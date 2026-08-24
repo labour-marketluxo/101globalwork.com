@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -12,7 +13,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <header className="site-header"><a href="/" className="brand">101GlobalWork</a><nav><a href="/services">Find services</a><a href="/providers">For providers</a></nav></header>
+        <header className="site-header">
+          <Link href="/" className="brand">101GlobalWork</Link>
+          <nav>
+            <Link href="/services">Find services</Link>
+            <Link href="/providers">For providers</Link>
+          </nav>
+        </header>
         <main>{children}</main>
         <footer>© {new Date().getFullYear()} 101GlobalWork</footer>
       </body>
