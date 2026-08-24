@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPublicProviderProfile } from '@/lib/providers/public-profile';
 
@@ -36,7 +37,7 @@ export default async function PublicProviderPage({ params }: { params: Params })
       <section className="action-panel">
         <h2>Need work done?</h2>
         <p>Describe the job first. 101GlobalWork will keep the request structured and match only eligible providers.</p>
-        <a className="button-link" href="/">Start a request</a>
+        <Link className="button-link" href="/">Start a request</Link>
       </section>
     </article>
   );
