@@ -24,5 +24,4 @@ language sql security invoker set search_path='app_private' as $$
 $$;
 grant execute on function public.get_provider_quote_opportunity(uuid,uuid) to authenticated;
 revoke execute on function public.get_provider_quote_opportunity(uuid,uuid) from anon, public;
-grant usage on schema app_private to authenticated;
-grant execute on function app_private.get_provider_quote_opportunity_authoritatively(uuid,uuid) to authenticated;
+revoke all on function app_private.get_provider_quote_opportunity_authoritatively(uuid,uuid) from public, anon, authenticated;
