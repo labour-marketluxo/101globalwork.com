@@ -1,0 +1,11 @@
+create index if not exists accounts_primary_market_idx on public.accounts(primary_market_id);
+create index if not exists locations_parent_idx on public.locations(parent_id);
+create index if not exists organisations_created_by_account_idx on public.organisations(created_by_account_id);
+create index if not exists organisations_primary_market_idx on public.organisations(primary_market_id);
+create index if not exists providers_owner_account_idx on public.providers(owner_account_id);
+create index if not exists providers_organisation_idx on public.providers(organisation_id);
+create index if not exists providers_primary_market_idx on public.providers(primary_market_id);
+create index if not exists public_routes_canonical_route_idx on public.public_routes(canonical_route_id);
+create index if not exists public_routes_location_idx on public.public_routes(location_id);
+create index if not exists route_redirects_to_route_idx on public.route_redirects(to_route_id);
+create index if not exists taxonomy_links_to_entity_idx on public.taxonomy_links(to_entity_id);
