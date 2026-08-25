@@ -33,10 +33,10 @@ begin
   perform set_config('request.jwt.claim.sub',v_customer_auth::text,true); select public.accept_quote_command(v_quote) into v_assignment;
   select id into v_obligation from public.payment_obligations where assignment_id=v_assignment;
   insert into pay_result values('obligation_created',v_obligation is not null,'quote acceptance created obligation');
-  select public.create_payment_attempt_command(v_obligation,'testpay','attempt-'||gen_random_uuid()::text) into v_attempt;
-  insert into pay_result values('attempt_created',exists(select 1 from public.payment_attempts where id=v_attempt and status='created'),'customer attempt');
-  select app_private.ingest_provider_event_authoritatively('testpay','evt-'||gen_random_uuid()::text,'payment_succeeded',repeat('a',64),v_attempt,true) into v_event;
-  insert into pay_result values('provider_event_reconciled',exists(select 1 from public.payment_provider_events where id=v_event and status='reconciled' and signature_verified),'verified provider event');
+  select public.create_payment_attempt_command(v_obligation,'paystack','attempt-'||gen_random_uuid()::text) into v_attempt;
+  insert into pay_result values('attempt_created',exists(select 1 from public.payment_attempts where id=v_attempt and status='created' and provider_adapter='paystack'),'customer Paystack attempt');
+  select app_private.ingest_provider_event_authoritatively('paystack','evt-'||gen_random_uuid()::text,'payment_succeeded',repeat('a',64),v_attempt,true) into v_event;
+  insert into pay_result values('provider_event_reconciled',exists(select 1 from public.payment_provider_events where id=v_event and status='reconciled' and signature_verified),'verified Paystack-shaped provider event');
   insert into pay_result values('obligation_funded',exists(select 1 from public.payment_obligations where id=v_obligation and status='funded'),'financial truth from reconciliation');
   insert into pay_result values('ledger_balanced',not exists(select 1 from public.ledger_entries e join public.ledger_transactions t on t.id=e.transaction_id where e.obligation_id=v_obligation group by t.id,e.currency_code having sum(e.amount_minor)<>0),'double entry sums zero');
 
@@ -57,7 +57,7 @@ begin
   insert into public.platform_admin_memberships(account_id,role_id,status,reason) values(v_finance_account,v_finance_role,'active','rollback-safe financial integrity test');
   perform set_config('request.jwt.claim.sub',v_finance_auth::text,true);
   select public.request_refund_command(v_obligation,100000,'rollback-safe finance test','finance-refund-'||gen_random_uuid()::text) into v_refund;
-  insert into pay_result values('finance_admin_refund_requested',exists(select 1 from public.payment_refunds where id=v_refund and status='requested'),'canonical Finance Admin can create audited refund request');
+  insert into pay_result values('finance_admin_refund_requested',exists(select 1 from public.payment_refunds where id=v_refund and status='requested' and adapter_key='paystack'),'canonical Finance Admin can create audited Paystack refund request');
 
   select app_private.refresh_payout_eligibility(v_obligation) into v_payout; insert into pay_result values('payout_blocked_before_completion',v_payout is null,'funding alone insufficient');
   update public.requests set state='scheduled' where id=v_request; update public.requests set state='in_progress' where id=v_request; update public.requests set state='submitted_for_approval' where id=v_request; update public.requests set state='completed' where id=v_request;
