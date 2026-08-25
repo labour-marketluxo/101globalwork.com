@@ -9,7 +9,26 @@ function money(minor: number, currency: string) {
   catch { return `${currency} ${(minor / 100).toFixed(2)}`; }
 }
 
-export default async function RequestPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; accepted?: string; completed?: string }> }) {
+function paymentErrorMessage(code?: string) {
+  if (!code) return null;
+  const messages: Record<string, string> = {
+    authentication_required: 'Please sign in again before starting payment.',
+    obligation_not_found: 'This payment obligation is no longer available.',
+    obligation_not_payable: 'This payment no longer needs to be started.',
+    payment_already_confirmed: 'This payment has already been confirmed.',
+    unable_to_create_payment_attempt: 'A payment is already in progress or cannot be started right now.',
+    unable_to_bind_checkout: 'The secure checkout session could not be saved. Please try again shortly.',
+    payment_provider_unavailable: 'Paystack is temporarily unavailable. No payment was recorded. Please try again shortly.',
+    invalid_request: 'The payment request could not be understood.',
+    obligation_required: 'The payment request is incomplete.',
+  };
+  return messages[code] ?? 'Payment could not be started. Please try again.';
+}
+
+export default async function RequestPage({ params, searchParams }: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string; accepted?: string; completed?: string; payment_error?: string }>;
+}) {
   const { id } = await params;
   const query = await searchParams;
   const supabase = await createSupabaseServerClient();
@@ -28,12 +47,17 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
   const { data: evidence } = assignment ? await supabase.from('work_evidence').select('id,kind,note,external_url,submitted_at').eq('assignment_id', assignment.id).order('submitted_at', { ascending: false }) : { data: [] };
   const { data: obligation } = assignment ? await supabase.from('payment_obligations').select('id,status,currency_code,amount_minor').eq('assignment_id', assignment.id).maybeSingle() : { data: null };
   const { data: attempts } = obligation ? await supabase.from('payment_attempts').select('id,status,provider_adapter,created_at').eq('obligation_id', obligation.id).order('created_at', { ascending: false }).limit(3) : { data: [] };
+  const latestAttempt = attempts?.[0];
+  const canStartPayment = Boolean(obligation && ['pending', 'funding'].includes(obligation.status) && latestAttempt?.status !== 'succeeded');
+  const paymentButtonLabel = latestAttempt?.status === 'pending_provider' ? 'Continue secure payment' : latestAttempt?.status === 'failed' ? 'Try payment again' : 'Pay securely';
+  const paymentError = paymentErrorMessage(query.payment_error);
 
   return <section className="content-shell">
     <p className="eyebrow">Your request</p>
     <h1>{request.need_text}</h1>
     <p className="lede left">Status: <strong>{request.state.replaceAll('_', ' ')}</strong></p>
     {query.error ? <p className="notice" role="alert">{query.error}</p> : null}
+    {paymentError ? <p className="notice" role="alert">{paymentError}</p> : null}
     {query.accepted ? <p className="notice">Quote accepted. Your provider is now assigned to this request.</p> : null}
     {query.completed ? <p className="notice">Completion approved. This work is now recorded as completed.</p> : null}
 
@@ -51,11 +75,29 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
       </form> : null}
     </section> : null}
 
-    {obligation ? <section className="action-panel">
-      <h2>Payment</h2>
-      <p><strong>{money(Number(obligation.amount_minor), obligation.currency_code)}</strong> · {obligation.status.replaceAll('_', ' ')}</p>
-      {obligation.status === 'funded' ? <p>Payment is confirmed from a verified provider event and reconciled financial records.</p> : <p className="hint">Payment is not treated as successful from a browser return or redirect. Only verified provider events can change financial truth.</p>}
-      {attempts?.length ? <ul>{attempts.map(a => <li key={a.id}>{a.provider_adapter}: {a.status.replaceAll('_', ' ')}</li>)}</ul> : null}
+    {obligation ? <section className="action-panel payment-panel">
+      <div className="payment-panel-heading">
+        <div>
+          <p className="eyebrow">Payment</p>
+          <h2>{money(Number(obligation.amount_minor), obligation.currency_code)}</h2>
+        </div>
+        <span className="pill">{obligation.status.replaceAll('_', ' ')}</span>
+      </div>
+      {obligation.status === 'funded'
+        ? <p>Payment is confirmed from a verified Paystack event and reconciled financial records.</p>
+        : <p className="hint">A browser return never marks this as paid. 101GlobalWork changes financial state only after a verified Paystack webhook is reconciled.</p>}
+
+      {canStartPayment ? <form action="/api/payments/paystack/checkout" method="post" className="payment-action-form">
+        <input type="hidden" name="obligationId" value={obligation.id} />
+        <input type="hidden" name="returnTo" value={`/requests/${id}`} />
+        <button type="submit">{paymentButtonLabel}</button>
+        <span>Secure checkout by Paystack</span>
+      </form> : null}
+
+      {attempts?.length ? <details className="identity-details payment-history">
+        <summary>Payment activity</summary>
+        <ul>{attempts.map(a => <li key={a.id}>{a.provider_adapter}: {a.status.replaceAll('_', ' ')} · {new Date(a.created_at).toLocaleString()}</li>)}</ul>
+      </details> : null}
     </section> : null}
 
     <section className="action-panel">
