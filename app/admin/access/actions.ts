@@ -37,7 +37,7 @@ export async function inviteAdminAction(formData: FormData) {
   if (invitationError || !invitationId) redirect(`/admin/access?error=${safeMessage(invitationError?.message ?? 'Unable to create invitation')}`);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://101globalwork.com';
-  const next = `/admin/invitations/accept?token=${encodeURIComponent(token)}`;
+  const next = `/admin-invite/accept?token=${encodeURIComponent(token)}`;
   const redirectTo = `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}`;
   const { error: emailError } = await service.auth.admin.inviteUserByEmail(email, { redirectTo });
   if (emailError) {
