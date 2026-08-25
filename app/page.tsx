@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function HomePage() {
   return (
     <section className="hero">
@@ -12,6 +14,7 @@ export default function HomePage() {
         <button type="submit">Find help</button>
       </form>
       <p className="hint">Simple jobs stay simple. For complex work, we’ll guide you step by step.</p>
+      <p className="provider-prompt">Offer a service instead? <Link href="/providers">Become a provider</Link>.</p>
     </section>
   );
 }
