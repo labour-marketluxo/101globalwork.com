@@ -24,7 +24,7 @@ export async function signUpAction(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
   const password = String(formData.get('password') ?? '');
   const displayName = String(formData.get('display_name') ?? '').trim();
-  const next = safeNext(formData.get('next'), '/provider/onboarding');
+  const next = safeNext(formData.get('next'), '/');
 
   if (!email || password.length < 10) redirect(`/sign-up?error=${encodeURIComponent('Use a valid email and a password of at least 10 characters.')}&next=${encodeURIComponent(next)}`);
 
