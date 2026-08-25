@@ -39,7 +39,6 @@ export async function signUpAction(formData: FormData) {
     },
   });
 
-  // Keep public errors intentionally generic to reduce account enumeration.
   if (error) redirect(`/sign-up?error=${encodeURIComponent('We could not complete sign up. Check your details and try again.')}&next=${encodeURIComponent(next)}`);
   redirect(`/sign-up?check_email=1&next=${encodeURIComponent(next)}`);
 }
@@ -51,6 +50,9 @@ export async function signInAction(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) redirect(`/sign-in?error=${encodeURIComponent('Email or password was not accepted.')}&next=${encodeURIComponent(next)}`);
+
+  const { data: activationRequired } = await supabase.rpc('platform_admin_activation_required_command');
+  if (activationRequired) redirect('/account/activate-admin-access');
   redirect(next);
 }
 
@@ -76,7 +78,6 @@ export async function requestPasswordResetAction(formData: FormData) {
   await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${origin}/auth/callback?next=${encodeURIComponent('/account/update-password')}`,
   });
-  // Always return the same result whether the account exists or not.
   redirect('/forgot-password?sent=1');
 }
 
