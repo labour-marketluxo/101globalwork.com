@@ -26,6 +26,8 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
   const { data: assignment } = await supabase.from('assignments').select('id,provider_id,status,assigned_at,accepted_quote_id').eq('request_id', id).in('status', ['active','completed']).maybeSingle();
   const { data: schedule } = assignment ? await supabase.from('assignment_schedules').select('scheduled_start,scheduled_end,timezone,note').eq('assignment_id', assignment.id).maybeSingle() : { data: null };
   const { data: evidence } = assignment ? await supabase.from('work_evidence').select('id,kind,note,external_url,submitted_at').eq('assignment_id', assignment.id).order('submitted_at', { ascending: false }) : { data: [] };
+  const { data: obligation } = assignment ? await supabase.from('payment_obligations').select('id,status,currency_code,amount_minor').eq('assignment_id', assignment.id).maybeSingle() : { data: null };
+  const { data: attempts } = obligation ? await supabase.from('payment_attempts').select('id,status,provider_adapter,created_at').eq('obligation_id', obligation.id).order('created_at', { ascending: false }).limit(3) : { data: [] };
 
   return <section className="content-shell">
     <p className="eyebrow">Your request</p>
@@ -37,7 +39,7 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
 
     {assignment ? <section className="action-panel">
       <h2>Assigned work</h2>
-      <p>Your accepted quote is the authoritative assignment. Payment has not been collected or released at this stage.</p>
+      <p>Your accepted quote is the authoritative assignment for this request.</p>
       {schedule ? <p><strong>Scheduled:</strong> {new Date(schedule.scheduled_start).toLocaleString()} ({schedule.timezone}){schedule.scheduled_end ? ` to ${new Date(schedule.scheduled_end).toLocaleString()}` : ''}</p> : <p className="hint">The provider has not scheduled the work yet.</p>}
       {evidence?.length ? <div><h3>Completion evidence</h3><ul>{evidence.map(item => <li key={item.id}><strong>{item.kind}</strong>: {item.note ?? item.external_url ?? 'Evidence submitted'} · {new Date(item.submitted_at).toLocaleString()}</li>)}</ul></div> : null}
       {request.state === 'submitted_for_approval' ? <form action={approveCompletionAction} className="stack-form">
@@ -47,6 +49,13 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
         <textarea id="completion-note" name="note" rows={3} placeholder="Add a note about the completed work." />
         <button type="submit">Approve completed work</button>
       </form> : null}
+    </section> : null}
+
+    {obligation ? <section className="action-panel">
+      <h2>Payment</h2>
+      <p><strong>{money(Number(obligation.amount_minor), obligation.currency_code)}</strong> · {obligation.status.replaceAll('_', ' ')}</p>
+      {obligation.status === 'funded' ? <p>Payment is confirmed from a verified provider event and reconciled financial records.</p> : <p className="hint">Payment is not treated as successful from a browser return or redirect. Only verified provider events can change financial truth.</p>}
+      {attempts?.length ? <ul>{attempts.map(a => <li key={a.id}>{a.provider_adapter}: {a.status.replaceAll('_', ' ')}</li>)}</ul> : null}
     </section> : null}
 
     <section className="action-panel">
