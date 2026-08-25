@@ -7,7 +7,7 @@ declare
   v_service uuid := (select id from public.taxonomy_entities where kind='service' and canonical_key='plumbing_residential' limit 1);
   v_location uuid := (select id from public.locations where canonical_code='gwarinpa' limit 1);
   v_provider_auth uuid := gen_random_uuid(); v_provider uuid; v_verification uuid;
-  v_reviewer_auth uuid := gen_random_uuid(); v_reviewer_account uuid;
+  v_reviewer_auth uuid := gen_random_uuid(); v_reviewer_account uuid; v_trust_role uuid;
   v_customer_auth uuid := gen_random_uuid(); v_request uuid; v_quote uuid; v_assignment uuid; v_obligation uuid; v_attempt uuid; v_event uuid; v_payout uuid;
 begin
   insert into auth.users(id,aud,role,email,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at,is_sso_user,is_anonymous) values(v_provider_auth,'authenticated','authenticated','p-'||substr(v_provider_auth::text,1,8)||'@example.invalid',now(),'{}','{}',now(),now(),false,false);
@@ -15,8 +15,15 @@ begin
   select public.create_provider_command('Payment Test Provider',v_market,'pay-'||substr(replace(gen_random_uuid()::text,'-',''),1,10),repeat('Experienced residential provider with clear scope and reliable delivery. ',2)) into v_provider;
   perform public.set_provider_service_command(v_provider,v_service,true); perform public.set_provider_service_area_command(v_provider,v_location,true); perform public.update_provider_profile_command(v_provider,'Payment test provider',repeat('Experienced residential provider serving Gwarinpa with reliable delivery and clear scope. ',2),5::smallint,true);
   select public.submit_provider_verification_command(v_provider,'identity','NG-FCT','PAY TEST') into v_verification;
+
   insert into auth.users(id,aud,role,email,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at,is_sso_user,is_anonymous) values(v_reviewer_auth,'authenticated','authenticated','r-'||substr(v_reviewer_auth::text,1,8)||'@example.invalid',now(),'{}','{}',now(),now(),false,false);
-  select id into v_reviewer_account from public.accounts where auth_user_id=v_reviewer_auth; insert into public.account_capabilities(account_id,capability) values(v_reviewer_account,'platform.verification.review'); perform set_config('request.jwt.claim.sub',v_reviewer_auth::text,true); perform public.review_provider_verification_command(v_verification,'verified','test');
+  select id into v_reviewer_account from public.accounts where auth_user_id=v_reviewer_auth;
+  select id into v_trust_role from public.platform_roles where role_key='trust_admin' and is_active;
+  insert into public.platform_admin_memberships(account_id,role_id,status,reason) values(v_reviewer_account,v_trust_role,'active','rollback-safe financial integrity test');
+  perform set_config('request.jwt.claim.sub',v_reviewer_auth::text,true);
+  perform public.review_provider_verification_command(v_verification,'verified','test');
+  insert into pay_result values('trust_admin_review',exists(select 1 from public.provider_verifications where id=v_verification and status='verified'),'canonical Trust Admin capability can perform review');
+
   perform set_config('request.jwt.claim.sub',v_provider_auth::text,true); perform public.publish_provider_profile_command(v_provider);
   insert into auth.users(id,aud,role,email,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at,is_sso_user,is_anonymous) values(v_customer_auth,'authenticated','authenticated','c-'||substr(v_customer_auth::text,1,8)||'@example.invalid',now(),'{}','{}',now(),now(),false,false);
   perform set_config('request.jwt.claim.sub',v_customer_auth::text,true); select public.create_request_command(v_market,'Payment-safe test work','pay-request-'||gen_random_uuid()::text,v_location,v_service,null,null,'en-NG','Africa/Lagos') into v_request;
