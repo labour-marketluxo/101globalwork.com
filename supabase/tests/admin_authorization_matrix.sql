@@ -42,6 +42,16 @@ begin
   insert into public.platform_admin_memberships(account_id,role_id,status) values
     (super_account,super_role,'active'),(trust_account,trust_role,'active'),(finance_account,finance_role,'active'),(auditor_account,auditor_role,'active');
 
+  -- Database-level owner protection: even elevated deletion is blocked by ownership FK.
+  blocked := false;
+  begin
+    delete from public.accounts where id=owner_account;
+  exception when foreign_key_violation then
+    blocked := true;
+  end;
+  if not blocked then raise exception 'owner account deletion was not blocked'; end if;
+
+  -- Super Admin has admin-management capability but cannot act as owner.
   perform set_config('request.jwt.claim.sub',super_auth::text,true);
   perform set_config('request.jwt.claim.role','authenticated',true);
   perform set_config('request.jwt.claim.aal','aal2',true);
@@ -66,14 +76,29 @@ begin
   end;
   if not blocked then raise exception 'non-owner super-admin grant was not blocked'; end if;
 
+  -- Ownership transfer requires the current owner and AAL2 step-up.
+  perform set_config('request.jwt.claim.sub',owner_auth::text,true);
+  perform set_config('request.jwt.claim.aal','aal1',true);
+  blocked := false;
+  begin
+    perform public.transfer_platform_ownership_command(super_account,'authorization test');
+  exception when insufficient_privilege then
+    blocked := true;
+  end;
+  if not blocked then raise exception 'owner transfer without AAL2 was not blocked'; end if;
+
+  -- Domain separation: Trust cannot operate Money.
   perform set_config('request.jwt.claim.sub',trust_auth::text,true);
+  perform set_config('request.jwt.claim.aal','aal2',true);
   if not app_private.current_account_has_platform_capability('platform.trust.verify') then raise exception 'trust admin missing trust.verify'; end if;
   if app_private.current_account_has_platform_capability('platform.money.refund') then raise exception 'trust admin incorrectly has money.refund'; end if;
 
+  -- Domain separation: Finance cannot perform Trust review.
   perform set_config('request.jwt.claim.sub',finance_auth::text,true);
   if not app_private.current_account_has_platform_capability('platform.money.refund') then raise exception 'finance admin missing money.refund'; end if;
   if app_private.current_account_has_platform_capability('platform.trust.verify') then raise exception 'finance admin incorrectly has trust.verify'; end if;
 
+  -- Auditor is read-only with audit visibility.
   perform set_config('request.jwt.claim.sub',auditor_auth::text,true);
   if not app_private.current_account_has_platform_capability('platform.admin.view_audit') then raise exception 'auditor missing view_audit'; end if;
   if app_private.current_account_has_platform_capability('platform.admin.manage') then raise exception 'auditor incorrectly has admin.manage'; end if;
