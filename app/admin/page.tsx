@@ -15,10 +15,12 @@ export default async function AdminHome() {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.rpc('admin_overview_command');
   const o = (data ?? {}) as Overview;
+  const bootstrapSecretPresent = Boolean(process.env.PLATFORM_OWNER_BOOTSTRAP_TOKEN);
   const alertCount = Number(o.providers?.pending_verifications ?? 0)
     + Number(o.work?.disputed ?? 0)
     + Number(o.money?.disputed_obligations ?? 0)
-    + Number(o.operations?.rejected_provider_events ?? 0);
+    + Number(o.operations?.rejected_provider_events ?? 0)
+    + (bootstrapSecretPresent ? 1 : 0);
 
   return <div className="admin-page">
     <header className="admin-page-header">
@@ -32,6 +34,8 @@ export default async function AdminHome() {
         <span>{alertCount ? 'items need attention' : 'no critical alerts'}</span>
       </div>
     </header>
+
+    {bootstrapSecretPresent ? <p className="notice" role="status"><strong>Security cleanup:</strong> the one-time Platform Owner bootstrap secret is still configured. Remove <code>PLATFORM_OWNER_BOOTSTRAP_TOKEN</code> from the Production environment and redeploy.</p> : null}
 
     <section className="admin-stat-grid" aria-label="Platform summary">
       <article><span>Active accounts</span><strong>{o.accounts?.active ?? 0}</strong><small>{o.accounts?.suspended ?? 0} suspended</small></article>
