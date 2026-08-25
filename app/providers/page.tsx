@@ -10,11 +10,12 @@ export default function ProvidersPage() {
     <section className="content-shell">
       <p className="eyebrow">For providers</p>
       <h1>Turn your skills into trusted work.</h1>
-      <p className="lede left">Create one account, add the services and areas you cover, complete the required verification, then publish when your profile is ready. We do not weaken trust checks just to fill search results.</p>
+      <p className="lede left">Use the same 101GlobalWork account you use as a customer, or create one now. Add the services and areas you cover, complete the required verification, then publish when your profile is ready.</p>
       <div className="entry-actions">
-        <Link href="/sign-up?next=/provider/onboarding" className="button-link">Create account</Link>
-        <Link href="/sign-in?next=/provider/onboarding" className="secondary-link">Sign in to continue</Link>
+        <Link href="/sign-up?intent=provider&next=/provider/onboarding" className="button-link">Create provider account</Link>
+        <Link href="/sign-in?next=/provider/onboarding" className="secondary-link">I already have an account</Link>
       </div>
+      <p className="hint">Need someone to do work instead? <Link href="/sign-up?intent=customer&next=/">Create a customer account</Link>.</p>
       <section className="action-panel">
         <h2>What happens next</h2>
         <ol className="simple-steps">
