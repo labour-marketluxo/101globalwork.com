@@ -18,9 +18,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Link href="/" className="brand">101GlobalWork</Link>
           <nav aria-label="Primary navigation">
             <Link href="/services" className="nav-discovery">Find services</Link>
-            <Link href="/provider/onboarding">Become a provider</Link>
+            <Link href="/providers">Become a provider</Link>
             <Link href="/sign-in">Sign in</Link>
-            <Link href="/sign-up?next=/" className="header-cta">Create account</Link>
+            <Link href="/sign-up?intent=customer&next=/" className="header-cta">Create account</Link>
           </nav>
         </header>
         <main>{children}</main>
