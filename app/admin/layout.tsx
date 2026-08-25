@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import AdminNav, { type AdminNavItem } from './admin-nav';
 
 export const metadata = { robots: { index: false, follow: false } };
 
@@ -15,6 +16,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const caps = new Set<string>((context.capabilities ?? []) as string[]);
   const can = (prefix: string) => context.is_owner || [...caps].some(c => c === prefix || c.startsWith(`${prefix}.`));
 
+  const navItems: AdminNavItem[] = [
+    { href: '/admin', label: 'Overview' },
+    ...(can('platform.admin') ? [{ href: '/admin/access', label: 'Users & access' }] : []),
+    ...(can('platform.trust') ? [{ href: '/admin/verifications', label: 'Trust & safety' }] : []),
+    ...(can('platform.projects') ? [{ href: '/admin/work', label: 'Work' }] : []),
+    ...(can('platform.money') ? [{ href: '/admin/money', label: 'Money' }] : []),
+    ...(can('platform.seo') || can('platform.taxonomy') ? [{ href: '/admin/discovery', label: 'Discovery & SEO' }] : []),
+    ...(can('platform.operations') ? [{ href: '/admin/operations', label: 'Operations' }] : []),
+    ...(can('platform.admin') ? [{ href: '/admin/audit', label: 'Audit' }] : []),
+  ];
+
   return <div className="admin-frame">
     <aside className="admin-sidebar" aria-label="Platform administration">
       <div className="admin-sidebar-head">
@@ -26,16 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       <div>
         <p className="admin-nav-label">Workspace</p>
-        <nav>
-          <Link href="/admin">Overview</Link>
-          {can('platform.admin') ? <Link href="/admin/access">Users & access</Link> : null}
-          {can('platform.trust') ? <Link href="/admin/verifications">Trust & safety</Link> : null}
-          {can('platform.projects') ? <Link href="/admin/work">Work</Link> : null}
-          {can('platform.money') ? <Link href="/admin/money">Money</Link> : null}
-          {can('platform.seo') || can('platform.taxonomy') ? <Link href="/admin/discovery">Discovery & SEO</Link> : null}
-          {can('platform.operations') ? <Link href="/admin/operations">Operations</Link> : null}
-          {can('platform.admin') ? <Link href="/admin/audit">Audit</Link> : null}
-        </nav>
+        <AdminNav items={navItems} />
       </div>
 
       <div className="admin-identity">
