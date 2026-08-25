@@ -27,25 +27,28 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     ...(can('platform.admin') ? [{ href: '/admin/audit', label: 'Audit' }] : []),
   ];
 
-  return <div className="admin-frame">
-    <aside className="admin-sidebar" aria-label="Platform administration">
-      <div className="admin-sidebar-head">
-        <div>
-          <Link className="admin-brand" href="/admin">101GlobalWork</Link>
-          <p>Platform control</p>
+  return <>
+    <style>{`.site-header, body > footer { display: none; } body > main { flex: 1; }`}</style>
+    <div className="admin-frame">
+      <aside className="admin-sidebar" aria-label="Platform administration">
+        <div className="admin-sidebar-head">
+          <div>
+            <Link className="admin-brand" href="/admin">101GlobalWork</Link>
+            <p>Platform control</p>
+          </div>
         </div>
-      </div>
 
-      <div>
-        <p className="admin-nav-label">Workspace</p>
-        <AdminNav items={navItems} />
-      </div>
+        <div>
+          <p className="admin-nav-label">Workspace</p>
+          <AdminNav items={navItems} />
+        </div>
 
-      <div className="admin-identity">
-        <span>{context.is_owner ? 'Platform Owner' : ((context.roles?.[0]?.name as string) ?? 'Administrator')}</span>
-        <small>Access is capability-based</small>
-      </div>
-    </aside>
-    <section className="admin-main">{children}</section>
-  </div>;
+        <div className="admin-identity">
+          <span>{context.is_owner ? 'Platform Owner' : ((context.roles?.[0]?.name as string) ?? 'Administrator')}</span>
+          <small>Access is capability-based</small>
+        </div>
+      </aside>
+      <section className="admin-main">{children}</section>
+    </div>
+  </>;
 }
