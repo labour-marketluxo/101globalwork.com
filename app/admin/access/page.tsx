@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { clearProvisionedCredentialAction, createAdminWithTemporaryPasswordAction, inviteAdminAction, revokeInvitationAction, revokeRoleAction } from './actions';
+import PendingSubmitButton from './pending-submit-button';
 
 export const metadata = { title: 'Users & access', robots: { index: false, follow: false } };
 
@@ -10,6 +12,20 @@ type RosterItem = {
   account_status: string;
   is_owner: boolean;
   roles: { key: string; name: string; status: string }[];
+};
+
+type DirectoryUser = {
+  account_id: string;
+  display_name: string;
+  email?: string | null;
+  email_confirmed: boolean;
+  last_sign_in_at?: string | null;
+  account_status: string;
+  created_at: string;
+  provider_count: number;
+  request_count: number;
+  admin_roles: { key: string; name: string; status: string }[];
+  providers: { id: string; display_name: string; status: string }[];
 };
 
 type TempAccess = { email: string; password: string; expiresAt: string };
@@ -31,15 +47,25 @@ function accessStatus(person: RosterItem) {
   return person.account_status.replaceAll('_', ' ');
 }
 
+function userKinds(person: DirectoryUser) {
+  const values: string[] = [];
+  if (person.request_count > 0) values.push('Customer');
+  if (person.provider_count > 0) values.push('Provider');
+  if (person.admin_roles.some(role => role.status === 'active' || role.status === 'invited')) values.push('Administrator');
+  return values.length ? values : ['Account'];
+}
+
 export default async function AccessPage({ searchParams }: { searchParams: Promise<{ error?: string; success?: string; provisioned?: string }> }) {
   const query = await searchParams;
   const supabase = await createSupabaseServerClient();
-  const [{ data: roster }, { data: roles }, { data: invitations }] = await Promise.all([
+  const [{ data: roster }, { data: roles }, { data: invitations }, { data: directory }] = await Promise.all([
     supabase.rpc('admin_access_roster_command'),
     supabase.from('platform_roles').select('role_key,display_name,description').eq('is_active', true).order('display_name'),
-    supabase.from('platform_admin_invitations').select('id,email_normalized,status,expires_at,created_at,platform_roles(display_name,role_key)').eq('status','pending').order('created_at',{ ascending:false })
+    supabase.from('platform_admin_invitations').select('id,email_normalized,status,expires_at,created_at,platform_roles(display_name,role_key)').eq('status','pending').order('created_at',{ ascending:false }),
+    supabase.rpc('admin_user_directory_command', { p_limit: 100 }),
   ]);
   const administrators = (roster ?? []) as RosterItem[];
+  const marketplaceUsers = (directory ?? []) as DirectoryUser[];
   const cookieStore = await cookies();
   const temporaryAccess = query.provisioned ? readTemporaryAccess(cookieStore.get('admin_provisioned_access')?.value) : null;
 
@@ -47,14 +73,14 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
     <header className="admin-page-header">
       <div>
         <p className="eyebrow">Users & access</p>
-        <h1>Give people only the access they need.</h1>
-        <p>Use a role as the starting point. Capabilities remain the authority underneath, and every consequential access change is audited.</p>
+        <h1>People, marketplace identities and platform authority.</h1>
+        <p>Ordinary users, provider identities and administrator privileges are separate. Inspect the person first; grant platform authority only when required.</p>
       </div>
       <span className="admin-quick-note">Least privilege by default</span>
     </header>
 
-    {query.error ? <p className="notice" role="alert">{query.error}</p> : null}
-    {query.success ? <p className="notice">{query.success}</p> : null}
+    {query.error ? <p className="notice" role="alert"><strong>Action not completed.</strong><br />{query.error}</p> : null}
+    {query.success ? <p className="notice" role="status">{query.success}</p> : null}
 
     {temporaryAccess ? <section className="admin-section admin-panel" aria-labelledby="temporary-access-heading">
       <div className="admin-section-heading"><div><p className="eyebrow">One-time access</p><h2 id="temporary-access-heading">Temporary sign-in created</h2><p>Copy these details now. The password is not stored by 101GlobalWork and this view disappears after a few minutes.</p></div></div>
@@ -67,20 +93,33 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
       <form action={clearProvisionedCredentialAction}><button type="submit" className="secondary-button">I saved these details</button></form>
     </section> : null}
 
+    <section className="admin-section">
+      <div className="admin-section-heading"><div><h2>Marketplace accounts</h2><p>See customers, providers and linked provider identities such as DAN SANI. Open a person to inspect sign-in state, providers, verification history and requests.</p></div><span>{marketplaceUsers.length} {marketplaceUsers.length === 1 ? 'account' : 'accounts'}</span></div>
+      {marketplaceUsers.length ? <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Person</th><th>Used as</th><th>Provider identity</th><th>Sign-in</th><th>Actions</th></tr></thead><tbody>
+        {marketplaceUsers.map(person => <tr key={person.account_id}>
+          <td><strong>{person.display_name}</strong><br /><small>{person.email ?? 'No email'}</small></td>
+          <td>{userKinds(person).map(kind => <span className="pill" key={kind}>{kind}</span>)}</td>
+          <td>{person.providers.length ? person.providers.map(provider => <span key={provider.id}><strong>{provider.display_name}</strong> · {provider.status.replaceAll('_',' ')}<br /></span>) : <span className="hint">None</span>}</td>
+          <td><span className="status-dot">{person.email_confirmed ? 'Email confirmed' : 'Email not confirmed'}</span><br /><small>{person.last_sign_in_at ? `Last sign-in ${new Date(person.last_sign_in_at).toLocaleString()}` : 'Never signed in'}</small></td>
+          <td><Link className="text-button" href={`/admin/users/${person.account_id}`}>View details</Link></td>
+        </tr>)}
+      </tbody></table></div> : <p className="empty-admin">No marketplace accounts are visible to this operator.</p>}
+    </section>
+
     <section className="admin-section two-column-admin">
       <div className="admin-panel">
-        <div className="admin-section-heading"><div><h2>Add an administrator</h2><p>Email invitation is preferred. If delivery is unreliable, create one-time temporary access and share it securely.</p></div></div>
+        <div className="admin-section-heading"><div><h2>Add an administrator</h2><p>This grants platform operating authority. It does not create a customer or provider identity.</p></div></div>
         <form action={inviteAdminAction} className="stack-form compact-form">
           <label htmlFor="admin-email">Email</label>
           <input id="admin-email" name="email" type="email" required placeholder="name@example.com" />
           <label htmlFor="role-key">Role</label>
           <select id="role-key" name="role_key" required>{roles?.map(role => <option key={role.role_key} value={role.role_key}>{role.display_name}</option>)}</select>
-          <button type="submit">Send email invitation</button>
+          <PendingSubmitButton idle="Send email invitation" pending="Sending invitation…" />
         </form>
 
         <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--line)' }}>
           <h3>Email not arriving?</h3>
-          <p className="hint">Create one-time temporary access. It creates only a platform administrator, never a customer or provider. An existing confirmed account is never given a new password.</p>
+          <p className="hint">Create one-time temporary access. The button now shows an explicit working state; after success, the generated credential appears at the top of this page.</p>
           <form action={createAdminWithTemporaryPasswordAction} className="stack-form compact-form">
             <label htmlFor="temporary-display-name">Name</label>
             <input id="temporary-display-name" name="display_name" required minLength={2} autoComplete="off" />
@@ -88,15 +127,15 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
             <input id="temporary-admin-email" name="email" type="email" required autoComplete="off" />
             <label htmlFor="temporary-role-key">Role</label>
             <select id="temporary-role-key" name="role_key" required>{roles?.map(role => <option key={role.role_key} value={role.role_key}>{role.display_name}</option>)}</select>
-            <button type="submit" className="secondary-button">Create one-time sign-in</button>
+            <PendingSubmitButton idle="Create one-time sign-in" pending="Creating secure access…" className="secondary-button" />
           </form>
         </div>
       </div>
 
       <aside className="admin-explainer">
+        <strong>Marketplace users</strong><p>Customer/provider activity is visible in the account directory without turning those users into administrators.</p>
         <strong>Protected owner</strong><p>The Platform Owner cannot be deleted or stripped by another administrator. Super Admin grants remain owner-controlled.</p>
         <strong>Sensitive actions</strong><p>High-risk actions require stronger authentication and produce audit evidence.</p>
-        <strong>Ordinary users stay ordinary</strong><p>Customers and providers register through the normal product flow. This screen never manufactures marketplace identities.</p>
       </aside>
     </section>
 
@@ -107,7 +146,7 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
           <td><strong>{person.display_name || 'Profile not completed'}</strong></td>
           <td>{person.is_owner ? <span className="pill strong">Platform Owner</span> : person.roles.map(role => <span className="pill" key={role.key}>{role.name}</span>)}</td>
           <td><span className="status-dot">{accessStatus(person)}</span></td>
-          <td><details className="identity-details"><summary>Details</summary><code>{person.account_id}</code></details>{!person.is_owner && person.roles[0] ? <form action={revokeRoleAction}><input type="hidden" name="account_id" value={person.account_id}/><input type="hidden" name="role_key" value={person.roles[0].key}/><input type="hidden" name="reason" value="Access removed from admin dashboard"/><button className="text-button" type="submit">Revoke access</button></form> : null}</td>
+          <td><Link className="text-button" href={`/admin/users/${person.account_id}`}>View account</Link>{!person.is_owner && person.roles[0] ? <form action={revokeRoleAction}><input type="hidden" name="account_id" value={person.account_id}/><input type="hidden" name="role_key" value={person.roles[0].key}/><input type="hidden" name="reason" value="Access removed from admin dashboard"/><button className="text-button" type="submit">Revoke access</button></form> : null}</td>
         </tr>)}
       </tbody></table></div>
     </section>
