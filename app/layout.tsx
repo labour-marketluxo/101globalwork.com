@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import AuthNav from './auth-nav';
 import './globals.css';
 import './entry-points.css';
 
@@ -16,12 +17,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <header className="site-header">
           <Link href="/" className="brand">101GlobalWork</Link>
-          <nav aria-label="Primary navigation">
-            <Link href="/services" className="nav-discovery">Find services</Link>
-            <Link href="/providers">Become a provider</Link>
-            <Link href="/sign-in">Sign in</Link>
-            <Link href="/sign-up?intent=customer&next=/" className="header-cta">Create account</Link>
-          </nav>
+          <AuthNav />
         </header>
         <main>{children}</main>
         <footer>© {new Date().getFullYear()} 101GlobalWork</footer>
