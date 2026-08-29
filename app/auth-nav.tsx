@@ -15,7 +15,7 @@ export default function AuthNav() {
 
     try {
       // Browser auth is created only after hydration so static/public pages can
-      // prerender in CI without exposing or requiring browser credentials there.
+      // prerender in CI without requiring browser credentials there.
       const supabase = createSupabaseBrowserClient();
       void supabase.auth.getUser().then(({ data }) => {
         if (active) setSession({ signedIn: Boolean(data.user), email: data.user?.email });
@@ -25,7 +25,8 @@ export default function AuthNav() {
       });
       unsubscribe = () => data.subscription.unsubscribe();
     } catch {
-      setSession({ signedIn: false });
+      // Anonymous navigation is already the passive fallback when browser auth
+      // configuration is absent (for example in static CI prerendering).
     }
 
     return () => {
