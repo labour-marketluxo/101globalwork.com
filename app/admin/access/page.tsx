@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { clearProvisionedCredentialAction, createAdminWithTemporaryPasswordAction, inviteAdminAction, revokeRoleAction } from './actions';
+import { clearProvisionedCredentialAction, createAdminWithTemporaryPasswordAction, inviteAdminAction, revokeInvitationAction, revokeRoleAction } from './actions';
 
 export const metadata = { title: 'Users & access', robots: { index: false, follow: false } };
 
@@ -21,6 +21,14 @@ function readTemporaryAccess(raw?: string): TempAccess | null {
     if (!value.email || !value.password || !value.expiresAt) return null;
     return value;
   } catch { return null; }
+}
+
+function accessStatus(person: RosterItem) {
+  if (person.is_owner) return 'Active';
+  if (person.roles.some(role => role.status === 'active')) return 'Active';
+  if (person.roles.some(role => role.status === 'invited')) return 'Pending first sign-in';
+  if (person.roles.some(role => role.status === 'revoked')) return 'Revoked';
+  return person.account_status.replaceAll('_', ' ');
 }
 
 export default async function AccessPage({ searchParams }: { searchParams: Promise<{ error?: string; success?: string; provisioned?: string }> }) {
@@ -55,24 +63,24 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
         <article><div><strong>Temporary password</strong><code>{temporaryAccess.password}</code></div></article>
         <article><div><strong>Expires</strong><span>{new Date(temporaryAccess.expiresAt).toLocaleString()}</span></div></article>
       </div>
-      <p className="hint">On first sign-in, the person must replace this password before administrator access becomes active.</p>
+      <p className="hint">Share these details through a trusted channel. On first sign-in, the person must replace this password before administrator access becomes active.</p>
       <form action={clearProvisionedCredentialAction}><button type="submit" className="secondary-button">I saved these details</button></form>
     </section> : null}
 
     <section className="admin-section two-column-admin">
       <div className="admin-panel">
-        <div className="admin-section-heading"><div><h2>Invite administrator</h2><p>Preferred method. Existing accounts receive access directly; new users receive a 72-hour email invitation.</p></div></div>
+        <div className="admin-section-heading"><div><h2>Add an administrator</h2><p>Email invitation is preferred. If delivery is unreliable, create one-time temporary access and share it securely.</p></div></div>
         <form action={inviteAdminAction} className="stack-form compact-form">
           <label htmlFor="admin-email">Email</label>
           <input id="admin-email" name="email" type="email" required placeholder="name@example.com" />
           <label htmlFor="role-key">Role</label>
           <select id="role-key" name="role_key" required>{roles?.map(role => <option key={role.role_key} value={role.role_key}>{role.display_name}</option>)}</select>
-          <button type="submit">Send invitation</button>
+          <button type="submit">Send email invitation</button>
         </form>
 
-        <details className="identity-details" style={{ marginTop: '1.25rem' }}>
-          <summary>Email not arriving? Create temporary access</summary>
-          <p className="hint">Use this only for platform administrators you can contact securely. It does not create customers or providers.</p>
+        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--line)' }}>
+          <h3>Email not arriving?</h3>
+          <p className="hint">Create one-time temporary access. It creates only a platform administrator, never a customer or provider. An existing confirmed account is never given a new password.</p>
           <form action={createAdminWithTemporaryPasswordAction} className="stack-form compact-form">
             <label htmlFor="temporary-display-name">Name</label>
             <input id="temporary-display-name" name="display_name" required minLength={2} autoComplete="off" />
@@ -80,9 +88,9 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
             <input id="temporary-admin-email" name="email" type="email" required autoComplete="off" />
             <label htmlFor="temporary-role-key">Role</label>
             <select id="temporary-role-key" name="role_key" required>{roles?.map(role => <option key={role.role_key} value={role.role_key}>{role.display_name}</option>)}</select>
-            <button type="submit" className="secondary-button">Create temporary access</button>
+            <button type="submit" className="secondary-button">Create one-time sign-in</button>
           </form>
-        </details>
+        </div>
       </div>
 
       <aside className="admin-explainer">
@@ -96,9 +104,9 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
       <div className="admin-section-heading"><div><h2>Platform administrators</h2><p>See who can operate the platform and what level of access they hold.</p></div><span>{administrators.length} {administrators.length === 1 ? 'person' : 'people'}</span></div>
       <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Person</th><th>Access</th><th>Status</th><th>Actions</th></tr></thead><tbody>
         {administrators.map(person => <tr key={person.account_id}>
-          <td><strong>{person.display_name || 'Unnamed account'}</strong></td>
+          <td><strong>{person.display_name || 'Profile not completed'}</strong></td>
           <td>{person.is_owner ? <span className="pill strong">Platform Owner</span> : person.roles.map(role => <span className="pill" key={role.key}>{role.name}</span>)}</td>
-          <td><span className="status-dot">{person.account_status}</span></td>
+          <td><span className="status-dot">{accessStatus(person)}</span></td>
           <td><details className="identity-details"><summary>Details</summary><code>{person.account_id}</code></details>{!person.is_owner && person.roles[0] ? <form action={revokeRoleAction}><input type="hidden" name="account_id" value={person.account_id}/><input type="hidden" name="role_key" value={person.roles[0].key}/><input type="hidden" name="reason" value="Access removed from admin dashboard"/><button className="text-button" type="submit">Revoke access</button></form> : null}</td>
         </tr>)}
       </tbody></table></div>
@@ -106,7 +114,7 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
 
     <section className="admin-section">
       <div className="admin-section-heading"><div><h2>Pending invitations</h2><p>Invitations expire automatically and grant nothing until accepted.</p></div></div>
-      {invitations?.length ? <div className="admin-list">{invitations.map(invite => <article key={invite.id}><div><strong>{invite.email_normalized}</strong><span>{(invite.platform_roles as {display_name?:string}|null)?.display_name ?? 'Administrator'}</span></div><small>Expires {new Date(invite.expires_at).toLocaleString()}</small></article>)}</div> : <p className="empty-admin">No pending invitations.</p>}
+      {invitations?.length ? <div className="admin-list">{invitations.map(invite => <article key={invite.id}><div><strong>{invite.email_normalized}</strong><span>{(invite.platform_roles as {display_name?:string}|null)?.display_name ?? 'Administrator'}</span></div><div><small>Expires {new Date(invite.expires_at).toLocaleString()}</small><form action={revokeInvitationAction}><input type="hidden" name="invitation_id" value={invite.id}/><button type="submit" className="text-button">Revoke invitation</button></form></div></article>)}</div> : <p className="empty-admin">No pending invitations.</p>}
     </section>
   </div>;
 }
