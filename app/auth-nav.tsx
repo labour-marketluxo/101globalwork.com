@@ -1,45 +1,22 @@
-'use client';
-
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { createSupabaseBrowserClient } from '@/lib/supabase/client';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
-type SessionView = { signedIn: boolean; email?: string | null } | null;
+export default async function AuthNav() {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-export default function AuthNav() {
-  const [session, setSession] = useState<SessionView>(null);
-
-  useEffect(() => {
-    let active = true;
-    let unsubscribe: (() => void) | undefined;
-
-    try {
-      // Browser auth is created only after hydration so static/public pages can
-      // prerender in CI without requiring browser credentials there.
-      const supabase = createSupabaseBrowserClient();
-      void supabase.auth.getUser().then(({ data }) => {
-        if (active) setSession({ signedIn: Boolean(data.user), email: data.user?.email });
-      });
-      const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-        if (active) setSession({ signedIn: Boolean(nextSession?.user), email: nextSession?.user?.email });
-      });
-      unsubscribe = () => data.subscription.unsubscribe();
-    } catch {
-      // Anonymous navigation is already the passive fallback when browser auth
-      // configuration is absent (for example in static CI prerendering).
+  if (user) {
+    const { data: account } = await supabase.from('accounts').select('id').eq('auth_user_id', user.id).maybeSingle();
+    let hasProvider = false;
+    if (account?.id) {
+      const { count } = await supabase.from('providers').select('id', { count: 'exact', head: true }).eq('owner_account_id', account.id).neq('status', 'closed');
+      hasProvider = Boolean(count);
     }
 
-    return () => {
-      active = false;
-      unsubscribe?.();
-    };
-  }, []);
-
-  if (session?.signedIn) {
     return <nav aria-label="Primary navigation">
       <Link href="/services" className="nav-discovery">Find services</Link>
-      <Link href="/provider">Provider workspace</Link>
-      <Link href="/account/security" title={session.email ?? undefined}>Account</Link>
+      <Link href={hasProvider ? '/provider' : '/providers'}>{hasProvider ? 'Provider workspace' : 'Become a provider'}</Link>
+      <Link href="/account/security" title={user.email ?? undefined}>Account</Link>
     </nav>;
   }
 
