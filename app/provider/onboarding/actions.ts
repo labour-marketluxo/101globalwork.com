@@ -34,9 +34,9 @@ export async function addProviderServiceAction(formData: FormData) {
   const supabase = await authedClient(`/provider/onboarding?provider=${encodeURIComponent(provider)}`);
   const service=String(formData.get('service_entity_id')??'');
   if (!service) back(provider,{ error:'Choose the service customers should hire you for.' });
-  const { error }=await supabase.rpc('set_provider_service_command',{p_provider_id:provider,p_service_entity_id:service,p_is_primary:true});
+  const { error }=await supabase.rpc('replace_provider_primary_service_for_onboarding_command',{p_provider_id:provider,p_service_entity_id:service});
   if(error) back(provider,{error:error.message});
-  back(provider,{success:'Service saved.'});
+  back(provider,{success:'Primary service saved. Any old onboarding service choice was removed from active matching eligibility.'});
 }
 
 export async function addProviderAreaAction(formData: FormData) {
@@ -44,9 +44,9 @@ export async function addProviderAreaAction(formData: FormData) {
   const supabase=await authedClient(`/provider/onboarding?provider=${encodeURIComponent(provider)}`);
   const location=String(formData.get('location_id')??'');
   if (!location) back(provider,{ error:'Choose where you can actually perform this work.' });
-  const {error}=await supabase.rpc('set_provider_service_area_command',{p_provider_id:provider,p_location_id:location,p_is_primary:true});
+  const {error}=await supabase.rpc('replace_provider_primary_area_for_onboarding_command',{p_provider_id:provider,p_location_id:location});
   if(error) back(provider,{error:error.message});
-  back(provider,{success:'Service area saved.'});
+  back(provider,{success:'Primary service area saved. Any old onboarding area choice was removed from active matching eligibility.'});
 }
 
 export async function submitVerificationAction(formData: FormData) {
