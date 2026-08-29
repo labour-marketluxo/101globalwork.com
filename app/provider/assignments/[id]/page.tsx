@@ -26,7 +26,6 @@ export default async function ProviderAssignmentPage({ params, searchParams }: {
   ]);
   if (!request) notFound();
 
-  const paidWork = Boolean(obligation);
   const paymentFunded = !obligation || obligation.status === 'funded';
   const canStart = request.state === 'scheduled' && paymentFunded;
 
@@ -45,10 +44,10 @@ export default async function ProviderAssignmentPage({ params, searchParams }: {
       <div><span>Assignment</span><strong>{assignment.status.replaceAll('_', ' ')}</strong></div>
     </section>
 
-    {paidWork ? <section className="action-panel">
+    {obligation ? <section className="action-panel">
       <p className="eyebrow">Payment protection</p>
       <h2>{money(Number(obligation.amount_minor), obligation.currency_code)}</h2>
-      {paymentFunded ? <p className="notice"><strong>Payment confirmed.</strong><br />The obligation is funded from reconciled payment records. Work can proceed when scheduled.</p> : <p className="notice"><strong>Waiting for customer payment.</strong><br />You may agree and save the schedule, but paid work cannot be started until the payment obligation is funded from a verified provider event.</p>}
+      {obligation.status === 'funded' ? <p className="notice"><strong>Payment confirmed.</strong><br />The obligation is funded from reconciled payment records. Work can proceed when scheduled.</p> : <p className="notice"><strong>Waiting for customer payment.</strong><br />You may agree and save the schedule, but paid work cannot be started until the payment obligation is funded from a verified provider event.</p>}
     </section> : null}
 
     {request.state === 'accepted' ? <form action={scheduleAssignmentAction} className="stack-form action-panel">
