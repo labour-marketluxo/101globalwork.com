@@ -5,16 +5,16 @@ import { addProviderAreaAction, addProviderServiceAction, createProviderAction, 
 
 export const metadata = { title: 'Provider onboarding', robots: { index: false, follow: false } };
 type Search = Promise<{ provider?: string; error?: string; success?: string; welcome?: string; signed_in?: string; new?: string }>;
-
 type OwnedProvider = { id: string; display_name: string; status: string };
 
 function nextActionLabel(value?: string | null) {
   switch (value) {
     case 'add_service': return 'Choose the service customers should hire you for.';
     case 'add_service_area': return 'Choose where you can actually perform the work.';
-    case 'complete_public_profile': return 'Complete your public profile with enough useful detail.';
-    case 'submit_verification': return 'Submit identity verification for review.';
-    default: return 'Finish the remaining setup steps below.';
+    case 'complete_public_profile': return 'Finish the public description, then save the profile.';
+    case 'submit_verification':
+    case 'start_verification': return 'Submit identity verification for review.';
+    default: return 'Finish the remaining requirement shown below.';
   }
 }
 
@@ -58,14 +58,23 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
   const currentAreaName = locations?.find(item => item.location_id === currentArea?.location_id)?.display_name;
   const identityVerified = Boolean(verifications?.some(v => v.kind === 'identity' && v.status === 'verified'));
   const identityPending = Boolean(verifications?.some(v => v.kind === 'identity' && v.status === 'pending'));
-  const setupComplete = Boolean(progress?.services_complete && progress?.service_area_complete && progress?.profile_complete);
+  const description = String(profile?.public_description ?? provider?.public_description ?? '').trim();
+  const descriptionLength = description.length;
+  const descriptionRemaining = Math.max(0, 80 - descriptionLength);
+  const serviceComplete = Boolean(progress?.services_complete);
+  const areaComplete = Boolean(progress?.service_area_complete);
+  const profileComplete = Boolean(progress?.profile_complete);
+  const publicationChecks = [serviceComplete, areaComplete, profileComplete, identityVerified];
+  const publicationComplete = publicationChecks.filter(Boolean).length;
+  const setupComplete = serviceComplete && areaComplete && profileComplete;
   const canPublish = Boolean(provider && identityVerified && setupComplete && !profile?.is_public);
   const showCreateForm = !provider && (ownedProviders.length === 0 || params.new === '1');
+  const nextTarget = !serviceComplete ? '#service' : !areaComplete ? '#service-area' : !profileComplete ? '#public-profile' : !identityVerified ? '#verification' : '#publish';
 
   return <section className="content-shell">
     <p className="eyebrow">Provider setup</p>
     <h1>Build your work profile</h1>
-    <p className="lede left">See what is done, what is waiting, and the single next step required before customers can discover you.</p>
+    <p className="lede left">Finish only what is missing. Every requirement below maps directly to the backend rule that controls whether customers can discover you.</p>
     {params.welcome ? <p className="notice" role="status"><strong>Account created and signed in.</strong><br />Your account is ready. Continue with provider setup below.</p> : null}
     {params.signed_in ? <p className="notice" role="status"><strong>Signed in successfully.</strong><br />You are continuing your provider setup.</p> : null}
     {params.success ? <p className="notice" role="status">{params.success}</p> : null}
@@ -80,75 +89,89 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
 
     {showCreateForm ? <form action={createProviderAction} className="stack-form action-panel">
       <h2>1. Provider identity</h2>
-      <p className="hint">This creates the public business/service identity attached to your signed-in account. You will see a confirmation immediately after it is saved.</p>
+      <p className="hint">Create the public work identity attached to this account. The description requirement is enforced here so you do not discover a hidden blocker later.</p>
       <label htmlFor="display_name">Public name</label><input id="display_name" name="display_name" required minLength={2} />
       <label htmlFor="market_id">Primary market</label><select id="market_id" name="market_id" required defaultValue=""><option value="" disabled>Choose a market</option>{markets?.map(m => <option key={m.market_id} value={m.market_id}>{m.display_name}</option>)}</select>
-      <label htmlFor="slug">Profile URL name</label><input id="slug" name="slug" required minLength={3} placeholder="amina-plumbing" />
-      <label htmlFor="description">What work do you do?</label><textarea id="description" name="description" rows={5} />
+      <label htmlFor="slug">Profile URL name</label><input id="slug" name="slug" required minLength={3} placeholder="amina-tailoring" />
+      <label htmlFor="description">Describe the work you do</label><textarea id="description" name="description" rows={5} required minLength={80} aria-describedby="new-description-help" />
+      <p id="new-description-help" className="hint">At least 80 characters. Explain the work, the customer problem you solve and the kind of job you want to receive.</p>
       <button type="submit">Create provider profile</button>
     </form> : null}
 
     {provider ? <>
-      <section className="provider-progress-card" aria-label="Provider setup status">
-        <div><span>Setup</span><strong>{progress?.completion_percent ?? 0}%</strong></div>
-        <div><span>Verification</span><strong>{identityVerified ? 'Verified' : identityPending ? 'In review' : 'Needed'}</strong></div>
-        <div><span>Visibility</span><strong>{profile?.is_public ? 'Published' : 'Not live'}</strong></div>
+      <section className="provider-progress-card" aria-label="Provider publication status">
+        <div><span>Publish requirements</span><strong>{publicationComplete}/4</strong></div>
+        <div><span>Search readiness</span><strong>{readiness?.total_score ?? 0}/100</strong></div>
+        <div><span>Visibility</span><strong>{profile?.is_public ? 'Live' : 'Not live'}</strong></div>
       </section>
 
+      {!profile?.is_public ? <section className="action-panel" aria-labelledby="publish-checklist-title">
+        <h2 id="publish-checklist-title">What is stopping publication?</h2>
+        <div className="admin-list">
+          <article><div><strong>{serviceComplete ? '✓ Service selected' : 'Service needed'}</strong><span>{currentServiceName ?? 'Choose the service customers can hire you for.'}</span></div><small><a href="#service">{serviceComplete ? 'Review or change' : 'Choose service'}</a></small></article>
+          <article><div><strong>{areaComplete ? '✓ Service area selected' : 'Service area needed'}</strong><span>{currentAreaName ?? 'Choose where you can actually perform the work.'}</span></div><small><a href="#service-area">{areaComplete ? 'Review or change' : 'Choose area'}</a></small></article>
+          <article><div><strong>{profileComplete ? '✓ Public profile complete' : 'Public description needs more detail'}</strong><span>{profileComplete ? `${descriptionLength} characters saved.` : `${descriptionLength}/80 characters saved — add at least ${descriptionRemaining} more.`}</span></div><small><a href="#public-profile">{profileComplete ? 'Review profile' : 'Finish description'}</a></small></article>
+          <article><div><strong>{identityVerified ? '✓ Identity verified' : identityPending ? 'Identity review in progress' : 'Identity verification needed'}</strong><span>{identityVerified ? 'Verification is complete and remains in your history.' : identityPending ? 'No action needed while the review is pending.' : 'Submit identity verification before publication.'}</span></div><small><a href="#verification">View verification</a></small></article>
+        </div>
+      </section> : null}
+
       <div className="notice">
-        <strong>Next step</strong><br />
-        {profile?.is_public ? 'Your profile is live. Keep your service, area, availability and payout details accurate.' : canPublish ? 'Everything required is complete. Publish now to become eligible for matching.' : identityPending ? 'Verification is being reviewed. You can finish the rest of your profile while you wait.' : nextActionLabel(progress?.next_action)}
+        <strong>Next action</strong><br />
+        {profile?.is_public ? 'Your profile is live. Keep service, area and availability accurate.' : canPublish ? 'All four publication requirements are complete. Publish now.' : !profileComplete ? `Add at least ${descriptionRemaining} more characters to your public description and save it.` : identityPending ? 'Your setup is complete; identity review is the only remaining gate.' : nextActionLabel(progress?.next_action)}
+        {!profile?.is_public && !canPublish ? <><br /><a href={nextTarget}>Go to the required step ↓</a></> : null}
       </div>
 
-      {canPublish ? <form action={publishProviderProfileAction} className="notice provider-ready-notice">
+      {canPublish ? <form action={publishProviderProfileAction} className="notice provider-ready-notice" id="publish-ready">
         <input type="hidden" name="provider_id" value={provider.id} />
-        <strong>You are ready to go live.</strong>
-        <p>Publishing makes this provider eligible for matching; normal service, geography and market rules still apply.</p>
+        <strong>Ready to go live.</strong>
+        <p>Publishing changes provider state to active and allows matching when service, geography and market rules also match.</p>
         <button type="submit">Publish and become discoverable</button>
       </form> : null}
 
-      <form action={addProviderServiceAction} className="stack-form action-panel">
-        <h2>2. Service {progress?.services_complete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
-        <p className="hint">Current service: <strong>{currentServiceName ?? 'Not chosen'}</strong>. This must match what customers can actually hire you for.</p>
+      <form id="service" action={addProviderServiceAction} className="stack-form action-panel">
+        <h2>2. Service {serviceComplete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
+        <p className="hint">Current service: <strong>{currentServiceName ?? 'Not chosen'}</strong>. If this does not describe the work you sell, change it now; matching uses this exact service record.</p>
         <label htmlFor="service_entity_id">What do you offer?</label><select id="service_entity_id" name="service_entity_id" required defaultValue={currentService?.service_entity_id ?? ''}><option value="" disabled>Choose a service</option>{services?.map(s => <option key={s.service_entity_id} value={s.service_entity_id}>{s.display_name}</option>)}</select>
-        <button type="submit">{progress?.services_complete ? 'Save service choice' : 'Add service'}</button>
+        <button type="submit">{serviceComplete ? 'Save service choice' : 'Add service'}</button>
       </form>
 
-      <form action={addProviderAreaAction} className="stack-form action-panel">
-        <h2>3. Service area {progress?.service_area_complete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
-        <p className="hint">Current area: <strong>{currentAreaName ?? 'Not chosen'}</strong>.</p>
+      <form id="service-area" action={addProviderAreaAction} className="stack-form action-panel">
+        <h2>3. Service area {areaComplete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
+        <p className="hint">Current area: <strong>{currentAreaName ?? 'Not chosen'}</strong>. Matching uses this exact location record.</p>
         <label htmlFor="location_id">Where can you work?</label><select id="location_id" name="location_id" required defaultValue={currentArea?.location_id ?? ''}><option value="" disabled>Choose an area</option>{locations?.map(l => <option key={l.location_id} value={l.location_id}>{l.display_name}</option>)}</select>
-        <button type="submit">{progress?.service_area_complete ? 'Save service area' : 'Add service area'}</button>
+        <button type="submit">{areaComplete ? 'Save service area' : 'Add service area'}</button>
       </form>
 
-      <form action={updateProviderProfileAction} className="stack-form action-panel">
-        <h2>4. Public profile {progress?.profile_complete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
-        {!progress?.profile_complete ? <p className="hint">Add a clear description of at least 80 characters so customers understand what you do, where you add value and when to hire you.</p> : null}
-        <label htmlFor="headline">Headline</label><input id="headline" name="headline" defaultValue={profile?.headline ?? ''} placeholder="Residential plumber serving Gwarinpa" />
-        <label htmlFor="description">Public description</label><textarea id="description" name="description" required minLength={80} rows={6} defaultValue={profile?.public_description ?? provider.public_description ?? ''} />
-        <label htmlFor="years_experience">Years of experience</label><input id="years_experience" name="years_experience" type="number" min={0} max={80} defaultValue={profile?.years_experience ?? ''} />
+      <form id="public-profile" action={updateProviderProfileAction} className="stack-form action-panel">
+        <h2>4. Public profile {profileComplete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
+        {!profileComplete ? <p className="notice" role="status"><strong>This is the current blocker.</strong><br />Your saved description is {descriptionLength}/80 characters. Add at least {descriptionRemaining} more characters, then save.</p> : null}
+        <label htmlFor="headline">Headline</label><input id="headline" name="headline" defaultValue={profile?.headline ?? ''} placeholder="Tailor and alterations specialist in Minna" />
+        <label htmlFor="description">Public description</label><textarea id="description" name="description" required minLength={80} rows={7} defaultValue={description} aria-describedby="description-help" />
+        <p id="description-help" className="hint">Minimum 80 characters. Current saved length: {descriptionLength}. A strong description explains the work you perform, the jobs you accept and the area/customer you serve.</p>
+        <label htmlFor="years_experience">Years of experience <span className="hint">(optional)</span></label><input id="years_experience" name="years_experience" type="number" min={0} max={80} defaultValue={profile?.years_experience ?? ''} />
         <label><input name="accepts_new_work" type="checkbox" defaultChecked={profile?.accepts_new_work ?? true} /> Accepting new work</label>
-        <button type="submit">Save public profile</button>
+        <button type="submit">Save public profile and recheck readiness</button>
       </form>
 
-      <form action={submitVerificationAction} className="stack-form action-panel">
-        <h2>5. Verification {identityVerified ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
-        {identityVerified ? <p className="hint">Identity verified. The decision remains in your history below.</p> : identityPending ? <p className="hint">Identity verification is in review. Do not submit the same check again while it is pending.</p> : <>
+      <section id="verification" className="action-panel">
+        <h2>5. Verification {identityVerified ? '✓' : ''}</h2>
+        {identityVerified ? <p className="hint">Identity verified. No further action is required for this publication gate.</p> : identityPending ? <p className="hint">Identity verification is in review. Do not submit the same check again while it is pending.</p> : <form action={submitVerificationAction} className="stack-form">
+          <input type="hidden" name="provider_id" value={provider.id} />
           <label htmlFor="kind">Verification type</label><select id="kind" name="kind"><option value="identity">Identity</option><option value="business">Business</option><option value="address">Address</option><option value="credential">Credential</option><option value="insurance">Insurance</option><option value="licence">Licence</option></select>
           <label htmlFor="jurisdiction_code">Jurisdiction</label><input id="jurisdiction_code" name="jurisdiction_code" placeholder="e.g. NG-FCT" />
           <label htmlFor="reference_label">Reference label</label><input id="reference_label" name="reference_label" />
           <button type="submit">Submit for review</button>
-        </>}
-      </form>
+        </form>}
+      </section>
 
       {verifications?.length ? <section className="action-panel"><h2>Verification history</h2><ul>{verifications.map(v => <li key={v.id}>{v.kind}: <strong>{v.status}</strong>{v.reviewed_at ? ` · reviewed ${new Date(v.reviewed_at).toLocaleString()}` : ` · submitted ${new Date(v.created_at).toLocaleString()}`}</li>)}</ul></section> : null}
 
-      {!profile?.is_public ? <form action={publishProviderProfileAction} className="action-panel">
+      {!profile?.is_public ? <form id="publish" action={publishProviderProfileAction} className="action-panel">
         <input type="hidden" name="provider_id" value={provider.id} />
         <h2>6. Publish</h2>
-        <p>{canPublish ? 'Everything required is ready.' : 'Publishing unlocks only after identity verification, a service, a service area and a complete public profile.'}</p>
-        <button type="submit" disabled={!canPublish}>Publish provider profile</button>
-        {!canPublish ? <p className="hint">Search readiness: {readiness?.total_score ?? 0}/100. {nextActionLabel(progress?.next_action)}</p> : null}
+        {canPublish ? <p>All publication gates are satisfied. Search readiness will be recalculated after the provider becomes active.</p> : <p>Publication is locked because {4 - publicationComplete} of 4 required checks {4 - publicationComplete === 1 ? 'is' : 'are'} still incomplete.</p>}
+        <button type="submit" disabled={!canPublish}>{canPublish ? 'Publish provider profile' : `Complete ${4 - publicationComplete} remaining requirement${4 - publicationComplete === 1 ? '' : 's'}`}</button>
+        {!canPublish ? <p className="hint">Do not use the search-readiness score as the task list. The publication checklist above is the authoritative gate.</p> : null}
       </form> : null}
     </> : null}
   </section>;
