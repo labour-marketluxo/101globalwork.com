@@ -14,6 +14,12 @@ function validEmail(value: string) {
   return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+async function findAuthUserByEmail(email: string) {
+  const service = createSupabaseServiceClient();
+  const { data } = await service.auth.admin.listUsers({ page: 1, perPage: 1000 });
+  return data?.users?.find(user => user.email?.toLowerCase() === email) ?? null;
+}
+
 export async function inviteAdminAction(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
   const roleKey = String(formData.get('role_key') ?? 'support_admin');
@@ -24,15 +30,17 @@ export async function inviteAdminAction(formData: FormData) {
   if (!user) redirect('/sign-in?next=/admin/access');
 
   const service = createSupabaseServiceClient();
-  const { data: existingUsers } = await service.auth.admin.listUsers({ page: 1, perPage: 1000 });
-  const existing = existingUsers?.users?.find(u => u.email?.toLowerCase() === email);
+  const existing = await findAuthUserByEmail(email);
 
   if (existing) {
+    if (!existing.email_confirmed_at) {
+      redirect('/admin/access?error=This%20email%20has%20an%20unconfirmed%20account.%20Use%20temporary%20access%20below%20to%20issue%20a%20fresh%20one-time%20credential.');
+    }
     const { data: account } = await supabase.from('accounts').select('id').eq('auth_user_id', existing.id).maybeSingle();
     if (!account) redirect('/admin/access?error=Account%20is%20not%20ready');
     const { error } = await supabase.rpc('grant_platform_role_command', { p_account_id: account.id, p_role_key: roleKey, p_reason: 'Granted from admin access dashboard' });
     if (error) redirect(`/admin/access?error=${safeMessage(error.message)}`);
-    redirect('/admin/access?success=Access%20granted');
+    redirect('/admin/access?success=Existing%20confirmed%20account%20was%20granted%20access');
   }
 
   const token = crypto.randomBytes(32).toString('base64url');
@@ -49,7 +57,7 @@ export async function inviteAdminAction(formData: FormData) {
     await supabase.rpc('revoke_platform_admin_invitation_command', { p_invitation_id: invitationId, p_reason: 'Authentication invitation delivery failed' });
     redirect(`/admin/access?error=${safeMessage('Invitation email could not be sent. Use temporary access below instead.')}`);
   }
-  redirect('/admin/access?success=Invitation%20sent');
+  redirect('/admin/access?success=Invitation%20requested.%20If%20email%20delivery%20is%20delayed%2C%20use%20temporary%20access%20instead.');
 }
 
 export async function createAdminWithTemporaryPasswordAction(formData: FormData) {
@@ -64,28 +72,52 @@ export async function createAdminWithTemporaryPasswordAction(formData: FormData)
   const { data: allowed, error: allowedError } = await supabase.rpc('platform_admin_manage_allowed_command');
   if (allowedError || !allowed) redirect('/admin/access?error=You%20cannot%20manage%20administrator%20access');
 
-  // The temporary password is generated once, never persisted by the application,
-  // and is shown only to the administrator who created it for a few minutes.
   const temporaryPassword = `Aa1!${crypto.randomBytes(18).toString('base64url')}`;
   const service = createSupabaseServiceClient();
-  const { data: created, error: createError } = await service.auth.admin.createUser({
-    email,
-    password: temporaryPassword,
-    email_confirm: true,
-    user_metadata: { display_name: displayName },
-  });
-  if (createError || !created.user) {
-    const message = createError?.message?.toLowerCase().includes('already')
-      ? 'An account already exists for this email. Use the normal role grant or email invitation.'
-      : 'Temporary administrator access could not be created.';
-    redirect(`/admin/access?error=${safeMessage(message)}`);
+  const existing = await findAuthUserByEmail(email);
+  let authUser = existing;
+
+  if (existing?.email_confirmed_at) {
+    const { data: account } = await service.from('accounts').select('id').eq('auth_user_id', existing.id).maybeSingle();
+    if (!account) redirect('/admin/access?error=Existing%20account%20is%20not%20ready');
+    await service.from('profiles').upsert({ account_id: account.id, display_name: displayName, updated_at: new Date().toISOString() }, { onConflict: 'account_id' });
+    const { error } = await supabase.rpc('grant_platform_role_command', { p_account_id: account.id, p_role_key: roleKey, p_reason: 'Existing confirmed account granted from temporary-access fallback' });
+    if (error) redirect(`/admin/access?error=${safeMessage(error.message)}`);
+    redirect('/admin/access?success=Existing%20confirmed%20account%20was%20granted%20access.%20No%20password%20was%20changed.');
   }
 
-  const { data: account } = await service.from('accounts').select('id').eq('auth_user_id', created.user.id).maybeSingle();
+  if (existing) {
+    const { data: updated, error: updateError } = await service.auth.admin.updateUserById(existing.id, {
+      password: temporaryPassword,
+      email_confirm: true,
+      user_metadata: { ...(existing.user_metadata ?? {}), display_name: displayName },
+    });
+    if (updateError || !updated.user) redirect('/admin/access?error=Unconfirmed%20account%20could%20not%20be%20converted%20to%20temporary%20access');
+    authUser = updated.user;
+  } else {
+    const { data: created, error: createError } = await service.auth.admin.createUser({
+      email,
+      password: temporaryPassword,
+      email_confirm: true,
+      user_metadata: { display_name: displayName },
+    });
+    if (createError || !created.user) redirect('/admin/access?error=Temporary%20administrator%20access%20could%20not%20be%20created');
+    authUser = created.user;
+  }
+
+  if (!authUser) redirect('/admin/access?error=Administrator%20account%20creation%20failed');
+  const { data: account } = await service.from('accounts').select('id').eq('auth_user_id', authUser.id).maybeSingle();
   if (!account) {
-    await service.auth.admin.deleteUser(created.user.id);
+    if (!existing) await service.auth.admin.deleteUser(authUser.id);
     redirect('/admin/access?error=Administrator%20account%20bootstrap%20failed');
   }
+
+  const { error: profileError } = await service.from('profiles').upsert({
+    account_id: account.id,
+    display_name: displayName,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'account_id' });
+  if (profileError) redirect('/admin/access?error=Administrator%20profile%20could%20not%20be%20saved');
 
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   const { error: provisionError } = await supabase.rpc('provision_platform_admin_role_command', {
@@ -95,7 +127,7 @@ export async function createAdminWithTemporaryPasswordAction(formData: FormData)
     p_reason: 'Temporary first-login credential created from Users & access',
   });
   if (provisionError) {
-    await service.auth.admin.deleteUser(created.user.id);
+    if (!existing) await service.auth.admin.deleteUser(authUser.id);
     redirect(`/admin/access?error=${safeMessage(provisionError.message)}`);
   }
 
@@ -125,4 +157,13 @@ export async function revokeRoleAction(formData: FormData) {
   const { error } = await supabase.rpc('revoke_platform_role_command', { p_account_id: accountId, p_role_key: roleKey, p_reason: reason });
   if (error) redirect(`/admin/access?error=${safeMessage(error.message)}`);
   redirect('/admin/access?success=Access%20revoked');
+}
+
+export async function revokeInvitationAction(formData: FormData) {
+  const invitationId = String(formData.get('invitation_id') ?? '');
+  if (!invitationId) redirect('/admin/access?error=Invitation%20not%20found');
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc('revoke_platform_admin_invitation_command', { p_invitation_id: invitationId, p_reason: 'Revoked from Users & access dashboard' });
+  if (error) redirect(`/admin/access?error=${safeMessage(error.message)}`);
+  redirect('/admin/access?success=Invitation%20revoked');
 }
