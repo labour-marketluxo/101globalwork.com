@@ -34,6 +34,11 @@ export default async function RequestMatchesPage({ params }: { params: Params })
       <p className="hint">Readiness {Math.round(Number(match.readiness_score))}% · Trust {Math.round(Number(match.trust_score))}%</p>
       <Link className="button-link" href={`/providers/${match.slug}/`}>View provider</Link>
     </article>)}</div>}
+    <div className="action-panel" style={{ marginTop: '1.5rem' }}>
+      <h2>What happens next?</h2>
+      <p>Eligible providers can quote this request. Your request page is where quotes, assignment, payment and completion will appear.</p>
+      <Link className="button-link" href={`/requests/${id}`}>Open request & quotes</Link>
+    </div>
     <p className="hint">Request state: {request.state}</p>
   </section>;
 }
