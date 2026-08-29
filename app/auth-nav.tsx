@@ -15,6 +15,7 @@ export default async function AuthNav() {
 
     return <nav aria-label="Primary navigation">
       <Link href="/services" className="nav-discovery">Find services</Link>
+      <Link href="/work">My work</Link>
       <Link href={hasProvider ? '/provider' : '/providers'}>{hasProvider ? 'Provider workspace' : 'Become a provider'}</Link>
       <Link href="/account/security" title={user.email ?? undefined}>Account</Link>
     </nav>;
