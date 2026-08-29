@@ -11,6 +11,6 @@ export async function reviewVerificationAction(formData: FormData) {
   const decision=String(formData.get('decision')??'');
   const note=String(formData.get('note')??'').trim()||null;
   const {error}=await supabase.rpc('review_provider_verification_command',{p_verification_id:id,p_decision:decision,p_note:note});
-  if(error) redirect(`/admin/verifications?error=${encodeURIComponent('Unable to review this verification.')}`);
-  redirect('/admin/verifications');
+  if(error) redirect(`/admin/verifications?error=${encodeURIComponent('Unable to review this verification. It may already have been decided or you may not have permission.')}`);
+  redirect(`/admin/verifications?reviewed=${encodeURIComponent(decision)}`);
 }
