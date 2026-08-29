@@ -31,8 +31,11 @@ export default async function ProviderWorkspacePage() {
   if (!providers?.length) redirect('/provider/onboarding');
 
   const providerIds = providers.map(p => p.id);
-  const [{ data: profiles }, { data: opportunities }, { data: quotes }, { data: assignments }, { data: payoutDestinations }] = await Promise.all([
-    supabase.from('provider_public_profiles').select('provider_id,headline,readiness_score,is_public,published_at,accepts_new_work').in('provider_id', providerIds),
+  const [{ data: profiles }, { data: readinessRows }, { data: progressRows }, { data: verifications }, { data: opportunities }, { data: quotes }, { data: assignments }, { data: payoutDestinations }] = await Promise.all([
+    supabase.from('provider_public_profiles').select('provider_id,headline,is_public,published_at,accepts_new_work').in('provider_id', providerIds),
+    supabase.from('provider_search_readiness').select('provider_id,total_score,readiness,reasons').in('provider_id', providerIds),
+    supabase.from('provider_onboarding_progress').select('provider_id,completion_percent,next_action').in('provider_id', providerIds),
+    supabase.from('provider_verifications').select('provider_id,kind,status,created_at').in('provider_id', providerIds).order('created_at', { ascending: false }),
     supabase.rpc('list_my_provider_opportunities_command', { p_limit: 25 }),
     supabase.from('quotes').select('id,request_id,provider_id,status,currency_code,total_minor,submitted_at').in('provider_id', providerIds).order('submitted_at', { ascending: false }).limit(20),
     supabase.from('assignments').select('id,request_id,provider_id,status,assigned_at').in('provider_id', providerIds).order('assigned_at', { ascending: false }).limit(20),
@@ -40,6 +43,12 @@ export default async function ProviderWorkspacePage() {
   ]);
 
   const profileByProvider = new Map((profiles ?? []).map(p => [p.provider_id, p]));
+  const readinessByProvider = new Map((readinessRows ?? []).map(r => [r.provider_id, r]));
+  const progressByProvider = new Map((progressRows ?? []).map(r => [r.provider_id, r]));
+  const latestIdentityByProvider = new Map<string, { status: string }>();
+  for (const verification of verifications ?? []) {
+    if (verification.kind === 'identity' && !latestIdentityByProvider.has(verification.provider_id)) latestIdentityByProvider.set(verification.provider_id, verification);
+  }
   const opps = (opportunities ?? []) as Opportunity[];
   const activeAssignments = (assignments ?? []).filter(a => a.status === 'active');
   const payoutReady = new Set((payoutDestinations ?? []).map(item => item.provider_id));
@@ -49,25 +58,30 @@ export default async function ProviderWorkspacePage() {
       <div>
         <p className="eyebrow">Provider workspace</p>
         <h1>Work you can act on.</h1>
-        <p className="lede left">Finish your profile, quote matching requests, manage accepted work, and keep your payout destination ready.</p>
+        <p className="lede left">At a glance: setup, verification, visibility, opportunities, active work and payout readiness.</p>
       </div>
-      <div className="entry-actions">
-        <Link className="secondary-link" href="/provider/onboarding">Edit provider setup</Link>
-        <Link className="secondary-link" href="/provider/payouts">Payout account</Link>
-      </div>
+      <Link className="secondary-link" href="/provider/payouts">Payout account</Link>
     </div>
 
     <div className="provider-grid">
       {providers.map(provider => {
         const profile = profileByProvider.get(provider.id);
-        const ready = provider.status === 'active' && profile?.is_public && profile?.published_at;
+        const readiness = readinessByProvider.get(provider.id);
+        const progress = progressByProvider.get(provider.id);
+        const identity = latestIdentityByProvider.get(provider.id);
+        const live = provider.status === 'active' && Boolean(profile?.is_public && profile?.published_at);
         return <article className="provider-card" key={provider.id}>
-          <p className="eyebrow">{ready ? 'Discoverable' : 'Setup needs attention'}</p>
+          <p className="eyebrow">{live ? 'Live provider' : 'Setup needs attention'}</p>
           <h2>{profile?.headline ?? provider.display_name}</h2>
-          <p className="hint">Provider status: {provider.status} · Readiness {Math.round(Number(profile?.readiness_score ?? 0))}%</p>
-          <p className="hint">Payout account: {payoutReady.has(provider.id) ? 'verified' : 'not verified yet'}</p>
-          {!ready ? <Link className="button-link" href="/provider/onboarding">Finish setup and publish</Link> : null}
-          {ready && !payoutReady.has(provider.id) ? <Link className="secondary-link" href="/provider/payouts">Verify payout account</Link> : null}
+          <div className="admin-list">
+            <div><strong>Setup</strong><span>{progress?.completion_percent ?? 0}% complete</span></div>
+            <div><strong>Identity</strong><span>{identity?.status?.replaceAll('_',' ') ?? 'not submitted'}</span></div>
+            <div><strong>Visibility</strong><span>{live ? 'published' : 'not live'}</span></div>
+            <div><strong>Search readiness</strong><span>{Math.round(Number(readiness?.total_score ?? 0))}/100 · {(readiness?.readiness ?? 'not_ready').replaceAll('_',' ')}</span></div>
+            <div><strong>Payout account</strong><span>{payoutReady.has(provider.id) ? 'verified' : 'not verified yet'}</span></div>
+          </div>
+          {!live ? <Link className="button-link" href={`/provider/onboarding?provider=${provider.id}`}>Continue setup</Link> : null}
+          {live && !payoutReady.has(provider.id) ? <Link className="secondary-link" href="/provider/payouts">Verify payout account</Link> : null}
         </article>;
       })}
     </div>
@@ -78,7 +92,7 @@ export default async function ProviderWorkspacePage() {
         <div><strong>{item.need_text}</strong><br /><span className="hint">{item.request_state.replaceAll('_',' ')} · {new Date(item.request_created_at).toLocaleString()}</span></div>
         {item.quote_id ? <p>Your latest quote is <strong>{item.quote_status?.replaceAll('_',' ')}</strong>.</p> : <p>No quote submitted yet.</p>}
         <Link className="button-link" href={`/provider/requests/${item.request_id}/quote?provider=${item.provider_id}`}>{item.quote_id ? 'Review / quote again' : 'Send quote'}</Link>
-      </article>)}</div> : <p className="notice">No matching opportunities right now. Only requests that pass the same service, area, verification, publication and readiness rules are shown here.</p>}
+      </article>)}</div> : <p className="notice">No matching opportunities right now. Finish setup first; after publication, only requests that pass service, area, verification and market eligibility rules appear here.</p>}
     </section>
 
     <section className="action-panel">
