@@ -9,9 +9,17 @@ function secret() {
   return value;
 }
 
+function assertCheckoutExecutionAllowed() {
+  const value = secret();
+  if (value.startsWith('sk_test_')) return;
+  if (value.startsWith('sk_live_') && process.env.PAYSTACK_LIVE_ENABLED === 'true') return;
+  throw new Error('Paystack live checkout is disabled');
+}
+
 export const paystackAdapter: PaymentAdapter = {
   key: 'paystack',
   async initializeCheckout(input: CheckoutInput): Promise<CheckoutResult> {
+    assertCheckoutExecutionAllowed();
     const reference = `ps_${input.attemptId.replaceAll('-', '')}`.slice(0, 48);
     const response = await fetch(`${API}/transaction/initialize`, {
       method: 'POST',
