@@ -31,25 +31,30 @@ export default async function ProviderWorkspacePage() {
   if (!providers?.length) redirect('/provider/onboarding');
 
   const providerIds = providers.map(p => p.id);
-  const [{ data: profiles }, { data: opportunities }, { data: quotes }, { data: assignments }] = await Promise.all([
+  const [{ data: profiles }, { data: opportunities }, { data: quotes }, { data: assignments }, { data: payoutDestinations }] = await Promise.all([
     supabase.from('provider_public_profiles').select('provider_id,headline,readiness_score,is_public,published_at,accepts_new_work').in('provider_id', providerIds),
     supabase.rpc('list_my_provider_opportunities_command', { p_limit: 25 }),
     supabase.from('quotes').select('id,request_id,provider_id,status,currency_code,total_minor,submitted_at').in('provider_id', providerIds).order('submitted_at', { ascending: false }).limit(20),
     supabase.from('assignments').select('id,request_id,provider_id,status,assigned_at').in('provider_id', providerIds).order('assigned_at', { ascending: false }).limit(20),
+    supabase.from('provider_payout_destinations').select('provider_id,verification_status,is_default').in('provider_id', providerIds).eq('verification_status','verified').eq('is_default',true),
   ]);
 
   const profileByProvider = new Map((profiles ?? []).map(p => [p.provider_id, p]));
   const opps = (opportunities ?? []) as Opportunity[];
   const activeAssignments = (assignments ?? []).filter(a => a.status === 'active');
+  const payoutReady = new Set((payoutDestinations ?? []).map(item => item.provider_id));
 
   return <section className="content-shell">
     <div className="section-heading-row">
       <div>
         <p className="eyebrow">Provider workspace</p>
         <h1>Work you can act on.</h1>
-        <p className="lede left">Finish your profile, quote matching requests, and manage accepted work from one place.</p>
+        <p className="lede left">Finish your profile, quote matching requests, manage accepted work, and keep your payout destination ready.</p>
       </div>
-      <Link className="button-link secondary" href="/provider/onboarding">Edit provider setup</Link>
+      <div className="entry-actions">
+        <Link className="secondary-link" href="/provider/onboarding">Edit provider setup</Link>
+        <Link className="secondary-link" href="/provider/payouts">Payout account</Link>
+      </div>
     </div>
 
     <div className="provider-grid">
@@ -60,7 +65,9 @@ export default async function ProviderWorkspacePage() {
           <p className="eyebrow">{ready ? 'Discoverable' : 'Setup needs attention'}</p>
           <h2>{profile?.headline ?? provider.display_name}</h2>
           <p className="hint">Provider status: {provider.status} · Readiness {Math.round(Number(profile?.readiness_score ?? 0))}%</p>
+          <p className="hint">Payout account: {payoutReady.has(provider.id) ? 'verified' : 'not verified yet'}</p>
           {!ready ? <Link className="button-link" href="/provider/onboarding">Finish setup and publish</Link> : null}
+          {ready && !payoutReady.has(provider.id) ? <Link className="secondary-link" href="/provider/payouts">Verify payout account</Link> : null}
         </article>;
       })}
     </div>
