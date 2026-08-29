@@ -1,28 +1,38 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 
 type SessionView = { signedIn: boolean; email?: string | null } | null;
 
 export default function AuthNav() {
-  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
   const [session, setSession] = useState<SessionView>(null);
 
   useEffect(() => {
     let active = true;
-    void supabase.auth.getUser().then(({ data }) => {
-      if (active) setSession({ signedIn: Boolean(data.user), email: data.user?.email });
-    });
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      if (active) setSession({ signedIn: Boolean(nextSession?.user), email: nextSession?.user?.email });
-    });
+    let unsubscribe: (() => void) | undefined;
+
+    try {
+      // Browser auth is created only after hydration so static/public pages can
+      // prerender in CI without exposing or requiring browser credentials there.
+      const supabase = createSupabaseBrowserClient();
+      void supabase.auth.getUser().then(({ data }) => {
+        if (active) setSession({ signedIn: Boolean(data.user), email: data.user?.email });
+      });
+      const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+        if (active) setSession({ signedIn: Boolean(nextSession?.user), email: nextSession?.user?.email });
+      });
+      unsubscribe = () => data.subscription.unsubscribe();
+    } catch {
+      setSession({ signedIn: false });
+    }
+
     return () => {
       active = false;
-      data.subscription.unsubscribe();
+      unsubscribe?.();
     };
-  }, [supabase]);
+  }, []);
 
   if (session?.signedIn) {
     return <nav aria-label="Primary navigation">
