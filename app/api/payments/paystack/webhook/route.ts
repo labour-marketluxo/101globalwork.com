@@ -47,8 +47,11 @@ export async function POST(request: Request) {
     if (reference) {
       const { data: payout } = await service.from('payouts').select('id').eq('provider_adapter', 'paystack').eq('provider_reference', reference).maybeSingle();
       if (payout) {
+        // The internal payout enum uses `blocked` for a provider reversal. The authoritative
+        // command detects a previously paid payout and posts the reversal ledger transaction.
         const status = type === 'transfer.success' ? 'paid' : type === 'transfer.failed' ? 'failed' : 'blocked';
-        await service.rpc('record_payout_provider_state_command', { p_payout_id: payout.id, p_adapter: 'paystack', p_provider_reference: reference, p_status: status });
+        const { error } = await service.rpc('record_payout_provider_state_command', { p_payout_id: payout.id, p_adapter: 'paystack', p_provider_reference: reference, p_status: status });
+        if (error) return NextResponse.json({ ok: false }, { status: 500 });
       }
     }
     return NextResponse.json({ ok: true });
@@ -59,8 +62,38 @@ export async function POST(request: Request) {
     if (transactionReference) {
       const { data: attempt } = await service.from('payment_attempts').select('id').eq('provider_adapter', 'paystack').or(`checkout_reference.eq.${transactionReference},provider_reference.eq.${transactionReference}`).maybeSingle();
       if (attempt) {
-        const status = type === 'refund.processed' ? 'succeeded' : type === 'refund.failed' ? 'failed' : type === 'refund.needs-attention' ? 'needs_attention' : type === 'refund.processing' ? 'processing' : 'submitted';
-        await service.from('payment_refunds').update({ status, provider_reference: data.refund_reference == null ? null : String(data.refund_reference), updated_at: new Date().toISOString() }).eq('payment_attempt_id', attempt.id).in('status', ['requested','submitted','processing','needs_attention']);
+        const amountMinor = data.amount == null ? null : Number(data.amount);
+        const eventReference = String(data.refund_reference ?? data.id ?? '');
+        const { data: candidates } = await service
+          .from('payment_refunds')
+          .select('id,amount_minor,status,provider_reference,created_at')
+          .eq('payment_attempt_id', attempt.id)
+          .in('status', ['requested','submitted','processing','needs_attention'])
+          .order('created_at', { ascending: true });
+
+        const refund = (candidates ?? []).find(item => {
+          if (eventReference && item.provider_reference && item.provider_reference === eventReference) return true;
+          return amountMinor != null && Number(item.amount_minor) === amountMinor;
+        }) ?? candidates?.[0];
+
+        if (refund) {
+          const normalizedStatus = type === 'refund.processed'
+            ? 'succeeded'
+            : type === 'refund.failed'
+              ? 'failed'
+              : type === 'refund.needs-attention'
+                ? 'needs_attention'
+                : type === 'refund.processing'
+                  ? 'processing'
+                  : 'submitted';
+          const { error } = await service.rpc('record_refund_provider_state_command', {
+            p_refund_id: refund.id,
+            p_adapter: 'paystack',
+            p_provider_reference: eventReference || refund.provider_reference || '',
+            p_status: normalizedStatus,
+          });
+          if (error) return NextResponse.json({ ok: false }, { status: 500 });
+        }
       }
     }
     return NextResponse.json({ ok: true });
