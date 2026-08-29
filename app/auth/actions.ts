@@ -10,6 +10,11 @@ function safeNext(value: FormDataEntryValue | null, fallback = '/') {
   return next;
 }
 
+function withFlag(path: string, key: string, value = '1') {
+  const separator = path.includes('?') ? '&' : '?';
+  return `${path}${separator}${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+}
+
 async function siteOrigin() {
   const configured = process.env.NEXT_PUBLIC_SITE_URL;
   if (configured) return configured.replace(/\/$/, '');
@@ -30,7 +35,7 @@ export async function signUpAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const origin = await siteOrigin();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -40,6 +45,10 @@ export async function signUpAction(formData: FormData) {
   });
 
   if (error) redirect(`/sign-up?error=${encodeURIComponent('We could not complete sign up. Check your details and try again.')}&next=${encodeURIComponent(next)}`);
+
+  // Some markets/projects allow immediate confirmed sessions while others require email confirmation.
+  // Never tell the user to check email when Auth already created a usable session.
+  if (data.session) redirect(withFlag(next, 'welcome'));
   redirect(`/sign-up?check_email=1&next=${encodeURIComponent(next)}`);
 }
 
@@ -53,7 +62,7 @@ export async function signInAction(formData: FormData) {
 
   const { data: activationRequired } = await supabase.rpc('platform_admin_activation_required_command');
   if (activationRequired) redirect('/account/activate-admin-access');
-  redirect(next);
+  redirect(withFlag(next, 'signed_in'));
 }
 
 export async function signInWithGoogleAction(formData: FormData) {
