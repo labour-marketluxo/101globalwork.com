@@ -46,6 +46,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="admin-identity">
           <span>{context.is_owner ? 'Platform Owner' : ((context.roles?.[0]?.name as string) ?? 'Administrator')}</span>
           <small>Access is capability-based</small>
+          <Link href="/account/security?next=/admin">Strong authentication</Link>
         </div>
       </aside>
       <section className="admin-main">{children}</section>
