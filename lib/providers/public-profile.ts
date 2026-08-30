@@ -10,18 +10,16 @@ export type PublicProviderProfile = {
   verification_summary: Record<string, unknown>;
   trust_score: number;
   readiness_score: number;
+  service_entity_id: string | null;
+  service_name: string | null;
+  location_id: string | null;
+  location_name: string | null;
 };
 
 export async function getPublicProviderProfile(slug: string): Promise<PublicProviderProfile | null> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
-    .from('provider_public_profiles')
-    .select('provider_id,slug,headline,public_description,years_experience,accepts_new_work,verification_summary,trust_score,readiness_score')
-    .eq('slug', slug)
-    .eq('is_public', true)
-    .not('published_at', 'is', null)
-    .maybeSingle();
+  const { data, error } = await supabase.rpc('get_public_provider_profile_command', { p_slug: slug });
 
   if (error) throw new Error(`Unable to load provider profile: ${error.message}`);
-  return data as PublicProviderProfile | null;
+  return (data?.[0] ?? null) as PublicProviderProfile | null;
 }
