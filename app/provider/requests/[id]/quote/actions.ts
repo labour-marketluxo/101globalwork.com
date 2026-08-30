@@ -15,8 +15,20 @@ export async function submitQuoteAction(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/provider/requests/${requestId}/quote?provider=${providerId}`)}`);
 
-  if (totalMinor < 0 || !/^[A-Z]{3}$/.test(currency)) {
-    redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&error=${encodeURIComponent('Enter a valid amount and currency.')}`);
+  if (totalMinor <= 0 || !/^[A-Z]{3}$/.test(currency)) {
+    redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&error=${encodeURIComponent('Enter a valid positive price.')}`);
+  }
+  if (summary.length < 20) {
+    redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&error=${encodeURIComponent('Describe what is included in at least 20 characters.')}`);
+  }
+
+  let validUntil: string | null = null;
+  if (validUntilRaw) {
+    const parsed = new Date(validUntilRaw);
+    if (Number.isNaN(parsed.getTime()) || parsed <= new Date()) {
+      redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&error=${encodeURIComponent('Quote validity must be a future date and time.')}`);
+    }
+    validUntil = parsed.toISOString();
   }
 
   const { error } = await supabase.rpc('submit_quote_command', {
@@ -24,11 +36,11 @@ export async function submitQuoteAction(formData: FormData) {
     p_provider_id: providerId,
     p_currency_code: currency,
     p_total_minor: totalMinor,
-    p_summary: summary || null,
+    p_summary: summary,
     p_scope_snapshot: {},
-    p_valid_until: validUntilRaw ? new Date(validUntilRaw).toISOString() : null,
+    p_valid_until: validUntil,
     p_idempotency_key: crypto.randomUUID(),
   });
-  if (error) redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&error=${encodeURIComponent('This quote could not be submitted. Check eligibility and request status, then try again.')}`);
+  if (error) redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&error=${encodeURIComponent('This quote could not be submitted. Check the request, price, scope and eligibility, then try again.')}`);
   redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&sent=1`);
 }
