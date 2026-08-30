@@ -113,7 +113,7 @@ export default async function ProviderWorkspacePage({ searchParams }: { searchPa
             <div><strong>Payout account</strong><span>{payoutReady.has(provider.id) ? 'verified' : 'not verified yet'}</span></div>
           </div>
           {!live ? <div className="notice"><strong>Next action</strong><br />{blocker}</div> : null}
-          {!live ? <Link className="button-link" href={`/provider/onboarding?provider=${provider.id}`}>Finish publication</Link> : <Link className="secondary-link" href={`/provider/onboarding?provider=${provider.id}`}>Edit public profile</Link>}
+          {!live ? <Link className="button-link" href={`/provider/onboarding?provider=${provider.id}`}>Finish publication</Link> : <Link className="secondary-link" href={`/provider/onboarding?provider=${provider.id}&edit=1`}>Edit public profile</Link>}
           {live && !payoutReady.has(provider.id) ? <Link className="secondary-link" href="/provider/payouts">Verify payout account</Link> : null}
         </article>;
       })}
