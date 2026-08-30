@@ -34,9 +34,8 @@ export default async function RequestMatchesPage({ params }: { params: Params })
 
   let matches: Match[] = [];
   if (request.service_entity_id && request.location_id) {
-    const { data } = await supabase.rpc('find_eligible_providers', {
-      p_service_entity_id: request.service_entity_id,
-      p_location_id: request.location_id,
+    const { data } = await supabase.rpc('find_eligible_providers_for_request', {
+      p_request_id: id,
       p_limit: 20,
     });
     matches = (data ?? []) as Match[];
@@ -45,7 +44,7 @@ export default async function RequestMatchesPage({ params }: { params: Params })
   return <section className="content-shell">
     <p className="eyebrow">Request created</p>
     <h1>Providers who can take this work</h1>
-    <p className="lede left">Eligibility is checked before ranking. We only show providers whose accepted records currently match the requested service and service area and who also pass publication, availability and identity-verification rules.</p>
+    <p className="lede left">Eligibility is checked before ranking. We only show providers whose accepted records currently match the requested service and service area and who also pass publication, availability and identity-verification rules. A provider owned by the requesting account is excluded from marketplace matching.</p>
 
     <section className="provider-progress-card" aria-label="Request matching criteria">
       <div><span>Service</span><strong>{service?.display_name ?? 'Not set'}</strong></div>
@@ -54,7 +53,7 @@ export default async function RequestMatchesPage({ params }: { params: Params })
     </section>
 
     {matches.length === 0
-      ? <div className="notice"><strong>No eligible providers yet.</strong><br />Your request is saved. We will not weaken service, geography, verification or readiness rules just to fill the list.</div>
+      ? <div className="notice"><strong>No independent eligible providers yet.</strong><br />Your request is saved. We exclude providers owned by the same account and will not weaken service, geography, verification or readiness rules just to fill the list.</div>
       : <div className="provider-grid">{matches.map(match => <article key={match.provider_id} className="provider-card">
           <p className="eyebrow">Matched for {location?.display_name ?? 'this area'}</p>
           <h2>{match.headline ?? 'Service provider'}</h2>
@@ -69,7 +68,7 @@ export default async function RequestMatchesPage({ params }: { params: Params })
 
     <div className="action-panel" style={{ marginTop: '1.5rem' }}>
       <h2>What happens next?</h2>
-      <p>Your request is saved. Eligible providers can submit quotes; the request page becomes the single place for quote review, hiring, payment, work progress and completion.</p>
+      <p>Your request is saved. Independent eligible providers can submit quotes; the request page becomes the single place for quote review, hiring, payment, work progress and completion.</p>
       <Link className="button-link" href={`/requests/${id}`}>Open request & quotes</Link>
     </div>
   </section>;
