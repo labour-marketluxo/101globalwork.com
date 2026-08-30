@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { addProviderAreaAction, addProviderServiceAction, createProviderAction, publishProviderProfileAction, submitVerificationAction, updateProviderProfileAction } from './actions';
 
 export const metadata = { title: 'Provider onboarding', robots: { index: false, follow: false } };
-type Search = Promise<{ provider?: string; error?: string; success?: string; welcome?: string; signed_in?: string; new?: string }>;
+type Search = Promise<{ provider?: string; error?: string; success?: string; welcome?: string; signed_in?: string; new?: string; edit?: string }>;
 type OwnedProvider = { id: string; display_name: string; status: string };
 
 function nextActionLabel(value?: string | null) {
@@ -36,7 +36,9 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
   const ownedProviders = (ownedProviderRows ?? []) as OwnedProvider[];
 
   if (!params.provider && !params.new && ownedProviders.length === 1) {
-    redirect(`/provider/onboarding?provider=${encodeURIComponent(ownedProviders[0].id)}${params.welcome ? '&welcome=1' : ''}${params.signed_in ? '&signed_in=1' : ''}`);
+    const onlyProvider = ownedProviders[0];
+    if (onlyProvider.status === 'active' && params.edit !== '1') redirect('/provider');
+    redirect(`/provider/onboarding?provider=${encodeURIComponent(onlyProvider.id)}${params.welcome ? '&welcome=1' : ''}${params.signed_in ? '&signed_in=1' : ''}${params.edit === '1' ? '&edit=1' : ''}`);
   }
 
   let provider = null, progress = null, verifications = null, profile = null, readiness = null, currentService = null, currentArea = null;
@@ -54,6 +56,8 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
     ({ data: currentArea } = await supabase.from('provider_service_areas').select('location_id,is_primary').eq('provider_id', params.provider).eq('is_active', true).order('is_primary', { ascending: false }).limit(1).maybeSingle());
   }
 
+  if (profile?.is_public && params.edit !== '1') redirect('/provider');
+
   const currentServiceName = services?.find(item => item.service_entity_id === currentService?.service_entity_id)?.display_name;
   const currentAreaName = locations?.find(item => item.location_id === currentArea?.location_id)?.display_name;
   const identityVerified = Boolean(verifications?.some(v => v.kind === 'identity' && v.status === 'verified'));
@@ -70,11 +74,13 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
   const canPublish = Boolean(provider && identityVerified && setupComplete && !profile?.is_public);
   const showCreateForm = !provider && (ownedProviders.length === 0 || params.new === '1');
   const nextTarget = !serviceComplete ? '#service' : !areaComplete ? '#service-area' : !profileComplete ? '#public-profile' : !identityVerified ? '#verification' : '#publish';
+  const editingLiveProfile = Boolean(profile?.is_public && params.edit === '1');
 
   return <section className="content-shell">
-    <p className="eyebrow">Provider setup</p>
-    <h1>Build your work profile</h1>
-    <p className="lede left">Finish only what is missing. Every requirement below maps directly to the backend rule that controls whether customers can discover you.</p>
+    <p className="eyebrow">{editingLiveProfile ? 'Provider profile' : 'Provider setup'}</p>
+    <h1>{editingLiveProfile ? 'Edit your public profile' : 'Build your work profile'}</h1>
+    <p className="lede left">{editingLiveProfile ? 'Your accepted service and service area control marketplace matching. Changes here take effect on future eligibility, so keep them accurate.' : 'Finish only what is missing. Every requirement below maps directly to the backend rule that controls whether customers can discover you.'}</p>
+    {editingLiveProfile ? <p><Link className="secondary-link" href="/provider">← Back to provider workspace</Link></p> : null}
     {params.welcome ? <p className="notice" role="status"><strong>Account created and signed in.</strong><br />Your account is ready. Continue with provider setup below.</p> : null}
     {params.signed_in ? <p className="notice" role="status"><strong>Signed in successfully.</strong><br />You are continuing your provider setup.</p> : null}
     {params.success ? <p className="notice" role="status">{params.success}</p> : null}
@@ -83,7 +89,7 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
     {!provider && ownedProviders.length > 1 && !params.new ? <section className="action-panel">
       <h2>Choose a provider profile</h2>
       <p>You already manage more than one provider identity. Continue the one you want to update.</p>
-      <div className="quote-list">{ownedProviders.map(item => <article className="quote-card" key={item.id}><div><strong>{item.display_name}</strong><br /><span className="hint">{item.status.replaceAll('_',' ')}</span></div><Link className="button-link" href={`/provider/onboarding?provider=${item.id}`}>Continue setup</Link></article>)}</div>
+      <div className="quote-list">{ownedProviders.map(item => <article className="quote-card" key={item.id}><div><strong>{item.display_name}</strong><br /><span className="hint">{item.status.replaceAll('_',' ')}</span></div><Link className="button-link" href={item.status === 'active' ? `/provider/onboarding?provider=${item.id}&edit=1` : `/provider/onboarding?provider=${item.id}`}>{item.status === 'active' ? 'Edit profile' : 'Continue setup'}</Link></article>)}</div>
       <p className="hint"><Link href="/provider/onboarding?new=1">Create another provider identity</Link></p>
     </section> : null}
 
@@ -145,9 +151,9 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
       <form id="public-profile" action={updateProviderProfileAction} className="stack-form action-panel">
         <h2>4. Public profile {profileComplete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
         {!profileComplete ? <p className="notice" role="status"><strong>This is the current blocker.</strong><br />Your saved description is {descriptionLength}/80 characters. Add at least {descriptionRemaining} more characters, then save.</p> : null}
-        <label htmlFor="headline">Headline</label><input id="headline" name="headline" defaultValue={profile?.headline ?? ''} placeholder="Tailor and alterations specialist in Minna" />
+        <label htmlFor="headline">Headline</label><input id="headline" name="headline" defaultValue={profile?.headline ?? ''} placeholder="Tailor and alterations specialist" />
         <label htmlFor="description">Public description</label><textarea id="description" name="description" required minLength={80} rows={7} defaultValue={description} aria-describedby="description-help" />
-        <p id="description-help" className="hint">Minimum 80 characters. Current saved length: {descriptionLength}. A strong description explains the work you perform, the jobs you accept and the area/customer you serve.</p>
+        <p id="description-help" className="hint">Minimum 80 characters. Current saved length: {descriptionLength}. A strong description explains the work you perform and the jobs you accept. The structured service area above is the authoritative geography used for matching.</p>
         <label htmlFor="years_experience">Years of experience <span className="hint">(optional)</span></label><input id="years_experience" name="years_experience" type="number" min={0} max={80} defaultValue={profile?.years_experience ?? ''} />
         <label><input name="accepts_new_work" type="checkbox" defaultChecked={profile?.accepts_new_work ?? true} /> Accepting new work</label>
         <button type="submit">Save public profile and recheck readiness</button>
