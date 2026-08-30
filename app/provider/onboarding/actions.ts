@@ -71,5 +71,5 @@ export async function publishProviderProfileAction(formData: FormData) {
   const supabase=await authedClient(`/provider/onboarding?provider=${encodeURIComponent(provider)}`);
   const {error}=await supabase.rpc('publish_provider_profile_command',{p_provider_id:provider});
   if(error) back(provider,{error:error.message});
-  back(provider,{success:'Your provider profile is now published and eligible for matching when all market rules pass.'});
+  redirect('/provider?published=1');
 }
