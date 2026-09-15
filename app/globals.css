@@ -372,6 +372,22 @@
   .admin-quick-note{@apply inline-flex items-center bg-accent-soft text-accent-strong;gap:7px;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:700}
   .admin-quick-note:before{content:"";width:6px;height:6px;border-radius:50%;@apply bg-accent}
 
+  /* -------------------------------------------------------- loading states */
+
+  /* Consumed by components/ui/RouteSkeleton.tsx, which backs the route-group
+     loading boundaries. The pulse animation itself comes from Tailwind's
+     `animate-pulse` utility; these rules only handle sizing. */
+  .skeleton-stack{display:grid;gap:12px;max-width:640px;margin-top:8px}
+
+  .skeleton{display:block;border-radius:var(--radius-sm)}
+  .skeleton[data-size='title']{height:40px;max-width:420px}
+  .skeleton[data-size='body']{height:14px}
+  .skeleton[data-size='short']{height:14px;max-width:240px}
+
+  /* Let .button-link (defined in entry-points.css) be used on a <button>,
+     which needs an explicit border reset and cursor. Anchors are unaffected. */
+  button.button-link{border:0;cursor:pointer}
+
   /* ------------------------------------------------------------ responsive */
 
   @media(max-width:960px){
