@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import AuthNav from './auth-nav';
+import MainNav from '@/components/navigation/MainNav';
+import Footer from '@/components/navigation/Footer';
 import './globals.css';
 import './entry-points.css';
 
@@ -15,12 +15,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <header className="site-header">
-          <Link href="/" className="brand">101GlobalWork</Link>
-          <AuthNav />
-        </header>
+        <MainNav />
         <main>{children}</main>
-        <footer>© {new Date().getFullYear()} 101GlobalWork</footer>
+        <Footer />
       </body>
     </html>
   );
