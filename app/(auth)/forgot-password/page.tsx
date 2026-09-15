@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { requestPasswordResetAction } from '@/app/auth/actions';
+import { requestPasswordResetAction } from '@/features/auth/actions';
 
 export const metadata = { title: 'Reset password', robots: { index: false, follow: false } };
 

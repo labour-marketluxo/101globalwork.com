@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { signInAction, signInWithGoogleAction } from '@/app/auth/actions';
+import { signInAction, signInWithGoogleAction } from '@/features/auth/actions';
 
 export const metadata = { title: 'Sign in', robots: { index: false, follow: false } };
 

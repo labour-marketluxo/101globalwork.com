@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { updatePasswordAction } from '@/app/auth/actions';
+import { updatePasswordAction } from '@/features/auth/actions';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export const metadata = { title: 'Choose new password', robots: { index: false, follow: false } };
