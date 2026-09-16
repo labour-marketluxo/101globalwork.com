@@ -43,20 +43,92 @@
   --color-sidebar: #13201f;
   --color-sidebar-soft: #1b2d2a;
 
-  /* Radii -> rounded-* (intentionally overrides Tailwind's defaults so the
-     utilities match the values this design system already uses) */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
+  /* -------------------------------------------------------------------------
+     Option A — "Slate Teal & Warm Ochre" design tokens.
 
-  /* -> shadow-soft */
+     Added ADDITIVELY: nothing above is overwritten, so the live UI keeps
+     rendering exactly as it does today while new work can adopt Option A.
+     Three names from the design spec are NOT reused verbatim because this app
+     already ships tokens under those names — see the collision note below.
+     ---------------------------------------------------------------------- */
+
+  /* Brand */
+  --color-brand-primary: #0f383d;
+  --color-brand-hover: #092528;
+
+  /* CTA accent (warm ochre). Exposed as `-cta` because `--color-accent` is
+     already this app's live emphasis colour (#23685d), referenced by existing
+     eyebrow, divider and hover rules. */
+  --color-accent-cta: #d97706;
+  --color-accent-cta-hover: #b45309;
+
+  /* Surfaces */
+  --color-surface-canvas: #fafaf9;
+  --color-surface-card: #ffffff;
+  --color-surface-muted: #f1f5f9;
+
+  /* Borders */
+  --color-border-default: #cbd5e1;
+  --color-border-subdued: #e2e8f0;
+
+  /* Status. `warning` and `info` are new. Option A's success/danger values
+     (#059669 / #dc2626) deliberately do NOT overwrite the live
+     --color-success (#2d7a55) and --color-danger (#a23d34) yet — those feed
+     live notices, audit rows and admin states. Switching them is a one-line
+     change once palette adoption is agreed. */
+  --color-warning: #d97706;
+  --color-info: #2563eb;
+
+  /* ------------------------------------------------- landing-page palette
+     Tokens for the photographic search-gateway landing page.
+
+     Note: brand-dark (#0b132b) and brand-light (#f8f9fa) sit alongside Option
+     A's brand-primary (#0f383d) and surface-canvas (#fafaf9). They are close
+     but NOT equal — this is a second, parallel brand palette, not an alias.
+     Worth consolidating before more pages adopt one or the other.
+
+     The brief's "Slate #1E293B" needs no token: it is Tailwind's default
+     slate-800, so bg-slate-800 / from-slate-800 already resolve to it. */
+  --color-brand-dark: #0b132b;
+  --color-brand-light: #f8f9fa;
+  --color-terracotta: #d96b43;
+  --color-sage: #6b9080;
+  --color-amber: #e5ad35;
+
+  /* Radii -> rounded-*
+     Option A calls for a RESTRAINED scale: inputs/buttons rounded-md (6px),
+     cards/modals rounded-lg (8px). Those are Tailwind's own defaults, so the
+     earlier overrides that forced this system's 10/16/22px are removed rather
+     than re-declared — that is precisely what makes rounded-md and rounded-lg
+     mean what the spec says.
+
+     Existing component rules reference var(--radius-sm|md|lg) directly, so they
+     now resolve to 4px/6px/8px. That is the intended restraint, not a
+     side effect. */
+  --radius-sm: 0.25rem;  /* 4px */
+  --radius-md: 0.375rem; /* 6px  — inputs, buttons */
+  --radius-lg: 0.5rem;   /* 8px  — cards, modals, panels */
+
+  /* Shadows stay minimal and non-decorative: shadow-sm for cards and shadow-md
+     for popovers/modals are Tailwind defaults, so nothing is overridden. */
+  /* -> shadow-soft (this system's own soft card shadow, retained) */
   --shadow-soft: 0 12px 32px rgba(33, 39, 37, .06);
 
   /* -> max-w-content */
   --container-content: 1240px;
 
-  /* -> font-sans */
-  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* -> font-sans. The first entry is the next/font variable applied to <html>
+     in app/layout.tsx, so `font-sans` resolves to Plus Jakarta Sans. */
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* The design spec names the text colours --text-main / --text-muted. Those are
+   declared in :root below; `inline` wires the utilities straight through to
+   them rather than duplicating the values, so there is one source of truth.
+   Consequence: the utility names are text-text-main / text-text-muted. */
+@theme inline {
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
 }
 
 @layer base {
@@ -82,18 +154,48 @@
     --sidebar-soft:var(--color-sidebar-soft);
     --shadow:var(--shadow-soft);
     --content:var(--container-content);
+
+    /* Option A plain-name aliases. The design spec refers to these without a
+       --color- prefix, so both spellings resolve to the same value.
+
+       `--accent` is deliberately ABSENT: that name already belongs to this
+       app's live emphasis colour aliased above, and reassigning it here would
+       silently recolour every eyebrow, divider and hover state. Option A's
+       ochre is exposed as --accent-cta / --color-accent-cta instead.
+
+       --text-main / --text-muted need literal values rather than var() chains,
+       because @theme inline above resolves them the other way round. */
+    --brand-primary:var(--color-brand-primary);
+    --brand-hover:var(--color-brand-hover);
+    --accent-cta:var(--color-accent-cta);
+    --accent-hover:var(--color-accent-cta-hover);
+    --surface-canvas:var(--color-surface-canvas);
+    --surface-card:var(--color-surface-card);
+    --surface-muted:var(--color-surface-muted);
+    --text-main:#0f172a;
+    --text-muted:#475569;
+    --border-default:var(--color-border-default);
+    --border-subdued:var(--color-border-subdued);
+    --warning:var(--color-warning);
+    --info:var(--color-info);
   }
 
   *{box-sizing:border-box}
 
   html{
     font-family:var(--font-sans);
-    @apply text-ink bg-surface-strong;
+    /* Option A base: Surface Canvas #FAFAF9, Text Main #0F172A.
+       Declared with the raw variables rather than @apply so the source of
+       truth is the Option A token, not a utility alias. */
+    background:var(--surface-canvas);
+    color:var(--text-main);
     text-rendering:optimizeLegibility;
   }
 
   body{
-    @apply flex flex-col bg-surface-strong;
+    @apply flex flex-col;
+    background:var(--surface-canvas);
+    color:var(--text-main);
     margin:0;
     min-height:100vh;
   }
@@ -124,16 +226,18 @@
     @apply flex items-center justify-between;
     height:68px;
     padding:0 clamp(20px,5vw,72px);
-    border-bottom:1px solid var(--line);
-    background:rgba(255,255,255,.94);
-    backdrop-filter:blur(12px);
+    /* Option A: surface-card (#FFFFFF) with a subtle border-subdued rule.
+       Drops the previous translucent white + backdrop blur; on a now-opaque
+       background the blur had nothing left to do. */
+    border-bottom:1px solid var(--border-subdued);
+    background:var(--surface-card);
   }
 
   .brand{font-size:20px;font-weight:780;letter-spacing:-.025em;text-decoration:none;color:inherit}
 
   .site-header nav{@apply flex;gap:24px}
-  .site-header nav a{@apply text-ink-soft;text-decoration:none;font-size:14px}
-  .site-header nav a:hover{@apply text-ink}
+  .site-header nav a{@apply text-text-muted;text-decoration:none;font-size:14px}
+  .site-header nav a:hover{@apply text-text-main}
 
   /* ------------------------------------------------------------ public shell */
 
@@ -154,7 +258,10 @@
 
   .need-form input,.need-form textarea,.need-form button,.stack-form input,.stack-form textarea,.stack-form button,.stack-form select{
     min-height:50px;
-    @apply rounded-sm;
+    /* Option A: inputs and buttons are rounded-md (6px). Was rounded-sm, which
+       this scale now resolves to 4px and the spec does not sanction for
+       controls. */
+    @apply rounded-md;
     font:inherit;
   }
 
@@ -343,6 +450,13 @@
   /* ------------------------------------------------------- pills and tables */
 
   .pill{@apply inline-block;border:1px solid var(--line-strong);border-radius:999px;padding:4px 8px;margin:0 4px 4px 0;font-size:11px;background:#fff}
+
+  /* Option A: tabular numerals for currency and financial figures, so digits
+     never shift width between renders or between rows.
+     Apply to money, counts, ratings and durations. New markup can use Tailwind's
+     own `tabular-nums` utility instead — this class exists for the existing
+     non-Tailwind markup that cannot take a utility. */
+  .numeric{font-variant-numeric:tabular-nums}
   .pill.strong{@apply bg-accent-soft text-accent-strong;border-color:#bdd6ce;font-weight:720}
   .status-dot{font-size:12px;@apply capitalize text-success;font-weight:680}
   .text-button{background:none;border:0;@apply text-accent-strong;text-decoration:none;font-size:12px;font-weight:700;@apply cursor-pointer;padding:5px 0}
