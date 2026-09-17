@@ -1,29 +1,37 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import { Hanken_Grotesk, JetBrains_Mono } from 'next/font/google';
 import MainNav from '@/components/navigation/MainNav';
 import Footer from '@/components/navigation/Footer';
 import './globals.css';
 import './entry-points.css';
 
 /**
- * Plus Jakarta Sans — the Option A primary typeface.
+ * Typography — the design specifies two faces:
  *
- * Loaded through next/font so Next self-hosts it: the @font-face rules are
- * inlined and the files fingerprinted. Do NOT also add the Google Fonts <link>
- * and preconnect tags from the design brief — that would fetch the same family
- * a second time from a third-party origin and undo the self-hosting.
+ *   Hanken Grotesk   everything structural: display, headline, title, body
+ *   JetBrains Mono   quantitative metadata only — metrics, IDs, timestamps
+ *
+ * Both load through next/font so Next self-hosts them: the @font-face rules are
+ * inlined and the files fingerprinted. Do NOT also add Google Fonts <link> tags
+ * — that fetches the same families a second time from a third-party origin and
+ * undoes the self-hosting.
  *
  * `.variable` is used rather than `.className` because next/font generates a
- * hashed family name (e.g. "__Plus_Jakarta_Sans_abc123"). A literal
- * `--font-sans: "Plus Jakarta Sans"` could never match that, so `font-sans`
- * would silently fall back to the system stack. Exposing the CSS variable lets
- * `--font-sans` in app/globals.css point at the real font, which is what
- * satisfies "ensure font-sans maps to Plus Jakarta Sans".
+ * HASHED family name (e.g. "__Hanken_Grotesk_abc123"). A literal
+ * `--font-sans: "Hanken Grotesk"` could never match that, so `font-sans` would
+ * silently fall back to system-ui. The variables are consumed by --font-sans
+ * and --font-mono in app/globals.css.
  */
-const plusJakartaSans = Plus_Jakarta_Sans({
+const hankenGrotesk = Hanken_Grotesk({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-plus-jakarta',
+  variable: '--font-hanken-grotesk',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
 });
 
 export const metadata: Metadata = {
@@ -48,7 +56,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   // Kept as a JS comment rather than a JSX comment deliberately — a comment node
   // directly inside <html> risks a DOM-nesting warning of its own.
   return (
-    <html lang="en" className={plusJakartaSans.variable}>
+    <html lang="en" className={`${hankenGrotesk.variable} ${jetbrainsMono.variable}`}>
       <body suppressHydrationWarning>
         <MainNav />
         <main>{children}</main>

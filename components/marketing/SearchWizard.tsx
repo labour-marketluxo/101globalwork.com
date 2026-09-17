@@ -256,7 +256,7 @@ export default function SearchWizard() {
 
         <button
           type="submit"
-          className="rounded-xl bg-brand-dark px-6 py-3 text-sm font-medium text-white shadow-md transition-all hover:bg-slate-800"
+          className="rounded-xl bg-primary px-6 py-3 text-sm font-medium text-white shadow-md transition-all hover:bg-primary-dark"
         >
           Find experts
         </button>
