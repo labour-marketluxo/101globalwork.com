@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import AuthNav from '@/components/navigation/AuthNav';
+import { MobileNav, NavLinks } from '@/components/navigation/NavLinks';
 
 /**
  * MainNav — the site header.
@@ -20,24 +21,17 @@ import AuthNav from '@/components/navigation/AuthNav';
  * and nothing in either stylesheet targets it any more. Drop the class and the
  * marketing header reappears on every admin screen.
  *
- * Responsive strategy is utilities-only: section links collapse below `lg`, the
- * trust pill below `xl`, and AuthNav keeps the bar to a single row at every
- * width. The old approach — a `<700px` block in the unlayered entry-points.css —
- * is gone, because an unlayered rule outranks every utility and a header that
- * cannot be overridden by Tailwind cannot be made responsive in Tailwind.
+ * Responsive strategy is utilities-only: section links collapse below `lg` (the
+ * MobileNav drawer takes over there), the trust pill below `xl`, and AuthNav keeps
+ * the bar to a single row at every width. The old approach — a `<700px` block in
+ * the unlayered entry-points.css — is gone, because an unlayered rule outranks
+ * every utility and a header that cannot be overridden by Tailwind cannot be made
+ * responsive in Tailwind.
  *
  * Every anchor carries `no-underline` explicitly: preflight is deliberately not
  * imported in this project, so no global `a { text-decoration: none }` exists
  * and a bare <a> renders browser-default blue and underlined.
  */
-
-const SECTION_LINKS = [
-  { href: '/#how-it-works', label: 'How it works' },
-  { href: '/services', label: 'Services' },
-  { href: '/#verticals', label: 'Trade network' },
-  { href: '/#trust', label: 'Trust & escrow' },
-  { href: '/providers', label: 'For providers' },
-] as const;
 
 export default function MainNav() {
   return (
@@ -53,7 +47,9 @@ export default function MainNav() {
             >
               101
             </span>
-            <span className="text-xl font-bold tracking-tight text-white">101GlobalWork</span>
+            <span className="hidden text-xl font-bold tracking-tight text-white sm:inline">
+              101GlobalWork
+            </span>
           </Link>
 
           <div className="hidden items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-2.5 py-1 font-mono text-[11px] text-emerald-300 xl:flex">
@@ -62,20 +58,10 @@ export default function MainNav() {
           </div>
         </div>
 
-        <nav
-          aria-label="Sections"
-          className="hidden items-center gap-8 text-[14px] font-medium text-slate-200 lg:flex"
-        >
-          {SECTION_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="no-underline transition-colors hover:text-white"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex shrink-0 items-center gap-3 lg:gap-4">
+          <NavLinks />
+          <MobileNav />
+        </div>
 
         <AuthNav />
       </div>
