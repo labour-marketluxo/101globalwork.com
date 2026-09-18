@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 
 /**
  * TradeVerticals — the dark deep-teal section of photographed category cards.
@@ -62,7 +63,9 @@ const VERTICALS = [
   },
 ];
 
-export default function TradeVerticals() {
+export default async function TradeVerticals() {
+  const marketSlug = await getDefaultMarketSlug();
+
   return (
     <section id="verticals" className="w-full scroll-mt-24 bg-primary py-24 text-white">
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
@@ -122,7 +125,7 @@ export default function TradeVerticals() {
 
               <div className="p-5 pt-0">
                 <Link
-                  href={`/search?q=${encodeURIComponent(vertical.slug)}`}
+                  href={`/${marketSlug}/search?q=${encodeURIComponent(vertical.slug)}`}
                   className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-amber-300 no-underline transition-all hover:text-amber-200 group-hover:gap-2"
                 >
                   See providers

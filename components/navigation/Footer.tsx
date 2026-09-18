@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 
 /**
  * Footer — the design's corporate footer: near-black teal, five columns, mono
@@ -16,14 +17,14 @@ import Link from 'next/link';
  * The year is evaluated during the server render, exactly as before.
  */
 
-const COLUMNS = [
+const columnsFor = (marketSlug: string) => [
   {
     heading: 'Services',
     links: [
-      { href: '/search?q=Plumbing', label: 'Plumbing' },
-      { href: '/search?q=Electrical', label: 'Electrical' },
-      { href: '/search?q=Air+conditioning', label: 'Air conditioning & HVAC' },
-      { href: '/search?q=Home+cleaning', label: 'Home cleaning' },
+      { href: `/${marketSlug}/search?q=Plumbing`, label: 'Plumbing' },
+      { href: `/${marketSlug}/search?q=Electrical`, label: 'Electrical' },
+      { href: `/${marketSlug}/search?q=Air+conditioning`, label: 'Air conditioning & HVAC' },
+      { href: `/${marketSlug}/search?q=Home+cleaning`, label: 'Home cleaning' },
       { href: '/services', label: 'All services' },
     ],
   },
@@ -35,7 +36,7 @@ const COLUMNS = [
       { href: '/trust-and-safety', label: 'Trust & safety' },
       { href: '/#verticals', label: 'Trade network' },
       { href: '/requests/new', label: 'Post a request' },
-      { href: '/search', label: 'Find providers' },
+      { href: `/${marketSlug}/search`, label: 'Find providers' },
     ],
   },
   {
@@ -47,9 +48,15 @@ const COLUMNS = [
       { href: '/providers', label: 'Become a provider' },
     ],
   },
-] as const;
+];
 
-export default function Footer() {
+export default async function Footer() {
+  // Search only exists at /{market}/search now, so every search link needs a market
+  // in the path. Resolved once per request (the helper is request-cached), and the
+  // same value the landing hero and the /search redirect use.
+  const marketSlug = await getDefaultMarketSlug();
+  const COLUMNS = columnsFor(marketSlug);
+
   return (
     <footer className="w-full border-t border-solid border-white/10 bg-primary-deep py-14 text-xs text-slate-400">
       <div className="mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8">

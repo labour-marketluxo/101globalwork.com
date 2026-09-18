@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ShieldCheck, Sparkles } from 'lucide-react';
 import OutcomePromptBar from '@/components/landing/OutcomePromptBar';
+import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 
 /**
  * HeroSection — full-bleed deep-teal hero over infrastructure photography.
@@ -64,7 +65,18 @@ const PRESETS = [
   { label: 'Deep clean before move-in', q: 'Deep clean of a three-bedroom flat before we move in' },
 ];
 
-export default function HeroSection() {
+/**
+ * The hero sits at `/`, which has no market in it, so the market the search belongs
+ * to is resolved here and handed down: search only exists at `/{market}/search` now,
+ * and a landing-page visitor has to be sent to a real one rather than to a bare
+ * `/search` that no longer renders anything.
+ *
+ * `getDefaultMarketSlug` is request-cached, so this is not an extra round trip even
+ * though the footer asks for the same value in the same render.
+ */
+export default async function HeroSection() {
+  const marketSlug = await getDefaultMarketSlug();
+
   return (
     <>
       <section className="relative flex min-h-[calc(100vh-83px)] items-center justify-center overflow-hidden bg-primary py-6">
@@ -121,7 +133,7 @@ export default function HeroSection() {
             until you approve the finished work.
           </p>
 
-          <OutcomePromptBar />
+          <OutcomePromptBar action={`/${marketSlug}/search`} />
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300">
             <span className="mr-1 font-mono text-[11px] tracking-wider text-slate-400 uppercase">
@@ -130,7 +142,7 @@ export default function HeroSection() {
             {PRESETS.map((preset) => (
               <Link
                 key={preset.label}
-                href={`/search?q=${encodeURIComponent(preset.q)}`}
+                href={`/${marketSlug}/search?q=${encodeURIComponent(preset.q)}`}
                 className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-slate-200 no-underline backdrop-blur-sm transition-colors hover:bg-white/20"
               >
                 {preset.label}

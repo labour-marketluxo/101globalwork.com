@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 import {
   ArrowRight,
   CircleCheckBig,
@@ -61,7 +62,9 @@ const PROJECT_STEPS = [
   },
 ];
 
-export default function ServiceVectors() {
+export default async function ServiceVectors() {
+  const marketSlug = await getDefaultMarketSlug();
+
   return (
     <section className="w-full bg-white py-24">
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
@@ -124,7 +127,7 @@ export default function ServiceVectors() {
             <div className="flex items-center justify-between border-t border-slate-200 pt-4">
               <span className="font-mono text-xs text-slate-500">Describe it in your own words</span>
               <Link
-                href="/search"
+                href={`/${marketSlug}/search`}
                 className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 font-mono text-xs font-semibold text-white no-underline shadow-sm transition-colors hover:bg-primary-dark"
               >
                 <Search aria-hidden="true" className="h-[15px] w-[15px]" />

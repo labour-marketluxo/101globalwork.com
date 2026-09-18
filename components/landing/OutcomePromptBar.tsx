@@ -15,9 +15,13 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
  * 1. The design's submit button faked a result. Its JavaScript swapped the
  *    label to "Decomposing Milestones & Matching Crews…", waited 1.4s, then
  *    showed "Scope Generated (3 Milestones Matched)" and reset — none of which
- *    did anything. This is a real `<form method="get" action="/search">`, so the
- *    button navigates to the app's existing search contract
- *    (`/search?q=…`) and the wizard result is a normal, shareable URL.
+ *    did anything. This is a real `<form method="get">`, so the button navigates
+ *    to the app's existing search contract and the wizard result is a normal,
+ *    shareable URL.
+ *
+ *    The action is a PROP, not a literal: search only exists at `/{market}/search`
+ *    now, and this component cannot know which market — the landing page has none
+ *    in its path. The hero resolves it server-side and passes it down.
  *
  * 2. "Upload Schematics" is gone. A GET form cannot submit file contents, and
  *    there is no storage plumbing behind it, so the tab could only ever
@@ -65,7 +69,7 @@ function getRecognitionCtor(): RecognitionCtor | null {
 /** Browser speech support cannot change while the page is open, so: no-op. */
 const subscribeToNothing = () => () => {};
 
-export default function OutcomePromptBar() {
+export default function OutcomePromptBar({ action }: { action: string }) {
   const [brief, setBrief] = useState('');
   const [listening, setListening] = useState(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
@@ -155,7 +159,7 @@ export default function OutcomePromptBar() {
 
   return (
     <form
-      action="/search"
+      action={action}
       method="get"
       role="search"
       aria-label="Describe the work you need done"
