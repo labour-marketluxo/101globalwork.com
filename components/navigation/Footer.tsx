@@ -30,9 +30,10 @@ const COLUMNS = [
   {
     heading: 'Platform',
     links: [
-      { href: '/#how-it-works', label: 'How it works' },
+      { href: '/how-it-works', label: 'How it works' },
+      { href: '/pricing', label: 'Pricing & fees' },
+      { href: '/trust-and-safety', label: 'Trust & safety' },
       { href: '/#verticals', label: 'Trade network' },
-      { href: '/#trust', label: 'Trust & escrow' },
       { href: '/requests/new', label: 'Post a request' },
       { href: '/search', label: 'Find providers' },
     ],
