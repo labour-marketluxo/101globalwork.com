@@ -15,6 +15,15 @@ import { useEffect } from 'react';
  * Because it replaces the root layout while active, it must render its own
  * <html>/<body> and cannot rely on app/globals.css being applied. Styles are
  * therefore inline, using the same design tokens as the rest of the app.
+ *
+ * The font stack names the design's Hanken Grotesk (see the --font-sans token in
+ * app/globals.css) rather than any other family. It previously asked for Inter,
+ * which this project loads nowhere — so on a crash the one screen nobody tests
+ * rendered in a face the rest of the app has never used. This stack cannot use
+ * the next/font variable either: the @font-face rules ship with globals.css,
+ * which is exactly what is missing here, so in practice it resolves to the
+ * system sans — the same family and fallbacks as the live app, just not the
+ * self-hosted file.
  */
 export default function GlobalError({
   error,
@@ -40,7 +49,7 @@ export default function GlobalError({
           background: '#fbfaf7',
           color: '#1b1f1e',
           fontFamily:
-            'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            '"Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         }}
       >
         <main style={{ maxWidth: '560px' }}>
