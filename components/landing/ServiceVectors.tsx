@@ -27,6 +27,14 @@ import {
  * The design's card B also branded its scope breakdown as "Algorithmic WBS".
  * Splitting a request into stages is a real feature here; calling it algorithmic
  * would be marketing for something that has not been built that way.
+ *
+ * THE THREE-STEP FLOW USED TO LIVE HERE, under an `id="how-it-works"` anchor that
+ * the header and footer jumped to. It moved to /how-it-works, where the same three
+ * beats are the summary rather than the whole story: that route carries the full
+ * seven-stage journey for customers and for providers. A three-card summary could
+ * only ever say "describe it, compare quotes, approve and pay", which is the part
+ * a visitor already assumes — leaving it here made the landing page longer without
+ * making it more informative.
  */
 
 const QUICK_STEPS = [
@@ -50,27 +58,6 @@ const PROJECT_STEPS = [
     icon: ShieldCheck,
     title: 'One thread',
     detail: 'Quotes, messages, dates and payments stay attached to the request.',
-  },
-];
-
-const FLOW = [
-  {
-    number: '1',
-    accent: false,
-    title: 'Describe what you need',
-    body: 'Write it in your own words — a leaking tap, or a full fit-out. No forms and no jargon.',
-  },
-  {
-    number: '2',
-    accent: false,
-    title: 'Compare itemized quotes',
-    body: 'Verified providers quote against the same scope, so you compare line by line instead of guessing.',
-  },
-  {
-    number: '3',
-    accent: true,
-    title: 'Approve the work, then pay',
-    body: 'Your payment is held until you confirm the work is done. Nothing is released before that.',
   },
 ];
 
@@ -196,45 +183,6 @@ export default function ServiceVectors() {
                 <ArrowRight aria-hidden="true" className="h-[15px] w-[15px] text-amber-300" />
               </Link>
             </div>
-          </div>
-        </div>
-
-        {/* Three-step flow.
-
-            `scroll-mt-24` on every anchor target: the site header is `sticky`
-            and measures 82.5px (an 80px bar plus its 1px rule), so jumping to
-            #how-it-works would otherwise park the target's top edge under the
-            bar. 24 = 6rem = 96px, which clears it with a small margin — verified
-            by navigating to /#verticals and comparing the two rects. The same
-            class is repeated on #verticals, #trust and #get-started; change one
-            and change them all. */}
-        <div id="how-it-works" className="scroll-mt-24 border-t border-slate-200 pt-8">
-          <div className="mx-auto mb-12 max-w-lg text-center">
-            <span className="font-mono text-xs font-semibold tracking-wider text-amber-800 uppercase">
-              How 101GlobalWork works
-            </span>
-            <h3 className="mt-1 text-2xl font-bold text-slate-900">
-              From a plain description to finished work
-            </h3>
-          </div>
-
-          <div className="relative grid grid-cols-1 gap-8 md:grid-cols-3">
-            {FLOW.map((step) => (
-              <div
-                key={step.number}
-                className="relative flex flex-col rounded-xl border border-slate-200 bg-canvas p-6"
-              >
-                <div
-                  className={`mb-4 flex h-10 w-10 items-center justify-center rounded-full font-mono text-sm font-bold text-white ${
-                    step.accent ? 'bg-secondary' : 'bg-primary'
-                  }`}
-                >
-                  {step.number}
-                </div>
-                <h4 className="mb-2 text-base font-bold text-slate-900">{step.title}</h4>
-                <p className="text-xs leading-relaxed text-slate-600 sm:text-sm">{step.body}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>
