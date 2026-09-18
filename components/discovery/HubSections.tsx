@@ -19,17 +19,18 @@ import type { LocationLink, ProviderPreview, ServiceLink } from '@/types/discove
  * global reset.
  */
 
-/** Hero plus the search entry point, mirroring the homepage's form contract. */
+/** Hero plus the search entry point, handing off to the market's own search page. */
 export function HubHero({
   eyebrow,
   title,
   lede,
-  searchLocation,
+  marketSlug,
 }: {
   eyebrow: string;
   title: string;
   lede: string;
-  searchLocation: string;
+  /** The market these hubs sit under; search is scoped to it now. */
+  marketSlug: string;
 }) {
   return (
     <header className="mb-10">
@@ -38,7 +39,14 @@ export function HubHero({
         {title}
       </h1>
       <p className="lede left">{lede}</p>
-      <form className="need-form stacked" action="/search" method="get">
+      {/*
+        One field, not two. The old form sent `location` as free text to a global
+        /search page; the market is in the path now, and the market search filters
+        areas by catalog code rather than by a typed string — so asking "where"
+        here would collect an answer nothing could use. The area filter lives on
+        the search page, where it is populated from the catalog.
+      */}
+      <form className="need-form stacked" action={`/${marketSlug}/search`} method="get">
         <label htmlFor="hub-need">What do you need done?</label>
         <input
           id="hub-need"
@@ -47,8 +55,6 @@ export function HubHero({
           autoComplete="off"
           placeholder="e.g. Fix a leaking pipe"
         />
-        <label htmlFor="hub-location">Where</label>
-        <input id="hub-location" name="location" defaultValue={searchLocation} />
         <button type="submit">Find help</button>
       </form>
     </header>
@@ -90,28 +96,34 @@ export function LocationGrid({
 /**
  * Service chips.
  *
- * A live service under a locality links to its published leaf; everything else
- * links to /search. That keeps the chips honest: a hub never links to a leaf
- * route that does not exist yet.
+ * A live service under a locality links to its published leaf; everything else hands
+ * off to the market's search as a keyword.
+ *
+ * Keyword, not `category=`: the hub catalog is mock data with slugs like `plumbers`,
+ * while the real search filters on `canonical_key` (`plumbing_residential`). Sending
+ * the mock slug as a category would match nothing and read as an empty market, so the
+ * chip sends the human name through the free-text query, which degrades honestly — it
+ * finds what mentions the trade, and the search page's own category filter is there
+ * for an exact match.
  */
 export function ServiceChips({
   heading,
   description,
   services,
-  searchLocation,
+  marketSlug,
   leafBasePath,
 }: {
   heading: string;
   description: string;
   services: ServiceLink[];
-  searchLocation: string;
+  marketSlug: string;
   /** Set only on a locality hub, where leaf routes exist one level below. */
   leafBasePath?: string;
 }) {
   const hrefFor = (service: ServiceLink) =>
     leafBasePath && service.live
       ? `${leafBasePath}/${service.slug}`
-      : `/search?service=${encodeURIComponent(service.slug)}&location=${encodeURIComponent(searchLocation)}`;
+      : `/${marketSlug}/search?q=${encodeURIComponent(service.name)}`;
 
   return (
     <section className="mt-14">

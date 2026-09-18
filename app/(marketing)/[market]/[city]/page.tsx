@@ -21,11 +21,11 @@ import { getCityHub } from '@/features/discovery/data/mock-locations';
  */
 
 
-type Params = Promise<{ country: string; city: string }>;
+type Params = Promise<{ market: string; city: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { country, city } = await params;
-  const found = getCityHub(country, city);
+  const { market, city } = await params;
+  const found = getCityHub(market, city);
   if (!found) return {};
 
   return {
@@ -37,8 +37,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function CityHubPage({ params }: { params: Params }) {
-  const { country, city } = await params;
-  const found = getCityHub(country, city);
+  const { market, city } = await params;
+  const found = getCityHub(market, city);
   if (!found) notFound();
 
   const { country: countryHub, city: cityHub } = found;
@@ -59,7 +59,7 @@ export default async function CityHubPage({ params }: { params: Params }) {
         eyebrow="City"
         title={`Services in ${cityHub.name}, ${countryHub.name}`}
         lede={cityHub.intro}
-        searchLocation={`${cityHub.name}, ${countryHub.name}`}
+        marketSlug={countryHub.slug}
       />
 
       <IndexabilityNotice />
@@ -75,7 +75,7 @@ export default async function CityHubPage({ params }: { params: Params }) {
         heading="Popular services"
         description="Tell us what needs doing and we will match you with eligible providers."
         services={cityHub.popularServices}
-        searchLocation={`${cityHub.name}, ${countryHub.name}`}
+        marketSlug={countryHub.slug}
       />
 
       <ProviderGrid

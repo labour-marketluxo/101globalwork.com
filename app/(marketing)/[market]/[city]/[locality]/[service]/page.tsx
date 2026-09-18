@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPublicDiscoveryDocument } from '@/lib/discovery/public-page';
 
-type Params = Promise<{ country: string; city: string; locality: string; service: string }>;
+type Params = Promise<{ market: string; city: string; locality: string; service: string }>;
 
-function pathFromParams({ country, city, locality, service }: Awaited<Params>) {
-  return `/${country}/${city}/${locality}/${service}/`.toLowerCase();
+function pathFromParams({ market, city, locality, service }: Awaited<Params>) {
+  return `/${market}/${city}/${locality}/${service}/`.toLowerCase();
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
@@ -32,9 +32,9 @@ export default async function ServiceLocationPage({ params }: { params: Params }
   return (
     <article className="content-shell">
       <nav className="breadcrumbs" aria-label="Breadcrumb">
-        <a href={`/${resolved.country}/`}>{resolved.country.toUpperCase()}</a>
+        <a href={`/${resolved.market}/`}>{resolved.market.toUpperCase()}</a>
         <span>/</span>
-        <a href={`/${resolved.country}/${resolved.city}/`}>{resolved.city}</a>
+        <a href={`/${resolved.market}/${resolved.city}/`}>{resolved.city}</a>
         <span>/</span>
         <span>{resolved.locality}</span>
       </nav>
@@ -54,9 +54,14 @@ export default async function ServiceLocationPage({ params }: { params: Params }
       <section className="action-panel">
         <h2>What do you need done?</h2>
         <p>Describe the plumbing problem in your own words. You do not need to know the professional terminology.</p>
-        <form action="/search" method="get" className="need-form stacked">
-          <input type="hidden" name="location" value={`${resolved.locality}, ${resolved.city}`} />
-          <input type="hidden" name="service" value={resolved.service} />
+        {/*
+          The market is in the path, so this no longer sends a free-text `location`
+          and `service` to a global /search — neither could be honoured: the market
+          search filters areas by catalog code and services by canonical key, and
+          the values on this page are URL slugs. The description the visitor types
+          is the part that carries over.
+        */}
+        <form action={`/${resolved.market}/search`} method="get" className="need-form stacked">
           <label htmlFor="q">Describe the work</label>
           <textarea id="q" name="q" required minLength={5} placeholder="e.g. Water is leaking under my kitchen sink" />
           <button type="submit">Continue request</button>

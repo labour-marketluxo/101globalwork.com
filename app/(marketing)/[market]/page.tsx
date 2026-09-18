@@ -15,7 +15,7 @@ import { getCountryHub } from '@/features/discovery/data/mock-locations';
  *
  * Top of the public location hierarchy. Previously this URL 404'd, which broke
  * the breadcrumb trail rendered by the leaf route
- * (app/(marketing)/[country]/[city]/[locality]/[service]/page.tsx).
+ * (app/(marketing)/[market]/[city]/[locality]/[service]/page.tsx).
  *
  * Server component: no 'use client'. It renders inside the (marketing) route
  * group, so LandingLayout already wraps it.
@@ -26,11 +26,11 @@ import { getCountryHub } from '@/features/discovery/data/mock-locations';
  */
 
 
-type Params = Promise<{ country: string }>;
+type Params = Promise<{ market: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { country } = await params;
-  const hub = getCountryHub(country);
+  const { market } = await params;
+  const hub = getCountryHub(market);
   if (!hub) return {};
 
   return {
@@ -44,8 +44,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function CountryHubPage({ params }: { params: Params }) {
-  const { country } = await params;
-  const hub = getCountryHub(country);
+  const { market } = await params;
+  const hub = getCountryHub(market);
   if (!hub) notFound();
 
   const basePath = `/${hub.slug}`;
@@ -58,7 +58,7 @@ export default async function CountryHubPage({ params }: { params: Params }) {
         eyebrow="Country"
         title={`Find trusted services across ${hub.name}`}
         lede={hub.intro}
-        searchLocation={hub.name}
+        marketSlug={hub.slug}
       />
 
       <IndexabilityNotice />
@@ -74,7 +74,7 @@ export default async function CountryHubPage({ params }: { params: Params }) {
         heading="Popular services"
         description="Tell us what needs doing and we will match you with eligible providers."
         services={hub.popularServices}
-        searchLocation={hub.name}
+        marketSlug={hub.slug}
       />
 
       <ProviderGrid

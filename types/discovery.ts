@@ -2,7 +2,7 @@
  * Discovery domain types.
  *
  * These describe the presentation shapes used by the public location hubs
- * (app/(marketing)/[country]/...). They are deliberately separate from
+ * (app/(marketing)/[market]/...). They are deliberately separate from
  * `PublicDiscoveryDocument` in lib/discovery/public-page.ts, which remains the
  * server-side projection of a single published canonical route, and from
  * `PublicProviderProfile` in lib/providers/public-profile.ts.
@@ -43,7 +43,7 @@ export type ProviderPreview = {
   verified: boolean;
 };
 
-/** A locality hub — the deepest hub, at /[country]/[city]/[locality]. */
+/** A locality hub — the deepest hub, at /[market]/[city]/[locality]. */
 export type LocalityHub = {
   slug: string;
   name: string;
@@ -52,7 +52,7 @@ export type LocalityHub = {
   featuredProviders: ProviderPreview[];
 };
 
-/** A city hub, at /[country]/[city]. */
+/** A city hub, at /[market]/[city]. */
 export type CityHub = {
   slug: string;
   name: string;
@@ -63,7 +63,7 @@ export type CityHub = {
   featuredProviders: ProviderPreview[];
 };
 
-/** A country hub, at /[country]. */
+/** A country hub, at /[market]. */
 export type CountryHub = {
   slug: string;
   name: string;

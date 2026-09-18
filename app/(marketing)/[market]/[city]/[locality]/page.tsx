@@ -24,11 +24,11 @@ import { getLocalityHub } from '@/features/discovery/data/mock-locations';
  */
 
 
-type Params = Promise<{ country: string; city: string; locality: string }>;
+type Params = Promise<{ market: string; city: string; locality: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { country, city, locality } = await params;
-  const found = getLocalityHub(country, city, locality);
+  const { market, city, locality } = await params;
+  const found = getLocalityHub(market, city, locality);
   if (!found) return {};
 
   const { country: countryHub, city: cityHub, locality: localityHub } = found;
@@ -41,15 +41,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function LocalityHubPage({ params }: { params: Params }) {
-  const { country, city, locality } = await params;
-  const found = getLocalityHub(country, city, locality);
+  const { market, city, locality } = await params;
+  const found = getLocalityHub(market, city, locality);
   if (!found) notFound();
 
   const { country: countryHub, city: cityHub, locality: localityHub } = found;
   const countryPath = `/${countryHub.slug}`;
   const cityPath = `${countryPath}/${cityHub.slug}`;
   const basePath = `${cityPath}/${localityHub.slug}`;
-  const searchLocation = `${localityHub.name}, ${cityHub.name}`;
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 pt-14 pb-24">
@@ -66,7 +65,7 @@ export default async function LocalityHubPage({ params }: { params: Params }) {
         eyebrow="Locality"
         title={`Services in ${localityHub.name}, ${cityHub.name}`}
         lede={localityHub.intro}
-        searchLocation={searchLocation}
+        marketSlug={countryHub.slug}
       />
 
       <IndexabilityNotice />
@@ -75,7 +74,7 @@ export default async function LocalityHubPage({ params }: { params: Params }) {
         heading={`Services in ${localityHub.name}`}
         description="Pick a service to see local availability and provider detail."
         services={localityHub.popularServices}
-        searchLocation={searchLocation}
+        marketSlug={countryHub.slug}
         leafBasePath={basePath}
       />
 

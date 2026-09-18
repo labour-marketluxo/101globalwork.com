@@ -8,7 +8,7 @@ import type {
 
 /**
  * TEMPORARY mock data backing the public location hubs
- * (app/(marketing)/[country]/[city]/[locality]).
+ * (app/(marketing)/[market]/[city]/[locality]).
  *
  * WHY THIS EXISTS
  * The hub projections do not exist in SQL yet. `public_routes` currently holds

@@ -12,7 +12,7 @@ export type BreadcrumbItem = {
  *
  * Uses the `.breadcrumbs` styles already defined in app/globals.css so the hub
  * pages and the existing leaf route
- * (app/(marketing)/[country]/[city]/[locality]/[service]/page.tsx) render an
+ * (app/(marketing)/[market]/[city]/[locality]/[service]/page.tsx) render an
  * identical trail.
  *
  * Links are emitted WITHOUT trailing slashes. next.config.ts does not set

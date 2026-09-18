@@ -5,7 +5,7 @@ import Link from 'next/link';
  *
  * Replaces Next's bare default page. This is reached from unmatched URLs and
  * from every `notFound()` call in the app — most notably the discovery route
- * (app/(marketing)/[country]/…/[service]/page.tsx), which calls notFound() when
+ * (app/(marketing)/[market]/…/[service]/page.tsx), which calls notFound() when
  * no public document exists for the requested path.
  *
  * Next marks 404 responses noindex automatically, so no robots metadata is
