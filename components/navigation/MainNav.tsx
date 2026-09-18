@@ -22,11 +22,16 @@ import { MobileNav, NavLinks } from '@/components/navigation/NavLinks';
  * marketing header reappears on every admin screen.
  *
  * Responsive strategy is utilities-only: section links collapse below `lg` (the
- * MobileNav drawer takes over there), the trust pill below `xl`, and AuthNav keeps
- * the bar to a single row at every width. The old approach — a `<700px` block in
- * the unlayered entry-points.css — is gone, because an unlayered rule outranks
- * every utility and a header that cannot be overridden by Tailwind cannot be made
- * responsive in Tailwind.
+ * MobileNav drawer takes over there), and AuthNav keeps the bar to a single row at
+ * every width. The old approach — a `<700px` block in the unlayered
+ * entry-points.css — is gone, because an unlayered rule outranks every utility and
+ * a header that cannot be overridden by Tailwind cannot be made responsive in
+ * Tailwind.
+ *
+ * The "Verified providers • Itemized quotes" pill that used to sit beside the logo
+ * (hidden below `xl`) has been removed. The same claim still appears in the hero's
+ * trust strip and in the footer, so nothing is lost — and the bar is cleaner for it,
+ * with one less thing competing with the wordmark and the actions.
  *
  * Every anchor carries `no-underline` explicitly: preflight is deliberately not
  * imported in this project, so no global `a { text-decoration: none }` exists
@@ -37,7 +42,7 @@ export default function MainNav() {
   return (
     <header className="site-header sticky top-0 z-50 border-b border-solid border-white/10 bg-primary/85 backdrop-blur-md">
       <div className="mx-auto flex h-20 w-full max-w-[1536px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex shrink-0 items-center gap-4">
+        <div className="flex shrink-0 items-center">
           <Link href="/" className="flex items-center gap-2.5 no-underline">
             {/* Monogram stands in for the design's logo tile — that asset was
                 the design tool's own mark. Drop a real logo in this slot. */}
@@ -51,11 +56,6 @@ export default function MainNav() {
               101GlobalWork
             </span>
           </Link>
-
-          <div className="hidden items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-2.5 py-1 font-mono text-[11px] text-emerald-300 xl:flex">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            <span>Verified providers &bull; Itemized quotes</span>
-          </div>
         </div>
 
         <div className="flex shrink-0 items-center gap-3 lg:gap-4">
