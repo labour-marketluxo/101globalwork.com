@@ -21,11 +21,11 @@ import { getCityHub } from '@/features/discovery/data/mock-locations';
  */
 
 
-type Params = Promise<{ market: string; city: string }>;
+type Params = Promise<{ market: string; region: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { market, city } = await params;
-  const found = getCityHub(market, city);
+  const { market, region } = await params;
+  const found = getCityHub(market, region);
   if (!found) return {};
 
   return {
@@ -37,8 +37,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function CityHubPage({ params }: { params: Params }) {
-  const { market, city } = await params;
-  const found = getCityHub(market, city);
+  const { market, region } = await params;
+  const found = getCityHub(market, region);
   if (!found) notFound();
 
   const { country: countryHub, city: cityHub } = found;

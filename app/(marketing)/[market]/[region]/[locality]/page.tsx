@@ -24,11 +24,11 @@ import { getLocalityHub } from '@/features/discovery/data/mock-locations';
  */
 
 
-type Params = Promise<{ market: string; city: string; locality: string }>;
+type Params = Promise<{ market: string; region: string; locality: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { market, city, locality } = await params;
-  const found = getLocalityHub(market, city, locality);
+  const { market, region, locality } = await params;
+  const found = getLocalityHub(market, region, locality);
   if (!found) return {};
 
   const { country: countryHub, city: cityHub, locality: localityHub } = found;
@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function LocalityHubPage({ params }: { params: Params }) {
-  const { market, city, locality } = await params;
-  const found = getLocalityHub(market, city, locality);
+  const { market, region, locality } = await params;
+  const found = getLocalityHub(market, region, locality);
   if (!found) notFound();
 
   const { country: countryHub, city: cityHub, locality: localityHub } = found;
