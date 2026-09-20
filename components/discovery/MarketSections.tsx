@@ -1,13 +1,35 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
+import {
+  ArrowRight,
+  BadgeCheck,
+  ChevronDown,
+  Info,
+  MapPin,
+  SearchX,
+  SlidersHorizontal,
+  TriangleAlert,
+} from 'lucide-react';
 import type { MarketLocation, MarketProvider, MarketService } from '@/features/discovery/data/market-catalog';
+import { BADGE_AMBER, CTA_AMBER, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 
 /**
  * MarketSections — the pieces the two market routes are built from.
  *
  * `/{market}/services` and `/{market}/search` are the market-scoped siblings of the
- * location hubs in HubSections.tsx, so they borrow that file's visual language
- * (tokens, `max-w-5xl`, `.pill`, `.notice`, `.need-form`) rather than the landing
- * page's. Same family of page, same clothes.
+ * location hubs in HubSections.tsx, and they were originally dressed like them
+ * (tokens, `max-w-5xl`, `.pill`, `.notice`, `.need-form`).
+ *
+ * THEY NOW WEAR THE LANDING PAGE'S CLOTHES INSTEAD (restyled 2026-09-20): the
+ * search page is where a visitor arrives from the hero prompt bar, so it has to
+ * continue that page rather than switch dialects halfway through a session. The
+ * vocabulary comes from components/marketing/PageSections.tsx and
+ * components/navigation/AuthNav.tsx — `rounded-xl`/`-2xl` cards on slate-200
+ * hairlines with `shadow-sm`, mono for metadata, amber strictly for action and
+ * status. The `.pill`/`.notice`/`.button-link` classes these components used to
+ * carry are all still defined; they are simply no longer used here, because
+ * `.button-link` and `.secondary-link` live in the UNLAYERED entry-points.css
+ * and would have outranked every utility the brand styling needs.
  *
  * NO CLIENT COMPONENTS ANYWHERE, deliberately. The filter panel is the only thing
  * that looks interactive, and it does not need JavaScript: a `<details>` element is
@@ -25,7 +47,11 @@ import type { MarketLocation, MarketProvider, MarketService } from '@/features/d
  * and the hidden one is `display: none` and therefore out of the accessibility tree.
  */
 
-const FIELD = 'rounded-md border border-solid border-line bg-surface px-3 py-2 text-sm text-ink';
+/**
+ * The shared control/metric class strings now live in ./tokens.ts, because the
+ * taxonomy routes in TaxonomySections.tsx render the same buttons, cards and
+ * badges — see that file for why they are strings and what they are overriding.
+ */
 
 export type FilterState = {
   query: string;
@@ -39,32 +65,6 @@ export function activeFilterCount(state: FilterState): number {
   return [state.query, state.category, state.area].filter(Boolean).length + (state.acceptingOnly ? 1 : 0);
 }
 
-/** The market-scoped search box. The global `/search` form is unchanged. */
-export function MarketSearchBar({
-  marketSlug,
-  marketName,
-  defaultQuery = '',
-}: {
-  marketSlug: string;
-  marketName: string;
-  defaultQuery?: string;
-}) {
-  return (
-    <form className="need-form stacked" action={`/${marketSlug}/search`} method="get">
-      <label htmlFor="market-q">What do you need done in {marketName}?</label>
-      <input
-        id="market-q"
-        name="q"
-        required
-        autoComplete="off"
-        placeholder="e.g. Fix a leaking pipe"
-        defaultValue={defaultQuery}
-      />
-      <button type="submit">Search this market</button>
-    </form>
-  );
-}
-
 /** Label for a filter option, so region/city/locality are never confused. */
 function locationLabel(location: MarketLocation): string {
   const type = location.type === 'locality' ? 'area' : location.type;
@@ -72,80 +72,15 @@ function locationLabel(location: MarketLocation): string {
 }
 
 /**
- * The service directory: one card per service in the catalog, each with its own
- * "Explore category" link into the market's search.
- *
- * The catalog holds two services today. That is not a bug in the page — it is the
- * whole public service catalog — and printing four would mean inventing two.
+ * NOTE — `MarketSearchBar` and `ServiceCategoryGrid` were removed from this file
+ * when the service directory was rebuilt on the taxonomy (2026-09-20). Both existed
+ * only for /{market}/services, and both were superseded: the search box by
+ * TaxonomySearchForm (same market search destination, plus the optional area
+ * filter) and the category grid by DirectoryBody's category and service cards
+ * (which read the real taxonomy instead of restating the service catalog). They
+ * were deleted rather than left in place because an orphaned export that duplicates
+ * a live component is how two versions of the same card start to drift.
  */
-export function ServiceCategoryGrid({
-  marketSlug,
-  marketName,
-  currencyCode,
-  services,
-  locations,
-}: {
-  marketSlug: string;
-  marketName: string;
-  currencyCode: string;
-  services: MarketService[];
-  locations: MarketLocation[];
-}) {
-  const cities = locations.filter((location) => location.type === 'city' || location.type === 'locality');
-
-  return (
-    <section className="mt-14">
-      <h2 className="text-2xl font-bold tracking-tight text-ink">
-        Service categories in {marketName}
-      </h2>
-      <p className="mt-1 text-ink-soft">
-        Quotes in this market are priced in {currencyCode}. Pick a category to see who can do the
-        work, or describe it in your own words and we will match it.
-      </p>
-
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
-        {services.map((service) => (
-          <article
-            key={service.canonicalKey}
-            className="flex flex-col justify-between rounded-md border border-solid border-line bg-surface p-5"
-          >
-            <div>
-              <span className="pill shrink-0 bg-accent-soft text-accent">Service</span>
-              <h3 className="mt-3 text-lg font-bold text-ink">{service.displayName}</h3>
-              <p className="mt-1 text-sm text-ink-soft">
-                Providers offering {service.displayName.toLowerCase()} in this market, matched against
-                the same scope so the quotes can be compared.
-              </p>
-
-              {cities.length ? (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {cities.slice(0, 4).map((location) => (
-                    <Link
-                      key={location.locationId}
-                      href={`/${marketSlug}/search?category=${encodeURIComponent(service.canonicalKey)}&area=${encodeURIComponent(location.code)}`}
-                      className="pill no-underline text-accent-strong hover:border-accent hover:bg-accent-soft"
-                    >
-                      {location.name}
-                    </Link>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mt-5">
-              <Link
-                href={`/${marketSlug}/search?category=${encodeURIComponent(service.canonicalKey)}`}
-                className="button-link"
-              >
-                Explore category
-              </Link>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
 
 /** Quick links into the search, one per location in the market's catalog. */
 export function AreaQuickLinks({
@@ -181,6 +116,45 @@ export function AreaQuickLinks({
 }
 
 /**
+ * A styled `<select>`.
+ *
+ * `appearance-none` strips the OS widget so the radius, border and focus ring
+ * are ours rather than the platform's — which means the arrow has to be drawn
+ * back in, and that is what the absolutely-positioned ChevronDown is for. It is
+ * `pointer-events-none` so the click still lands on the select underneath, and
+ * the select carries `pr-9` so its text can never run under the arrow.
+ *
+ * Still a native `<select>`: no listbox to reimplement, keyboard and screen
+ * reader behaviour unchanged, and it works with the GET form and no JavaScript.
+ */
+function SelectField({
+  label,
+  name,
+  value,
+  children,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className={LABEL}>{label}</span>
+      <span className="relative block">
+        <select className={`${FIELD} appearance-none pr-9`} name={name} defaultValue={value}>
+          {children}
+        </select>
+        <ChevronDown
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-slate-400"
+        />
+      </span>
+    </label>
+  );
+}
+
+/**
  * The filter form. Rendered twice — see the file header for why.
  *
  * Only dimensions backed by a real column appear here. There is no price filter and
@@ -201,11 +175,11 @@ function FilterForm({
   state: FilterState;
 }) {
   return (
-    <form className="stack-form" action={`/${marketSlug}/search`} method="get">
-      <label>
-        <span className="block text-sm font-bold text-ink">Keyword</span>
+    <form className="stack-form gap-4" action={`/${marketSlug}/search`} method="get">
+      <label className="block">
+        <span className={LABEL}>Keyword</span>
         <input
-          className={`${FIELD} mt-1 w-full`}
+          className={FIELD}
           type="search"
           name="q"
           defaultValue={state.query}
@@ -214,49 +188,63 @@ function FilterForm({
         />
       </label>
 
-      <label>
-        <span className="block text-sm font-bold text-ink">Service</span>
-        <select className={`${FIELD} mt-1 w-full`} name="category" defaultValue={state.category}>
-          <option value="">All services</option>
-          {services.map((service) => (
-            <option key={service.canonicalKey} value={service.canonicalKey}>
-              {service.displayName}
+      <SelectField label="Service" name="category" value={state.category}>
+        <option value="">All services</option>
+        {services.map((service) => (
+          <option key={service.canonicalKey} value={service.canonicalKey}>
+            {service.displayName}
+          </option>
+        ))}
+      </SelectField>
+
+      <SelectField label="Area" name="area" value={state.area}>
+        <option value="">Anywhere in {marketName}</option>
+        {locations
+          .filter((location) => location.type !== 'country')
+          .map((location) => (
+            <option key={location.locationId} value={location.code}>
+              {locationLabel(location)}
             </option>
           ))}
-        </select>
+      </SelectField>
+
+      {/* The checkbox is inside `.stack-form`, whose input rule forces
+          `min-height:50px` — harmless on a text field, a 50px-tall checkbox
+          here. `min-h-0 p-0` are utilities, so they take it back. */}
+      <label className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-solid border-slate-200 bg-slate-50 px-3 py-2.5 transition-colors hover:border-amber-200 hover:bg-amber-50/50">
+        <input
+          className="h-4 w-4 min-h-0 shrink-0 p-0 accent-secondary"
+          type="checkbox"
+          name="availability"
+          value="open"
+          defaultChecked={state.acceptingOnly}
+        />
+        <span className="text-sm font-medium text-slate-700">
+          Only providers accepting new work
+        </span>
       </label>
 
-      <label>
-        <span className="block text-sm font-bold text-ink">Area</span>
-        <select className={`${FIELD} mt-1 w-full`} name="area" defaultValue={state.area}>
-          <option value="">Anywhere in {marketName}</option>
-          {locations
-            .filter((location) => location.type !== 'country')
-            .map((location) => (
-              <option key={location.locationId} value={location.code}>
-                {locationLabel(location)}
-              </option>
-            ))}
-        </select>
-      </label>
+      <SelectField label="Sort by" name="sort" value={state.sort}>
+        <option value="readiness">Platform readiness</option>
+        <option value="experience">Years of experience</option>
+      </SelectField>
 
-      <label className="flex items-center gap-2 text-sm text-ink">
-        <input type="checkbox" name="availability" value="open" defaultChecked={state.acceptingOnly} />
-        <span>Only providers accepting new work</span>
-      </label>
-
-      <label>
-        <span className="block text-sm font-bold text-ink">Sort by</span>
-        <select className={`${FIELD} mt-1 w-full`} name="sort" defaultValue={state.sort}>
-          <option value="readiness">Platform readiness</option>
-          <option value="experience">Years of experience</option>
-        </select>
-      </label>
-
-      <button type="submit">Apply filters</button>
+      {/* Deep teal, the brand's primary button (PageSections' `primary` variant),
+          rather than the amber CTA: amber is the CTA colour, and the page already
+          spends it on "Post an open request". Filled teal keeps the sidebar
+          actionable without a second focal point. */}
+      <button
+        type="submit"
+        className="inline-flex w-full items-center justify-center gap-2 justify-self-stretch rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+      >
+        Apply filters
+      </button>
 
       {activeFilterCount(state) > 0 ? (
-        <Link href={`/${marketSlug}/search`} className="secondary-link">
+        <Link
+          href={`/${marketSlug}/search`}
+          className="justify-self-start rounded-lg px-2 py-1 font-mono text-xs font-semibold text-slate-500 no-underline transition-colors hover:bg-amber-50 hover:text-amber-700"
+        >
           Clear filters
         </Link>
       ) : null}
@@ -281,11 +269,25 @@ export function MarketFilterPanel({
 
   return (
     <>
-      <details className="lg:hidden">
-        <summary className="cursor-pointer rounded-md border border-solid border-line bg-surface px-4 py-3 text-sm font-bold text-ink">
-          Filters{applied > 0 ? ` (${applied} applied)` : ''}
+      {/* Mobile/tablet: the same form behind a native <details>, so nothing here
+          needs JavaScript. `list-none` + the marker pseudo-element strip the
+          default disclosure triangle on both engines; the chevron replaces it
+          and flips while the panel is open. */}
+      <details className="group lg:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl border border-solid border-slate-200/80 bg-white px-4 py-3.5 shadow-sm transition-colors hover:border-slate-300 [&::-webkit-details-marker]:hidden">
+          <span className="inline-flex items-center gap-2.5 text-sm font-bold text-slate-900">
+            <SlidersHorizontal aria-hidden="true" className="h-4 w-4 text-primary" />
+            Filters
+          </span>
+          <span className="flex shrink-0 items-center gap-2">
+            {applied > 0 ? <span className={BADGE_AMBER}>{applied} applied</span> : null}
+            <ChevronDown
+              aria-hidden="true"
+              className="h-4 w-4 text-slate-400 transition-transform group-open:rotate-180"
+            />
+          </span>
         </summary>
-        <div className="mt-4">
+        <div className="mt-3 rounded-xl border border-solid border-slate-200/80 bg-white p-5 shadow-sm">
           <FilterForm
             marketSlug={marketSlug}
             marketName={marketName}
@@ -297,8 +299,16 @@ export function MarketFilterPanel({
       </details>
 
       <div className="hidden lg:block">
-        <h2 className="text-lg font-bold text-ink">Filters</h2>
-        <div className="mt-4">
+        <div className="rounded-xl border border-solid border-slate-200/80 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between gap-3 border-b border-solid border-slate-100 pb-3.5">
+            <h2 className="inline-flex items-center gap-2.5 text-sm font-bold text-slate-900">
+              <SlidersHorizontal aria-hidden="true" className="h-4 w-4 text-primary" />
+              Filters
+            </h2>
+            {/* Amber on white has to be amber-800: --color-secondary (#d97706)
+                measures ~3.1:1 here and fails AA. */}
+            {applied > 0 ? <span className={BADGE_AMBER}>{applied} applied</span> : null}
+          </div>
           <FilterForm
             marketSlug={marketSlug}
             marketName={marketName}
@@ -330,61 +340,113 @@ export function MarketFilterPanel({
 export function ProviderResultCard({
   provider,
   sample = false,
+  profileHref,
 }: {
   provider: MarketProvider;
   /** Marks a card rendered from the dev-only preview list. Never true in production. */
   sample?: boolean;
+  /**
+   * Where this provider's public profile lives, when the caller can offer one.
+   *
+   * Omitted on the market search page on purpose: `/{market}/providers/{slug}` does
+   * not exist, and the real profile route is `/providers/{slug}` off the global root,
+   * so linking from a market-scoped card would either 404 or drop the market context.
+   * The local discovery page passes it, because there the profile is the next step a
+   * visitor wants and the global route is the correct destination.
+   */
+  profileHref?: string;
 }) {
   return (
-    <article className="rounded-md border border-solid border-line bg-surface p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-base font-bold text-ink">
+    <article className="rounded-xl border border-solid border-slate-200/80 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h3 className="text-base font-bold tracking-tight text-slate-900">
             {provider.headline ?? provider.slug.replace(/-/g, ' ')}
           </h3>
+          {/* Services and areas are no longer one `·`-joined string: they are
+              different claims — what this provider is eligible for, and where —
+              so they get different chips. Teal = the service catalog the page
+              filters on; a pin = a place. */}
           {provider.services.length || provider.areas.length ? (
-            <p className="mt-1 text-sm text-ink-soft">
-              {[...provider.services, ...provider.areas].join(' · ')}
-            </p>
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+              {provider.services.map((service) => (
+                <span
+                  key={service}
+                  className="rounded-full border border-solid border-primary-subtle bg-primary-surface px-2.5 py-0.5 text-xs font-medium text-primary"
+                >
+                  {service}
+                </span>
+              ))}
+              {provider.areas.map((area) => (
+                <span
+                  key={area}
+                  className="inline-flex items-center gap-1 rounded-full border border-solid border-slate-200 bg-slate-50 px-2.5 py-0.5 text-xs text-slate-600"
+                >
+                  <MapPin aria-hidden="true" className="h-3 w-3 text-slate-400" />
+                  {area}
+                </span>
+              ))}
+            </div>
           ) : null}
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-2">
-          {sample ? (
-            <span className="pill bg-secondary-light text-amber-800">Sample</span>
-          ) : null}
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
+          {sample ? <span className={BADGE_AMBER}>Sample</span> : null}
           {provider.verified ? (
-            <span className="pill shrink-0 bg-accent-soft text-accent">Identity checked</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wide text-primary uppercase">
+              <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
+              Identity checked
+            </span>
           ) : null}
         </div>
       </div>
 
       {provider.description ? (
-        <p className="mt-3 text-sm leading-relaxed text-ink-soft">{provider.description}</p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600">{provider.description}</p>
       ) : null}
 
-      <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted">
+      {/* Facts strip. Mono on the labels only — the values are the readable
+          part, and `tabular-nums` keeps the readiness figure from shifting
+          width between rows. */}
+      <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-2 rounded-lg border border-solid border-slate-100 bg-slate-50/80 px-3.5 py-2.5">
         {provider.yearsExperience !== null ? (
-          <div className="flex gap-1.5">
-            <dt>Experience:</dt>
-            <dd className="font-bold text-ink">
+          <div className="flex items-baseline gap-1.5">
+            <dt className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+              Experience
+            </dt>
+            <dd className="text-sm font-bold text-slate-900">
               {provider.yearsExperience} {provider.yearsExperience === 1 ? 'year' : 'years'}
             </dd>
           </div>
         ) : null}
-        <div className="flex gap-1.5">
-          <dt>Availability:</dt>
-          <dd className="font-bold text-ink">
+        <div className="flex items-baseline gap-1.5">
+          <dt className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+            Availability
+          </dt>
+          <dd className="text-sm font-bold text-slate-900">
             {provider.acceptsNewWork ? 'Accepting new work' : 'Not taking new work'}
           </dd>
         </div>
-        <div className="flex gap-1.5">
-          <dt>Platform readiness:</dt>
-          <dd className="font-bold text-ink">{provider.readinessScore.toFixed(0)}/100</dd>
+        <div className="flex items-baseline gap-1.5">
+          <dt className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+            Platform readiness
+          </dt>
+          <dd className="text-sm font-bold text-slate-900 tabular-nums">
+            {provider.readinessScore.toFixed(0)}/100
+          </dd>
         </div>
       </dl>
 
+      {profileHref ? (
+        <p className="mt-4">
+          <Link href={profileHref} className={LINK_ARROW}>
+            View profile
+            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </Link>
+        </p>
+      ) : null}
+
       {provider.slug ? (
-        <p className="mt-3 text-xs text-muted">
+        <p className="mt-3 font-mono text-[11px] text-slate-400">
           Provider reference: <code>{provider.slug}</code>
         </p>
       ) : null}
@@ -408,26 +470,102 @@ export function MarketEmptyState({
   unavailable: boolean;
 }) {
   return (
-    <div className="rounded-md border border-solid border-line bg-surface p-6">
-      <h3 className="text-lg font-bold text-ink">
+    <div className="rounded-2xl border border-solid border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
+      {/* The badge is the illustration: amber when the search could not run
+          (our fault, our colour to own), teal when the catalog is simply
+          empty. No spot-art asset exists for this state, and drawing one in
+          CSS beats shipping a stock illustration that claims nothing. */}
+      <span
+        aria-hidden="true"
+        className={`flex h-12 w-12 items-center justify-center rounded-xl border border-solid ${
+          unavailable
+            ? 'border-amber-200 bg-secondary-light text-amber-700'
+            : 'border-primary-subtle bg-primary-surface text-primary'
+        }`}
+      >
+        {unavailable ? <TriangleAlert className="h-6 w-6" /> : <SearchX className="h-6 w-6" />}
+      </span>
+
+      <h3 className="mt-4 text-xl font-bold tracking-tight text-slate-900">
         {unavailable
           ? 'We cannot search this market right now'
           : hasFilters
             ? `No providers in ${marketName} match those filters`
             : `No providers are published in ${marketName} yet`}
       </h3>
-      <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
         {unavailable
           ? 'The provider catalog did not respond. This is a problem on our side, not a statement about what is available — try again in a moment.'
           : 'Providers appear here once they have been verified and published. Nothing is shown for a market we cannot fill, because a list of unverified names would be worse than an empty list.'}
       </p>
-      <div className="entry-actions mt-4">
-        <Link href="/requests/new" className="button-link">
+
+      {/* Amber is the CTA colour, so the primary action here is the same filled
+          pill as the navbar's — one destination, one look. The secondary is a
+          text link whose arrow travels on hover; the gap is declared on the
+          variant, not the base, or `hover:gap-2.5` would never win. */}
+      <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <Link href="/requests/new" className={CTA_AMBER}>
           Post an open request
+          <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Link>
-        <Link href="/how-it-works" className="secondary-link">
+        <Link href="/how-it-works" className={LINK_ARROW}>
           See how matching works
+          <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
+      </div>
+    </div>
+  );
+}
+
+/** Surface + accent per callout tone. `border-l-4` is the left accent rule. */
+const NOTICE_TONE = {
+  amber: 'border-amber-200/80 border-l-amber-500 bg-amber-50/70',
+  slate: 'border-slate-200 border-l-primary bg-slate-50',
+} as const;
+
+const NOTICE_ICON_TONE = {
+  amber: 'border-amber-200 bg-secondary-light text-amber-700',
+  slate: 'border-primary-subtle bg-primary-surface text-primary',
+} as const;
+
+/**
+ * The callout box both notices and both page-level banners render through.
+ *
+ * Two jobs, both learned the hard way here: the disclosure text was plain prose
+ * in a hairline box, which read like body copy nobody had to read; and links
+ * inside it carried only `underline` — with no preflight in this project that
+ * leaves them browser-default blue. The `[&_a]` rules fix the second at the
+ * source rather than at every call site, and the left accent bar does the
+ * first: an amber edge on an amber wash is a status, not a paragraph.
+ */
+export function NoticePanel({
+  tone = 'amber',
+  title,
+  icon,
+  className = '',
+  children,
+}: {
+  tone?: keyof typeof NOTICE_TONE;
+  /** Optional bold lead-in, rendered as part of the prose rather than as a heading. */
+  title?: ReactNode;
+  icon?: ReactNode;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={`flex items-start gap-3.5 rounded-xl border border-solid border-l-4 p-5 ${NOTICE_TONE[tone]} ${className}`}
+    >
+      {icon ? (
+        <span
+          aria-hidden="true"
+          className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-solid ${NOTICE_ICON_TONE[tone]}`}
+        >
+          {icon}
+        </span>
+      ) : null}
+      <div className="min-w-0 text-sm leading-relaxed text-slate-700 [&_a]:font-semibold [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_a]:transition-colors [&_a]:hover:text-primary-dark [&_code]:rounded-sm [&_code]:border [&_code]:border-solid [&_code]:border-amber-200 [&_code]:bg-white/70 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[11px] [&_code]:text-amber-800 [&_strong]:font-bold [&_strong]:text-slate-900">
+        {title ? <strong>{title}</strong> : null} {children}
       </div>
     </div>
   );
@@ -436,18 +574,17 @@ export function MarketEmptyState({
 /** States what is deliberately not on the page. Silence would be the dishonest option. */
 export function MarketDataNotice({ className = '' }: { className?: string }) {
   return (
-    <aside className={`notice ${className}`}>
-      <strong>What is not published here:</strong> customer ratings and prices. The platform has no
-      reviews table, and provider prices are only ever stated on an itemized quote — so there is no
-      rating or &ldquo;from&rdquo; figure to show on a card. Filters exist only for the data that does:{' '}
-      <Link href="/trust-and-safety" className="underline">
-        verification
-      </Link>{' '}
-      and{' '}
-      <Link href="/pricing" className="underline">
-        fees
-      </Link>{' '}
-      are explained on their own pages.
-    </aside>
+    <NoticePanel
+      tone="amber"
+      title="What is not published here:"
+      icon={<Info className="h-5 w-5" />}
+      className={className}
+    >
+      customer ratings and prices. The platform has no reviews table, and provider prices are only
+      ever stated on an itemized quote — so there is no rating or &ldquo;from&rdquo; figure to show
+      on a card. Filters exist only for the data that does:{' '}
+      <Link href="/trust-and-safety">verification</Link> and{' '}
+      <Link href="/pricing">fees</Link> are explained on their own pages.
+    </NoticePanel>
   );
 }
