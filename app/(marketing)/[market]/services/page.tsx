@@ -1,13 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { Suspense } from 'react';
+import { ArrowRight, MapPin } from 'lucide-react';
+import { AreaQuickLinks, MarketDataNotice, NoticePanel } from '@/components/discovery/MarketSections';
 import {
-  AreaQuickLinks,
-  MarketDataNotice,
-  MarketSearchBar,
-  ServiceCategoryGrid,
-} from '@/components/discovery/MarketSections';
+  DirectoryBody,
+  PreviewNotice,
+  TaxonomyHero,
+  TaxonomySearchForm,
+  TaxonomySkeleton,
+} from '@/components/discovery/TaxonomySections';
+import { CARD, CTA_AMBER, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { previewMode } from '@/features/discovery/data/preview-taxonomy';
 import {
   getMarket,
   getMarketLocations,
@@ -16,30 +21,41 @@ import {
 } from '@/features/discovery/data/market-catalog';
 
 /**
- * Market service directory — /{market}/services
+ * Service directory — /{market}/services
  *
- * The market-scoped sibling of /services. Everything on it is scoped to the market
- * in the URL: the categories are the real `public_service_catalog`, the areas are the
- * real `public_location_catalog` rows for that market, and the currency is the
- * market's own (`default_currency_code`), which is the currency quotes in that market
- * are denominated in.
+ * The top of the canonical service taxonomy for one market: the curated categories
+ * (when any exist), every service in the public catalog, the ordinary-language
+ * phrases customers actually use, and the areas requests can be scoped to.
  *
- * UNKNOWN OR UNSUPPORTED MARKET → redirect('/').
+ * WHAT IT IS FOR. Someone who needs work done does not necessarily know the trade
+ * term for it. This page is the index that lets them start from a category or from
+ * a phrase they would actually say ("leaking pipe repair") and end up on a service
+ * page that explains the scope and offers a request. Category and service pages are
+ * the two children of this route, and both live under ONE `[slug]` segment — see
+ * app/(marketing)/[market]/services/[slug]/page.tsx for why that has to be one
+ * segment and not two.
  *
- * The brief asked for a graceful redirect rather than an error page, and there is
- * exactly one market in the catalog today, so anything else is unsupported by
- * definition. The trade-off is written down on purpose: this makes
- * `/{anything}/services` a 307 to the homepage instead of a 404, and a redirect to
- * the homepage is a soft-404 to a crawler. The sibling hub route at `/{market}`
- * still 404s for the same input, so the two disagree today. If the stricter
- * behaviour is wanted, `notFound()` replaces one line here.
+ * UNKNOWN OR UNSUPPORTED MARKET → redirect('/'). The same trade-off this route has
+ * always made: a 307 to the homepage is a soft-404 to a crawler, while the sibling
+ * hub at /{market} 404s for the same input. Kept as-is rather than quietly changed
+ * here; the alternative is one line (notFound()).
  *
- * No `loading.tsx` anywhere near this route: a route-level Suspense boundary flushes
- * the shell with a 200 and would break the redirect above (documented in the repo's
- * own findings, and the reason the existing dynamic routes have none either).
+ * NO `loading.tsx` ANYWHERE NEAR THIS ROUTE, and that is not an oversight. A
+ * route-level loading file creates a Suspense boundary ABOVE the redirect above,
+ * which flushes a 200 shell and turns the redirect (and every 404 below it) into a
+ * soft-404. The skeleton the brief asks for is therefore rendered by an IN-PAGE
+ * `<Suspense>` placed AFTER the guard, which streams identically without being able
+ * to swallow it.
+ *
+ * SEO. Server-rendered from the public catalogs, canonical URL declared, and
+ * `index: false` until the market has supply — the rule every hub page in this
+ * project follows, and the reason there is no sitemap entry for it. The listing
+ * becomes indexable when the platform's own policy says so, not when this file is
+ * edited.
  */
 
 type Params = Promise<{ market: string }>;
+type SearchParams = Promise<{ preview?: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { market } = await params;
@@ -47,27 +63,36 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!found) return {};
 
   return {
-    title: `${found.displayName} — service categories`,
-    description: `Service categories available in ${found.displayName}, with quotes priced in ${found.currencyCode}.`,
+    title: `${found.displayName} — service directory`,
+    description: `Every service category in ${found.displayName}, with the ordinary phrases people use for each one. Quotes in this market are priced in ${found.currencyCode}.`,
     alternates: { canonical: `/${found.slug}/services` },
-    // Consistent with /services and every other hub page: useful to a visitor,
-    // indexed only once supply and quality thresholds are met.
     robots: { index: false, follow: true },
   };
 }
 
-export default async function MarketServicesPage({ params }: { params: Params }) {
+export default async function MarketServicesPage({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
+}) {
   const { market } = await params;
   const found = await getMarket(market);
   if (!found) redirect('/');
+
+  const query = await searchParams;
+  // Dev-only, and null in production: see previewMode() in preview-taxonomy.ts.
+  // ?preview=1 shows the seeded taxonomy, ?preview=empty the unconfigured market.
+  const preview = previewMode(query.preview);
 
   const [locations, services] = await Promise.all([
     getMarketLocations(found.marketId),
     getMarketServices(),
   ]);
 
-  // Asked rather than asserted: the page states how many providers this market
-  // actually has instead of claiming to have some.
+  // Asked rather than asserted, exactly as before: the page states how many
+  // providers this market actually has instead of claiming to have some.
   const { providers, unavailable } = await searchMarketProviders({
     market: found,
     locations,
@@ -75,69 +100,89 @@ export default async function MarketServicesPage({ params }: { params: Params })
   });
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 pt-14 pb-24">
-      <Breadcrumbs
-        items={[
+    <div className="w-full">
+      <TaxonomyHero
+        breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: found.displayName, href: `/${found.slug}` },
           { label: 'Services' },
         ]}
-      />
+        eyebrow={
+          <>
+            <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
+            Market · {found.code}
+          </>
+        }
+        title={`Service categories in ${found.displayName}`}
+        lede={`Browse the canonical service catalog for ${found.displayName}, grouped the way the work is described rather than the way it is invoiced. Every request is scoped the same way for every provider who quotes on it, and quotes here are priced in ${found.currencyCode}.`}
+      >
+        <TaxonomySearchForm
+          marketSlug={found.slug}
+          marketName={found.displayName}
+          locations={locations}
+        />
+      </TaxonomyHero>
 
-      <header className="mb-10">
-        <p className="eyebrow">Market · {found.code}</p>
-        <h1 className="mt-3 mb-4 text-4xl leading-tight font-bold tracking-tight text-ink sm:text-5xl">
-          Service categories in {found.displayName}
-        </h1>
-        <p className="lede left">
-          Pick a category to see who can do the work, or describe the job in your own words and we
-          will match it against the same scope for every provider. Quotes in this market are priced
-          in {found.currencyCode}.
-        </p>
-        <MarketSearchBar marketSlug={found.slug} marketName={found.displayName} />
-      </header>
+      <div className={PAGE_SHELL}>
+        <div className="grid gap-10">
+          {preview ? <PreviewNotice clearHref={`/${found.slug}/services`} /> : null}
+          {!unavailable && providers.length === 0 ? (
+            <NoticePanel tone="slate" title="No providers are published in this market yet.">
+              The categories, services and areas below are real catalog rows; the supply behind them
+              is not there yet. Nothing is listed for a market the platform cannot fill, because a
+              list of unverified names would be worse than an empty list. Posting a request still
+              records what you need.
+            </NoticePanel>
+          ) : null}
 
-      <MarketDataNotice />
+          {/* The brief's skeleton, streamed from an in-page boundary placed after
+              the redirect guard — see the file header. */}
+          <Suspense fallback={<TaxonomySkeleton />}>
+            <DirectoryBody
+              market={found}
+              locations={locations}
+              marketSlug={found.slug}
+              preview={preview}
+            />
+          </Suspense>
 
-      {!unavailable && providers.length === 0 ? (
-        <div className="notice">
-          <strong>No providers are published in this market yet.</strong> The categories and areas
-          below are real; searching them will return an empty list until verified providers are
-          published for {found.displayName}. Posting a request still records what you need.
+          <AreaQuickLinks marketSlug={found.slug} locations={locations} />
+
+          <MarketDataNotice />
+
+          {/* The directory's own call to action: a job that spans categories, or one
+              the catalog has no row for. Amber, because it is this page's single
+              primary action and amber is the CTA colour. */}
+          <section
+            className={`${CARD} flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8`}
+          >
+            <div>
+              <h2 className="text-lg font-bold tracking-tight text-slate-900">Not in the list?</h2>
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-slate-600">
+                A job that spans several trades, or something this catalog has no row for yet. It
+                becomes a request with an itemized scope rather than a guess.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
+              <Link href="/requests/new" className={CTA_AMBER}>
+                Start request
+                <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              </Link>
+              <Link href={`/${found.slug}/search`} className={LINK_ARROW}>
+                Search all providers
+                <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </section>
+
+          <p className="text-sm text-slate-500">
+            {locations.filter((location) => location.type !== 'country').length} area
+            {locations.filter((location) => location.type !== 'country').length === 1 ? '' : 's'} and{' '}
+            {services.length} service{services.length === 1 ? '' : 's'} in this market&rsquo;s
+            catalog.
+          </p>
         </div>
-      ) : null}
-
-      <ServiceCategoryGrid
-        marketSlug={found.slug}
-        marketName={found.displayName}
-        currencyCode={found.currencyCode}
-        services={services}
-        locations={locations}
-      />
-
-      <AreaQuickLinks marketSlug={found.slug} locations={locations} />
-
-      <section className="action-panel">
-        <h2 className="text-lg font-bold text-ink">Request a custom service</h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-          Not in the list? Describe what needs doing — a job that spans several trades, or something
-          this catalog has no row for yet — and it becomes a request with an itemized scope rather
-          than a guess.
-        </p>
-        <div className="entry-actions mt-4">
-          <Link href="/requests/new" className="button-link">
-            Request custom service
-          </Link>
-          <Link href={`/${found.slug}/search`} className="secondary-link">
-            Search all providers in {found.displayName}
-          </Link>
-        </div>
-      </section>
-
-      <p className="hint">
-        {locations.length} area{locations.length === 1 ? '' : 's'} and {services.length} service
-        {services.length === 1 ? '' : 's'} in this market&rsquo;s catalog.
-      </p>
+      </div>
     </div>
   );
 }
