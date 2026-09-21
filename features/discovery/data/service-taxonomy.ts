@@ -540,3 +540,58 @@ export function serviceHref(marketSlug: string, service: TaxonomyService): strin
 export function categoryHref(marketSlug: string, category: TaxonomyCategory): string {
   return `/${marketSlug}/services/${category.slug}`;
 }
+
+/**
+ * Every catalogue service, with the handle the registry holds for it in ONE locality.
+ *
+ * The locality hub needs this and cannot use `getLocalServiceRoute` in a loop: that function
+ * reads the whole route projection and then filters, so calling it per service would read the
+ * same rows N times. This reads once and answers for every service.
+ *
+ * `handle: null` MEANS THE TRADE HAS NO PAGE HERE, and the hub must respect that — it links
+ * the service where the registry has a route and falls back to search where it does not. That
+ * is the same rule the mock hubs apply with their `live` flag, except this one is derived from
+ * the registry rather than hand-maintained, so it cannot go stale when supply arrives.
+ *
+ * Indexability rides along per service per locality, because that is the granularity the policy
+ * engine evaluates at: one trade in one area can be indexable while the next is not.
+ */
+export type LocalityServiceLink = {
+  service: TaxonomyService;
+  /** The registered URL handle for this service in this locality, when one exists. */
+  handle: string | null;
+  canonicalPath: string | null;
+  indexability: IndexabilityState | null;
+  indexingThreshold: number | null;
+};
+
+export async function getLocalityServiceLinks(
+  market: Market,
+  locations: MarketLocation[],
+  localityId: string,
+): Promise<{ links: LocalityServiceLink[]; unavailable: boolean }> {
+  const taxonomy = await getServiceTaxonomy(market, locations);
+  if (taxonomy.unavailable) return { links: [], unavailable: true };
+
+  const supabase = await createSupabaseServerClient();
+  const rows = await readProjection(
+    supabase,
+    'public_service_route_catalog',
+    'service_entity_id,slug,canonical_path,indexability,minimum_supply,location_id',
+  );
+
+  const links = taxonomy.services.map((service) => {
+    const match = rows.find(
+      (row) => row.location_id === localityId && row.service_entity_id === service.serviceEntityId,
+    );
+    return {
+      service,
+      handle: text(match?.slug),
+      canonicalPath: text(match?.canonical_path),
+      indexability: (text(match?.indexability) as IndexabilityState | null) ?? null,
+      indexingThreshold: numberOrNull(match?.minimum_supply),
+    };
+  });
+
+  return { links, unavailable: false };
+}

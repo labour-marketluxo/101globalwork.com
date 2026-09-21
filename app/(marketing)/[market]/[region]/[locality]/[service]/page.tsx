@@ -3,12 +3,28 @@ import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { ArrowRight, MapPin, Tag } from 'lucide-react';
-import type { BreadcrumbItem } from '@/components/ui/Breadcrumbs';
+import { ProblemPageView, placeOf, type LocalizedPlace } from '@/components/discovery/IntentSections';
 import { LocalPageBody } from '@/components/discovery/LocalServiceSections';
 import { MetaChip, TaxonomyHero, TaxonomySkeleton } from '@/components/discovery/TaxonomySections';
 import { CTA_AMBER, LINK_ARROW_DARK, PAGE_SHELL } from '@/components/discovery/tokens';
-import { getCityHub, getLocalityHub } from '@/features/discovery/data/mock-locations';
-import { resolveLocalService } from '@/features/discovery/data/local-service';
+import {
+  CONTEXTUAL_VARIANT_ROBOTS,
+  intentCanonicalHref,
+} from '@/features/discovery/data/canonical-policy';
+import { discoveryTrail } from '@/features/discovery/data/discovery-breadcrumbs';
+import {
+  resolveLocalLocation,
+  resolveLocalService,
+  type LocalServiceContext,
+} from '@/features/discovery/data/local-service';
+import type { Market } from '@/features/discovery/data/market-catalog';
+import {
+  resolveProblem,
+  type IntentCatalog,
+  type TaxonomyProblem,
+} from '@/features/discovery/data/intent-taxonomy';
+import { humaniseSegment } from '@/features/discovery/data/route-segments';
+import { previewEnabled } from '@/features/discovery/data/preview-providers';
 import { getPublicRouteDocument } from '@/features/discovery/data/service-taxonomy';
 
 /**
@@ -34,6 +50,16 @@ import { getPublicRouteDocument } from '@/features/discovery/data/service-taxono
  * directory was renamed from `[city]` for that reason — the old name was wrong about
  * half its own contents, and the router does not care what a segment is called as long
  * as siblings agree on one name.
+ *
+ * THE FINAL SEGMENT SERVES TWO PAGE TYPES, and that is forced rather than chosen. Next.js
+ * allows one dynamic name per level, so /…/{locality}/plumbers (a trade) and
+ * /…/{locality}/leaking-pipe (a problem) arrive here with an identical shape and only the
+ * catalogue can tell them apart — see `resolveLeaf` below. The trade is tried first because
+ * it is the common case and because its page carries the supply; a problem is then served
+ * through the same page view the flat /{market}/problems/{slug} route renders, with the
+ * locality attached. A third shape the brief describes — an outcome under a region — is NOT
+ * served here: it belongs to the region-level route, and a locality-level copy of it would
+ * add a name substitution and no differentiating content.
  *
  * UNKNOWN MARKET, REGION, LOCALITY OR SERVICE → notFound(). Deliberately stricter than
  * the sibling `/{market}/services` and `/{market}/search` routes, which redirect an
@@ -61,16 +87,72 @@ import { getPublicRouteDocument } from '@/features/discovery/data/service-taxono
 type Params = Promise<{ market: string; region: string; locality: string; service: string }>;
 type SearchParams = Promise<{ preview?: string }>;
 
-/** Dev-only UI preview; dead code in a production bundle. See LocalPageBody. */
-function previewEnabled(value: string | undefined): boolean {
-  if (process.env.NODE_ENV === 'production') return false;
-  return value === '1' || value === 'true';
-}
+/**
+ * What the final segment turned out to be.
+ *
+ * THREE OUTCOMES FROM ONE SEGMENT, because the router gives this level exactly one dynamic
+ * name. /ng/abuja/gwarinpa/plumbers and /ng/abuja/gwarinpa/leaking-pipe are the same shape as
+ * far as Next.js is concerned; only the catalogue can tell them apart. Both the metadata and
+ * the page call this, so the two can never disagree about what a URL means.
+ */
+type LeafResolution =
+  | { kind: 'service'; context: LocalServiceContext }
+  | { kind: 'redirect'; toPath: string }
+  | {
+      kind: 'problem';
+      market: Market;
+      problem: TaxonomyProblem;
+      catalog: IntentCatalog;
+      localized: LocalizedPlace;
+    };
 
-/** 'leaking-pipe-repair' → 'Leaking pipe repair', for a crumb with no better name. */
-function humaniseSegment(segment: string): string {
-  const words = segment.replace(/-/g, ' ').trim();
-  return words ? words.charAt(0).toUpperCase() + words.slice(1) : segment;
+/**
+ * Resolve the final segment: a trade handle, a retired path, or a problem.
+ *
+ * THE ORDER IS THE DESIGN. The service lookup runs first and on its own, so the common case
+ * (a trade page) never pays for the intent catalogue. Only a segment that is NOT a service
+ * handle — and not a retired one — reaches the problem resolution, and only then is the
+ * location chain read a second time (cached, so it is not a second query).
+ *
+ * Precedence matters when a segment could be both, and it is written down here rather than
+ * left to whoever reads the code next: a trade wins. The service resolver matches aliases as
+ * well as handles, and a trade page carries the supply, the price guidance and the request
+ * flow — the more useful of the two answers. A problem page stays reachable at its own flat
+ * URL, so nothing is lost.
+ */
+async function resolveLeaf(
+  market: string,
+  region: string,
+  locality: string,
+  segment: string,
+): Promise<LeafResolution | null> {
+  const service = await resolveLocalService(market, region, locality, segment);
+  if (service) {
+    return service.kind === 'redirect'
+      ? { kind: 'redirect', toPath: service.toPath }
+      : { kind: 'service', context: service.context };
+  }
+
+  const location = await resolveLocalLocation(market, region, locality);
+  if (!location) return null;
+
+  const problem = await resolveProblem(market, segment, {
+    region: location.region,
+    locality: location.locality,
+  });
+  if (!problem) return null;
+
+  return {
+    kind: 'problem',
+    market: problem.market,
+    problem: problem.problem,
+    catalog: problem.catalog,
+    localized: {
+      region: location.region,
+      locality: location.locality,
+      locations: location.locations,
+    },
+  };
 }
 
 export async function generateMetadata({
@@ -81,11 +163,27 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { market, region, locality, service } = await params;
 
-  const resolved = await resolveLocalService(market, region, locality, service);
+  const leaf = await resolveLeaf(market, region, locality, service);
   // A redirect has no page of its own; an unresolvable combination has no title.
-  if (!resolved || resolved.kind === 'redirect') return {};
+  if (!leaf || leaf.kind === 'redirect') return {};
 
-  const { context } = resolved;
+  // A PROBLEM REACHED THROUGH A LOCALITY URL. Its canonical is the FLAT problem page, not
+  // this one: this URL is the problem read in one of the localities the market contains, and
+  // one flat page plus N locality variants is the duplication the canonical policy exists to
+  // prevent. The title still names the place, because that is the page the visitor asked
+  // for — a canonical tag is an instruction to crawlers, not to the reader.
+  if (leaf.kind === 'problem') {
+    return {
+      title: `${leaf.problem.displayName} in ${placeOf(leaf.localized)} — ${leaf.market.displayName}`,
+      description: leaf.problem.definition,
+      alternates: {
+        canonical: intentCanonicalHref(leaf.market.slug, 'problems', leaf.problem.slug),
+      },
+      robots: CONTEXTUAL_VARIANT_ROBOTS,
+    };
+  }
+
+  const { context } = leaf;
   const document = await getPublicRouteDocument(`${context.canonicalHref}/`);
   const place = `${context.locality.name}, ${context.region.name}`;
 
@@ -103,7 +201,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocalServicePage({
+export default async function LocalLeafPage({
   params,
   searchParams,
 }: {
@@ -114,14 +212,40 @@ export default async function LocalServicePage({
   const query = await searchParams;
   const preview = previewEnabled(query.preview);
 
-  const resolved = await resolveLocalService(market, region, locality, service);
+  const leaf = await resolveLeaf(market, region, locality, service);
 
-  // Retired handle: the redirect catalogue is consulted before anything renders, so a
-  // URL the platform itself published once keeps working.
-  if (resolved?.kind === 'redirect') permanentRedirect(resolved.toPath);
-  if (!resolved) notFound();
+  // Retired handle: the redirect catalogue is consulted before anything renders, so a URL
+  // the platform itself published once keeps working. One catalogue serves both kinds, so a
+  // retired problem path resolves here too.
+  if (leaf?.kind === 'redirect') permanentRedirect(leaf.toPath);
+  if (!leaf) notFound();
 
-  const { context } = resolved;
+  /* --------------------------------------------------- the segment was a problem */
+
+  if (leaf.kind === 'problem') {
+    return (
+      <ProblemPageView
+        market={leaf.market}
+        problem={leaf.problem}
+        catalog={leaf.catalog}
+        localized={leaf.localized}
+        breadcrumbs={discoveryTrail({
+          market: leaf.market,
+          region: leaf.localized.region,
+          locality: leaf.localized.locality,
+          localityHub: true,
+          // The family label explains why a problem slug is sitting where a trade noun is
+          // expected. There is no /problems index to link to, so it is a label, not a link.
+          family: 'Problems',
+          leaf: leaf.problem.displayName,
+        })}
+      />
+    );
+  }
+
+  /* --------------------------------------------------- the segment was a service */
+
+  const { context } = leaf;
 
   // The visitor arrived on a handle that is not the registered one (an alias, or the
   // canonical key). Serving it as well would put two live URLs behind one page, so it is
@@ -137,37 +261,23 @@ export default async function LocalServicePage({
     permanentRedirect(context.canonicalHref);
   }
 
-  const marketHub = `/${context.market.slug}`;
-  const regionHubPath = `${marketHub}/${context.region.code}`;
-  const localityHubPath = `${regionHubPath}/${context.locality.code}`;
-
-  // The hub chain is still served from mock-locations.ts, which knows Abuja, Lagos and
-  // Port Harcourt but not Niger State. A breadcrumb whose link 404s is worse than one
-  // that is merely not a link, so each ancestor is linked only when its hub route
-  // actually resolves (this is the defect the phase-0 audit reported).
-  const regionHubExists = Boolean(getCityHub(context.market.slug, context.region.code));
-  const localityHubExists = Boolean(
-    getLocalityHub(context.market.slug, context.region.code, context.locality.code),
-  );
+  const localityHubPath = `/${context.market.slug}/${context.region.code}/${context.locality.code}`;
 
   const document = await getPublicRouteDocument(`${context.canonicalHref}/`);
-
-  const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Home', href: '/' },
-    { label: context.market.displayName, href: marketHub },
-    regionHubExists ? { label: context.region.name, href: regionHubPath } : { label: context.region.name },
-    localityHubExists
-      ? { label: context.locality.name, href: localityHubPath }
-      : { label: context.locality.name },
-    {
-      label: document ? context.service.displayName : humaniseSegment(context.requestedSlug),
-    },
-  ];
 
   return (
     <div className="w-full">
       <TaxonomyHero
-        breadcrumbs={breadcrumbs}
+        // Ancestor links come from the trail builder, which links a crumb only where a page
+        // exists: the region hub is still served from the mock hubs, so `regionHub` is left
+        // to its own lookup, while the locality hub is real for every catalogue locality.
+        breadcrumbs={discoveryTrail({
+          market: context.market,
+          region: context.region,
+          locality: context.locality,
+          localityHub: true,
+          leaf: document ? context.service.displayName : humaniseSegment(context.requestedSlug),
+        })}
         eyebrow={
           <>
             <Tag aria-hidden="true" className="h-3.5 w-3.5" />
@@ -199,11 +309,10 @@ export default async function LocalServicePage({
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>
             {/* "Change location" sits at the top because the most likely reason to leave
-                this page immediately is that the visitor picked the wrong area. */}
-            <Link
-              href={localityHubExists ? localityHubPath : `/${context.market.slug}/search`}
-              className={LINK_ARROW_DARK}
-            >
+                this page immediately is that the visitor picked the wrong area. The hub page
+                for the locality is now a real page for every locality in the catalogue,
+                which is why this no longer falls back to search. */}
+            <Link href={localityHubPath} className={LINK_ARROW_DARK}>
               Change location
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
             </Link>

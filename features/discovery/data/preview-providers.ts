@@ -1,4 +1,5 @@
 import type { MarketProvider } from '@/features/discovery/data/market-catalog';
+import type { ProviderProfileView } from '@/features/discovery/data/provider-profile';
 
 /**
  * ⚠️ SAMPLE DATA FOR THE DEV-ONLY UI PREVIEW. NOT A DATA SOURCE. NEVER IMPORT THIS
@@ -68,3 +69,50 @@ export const PREVIEW_PROVIDERS: MarketProvider[] = [
     areas: ['Gwarinpa', 'Abuja', 'Minna'],
   },
 ];
+
+/**
+ * Is the dev-only UI preview switched on for this request?
+ *
+ * The guard is `NODE_ENV`, which Next inlines at build time, so every caller of this function
+ * has a dead branch in a production bundle — the query param cannot switch anything on in a
+ * deployed build. Shared rather than copied per route: this file already existed in two routes
+ * as near-identical private helpers, and a preview that is on in one route and off in another
+ * is worse than no preview at all.
+ */
+export function previewEnabled(value: string | undefined): boolean {
+  if (process.env.NODE_ENV === 'production') return false;
+  return value === '1' || value === 'true';
+}
+
+/**
+ * A sample provider, shaped like a profile, for the `?preview=1` branch of the provider routes.
+ *
+ * The provider routes have the same problem the search page has, only more so: with zero
+ * published profiles, the profile page cannot be seen at all — not with real data, not by the
+ * person reviewing the layout. So the sample rows above are projected through the same
+ * `ProviderProfileView` the real read produces, which means the preview exercises the actual
+ * component and the actual field allowlist rather than a parallel mock-up that can drift.
+ *
+ * It returns a VIEW, deliberately, and no identifiers: the preview is not a claim that a real
+ * provider exists at a real location, so it carries nothing a context check could match on.
+ * The routes skip their locality and service checks in preview for that reason, and label
+ * every previewed page SAMPLE.
+ */
+export function previewProviderProfile(slug: string): ProviderProfileView | null {
+  const row = PREVIEW_PROVIDERS.find((provider) => provider.slug === slug);
+  if (!row) return null;
+
+  return {
+    slug: row.slug,
+    displayName: row.headline ?? row.services[0] ?? 'Service provider',
+    headline: row.headline,
+    description: row.description,
+    yearsExperience: row.yearsExperience,
+    serviceName: row.services[0] ?? null,
+    locationName: row.areas[0] ?? null,
+    acceptsNewWork: row.acceptsNewWork,
+    verified: row.verified,
+    readinessScore: row.readinessScore,
+    trustScore: row.trustScore,
+  };
+}

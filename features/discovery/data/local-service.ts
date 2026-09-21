@@ -17,6 +17,7 @@ import {
   type TaxonomyCategory,
   type TaxonomyService,
 } from '@/features/discovery/data/service-taxonomy';
+import { resolveLocationChain, safeDecode, slugKey } from '@/features/discovery/data/route-segments';
 
 /**
  * The local discovery page — /{market}/{region}/{locality}/{service-plural}
@@ -51,23 +52,12 @@ import {
  * NO PRICING IS READ HERE, because none is publishable: see features/pricing/fee-policy.ts.
  */
 
-/** URL segments are matched case-insensitively and by slug spelling. */
-function slugKey(value: string): string {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/[\s_]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-
-function safeDecode(value: string): string {
-  try {
-    return decodeURIComponent(value);
-  } catch {
-    return value;
-  }
-}
+/**
+ * `slugKey` and `safeDecode` used to live here, and the location chain below was this
+ * file's private business. Both moved to route-segments.ts the moment a second route
+ * shape needed them: five nested route files now parse the same segments, and a second
+ * copy of "what counts as the same slug" is how two URLs for one page appear.
+ */
 
 export type LocalServiceContext = {
   market: Market;
@@ -120,54 +110,99 @@ export const getLocalSupply = cache(async function getLocalSupply(
   });
 });
 
+/**
+ * Supply for an AREA rather than for one service — what the problem and outcome pages
+ * need when they are opened with a location in the path.
+ *
+ * Same source as everything else (provider_matching_eligibility joined to the public
+ * profile projection), so a count here and a count on the local service page for the
+ * same area cannot disagree.
+ *
+ * The area code is expanded to its descendants by `locationScopeIds`, which is why a
+ * region-scoped page shows providers recorded in its localities too. Narrowing by
+ * service is a FILTER over that result rather than a second query, because
+ * `searchMarketProviders` takes a single canonical key and a problem may link to more
+ * than one service. When the entity links to no service at all, no narrowing happens and
+ * the caller is expected to say so on the page — an unfiltered area count presented as
+ * "providers for this problem" would be a claim the data does not support.
+ */
+export const getAreaSupply = cache(async function getAreaSupply(input: {
+  market: Market;
+  locations: MarketLocation[];
+  /** A canonical location code: a locality, a city or a region. */
+  areaCode: string;
+  /** Display names of the services the page is about. Empty means "do not narrow". */
+  serviceNames?: string[];
+}): Promise<LocalSupply> {
+  const marketServices = await getMarketServices();
+  const result = await searchMarketProviders({
+    market: input.market,
+    locations: input.locations,
+    services: marketServices,
+    areaCode: input.areaCode,
+  });
+
+  if (result.unavailable) return { providers: [], unavailable: true };
+
+  const wanted = new Set((input.serviceNames ?? []).map((name) => name.trim().toLowerCase()));
+  if (wanted.size === 0) return result;
+
+  return {
+    providers: result.providers.filter((provider) =>
+      provider.services.some((name) => wanted.has(name.trim().toLowerCase())),
+    ),
+    unavailable: false,
+  };
+});
+
 export type LocalServiceResolution =
   | { kind: 'page'; context: LocalServiceContext }
   /** The requested path is retired. The caller issues a permanent redirect. */
   | { kind: 'redirect'; toPath: string; status: 301 | 308 };
 
+export type LocalLocationContext = {
+  market: Market;
+  /** The `[region]` segment: a region row or a city row, whichever the catalogue has. */
+  region: MarketLocation;
+  locality: MarketLocation;
+  /** Other localities under the same region — the coverage list. */
+  siblings: MarketLocation[];
+  /** Every location in the market, so the supply reads can scope themselves. */
+  locations: MarketLocation[];
+};
+
 /**
- * The location chain, or null when any step is not real.
+ * The location half of a nested discovery URL, and nothing else.
  *
- * The shape is fixed at three levels under the market — country → region → locality —
- * which is what the URL encodes. This market happens to hold one region row
- * (`niger-state`) and two city rows (`abuja`, `minna`), with `gwarinpa` and `minna`
- * one level below; the resolver therefore accepts a region OR a city in the `[region]`
- * position and any child in the `[locality]` position, and does not care which
- * `location_type` string a row carries. Type strings are a catalog detail the URL
- * should not be encoding.
+ * Split out of `resolveLocalService` because not every nested route is a service page:
+ * /{market}/{region}/{outcome-slug} and the provider profile at the foot of the tree
+ * need the same two segment resolutions and none of the service matching, and the
+ * provider profile sits UNDER the service leaf, so it would otherwise pay for the
+ * service taxonomy read twice.
+ *
+ * Cached per request, so calling it and then calling `resolveLocalService` — which calls
+ * it too — is one location read, not two.
  */
-function resolveLocationChain(
-  locations: MarketLocation[],
+export const resolveLocalLocation = cache(async function resolveLocalLocation(
+  marketSlug: string,
   regionSlug: string,
   localitySlug: string,
-): { region: MarketLocation; locality: MarketLocation; siblings: MarketLocation[] } | null {
-  const country = locations.find((location) => location.parentId === null);
-  if (!country) return null;
+): Promise<LocalLocationContext | null> {
+  const market = await getMarket(marketSlug);
+  if (!market) return null;
 
-  const regionNeedle = slugKey(safeDecode(regionSlug));
-  const localityNeedle = slugKey(safeDecode(localitySlug));
-
-  const region = locations.find(
-    (location) =>
-      location.parentId === country.locationId && slugKey(location.code) === regionNeedle,
-  );
-  if (!region) return null;
-
-  const locality = locations.find(
-    (location) =>
-      location.parentId === region.locationId && slugKey(location.code) === localityNeedle,
-  );
-  if (!locality) return null;
+  const locations = await getMarketLocations(market.marketId);
+  const chain = resolveLocationChain(locations, regionSlug, localitySlug);
+  if (!chain) return null;
 
   return {
-    region,
-    locality,
-    siblings: locations.filter(
-      (location) =>
-        location.parentId === region.locationId && location.locationId !== locality.locationId,
-    ),
+    market,
+    region: chain.region,
+    locality: chain.locality,
+    siblings: chain.siblings,
+    locations,
   };
-}
+});
 
 /**
  * Which service a URL segment means.
@@ -219,14 +254,10 @@ export const resolveLocalService = cache(async function resolveLocalService(
   localitySlug: string,
   serviceSlug: string,
 ): Promise<LocalServiceResolution | null> {
-  const market = await getMarket(marketSlug);
-  if (!market) return null;
+  const location = await resolveLocalLocation(marketSlug, regionSlug, localitySlug);
+  if (!location) return null;
 
-  const locations = await getMarketLocations(market.marketId);
-  const chain = resolveLocationChain(locations, regionSlug, localitySlug);
-  if (!chain) return null;
-
-  const { region, locality, siblings } = chain;
+  const { market, region, locality, siblings, locations } = location;
 
   // A retired path is answered before anything else is resolved: the handle may name
   // a service this catalog no longer keys at all, and a redirect is a better answer

@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { OutcomeBody } from '@/components/discovery/IntentSections';
-import { MetaChip, TaxonomyHero } from '@/components/discovery/TaxonomySections';
-import { CTA_AMBER, PAGE_SHELL } from '@/components/discovery/tokens';
+import { OutcomePageView } from '@/components/discovery/IntentSections';
+import {
+  CONTEXTUAL_VARIANT_ROBOTS,
+  intentCanonicalHref,
+} from '@/features/discovery/data/canonical-policy';
+import { discoveryTrail } from '@/features/discovery/data/discovery-breadcrumbs';
 import { getMarket } from '@/features/discovery/data/market-catalog';
 import { resolveOutcome } from '@/features/discovery/data/intent-taxonomy';
 
@@ -45,8 +46,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: `${outcome.displayName} — ${marketRow.displayName}`,
     description: outcome.definition,
-    alternates: { canonical: `/${marketRow.slug}/solutions/${outcome.slug}` },
-    robots: { index: false, follow: true },
+    // Flat path is canonical; the region-scoped sibling at /{market}/{region}/{outcome-slug}
+    // is a contextual variant. See canonical-policy.ts.
+    alternates: { canonical: intentCanonicalHref(marketRow.slug, 'solutions', outcome.slug) },
+    robots: CONTEXTUAL_VARIANT_ROBOTS,
   };
 }
 
@@ -61,47 +64,18 @@ export default async function OutcomePage({ params }: { params: Params }) {
 
   const { outcome, catalog } = resolved;
 
+  // No location is passed: this is the flat, context-free page. The region-scoped variant
+  // renders through the same view with `localized` set. See ProblemPage for the sibling.
   return (
-    <div className="w-full">
-      <TaxonomyHero
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: marketRow.displayName, href: `/${marketRow.slug}` },
-          // No /solutions index route exists yet: text, not a link that would 404.
-          { label: 'Solutions' },
-          { label: outcome.displayName },
-        ]}
-        eyebrow={
-          <>
-            <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
-            Outcome · {marketRow.code}
-          </>
-        }
-        title={outcome.displayName}
-        lede={outcome.definition}
-        chips={
-          <>
-            <MetaChip>
-              {outcome.services.length} service{outcome.services.length === 1 ? '' : 's'} bundled
-            </MetaChip>
-            {outcome.planningSteps.length ? (
-              <MetaChip>{outcome.planningSteps.length}-step process</MetaChip>
-            ) : null}
-          </>
-        }
-        actions={
-          <Link href="/requests/new" className={CTA_AMBER}>
-            Plan your project
-            <ArrowRight aria-hidden="true" className="h-4 w-4" />
-          </Link>
-        }
-      />
-
-      {/* No Suspense boundary: the catalogue read had to finish before this page could
-          resolve at all, so there is nothing left to stream. */}
-      <div className={PAGE_SHELL}>
-        <OutcomeBody market={marketRow} outcome={outcome} catalog={catalog} />
-      </div>
-    </div>
+    <OutcomePageView
+      market={marketRow}
+      outcome={outcome}
+      catalog={catalog}
+      breadcrumbs={discoveryTrail({
+        market: marketRow,
+        family: 'Solutions',
+        leaf: outcome.displayName,
+      })}
+    />
   );
 }

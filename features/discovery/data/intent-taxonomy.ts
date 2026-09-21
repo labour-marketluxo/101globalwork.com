@@ -1,6 +1,11 @@
 import { cache } from 'react';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { getMarket, getMarketLocations, type Market } from '@/features/discovery/data/market-catalog';
+import {
+  getMarket,
+  getMarketLocations,
+  type Market,
+  type MarketLocation,
+} from '@/features/discovery/data/market-catalog';
 import { getServiceTaxonomy, type TaxonomyService } from '@/features/discovery/data/service-taxonomy';
 import {
   readPublicProjection,
@@ -72,6 +77,25 @@ export type IntentCatalog = {
   outcomes: TaxonomyOutcome[];
   /** True when a read failed, as opposed to the catalogue being empty. */
   unavailable: boolean;
+};
+
+/**
+ * The location a contextual intent page was opened for.
+ *
+ * Passed IN rather than resolved here, because it has already been resolved — the route
+ * that parsed /{market}/{region}/{locality}/{problem-slug} had to validate both segments
+ * against the catalogue before it could decide this was a problem page at all. Resolving
+ * them a second time here would be two reads answering the same question, and the second
+ * answer could disagree with the first.
+ *
+ * It is also not optional in the sense of "nice to have": a caller that passes one is
+ * asserting the location is real. A null region means the URL had no location segments,
+ * not that the location failed to resolve.
+ */
+export type IntentLocationContext = {
+  region: MarketLocation;
+  /** Present for a locality-scoped URL (/…/{region}/{locality}/{slug}), absent for a region-scoped one. */
+  locality: MarketLocation | null;
 };
 
 function severityOf(value: unknown): ProblemSeverity {
@@ -185,17 +209,31 @@ export const getIntentCatalog = cache(async function getIntentCatalog(
 });
 
 /**
- * Resolve one problem slug for one market. Null means 404.
+ * Resolve one problem slug for one market, optionally in a location.
  *
  * The slug IS the handle here — problems are catalog rows with a curated slug, and
  * unlike services there is no registry route to reconcile against (no indexing policy
  * covers these kinds yet, which is also why the pages are noindex). A retired slug
  * therefore 404s; the redirect catalogue only carries paths the registry knows about.
+ *
+ * ALIASES ARE NOT MATCHED, and that is a deliberate difference from services. A service
+ * has three spellings because trades have common names; a problem row carries aliases so
+ * that SEARCH can find it, and the URL uses the curated slug. The consequence to know
+ * about: on the locality-scoped route the service resolver runs first and DOES match
+ * aliases, so a segment that is both a service alias and a problem slug resolves as a
+ * service. Documented rather than resolved by precedence-guessing — the service page is
+ * the one with supply on it, and is the safer of the two answers.
  */
 export async function resolveProblem(
   marketSlug: string,
   problemSlug: string,
-): Promise<{ market: Market; problem: TaxonomyProblem; catalog: IntentCatalog } | null> {
+  location: IntentLocationContext | null = null,
+): Promise<{
+  market: Market;
+  problem: TaxonomyProblem;
+  catalog: IntentCatalog;
+  location: IntentLocationContext | null;
+} | null> {
   const market = await getMarket(marketSlug);
   if (!market) return null;
 
@@ -204,13 +242,20 @@ export async function resolveProblem(
 
   const needle = problemSlug.trim().toLowerCase();
   const problem = catalog.problems.find((item) => item.slug.toLowerCase() === needle);
-  return problem ? { market, problem, catalog } : null;
+  return problem ? { market, problem, catalog, location } : null;
 }
 
+/** Resolve one outcome slug for one market, optionally in a region. See `resolveProblem`. */
 export async function resolveOutcome(
   marketSlug: string,
   outcomeSlug: string,
-): Promise<{ market: Market; outcome: TaxonomyOutcome; catalog: IntentCatalog } | null> {
+  location: IntentLocationContext | null = null,
+): Promise<{
+  market: Market;
+  outcome: TaxonomyOutcome;
+  catalog: IntentCatalog;
+  location: IntentLocationContext | null;
+} | null> {
   const market = await getMarket(marketSlug);
   if (!market) return null;
 
@@ -219,7 +264,7 @@ export async function resolveOutcome(
 
   const needle = outcomeSlug.trim().toLowerCase();
   const outcome = catalog.outcomes.find((item) => item.slug.toLowerCase() === needle);
-  return outcome ? { market, outcome, catalog } : null;
+  return outcome ? { market, outcome, catalog, location } : null;
 }
 
 export function problemHref(marketSlug: string, problem: TaxonomyProblem): string {

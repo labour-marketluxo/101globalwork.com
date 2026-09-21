@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowRight, Tag } from 'lucide-react';
-import { ProblemBody, SeverityBadge } from '@/components/discovery/IntentSections';
-import { MetaChip, TaxonomyHero } from '@/components/discovery/TaxonomySections';
-import { CTA_AMBER, PAGE_SHELL } from '@/components/discovery/tokens';
+import { ProblemPageView } from '@/components/discovery/IntentSections';
+import {
+  CONTEXTUAL_VARIANT_ROBOTS,
+  intentCanonicalHref,
+} from '@/features/discovery/data/canonical-policy';
+import { discoveryTrail } from '@/features/discovery/data/discovery-breadcrumbs';
 import { getMarket } from '@/features/discovery/data/market-catalog';
 import { resolveProblem } from '@/features/discovery/data/intent-taxonomy';
 
@@ -46,8 +47,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: `${problem.displayName} — ${marketRow.displayName}`,
     description: problem.definition,
-    alternates: { canonical: `/${marketRow.slug}/problems/${problem.slug}` },
-    robots: { index: false, follow: true },
+    // The FLAT path is canonical for a problem, which is what makes the locality-scoped
+    // sibling a contextual variant. Emitted from canonical-policy so the preferred URL is
+    // defined once: if this route's shape ever changes, the sibling's canonical follows it
+    // instead of silently pointing at a URL that no longer exists.
+    alternates: { canonical: intentCanonicalHref(marketRow.slug, 'problems', problem.slug) },
+    robots: CONTEXTUAL_VARIANT_ROBOTS,
   };
 }
 
@@ -62,50 +67,20 @@ export default async function ProblemPage({ params }: { params: Params }) {
 
   const { problem, catalog } = resolved;
 
+  // One page view for both shapes of this entity: this route passes no location, the
+  // locality-scoped route at /{market}/{region}/{locality}/{problem-slug} passes one. The
+  // heading, the scope sentence, the cost panel and the supply section all vary from that
+  // one input, so the two URLs cannot describe the same problem differently.
   return (
-    <div className="w-full">
-      <TaxonomyHero
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: marketRow.displayName, href: `/${marketRow.slug}` },
-          // No /problems index exists yet, so this crumb is text rather than a link that
-          // would 404 — the same rule the local page applies to its hub ancestors.
-          { label: 'Problems' },
-          { label: problem.displayName },
-        ]}
-        eyebrow={
-          <>
-            <Tag aria-hidden="true" className="h-3.5 w-3.5" />
-            Problem · {marketRow.code}
-          </>
-        }
-        title={problem.displayName}
-        lede={problem.definition}
-        chips={
-          <>
-            <SeverityBadge severity={problem.severity} />
-            <MetaChip>
-              {problem.services.length} service{problem.services.length === 1 ? '' : 's'} linked
-            </MetaChip>
-          </>
-        }
-        actions={
-          // /requests/new is the destination; it sends a signed-out visitor through
-          // /sign-in and returns them to the form, which is why this does not point at
-          // /sign-in directly.
-          <Link href="/requests/new" className={CTA_AMBER}>
-            Start request to fix this
-            <ArrowRight aria-hidden="true" className="h-4 w-4" />
-          </Link>
-        }
-      />
-
-      {/* No Suspense boundary here, deliberately: the catalogue is a single cached read
-          that already had to complete before the page could 404, so there is no slow
-          work left to stream and a skeleton would only flash on a fast connection. */}
-      <div className={PAGE_SHELL}>
-        <ProblemBody market={marketRow} problem={problem} catalog={catalog} />
-      </div>
-    </div>
+    <ProblemPageView
+      market={marketRow}
+      problem={problem}
+      catalog={catalog}
+      breadcrumbs={discoveryTrail({
+        market: marketRow,
+        family: 'Problems',
+        leaf: problem.displayName,
+      })}
+    />
   );
 }

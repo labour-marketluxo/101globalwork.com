@@ -1,12 +1,19 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowRight, BadgeCheck, Building2, Clock, Info, MapPin, ShieldCheck } from 'lucide-react';
-import { BADGE_AMBER, BADGE_SLATE, CARD, CTA_AMBER, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { ArrowRight, BadgeCheck, Building2, MapPin } from 'lucide-react';
+import { BADGE_AMBER, BADGE_SLATE, CTA_AMBER, PAGE_SHELL } from '@/components/discovery/tokens';
 import { NoticePanel } from '@/components/discovery/MarketSections';
+import { ProviderProfileSections } from '@/components/discovery/ProviderProfileSections';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
+import { providerCanonicalHref } from '@/features/discovery/data/canonical-policy';
+import { discoveryTrail } from '@/features/discovery/data/discovery-breadcrumbs';
 import { getMarket, getMarketLocations } from '@/features/discovery/data/market-catalog';
-import { getPublicProviderProfile } from '@/lib/providers/public-profile';
+import { resolveMarketProviderProfile } from '@/features/discovery/data/provider-profile';
+import {
+  previewEnabled,
+  previewProviderProfile,
+} from '@/features/discovery/data/preview-providers';
 
 /**
  * Public provider profile — /{market}/providers/{provider-slug}
@@ -41,107 +48,113 @@ import { getPublicProviderProfile } from '@/lib/providers/public-profile';
  * one provider currently has two live URLs. Deciding which is canonical is a product/SEO
  * decision with a redirect attached, and silently changing an existing page's canonical tag
  * from inside a new route would hide that decision rather than make it. This page declares
- * itself canonical for the market-scoped path; the global route is untouched.
+ * itself canonical for the market-scoped path, through canonical-policy.ts; the global route is
+ * untouched.
+ *
+ * THE BODY IS SHARED WITH THE NESTED ROUTE. /{market}/{region}/{locality}/{service}/{slug}
+ * serves the same profile with the location in the path, and both render through
+ * ProviderProfileSections. What differs is the breadcrumb (this page has two crumbs, that one
+ * has six), the canonical tag (flat here, pointing at this URL there), and a provenance note.
+ * Everything else — including every claim the page makes about verification, ratings and
+ * hours — is one implementation, because a second copy is where "not collected" becomes a
+ * plausible-looking table.
+ *
+ * NO /{market}/providers INDEX EXISTS. The breadcrumb used to link to one, which meant a live
+ * page linked to a 404 on every provider profile. It is now a family label rather than a link,
+ * which is the rule discoveryTrail applies to every crumb it builds. Creating that index is a
+ * real piece of missing work, and it is deliberately not faked here.
  *
  * UNKNOWN MARKET → redirect('/'). A provider whose primary location is not in this market →
  * 404, because the market is part of what the URL asserts.
  */
 
 type Params = Promise<{ market: string; slug: string }>;
+type SearchParams = Promise<{ preview?: string }>;
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
+}): Promise<Metadata> {
   const { market, slug } = await params;
+  const query = await searchParams;
   const marketRow = await getMarket(market);
   if (!marketRow) return {};
 
-  const profile = await loadProfile(marketRow.marketId, slug);
-  if (!profile) return {};
+  const locations = await getMarketLocations(marketRow.marketId);
+  const preview = previewEnabled(query.preview);
+  const view = preview
+    ? previewProviderProfile(slug)
+    : ((await resolveMarketProviderProfile(locations, slug))?.view ?? null);
+  if (!view) return {};
 
   return {
-    title: profile.headline ?? profile.service_name ?? 'Service provider',
-    description: profile.public_description ?? undefined,
-    alternates: { canonical: `/${marketRow.slug}/providers/${slug}` },
+    title: view.displayName,
+    description: view.description ?? undefined,
+    alternates: { canonical: providerCanonicalHref(marketRow.slug, view.slug) },
     // The same gate the global profile route uses: the platform's own readiness score, not
     // a popularity signal. Below the threshold the page is useful to a human who has the
     // link and is not offered to a crawler.
-    robots: { index: profile.readiness_score >= 60, follow: true },
+    //
+    // A PREVIEW IS NEVER INDEXABLE, whatever the sample's score says: it is fabricated supply,
+    // and a fabricated page asking to be crawled is the exact failure the fixture exists to
+    // avoid. The branch is dead code in a production build (see previewEnabled).
+    robots: preview
+      ? { index: false, follow: false }
+      : { index: view.readinessScore >= 60, follow: true },
   };
 }
 
-/**
- * The provider, only if they serve this market.
- *
- * `getPublicProviderProfile` throws on a read error, which is right for a page whose entire
- * content is the profile — but this route also has a market guard, and a 404 for an
- * unreadable row is worse than saying so. Hence the try/catch, narrowed to "no profile".
- */
-async function loadProfile(marketId: string, slug: string) {
-  let profile;
-  try {
-    profile = await getPublicProviderProfile(slug);
-  } catch {
-    return null;
-  }
-  if (!profile) return null;
-
-  const locations = await getMarketLocations(marketId);
-  const inMarket = locations.some((location) => location.locationId === profile.location_id);
-  return inMarket ? profile : null;
-}
-
-export default async function MarketProviderProfilePage({ params }: { params: Params }) {
+export default async function MarketProviderProfilePage({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
+}) {
   const { market, slug } = await params;
+  const query = await searchParams;
+  const preview = previewEnabled(query.preview);
 
   const marketRow = await getMarket(market);
   if (!marketRow) redirect('/');
 
-  const profile = await loadProfile(marketRow.marketId, slug);
-  if (!profile) notFound();
+  const locations = await getMarketLocations(marketRow.marketId);
+  // In preview the sample is used directly and the market check is skipped: the fixture is not
+  // a claim about any real provider, so there is no location to verify it against.
+  const view = preview
+    ? previewProviderProfile(slug)
+    : ((await resolveMarketProviderProfile(locations, slug))?.view ?? null);
+  if (!view) notFound();
 
-  const verified = Boolean(profile.verification_summary?.verified);
-  const displayName = profile.headline ?? profile.service_name ?? 'Service provider';
-  const place = profile.location_name ? `${profile.location_name}` : marketRow.displayName;
-
-  const facts = [
-    { label: 'Service', value: profile.service_name ?? '—' },
-    { label: 'Based in', value: place },
-    {
-      label: 'Experience',
-      value:
-        profile.years_experience === null
-          ? 'Not stated'
-          : `${profile.years_experience} year${profile.years_experience === 1 ? '' : 's'}`,
-    },
-    { label: 'Taking new work', value: profile.accepts_new_work ? 'Yes' : 'No' },
-    {
-      label: 'Platform readiness',
-      value: `${profile.readiness_score.toFixed(0)}/100`,
-    },
-  ];
+  const place = view.locationName ?? marketRow.displayName;
 
   return (
     <div className="w-full">
       <TaxonomyHero
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: marketRow.displayName, href: `/${marketRow.slug}` },
-          { label: 'Providers', href: `/${marketRow.slug}/providers` },
-          { label: displayName },
-        ]}
+        breadcrumbs={discoveryTrail({
+          market: marketRow,
+          // 'Providers' is a FAMILY LABEL, not a link: there is no /{market}/providers index
+          // page, and the crumb that used to point there was a live link to a 404.
+          family: 'Providers',
+          leaf: view.displayName,
+        })}
         eyebrow={
           <>
             <Building2 aria-hidden="true" className="h-3.5 w-3.5" />
             Provider · {marketRow.code}
           </>
         }
-        title={displayName}
+        title={view.displayName}
         lede={
-          profile.public_description ??
-          `${profile.service_name ?? 'Service provider'} covering ${place}. The provider has not published a description yet.`
+          view.description ??
+          `${view.serviceName ?? 'Service provider'} covering ${place}. The provider has not published a description yet.`
         }
         chips={
           <>
-            {verified ? (
+            {view.verified ? (
               <span className={BADGE_AMBER}>
                 <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
                 Identity checked
@@ -153,6 +166,7 @@ export default async function MarketProviderProfilePage({ params }: { params: Pa
               <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
               {place}
             </span>
+            {preview ? <span className={BADGE_SLATE}>Sample row</span> : null}
           </>
         }
         actions={
@@ -164,178 +178,20 @@ export default async function MarketProviderProfilePage({ params }: { params: Pa
       />
 
       <div className={PAGE_SHELL}>
-        <div className="grid gap-12">
-          <section aria-labelledby="provider-facts">
-            <h2 id="provider-facts" className="text-2xl font-bold tracking-tight text-slate-900">
-              At a glance
-            </h2>
-            <dl className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-              {facts.map((fact) => (
-                <div key={fact.label} className={`${CARD} p-4`}>
-                  <dt className="font-mono text-[11px] tracking-wider text-slate-500 uppercase">
-                    {fact.label}
-                  </dt>
-                  <dd className="mt-1 text-base font-bold text-slate-900">{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-3 max-w-3xl text-xs leading-relaxed text-slate-500">
-              Platform readiness is the platform&rsquo;s own discoverability score for a provider
-              — it is not a customer rating, and it is not a promise about ranking. No customer
-              ratings exist anywhere on this platform yet.
-            </p>
-          </section>
-
-          <section aria-labelledby="provider-services">
-            <h2 id="provider-services" className="text-2xl font-bold tracking-tight text-slate-900">
-              Services and area
-            </h2>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <div className={`${CARD} p-5`}>
-                <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-                  Canonical service
-                </h3>
-                {profile.service_name ? (
-                  <p className="mt-2">
-                    <Link
-                      href={`/${marketRow.slug}/search?q=${encodeURIComponent(profile.service_name)}`}
-                      className="rounded-full border border-solid border-primary-subtle bg-primary-surface px-2.5 py-1 text-xs font-medium text-primary no-underline transition-colors hover:border-primary hover:bg-white"
-                    >
-                      {profile.service_name}
-                    </Link>
-                  </p>
-                ) : (
-                  <p className="mt-2 text-sm text-slate-600">No service is recorded yet.</p>
-                )}
-                <p className="mt-3 text-xs leading-relaxed text-slate-500">
-                  The catalog service this provider is eligible for. Eligibility is checked per
-                  service and per area, so it is the same scope their quotes are matched against.
-                </p>
-              </div>
-              <div className={`${CARD} p-5`}>
-                <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-                  Based in
-                </h3>
-                <p className="mt-2 text-sm font-bold text-slate-900">{place}</p>
-                <p className="mt-3 text-xs leading-relaxed text-slate-500">
-                  The locality on record, which is as precise as this platform publishes. Exact
-                  addresses are not collected for publication and never appear on a public page.
-                </p>
-                <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-                  <Link
-                    href={`/${marketRow.slug}/search?area=${encodeURIComponent(
-                      (profile.location_name ?? '').toLowerCase().replace(/\s+/g, '-'),
-                    )}`}
-                    className={LINK_ARROW}
-                  >
-                    Local providers
-                    <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section aria-labelledby="provider-verification">
-            <h2 id="provider-verification" className="text-2xl font-bold tracking-tight text-slate-900">
-              Verification
-            </h2>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <div className={`${CARD} p-5`}>
-                <span
-                  aria-hidden="true"
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-solid border-primary-subtle bg-primary-surface text-primary"
-                >
-                  <BadgeCheck className="h-5 w-5" />
-                </span>
-                <h3 className="mt-3 text-sm font-bold text-slate-900">Identity</h3>
-                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                  {verified
-                    ? 'Checked before this provider could quote. The check confirms identity; it is not a character reference.'
-                    : 'Not yet shown as verified. A provider can hold a public profile while a check is outstanding, and cannot quote until it passes.'}
-                </p>
-              </div>
-              <div className={`${CARD} p-5`}>
-                <span
-                  aria-hidden="true"
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-solid border-primary-subtle bg-primary-surface text-primary"
-                >
-                  <ShieldCheck className="h-5 w-5" />
-                </span>
-                <h3 className="mt-3 text-sm font-bold text-slate-900">Licences and insurance</h3>
-                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                  Licences are checked where the trade requires one, and insurance is requested
-                  where it applies. Which checks ran for this provider is not published per
-                  provider yet.
-                </p>
-              </div>
-              <div className={`${CARD} p-5`}>
-                <span
-                  aria-hidden="true"
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-solid border-amber-200 bg-secondary-light text-amber-700"
-                >
-                  <Clock className="h-5 w-5" />
-                </span>
-                <h3 className="mt-3 text-sm font-bold text-slate-900">Operational hours</h3>
-                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                  Not published, because the platform does not collect them. Availability is
-                  expressed as whether the provider is taking new work, and turnaround is agreed
-                  in the request.
-                </p>
-              </div>
-            </div>
-            <p className="mt-3 max-w-3xl text-xs text-slate-500">
-              What verification does not guarantee, and how a dispute is handled, are set out on{' '}
-              <Link
-                href="/trust-and-safety"
-                className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary-dark"
-              >
-                trust and safety
-              </Link>
-              .
-            </p>
-          </section>
-
-          <section aria-labelledby="provider-reviews">
-            <h2 id="provider-reviews" className="text-2xl font-bold tracking-tight text-slate-900">
-              Reviews and work samples
-            </h2>
-            <div className="mt-5">
-              <NoticePanel tone="slate" icon={<Info className="h-5 w-5" />} title="Not collected yet.">
-                This platform has no reviews table and no portfolio records, so there is nothing
-                truthful to show here — and a fabricated testimonial is exactly the kind of proof
-                this codebase refuses to publish. When reviews exist they will carry the request
-                they came from, so a rating can be traced to completed work rather than asserted.
-              </NoticePanel>
-            </div>
-          </section>
-
-          <section
-            className={`${CARD} flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8`}
-          >
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-slate-900">
-                Request a quote from {displayName}
-              </h2>
-              <p className="mt-1 max-w-xl text-sm leading-relaxed text-slate-600">
-                Describe the work once. Every quote on a request is itemized against the same scope,
-                so this provider&rsquo;s price can be compared with the others — and payment is
-                released only after you approve the finished work.
-              </p>
-            </div>
-            <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
-              <Link href="/requests/new" className={CTA_AMBER}>
-                Request a quote
-                <ArrowRight aria-hidden="true" className="h-4 w-4" />
-              </Link>
-              <Link href={`/${marketRow.slug}/services`} className={LINK_ARROW}>
-                All services in {marketRow.displayName}
-                <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </section>
-        </div>
+        {preview ? (
+          <div className="mb-8">
+            <NoticePanel tone="amber" title="Sample profile">
+              This is the dev-only <code>?preview=1</code> fixture, not a published provider.
+              No provider profile exists in this database yet, so the page you are looking at is
+              rendering invented copy through the real component. It is inert in a production
+              build and is marked noindex, nofollow.
+            </NoticePanel>
+          </div>
+        ) : null}
+        <ProviderProfileSections view={view} market={marketRow} place={place} />
       </div>
     </div>
   );
 }
+
+
