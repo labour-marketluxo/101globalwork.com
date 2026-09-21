@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { CircleCheck, Info, TriangleAlert } from 'lucide-react';
-import { CARD, FIELD, LABEL } from '@/components/discovery/tokens';
+import { FIELD, LABEL } from '@/components/discovery/tokens';
 import { signInWithGoogleAction } from '@/features/auth/actions';
 
 /**
@@ -16,8 +16,11 @@ import { signInWithGoogleAction } from '@/features/auth/actions';
  * THE OLD CLASSES ARE DELIBERATELY NOT USED. `.content-shell`, `.auth-shell`, `.stack-form`,
  * `.notice` and `.secondary-button` all live in app/entry-points.css, which is UNLAYERED — so
  * they outrank every Tailwind utility and cannot be restyled. Building on them is what made the
- * previous pages impossible to bring onto the brand, so the shell here is utilities only, drawn
- * from the same tokens the discovery surfaces use (FIELD, LABEL, CARD). One consequence worth
+ * previous pages impossible to bring onto the brand, so the shell here is utilities only. The
+ * fields and labels come from the same tokens the discovery surfaces use (FIELD, LABEL), while
+ * the card has its OWN constant — AUTH_CARD below — because this shell wants a softer, roomier
+ * container than the discovery surfaces' shared CARD token, and changing that token would have
+ * restyled every taxonomy card on the public site. One consequence worth
  * knowing: `.stack-form input` sets `font: inherit`, so the controls render at the inherited
  * weight unless `font-normal` is present — which FIELD already carries.
  *
@@ -55,6 +58,20 @@ export const AUTH_LINK = 'font-semibold text-primary underline underline-offset-
  */
 export const AUTH_TEXT_BUTTON =
   'cursor-pointer border-0 bg-transparent p-0 text-sm font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:text-slate-400 disabled:no-underline';
+
+/**
+ * The card every credential screen sits in.
+ *
+ * Its own constant rather than the shared CARD token from components/discovery/tokens.ts: this
+ * container is deliberately softer (16px rather than 12px) and flatter, because it holds a form
+ * rather than a grid of results, and reusing CARD would have meant either restyling every
+ * discovery card or overriding this one in five places.
+ *
+ * `border-solid` is explicit because Preflight is not imported — Tailwind's `border` utility
+ * sets the width only, and a bare <div> with `border` and no `border-solid` keeps the browser's
+ * default border STYLE, which is `none` for a div.
+ */
+const AUTH_CARD = 'w-full rounded-2xl border border-solid border-slate-200 bg-white shadow-sm';
 
 const NOTICE_TONES = {
   error: 'border-secondary bg-secondary-light text-amber-900',
@@ -102,11 +119,7 @@ export function AuthShell({
   size?: 'md' | 'lg';
 }) {
   return (
-    <div
-      className={`mx-auto flex w-full flex-col px-4 py-10 sm:px-6 sm:py-14 ${
-        size === 'lg' ? 'max-w-xl' : 'max-w-md'
-      }`}
-    >
+    <div className={`flex w-full flex-col ${size === 'lg' ? 'max-w-xl' : 'max-w-md'}`}>
       <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
         {eyebrow}
       </p>
@@ -117,7 +130,7 @@ export function AuthShell({
 
       {notice ? <div className="mt-5">{notice}</div> : null}
 
-      <div className={`${CARD} mt-6 p-5 sm:p-6`}>{children}</div>
+      <div className={`${AUTH_CARD} mt-6 p-6 sm:p-8`}>{children}</div>
 
       {aside ? <div className="mt-4">{aside}</div> : null}
       {footer ? <div className="mt-6 text-sm text-slate-600">{footer}</div> : null}
