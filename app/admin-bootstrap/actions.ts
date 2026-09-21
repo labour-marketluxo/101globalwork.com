@@ -18,7 +18,7 @@ export async function bootstrapOwnerAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/admin-bootstrap');
+  if (!user) redirect('/auth/sign-in?next=/admin-bootstrap');
   const { data: account } = await supabase.from('accounts').select('id').eq('auth_user_id', user.id).maybeSingle();
   if (!account) redirect('/admin-bootstrap?error=Account%20not%20ready');
 

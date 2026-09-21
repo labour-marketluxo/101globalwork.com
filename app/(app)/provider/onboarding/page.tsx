@@ -22,10 +22,10 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
   const params = await searchParams;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/provider/onboarding');
+  if (!user) redirect('/auth/sign-in?next=/provider/onboarding');
 
   const { data: account } = await supabase.from('accounts').select('id').eq('auth_user_id', user.id).maybeSingle();
-  if (!account) redirect('/sign-in?error=Account%20setup%20is%20not%20ready&next=/provider/onboarding');
+  if (!account) redirect('/auth/sign-in?error=account_not_ready&next=/provider/onboarding');
 
   const [{ data: markets }, { data: services }, { data: locations }, { data: ownedProviderRows }] = await Promise.all([
     supabase.from('public_market_catalog').select('*').order('display_name'),

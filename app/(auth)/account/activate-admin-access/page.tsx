@@ -8,7 +8,7 @@ export default async function ActivateAdminAccessPage({ searchParams }: { search
   const { error } = await searchParams;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/account/activate-admin-access');
+  if (!user) redirect('/auth/sign-in?next=/account/activate-admin-access');
   const { data: required } = await supabase.rpc('platform_admin_activation_required_command');
   if (!required) redirect('/');
 

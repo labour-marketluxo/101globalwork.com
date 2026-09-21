@@ -8,7 +8,7 @@ export default async function NewRequestPage({ searchParams }: { searchParams: P
   const params = await searchParams;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in');
+  if (!user) redirect('/auth/sign-in');
 
   const [{ data: markets }, { data: services }, { data: locations }] = await Promise.all([
     supabase.from('public_market_catalog').select('*').order('display_name'),

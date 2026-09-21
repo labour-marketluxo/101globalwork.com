@@ -11,7 +11,7 @@ export default async function ProviderQuotePage({ params, searchParams }: { para
   const providerId = query.provider ?? '';
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/provider/requests/${id}/quote?provider=${providerId}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/provider/requests/${id}/quote?provider=${providerId}`)}`);
   if (!providerId) notFound();
 
   const { data: opportunity } = await supabase.rpc('get_provider_quote_opportunity', { p_request_id: id, p_provider_id: providerId });

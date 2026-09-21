@@ -6,7 +6,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 export async function reviewVerificationAction(formData: FormData) {
   const supabase=await createSupabaseServerClient();
   const {data:{user}}=await supabase.auth.getUser();
-  if(!user) redirect('/sign-in?next=/admin/verifications');
+  if(!user) redirect('/auth/sign-in?next=/admin/verifications');
   const id=String(formData.get('verification_id')??'');
   const decision=String(formData.get('decision')??'');
   const note=String(formData.get('note')??'').trim()||null;

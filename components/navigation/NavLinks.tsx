@@ -188,14 +188,14 @@ export function MobileNav() {
 
             <div className="mt-3 grid gap-2 border-t border-solid border-white/10 pt-3">
               <Link
-                href="/sign-in"
+                href="/auth/sign-in"
                 onClick={close}
                 className="inline-flex items-center justify-center rounded-lg border-[1.5px] border-solid border-amber-500 bg-transparent px-4 py-2.5 text-sm font-semibold text-amber-500 no-underline transition-all duration-200 hover:bg-amber-500 hover:text-white"
               >
                 Sign In
               </Link>
               <Link
-                href="/sign-in"
+                href="/auth/sign-in"
                 onClick={close}
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark active:scale-95"
               >

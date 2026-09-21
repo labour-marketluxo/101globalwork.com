@@ -27,7 +27,7 @@ export default async function VerificationReviewPage({searchParams}:{searchParam
   const {error,reviewed}=await searchParams;
   const supabase=await createSupabaseServerClient();
   const {data:{user}}=await supabase.auth.getUser();
-  if(!user) redirect('/sign-in?next=/admin/verifications');
+  if(!user) redirect('/auth/sign-in?next=/admin/verifications');
 
   const {data,error:recordsError}=await supabase.rpc('admin_verification_records_command',{p_limit:100});
   if(recordsError) return <section className="content-shell"><p className="eyebrow">Trust operations</p><h1>Verification review</h1><p className="notice" role="alert">You do not have access to the verification queue.</p></section>;

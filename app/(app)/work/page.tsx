@@ -28,10 +28,10 @@ function nextAction(request: RequestRow, quoteCount: number, assignmentStatus?: 
 export default async function MyWorkPage() {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/work');
+  if (!user) redirect('/auth/sign-in?next=/work');
 
   const { data: account } = await supabase.from('accounts').select('id').eq('auth_user_id', user.id).maybeSingle();
-  if (!account) redirect('/sign-in?error=Account%20setup%20is%20not%20ready&next=/work');
+  if (!account) redirect('/auth/sign-in?error=account_not_ready&next=/work');
 
   const { data: requests } = await supabase
     .from('requests')

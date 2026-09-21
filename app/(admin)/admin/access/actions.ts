@@ -27,7 +27,7 @@ export async function inviteAdminAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/admin/access');
+  if (!user) redirect('/auth/sign-in?next=/admin/access');
 
   const service = createSupabaseServiceClient();
   const existing = await findAuthUserByEmail(email);
@@ -68,7 +68,7 @@ export async function createAdminWithTemporaryPasswordAction(formData: FormData)
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/admin/access');
+  if (!user) redirect('/auth/sign-in?next=/admin/access');
   const { data: allowed, error: allowedError } = await supabase.rpc('platform_admin_manage_allowed_command');
   if (allowedError || !allowed) redirect('/admin/access?error=You%20cannot%20manage%20administrator%20access');
 

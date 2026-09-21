@@ -6,7 +6,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 async function authedClient(next = '/provider/onboarding') {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(next)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(next)}`);
   return supabase;
 }
 

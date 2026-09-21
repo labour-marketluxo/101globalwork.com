@@ -231,8 +231,8 @@ export default async function TaxonomySegmentPage({
           }
           actions={
             // /requests/new is the customer destination; it bounces a signed-out
-            // visitor through /sign-in and returns them to the form, which is why
-            // this does not link to /sign-in directly.
+            // visitor through /auth/sign-in and returns them to the form, which is why
+            // this does not link to /auth/sign-in directly.
             <Link href="/requests/new" className={CTA_AMBER}>
               Start request
               <ArrowRight aria-hidden="true" className="h-4 w-4" />

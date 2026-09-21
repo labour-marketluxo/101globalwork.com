@@ -7,7 +7,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 export async function createRequestAction(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in`);
+  if (!user) redirect(`/auth/sign-in`);
 
   const needText = String(formData.get('need_text') ?? '').trim();
   const marketId = String(formData.get('market_id') ?? '');

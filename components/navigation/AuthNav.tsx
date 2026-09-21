@@ -26,13 +26,13 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
  * the amber fill (~5.8:1) is the fix if you ever want it to pass. The outlined
  * state is fine on its own: amber-500 on the deep teal bar is ~5.8:1.
  *
- * ROUTES. Signed out, BOTH of these target /sign-in, per the navbar spec. Note
- * the trade-off: /sign-up?intent=customer&next=%2Frequests%2Fnew — the URL this
+ * ROUTES. Signed out, BOTH of these target /auth/sign-in, per the navbar spec. Note
+ * the trade-off: /auth/sign-up?intent=customer&next=%2Frequests%2Fnew — the URL this
  * CTA used before — carries the intent and the destination through the auth
  * flow, so a new customer lands on the request form rather than back on the
- * homepage. /sign-in also drops the `next` parameter, because the sign-in page
+ * homepage. /auth/sign-in also drops the `next` parameter, because the sign-in page
  * does not accept one. Signed in, the CTA targets /requests/new directly, since
- * sending a signed-in user to /sign-in would be a dead end.
+ * sending a signed-in user to /auth/sign-in would be a dead end.
  *
  * Every anchor carries `no-underline` explicitly: preflight is deliberately not
  * imported in this project, so there is no global `a { text-decoration: none }`
@@ -114,10 +114,10 @@ export default async function AuthNav() {
 
   return (
     <div className="flex shrink-0 items-center gap-3">
-      <Link href="/sign-in" className={`hidden sm:inline-flex ${GHOST}`}>
+      <Link href="/auth/sign-in" className={`hidden sm:inline-flex ${GHOST}`}>
         Sign In
       </Link>
-      <Link href="/sign-in" className={CTA}>
+      <Link href="/auth/sign-in" className={CTA}>
         Post a Request
         <ArrowRight aria-hidden="true" className="h-4 w-4" />
       </Link>

@@ -22,7 +22,7 @@ export default async function ProviderWorkspacePage({ searchParams }: { searchPa
   const query = await searchParams;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/provider');
+  if (!user) redirect('/auth/sign-in?next=/provider');
 
   const { data: account } = await supabase.from('accounts').select('id').eq('auth_user_id', user.id).maybeSingle();
   if (!account) redirect('/provider/onboarding');

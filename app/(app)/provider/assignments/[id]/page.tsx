@@ -14,7 +14,7 @@ export default async function ProviderAssignmentPage({ params, searchParams }: {
   const query = await searchParams;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/provider/assignments/${id}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/provider/assignments/${id}`)}`);
 
   const { data: assignment } = await supabase.from('assignments').select('id,request_id,provider_id,status,assigned_at').eq('id', id).maybeSingle();
   if (!assignment) notFound();

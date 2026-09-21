@@ -12,7 +12,7 @@ export async function activateAdminAccessAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/account/activate-admin-access');
+  if (!user) redirect('/auth/sign-in?next=/account/activate-admin-access');
 
   const { error: passwordError } = await supabase.auth.updateUser({ password });
   if (passwordError) redirect(`/account/activate-admin-access?error=${encodeURIComponent('Your password could not be updated. Try again.')}`);

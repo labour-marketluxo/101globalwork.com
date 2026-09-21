@@ -42,8 +42,8 @@ const columnsFor = (marketSlug: string) => [
   {
     heading: 'Account',
     links: [
-      { href: '/sign-up?intent=customer', label: 'Create an account' },
-      { href: '/sign-in', label: 'Sign in' },
+      { href: '/auth/sign-up?intent=customer', label: 'Create an account' },
+      { href: '/auth/sign-in', label: 'Sign in' },
       { href: '/work', label: 'My work' },
       { href: '/providers', label: 'Become a provider' },
     ],

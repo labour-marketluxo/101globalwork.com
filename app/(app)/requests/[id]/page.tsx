@@ -49,7 +49,7 @@ export default async function RequestPage({ params, searchParams }: {
   const query = await searchParams;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/requests/${id}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/requests/${id}`)}`);
 
   const { data: request } = await supabase.from('requests').select('id,state,need_text,service_entity_id,location_id,created_at').eq('id', id).maybeSingle();
   if (!request) notFound();

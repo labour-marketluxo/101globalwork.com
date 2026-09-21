@@ -8,7 +8,7 @@ export const metadata = { robots: { index: false, follow: false } };
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/admin');
+  if (!user) redirect('/auth/sign-in?next=/admin');
 
   const { data: context, error } = await supabase.rpc('admin_context_command');
   if (error || !context) redirect('/');

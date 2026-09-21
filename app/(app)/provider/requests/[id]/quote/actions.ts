@@ -13,7 +13,7 @@ export async function submitQuoteAction(formData: FormData) {
   const validUntilRaw = String(formData.get('valid_until') ?? '').trim();
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/provider/requests/${requestId}/quote?provider=${providerId}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/provider/requests/${requestId}/quote?provider=${providerId}`)}`);
 
   if (totalMinor <= 0 || !/^[A-Z]{3}$/.test(currency)) {
     redirect(`/provider/requests/${requestId}/quote?provider=${providerId}&error=${encodeURIComponent('Enter a valid positive price.')}`);

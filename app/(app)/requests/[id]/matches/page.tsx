@@ -18,7 +18,7 @@ export default async function RequestMatchesPage({ params }: { params: Params })
   const { id } = await params;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in');
+  if (!user) redirect('/auth/sign-in');
 
   const { data: request } = await supabase.from('requests').select('id,need_text,state,service_entity_id,location_id').eq('id', id).maybeSingle();
   if (!request) notFound();

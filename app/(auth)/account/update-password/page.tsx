@@ -7,7 +7,7 @@ export const metadata = { title: 'Choose new password', robots: { index: false, 
 export default async function UpdatePasswordPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/sign-in?next=/account/update-password');
+  if (!user) redirect('/auth/sign-in?next=/account/update-password');
   const { error } = await searchParams;
 
   return <section className="content-shell auth-shell">

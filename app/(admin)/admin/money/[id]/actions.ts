@@ -31,7 +31,7 @@ export async function queueAndSubmitPayoutAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/admin/money/${obligationId}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/admin/money/${obligationId}`)}`);
 
   const { error: queueError } = await supabase.rpc('queue_payout_execution_command', { p_payout_id: payoutId });
   if (queueError) back(obligationId, 'error', queueError.message);
@@ -76,7 +76,7 @@ export async function requestRefundAction(formData: FormData) {
   const amountMinor = Math.round(amount * 100);
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/admin/money/${obligationId}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/admin/money/${obligationId}`)}`);
 
   const { data: refundId, error } = await supabase.rpc('request_refund_command', {
     p_obligation_id: obligationId,
@@ -95,7 +95,7 @@ export async function submitRefundAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/admin/money/${obligationId}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/admin/money/${obligationId}`)}`);
 
   // Re-check the human's Finance authority before the service-role submission step.
   const { data: context, error: contextError } = await supabase.rpc('admin_context_command');
