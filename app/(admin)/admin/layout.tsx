@@ -28,7 +28,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ];
 
   return <>
-    <style>{`.site-header, body > footer { display: none; } body > main { flex: 1; }`}</style>
     <div className="admin-frame">
       <aside className="admin-sidebar" aria-label="Platform administration">
         <div className="admin-sidebar-head">
@@ -49,7 +48,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/account/security?next=/admin">Strong authentication</Link>
         </div>
       </aside>
-      <section className="admin-main">{children}</section>
+      <main className="admin-main">{children}</main>
     </div>
   </>;
 }

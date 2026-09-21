@@ -1,14 +1,14 @@
+import SiteChrome from '@/components/navigation/SiteChrome';
+
 /**
- * LandingLayout — pass-through shell for the (marketing) route group.
+ * LandingLayout — the public shell for the (marketing) route group.
  *
- * Currently renders children unchanged: the real header and footer are still
- * provided by app/layout.tsx, so this is a structural seam, not yet a visual
- * one. It renders `children` deliberately — returning null here would blank
- * every page in the group.
- *
- * Intended end state: MainNav + page content + Footer, with the header and
- * footer relocated out of the root layout.
+ * This was a pass-through while app/layout.tsx drew the header and footer. That is now
+ * inverted: the root layout draws no chrome at all, and this is where the public pages get
+ * theirs. See components/navigation/SiteChrome.tsx for why it moved — the short version is
+ * that chrome drawn by the root layout cannot be excluded from any route, and the auth screens
+ * needed exactly that.
  */
 export default function LandingLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <SiteChrome>{children}</SiteChrome>;
 }

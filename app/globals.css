@@ -257,14 +257,17 @@
 
   /* ------------------------------------------------------------- site chrome */
 
-  /* The header is now styled entirely with utilities inside
+  /* The header is styled entirely with utilities inside
      components/navigation/MainNav.tsx — it is the design's translucent deep-teal
      bar, which does not reduce to a handful of declarations. The `.site-header`
-     class is deliberately KEPT on the element as a semantic hook, because
-     app/(admin)/admin/layout.tsx hides the marketing chrome with a single
-     injected rule: `.site-header, body > footer { display: none; }`.
-     Removing the class would put the marketing header back on every admin
-     screen. */
+     class is kept on the element as a semantic hook for the document's header.
+     It used to be load-bearing: app/(admin)/admin/layout.tsx hid the marketing
+     chrome with an injected `.site-header, body > footer { display: none }`
+     rule. That rule is gone — the chrome now lives in
+     components/navigation/SiteChrome.tsx and the admin frame simply does not
+     render it. Nothing selects `.site-header` today; it is kept as a hook for
+     the document header and as the handle to reach for if the chrome ever has
+     to be hidden again. */
 
   /* ------------------------------------------------------------ public shell */
 

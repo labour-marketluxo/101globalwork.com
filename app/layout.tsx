@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { Hanken_Grotesk, JetBrains_Mono } from 'next/font/google';
-import MainNav from '@/components/navigation/MainNav';
-import Footer from '@/components/navigation/Footer';
 import './globals.css';
 import './entry-points.css';
 
@@ -55,13 +53,22 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   //
   // Kept as a JS comment rather than a JSX comment deliberately — a comment node
   // directly inside <html> risks a DOM-nesting warning of its own.
+  //
+  // ⚠️ THIS LAYOUT RENDERS NO CHROME, and that is the point rather than an omission. The
+  // marketing header and footer used to be drawn here, which made them impossible to opt out
+  // of: a nested layout can add to its parent's output but cannot remove any of it, so the
+  // only way to keep the nav off a route was to hide it with CSS — which is exactly what
+  // app/(admin)/admin/layout.tsx had to do, injecting `display: none` on every admin screen
+  // while still shipping the nav markup.
+  //
+  // Each group draws its own now: components/navigation/SiteChrome.tsx for the public and
+  // workspace routes, components/auth/MinimalAuthLayout.tsx for the credential and onboarding
+  // screens, and its own frame for /admin. <body> keeps `display: flex; flex-direction:
+  // column` from globals.css, so whichever layout renders here must still put <main> directly
+  // under <body> — that is what pins the footer to the bottom of a short page.
   return (
     <html lang="en" className={`${hankenGrotesk.variable} ${jetbrainsMono.variable}`}>
-      <body suppressHydrationWarning>
-        <MainNav />
-        <main>{children}</main>
-        <Footer />
-      </body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }
