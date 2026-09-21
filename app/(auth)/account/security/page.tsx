@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import MfaClient from './mfa-client';
+import MfaClient from '@/components/auth/MfaClient';
 
 export const metadata = { title: 'Account security', robots: { index: false, follow: false } };
 
@@ -15,7 +15,7 @@ export default async function AccountSecurityPage({ searchParams }: { searchPara
   const nextPath = safeNext(query.next);
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/account/security?next=${encodeURIComponent(nextPath)}`)}`);
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/account/security?next=${encodeURIComponent(nextPath)}`)}`);
 
   return <section className="content-shell">
     <p className="eyebrow">Account security</p>
