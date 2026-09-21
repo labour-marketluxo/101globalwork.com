@@ -1,14 +1,31 @@
-import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { acceptAdminInvitationAction } from './actions';
+import { permanentRedirect, redirect } from 'next/navigation';
 
-export const metadata = { title: 'Accept administrator access', robots: { index: false, follow: false } };
-
-export default async function Page({ searchParams }: { searchParams: Promise<{ token?: string; error?: string }> }) {
-  const { token, error } = await searchParams;
+/**
+ * /admin-invite/accept?token=… — retired, redirected.
+ *
+ * This was the link inside the invitation email, and it may still be the link in invitations sitting in
+ * inboxes right now, so it has to keep working. It now hands over to /invitations/{token}, which is the
+ * canonical surface and does everything this page did — plus the things it could not: showing who
+ * invited you, what the role can do, when it expires, whether you are signed in as the right person, and
+ * a way to decline.
+ *
+ * ⚠️ THE REDIRECT ALSO CLOSES A LEAK. This page used to render whatever arrived in `?error=`, and the
+ * action beside it built that parameter from `error.message` — the provider's own text, reflected into a
+ * user-editable part of the URL and printed inside the page. It is now a code from a fixed vocabulary
+ * (see features/invitations/invitation.ts), which is why nothing here forwards an error string.
+ *
+ * 308, not 307: the mapping is a rename with no runtime resolution behind it. The token travels as a
+ * PATH segment rather than a query parameter, where it is less likely to be logged as part of a
+ * parameter dump and cannot be rewritten by a second `?token=` appearing later in the URL.
+ */
+export default async function LegacyAdminInviteAcceptPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string }>;
+}) {
+  const { token } = await searchParams;
+  // Without a token there is nothing to redirect to; the platform has no invitation index to fall back
+  // on, so the honest destination is the front page rather than an invitation page for an empty string.
   if (!token) redirect('/');
-  const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/admin-invite/accept?token=${token}`)}`);
-  return <section className="content-shell auth-shell"><p className="eyebrow">Administrator invitation</p><h1>Accept platform access</h1><p className="lede left">Administrative access is separate from your normal account. Your permissions are explicit and consequential actions are audited.</p>{error ? <p className="notice" role="alert">{error}</p> : null}<form action={acceptAdminInvitationAction} className="stack-form"><input type="hidden" name="token" value={token}/><button type="submit">Accept administrator access</button></form></section>;
+  permanentRedirect(`/invitations/${encodeURIComponent(token)}`);
 }
