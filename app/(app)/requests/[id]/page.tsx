@@ -31,6 +31,9 @@ function paymentErrorMessage(code?: string) {
     authentication_required: 'Please sign in again before starting payment.',
     obligation_not_found: 'This payment obligation is no longer available.',
     obligation_not_payable: 'This payment no longer needs to be started.',
+    step_up_required:
+      'For a payment we ask you to verify it is you. Open the payment to send yourself a code, then pay from there — nothing was charged.',
+    no_channel: 'That payment method is not available for this payment. Nothing was charged.',
     payment_already_confirmed: 'This payment has already been confirmed.',
     unable_to_create_payment_attempt: 'A payment is already in progress or cannot be started right now.',
     unable_to_bind_checkout: 'The secure checkout session could not be saved. Please try again shortly.',
@@ -112,12 +115,14 @@ export default async function RequestPage({ params, searchParams }: {
         ? <p><strong>Payment confirmed.</strong> The obligation is funded from a verified Paystack event and reconciled financial records.</p>
         : <p className="hint">A browser return never marks this as paid. 101GlobalWork changes financial state only after a verified Paystack webhook is reconciled.</p>}
 
-      {canStartPayment ? <form action="/api/payments/paystack/checkout" method="post" className="payment-action-form">
-        <input type="hidden" name="obligationId" value={obligation.id} />
-        <input type="hidden" name="returnTo" value={`/requests/${id}`} />
-        <button type="submit">{paymentButtonLabel}</button>
-        <span>Secure checkout by Paystack</span>
-      </form> : null}
+      {/* ⚠️ PAYING GOES THROUGH THE CUSTOMER CHECKOUT PAGE, NOT A POST FROM HERE. Checkout now requires the
+          session to have authenticated within the last 15 minutes, and that step-up needs somewhere to happen.
+          Two entry points into the money would mean the step-up lived on one of them, and the raw form post
+          would be the one without it. */}
+      {canStartPayment ? <p className="payment-action-form">
+        <Link className="button-link" href={`/customer/payments/${obligation.id}/checkout`}>{paymentButtonLabel}</Link>
+        <span>Opens the payment page: you verify it is you, then pay on Paystack&rsquo;s own secure page.</span>
+      </p> : null}
 
       {attempts?.length ? <details className="identity-details payment-history"><summary>Payment activity</summary><ul>{attempts.map(a => <li key={a.id}>{a.provider_adapter}: {a.status.replaceAll('_', ' ')} · {new Date(a.created_at).toLocaleString()}</li>)}</ul></details> : null}
     </section> : null}

@@ -1,120 +1,71 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { getPaymentAdapter } from '@/lib/payments';
+import { safeReturnTo, startCheckout } from '@/lib/payments/start-checkout';
 
-const obligationSchema = z.string().uuid();
+/**
+ * The programmatic way to start a payment.
+ *
+ * ⚠️ THIS IS A THIN WRAPPER, AND IT IS DELIBERATELY THIN. Everything that decides whether a payment may start
+ * — ownership, payability, the step-up, the channel against the adapter's configured list, the attempt's
+ * idempotency — happens in `lib/payments/start-checkout.ts`, which the checkout page's server action calls
+ * too. Two copies of that logic would be two chances to forget the step-up, and the copy that gets forgotten
+ * is never the one that gets tested.
+ *
+ * It answers both a form post (a 303 to the gateway, which is what a native form needs) and a JSON request
+ * (the authorization URL, for anything calling this directly), and it keeps the `payment_error` vocabulary it
+ * has always used so existing callers do not have to change.
+ */
 
-function safeReturnTo(value: string | null) {
-  if (!value || !value.startsWith('/') || value.startsWith('//')) return '/';
-  return value;
+export async function POST(request: Request) {
+  const contentType = request.headers.get('content-type') ?? '';
+  const asForm =
+    contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data');
+
+  let obligationId = '';
+  let channel: string | null = null;
+  let returnTo = '/customer/payments';
+
+  try {
+    if (asForm) {
+      const form = await request.formData();
+      obligationId = String(form.get('obligationId') ?? '');
+      channel = String(form.get('channel') ?? '').trim() || null;
+      returnTo = safeReturnTo(String(form.get('returnTo') ?? ''), '/customer/payments');
+    } else {
+      const body = (await request.json()) as { obligationId?: unknown; channel?: unknown; returnTo?: unknown };
+      obligationId = typeof body.obligationId === 'string' ? body.obligationId : '';
+      channel = typeof body.channel === 'string' && body.channel.trim() ? body.channel.trim() : null;
+      returnTo = safeReturnTo(typeof body.returnTo === 'string' ? body.returnTo : null, '/customer/payments');
+    }
+  } catch {
+    return failure(request, returnTo, asForm, 'invalid_request', 400);
+  }
+
+  const result = await startCheckout({
+    obligationId,
+    channel,
+    returnTo,
+    origin: new URL(request.url).origin,
+  });
+
+  if (!result.ok) {
+    const status =
+      result.code === 'authentication_required' ? 401
+      : result.code === 'obligation_not_found' ? 404
+      : result.code === 'payment_provider_unavailable' ? 502
+      : result.code === 'unable_to_bind_checkout' ? 500
+      : 409;
+    return failure(request, returnTo, asForm, result.code, status);
+  }
+
+  if (asForm) return NextResponse.redirect(result.authorizationUrl, 303);
+  return NextResponse.json({ authorizationUrl: result.authorizationUrl, returnTo });
 }
 
-function checkoutResponse(request: Request, authorizationUrl: string, returnTo: string, asForm: boolean) {
-  if (asForm) return NextResponse.redirect(authorizationUrl, 303);
-  return NextResponse.json({ authorizationUrl, returnTo });
-}
-
-function failureResponse(request: Request, returnTo: string, asForm: boolean, code: string, status: number) {
+function failure(request: Request, returnTo: string, asForm: boolean, code: string, status: number) {
   if (asForm) {
     const url = new URL(returnTo, new URL(request.url).origin);
     url.searchParams.set('payment_error', code);
     return NextResponse.redirect(url, 303);
   }
   return NextResponse.json({ error: code }, { status });
-}
-
-export async function POST(request: Request) {
-  const contentType = request.headers.get('content-type') ?? '';
-  const asForm = contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data');
-
-  let rawObligationId = '';
-  let returnTo = '/';
-  try {
-    if (asForm) {
-      const form = await request.formData();
-      rawObligationId = String(form.get('obligationId') ?? '');
-      returnTo = safeReturnTo(String(form.get('returnTo') ?? '/'));
-    } else {
-      const body = await request.json() as { obligationId?: unknown; returnTo?: unknown };
-      rawObligationId = typeof body.obligationId === 'string' ? body.obligationId : '';
-      returnTo = safeReturnTo(typeof body.returnTo === 'string' ? body.returnTo : '/');
-    }
-  } catch {
-    return failureResponse(request, returnTo, asForm, 'invalid_request', 400);
-  }
-
-  const parsedObligation = obligationSchema.safeParse(rawObligationId);
-  if (!parsedObligation.success) return failureResponse(request, returnTo, asForm, 'obligation_required', 400);
-  const obligationId = parsedObligation.data;
-
-  const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user?.email) return failureResponse(request, returnTo, asForm, 'authentication_required', 401);
-
-  const { data: obligation } = await supabase
-    .from('payment_obligations')
-    .select('id,amount_minor,currency_code,status')
-    .eq('id', obligationId)
-    .maybeSingle();
-  if (!obligation) return failureResponse(request, returnTo, asForm, 'obligation_not_found', 404);
-  if (!['pending', 'funding'].includes(obligation.status)) {
-    return failureResponse(request, returnTo, asForm, 'obligation_not_payable', 409);
-  }
-
-  const { data: latestAttempts, count } = await supabase
-    .from('payment_attempts')
-    .select('id,status,idempotency_key,checkout_authorization_url', { count: 'exact' })
-    .eq('obligation_id', obligationId)
-    .eq('provider_adapter', 'paystack')
-    .order('created_at', { ascending: false })
-    .limit(1);
-  const latest = latestAttempts?.[0];
-
-  if (latest?.status === 'pending_provider' && latest.checkout_authorization_url) {
-    return checkoutResponse(request, latest.checkout_authorization_url, returnTo, asForm);
-  }
-
-  if (latest?.status === 'succeeded') {
-    return failureResponse(request, returnTo, asForm, 'payment_already_confirmed', 409);
-  }
-
-  const activeWithoutSession = latest && ['created', 'pending_provider'].includes(latest.status) && !latest.checkout_authorization_url;
-  const idempotencyKey = activeWithoutSession
-    ? latest.idempotency_key
-    : `checkout:${obligationId}:paystack:${(count ?? 0) + 1}`;
-
-  const { data: attemptId, error: attemptError } = await supabase.rpc('create_payment_attempt_command', {
-    p_obligation_id: obligationId,
-    p_provider_adapter: 'paystack',
-    p_idempotency_key: idempotencyKey,
-  });
-  if (attemptError || !attemptId) {
-    return failureResponse(request, returnTo, asForm, 'unable_to_create_payment_attempt', 409);
-  }
-
-  try {
-    const adapter = getPaymentAdapter('paystack');
-    const origin = new URL(request.url).origin;
-    const checkout = await adapter.initializeCheckout({
-      attemptId: String(attemptId),
-      obligationId,
-      email: user.email,
-      amountMinor: Number(obligation.amount_minor),
-      currencyCode: obligation.currency_code,
-      callbackUrl: `${origin}/payments/paystack/return?attempt=${encodeURIComponent(String(attemptId))}&returnTo=${encodeURIComponent(returnTo)}`,
-    });
-
-    const { error: bindError } = await supabase.rpc('bind_payment_attempt_checkout_session_command', {
-      p_attempt_id: attemptId,
-      p_adapter: 'paystack',
-      p_checkout_reference: checkout.providerReference,
-      p_authorization_url: checkout.authorizationUrl,
-    });
-    if (bindError) return failureResponse(request, returnTo, asForm, 'unable_to_bind_checkout', 500);
-
-    return checkoutResponse(request, checkout.authorizationUrl, returnTo, asForm);
-  } catch {
-    return failureResponse(request, returnTo, asForm, 'payment_provider_unavailable', 502);
-  }
 }

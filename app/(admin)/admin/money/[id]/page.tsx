@@ -25,7 +25,7 @@ export default async function MoneyDetailPage({ params, searchParams }: {
   const { data: obligation } = await supabase.from('payment_obligations').select('*').eq('id', id).maybeSingle();
   if (!obligation) notFound();
 
-  const [requestResult, assignmentResult, attemptsResult, reconciliationsResult, payoutResult, refundsResult, disputesResult, entriesResult] = await Promise.all([
+  const [requestResult, assignmentResult, attemptsResult, reconciliationsResult, payoutResult, refundsResult, disputesResult, entriesResult, customerRequestsResult] = await Promise.all([
     supabase.from('requests').select('id,need_text,state,created_at,completed_at').eq('id', obligation.request_id).maybeSingle(),
     supabase.from('assignments').select('id,status,provider_id,assigned_at').eq('id', obligation.assignment_id).maybeSingle(),
     supabase.from('payment_attempts').select('id,status,provider_adapter,provider_reference,checkout_reference,amount_minor,currency_code,created_at,updated_at').eq('obligation_id', id).order('created_at', { ascending: false }),
@@ -34,6 +34,10 @@ export default async function MoneyDetailPage({ params, searchParams }: {
     supabase.from('payment_refunds').select('*').eq('obligation_id', id).order('created_at', { ascending: false }),
     supabase.from('payment_disputes').select('*').eq('obligation_id', id).order('created_at', { ascending: false }),
     supabase.from('ledger_entries').select('id,transaction_id,ledger_account_id,currency_code,amount_minor,created_at').eq('obligation_id', id).order('created_at', { ascending: true }),
+    // The customer's own asks. They are a record of what somebody is waiting on, not a financial hold — this
+    // page is the reader that makes them mean something, and the refund control beside it is the only thing
+    // here that can actually move money.
+    supabase.from('payment_dispute_requests').select('id,kind,message,status,created_at').eq('obligation_id', id).order('created_at', { ascending: false }),
   ]);
 
   const request = requestResult.data;
@@ -44,6 +48,7 @@ export default async function MoneyDetailPage({ params, searchParams }: {
   const refunds = refundsResult.data ?? [];
   const disputes = disputesResult.data ?? [];
   const entries = entriesResult.data ?? [];
+  const customerRequests = customerRequestsResult.data ?? [];
 
   const transactionIds = [...new Set(entries.map(entry => entry.transaction_id))];
   const accountIds = [...new Set(entries.map(entry => entry.ledger_account_id))];
@@ -133,6 +138,16 @@ export default async function MoneyDetailPage({ params, searchParams }: {
     <section className="admin-section admin-panel">
       <div className="admin-section-heading"><div><h2>Disputes</h2><p>An unresolved dispute blocks payout. Provider resolution alone does not release money; Finance must explicitly clear it.</p></div><span>{disputes.length}</span></div>
       {disputes.length ? <div className="admin-list">{disputes.map(dispute => <article key={dispute.id}><div><strong>{status(dispute.status)}</strong><span>{dispute.reason || dispute.provider_dispute_id}</span><small>Resolution: {dispute.resolution || 'not cleared'}</small></div>{dispute.resolution !== 'cleared_for_payout' ? <form action={clearDisputeForPayoutAction} className="compact-form"><input type="hidden" name="obligation_id" value={id}/><input type="hidden" name="dispute_id" value={dispute.id}/><input name="reason" required placeholder="Finance resolution reason"/><button type="submit" className="text-button">Clear for payout</button></form> : null}</article>)}</div> : <p className="empty-admin">No disputes recorded.</p>}
+    </section>
+
+    {/* ⚠️ READ, NOT AUTO-APPLIED. A customer's request does not move money and does not place the hold itself.
+        The refund control above is what does both, under `platform.money.refund` and a step-up. These rows exist
+        so that a customer asking for a refund or a review lands in front of the person who can act on it. */}
+    <section className="admin-section admin-panel">
+      <div className="admin-section-heading"><div><h2>Customer requests</h2><p>What the customer has asked the platform team about this payment. Nothing here has moved money or placed a hold.</p></div><span>{customerRequests.length}</span></div>
+      {customerRequests.length
+        ? <div className="admin-list">{customerRequests.map(item => <article key={item.id}><div style={{ width: '100%' }}><strong>{item.kind === 'refund' ? 'Refund requested' : 'Review requested'} · {status(item.status)}</strong><span>{item.message}</span><small>{new Date(item.created_at).toLocaleString()}</small></div></article>)}</div>
+        : <p className="empty-admin">The customer has not asked for anything on this payment.</p>}
     </section>
   </div>;
 }

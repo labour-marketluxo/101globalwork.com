@@ -1,6 +1,12 @@
+import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { scheduleAssignmentAction, startAssignmentAction, submitEvidenceAction } from './actions';
+import {
+  acceptAppointmentProposalAction,
+  scheduleAssignmentAction,
+  startAssignmentAction,
+  submitEvidenceAction,
+} from './actions';
 
 export const metadata = { title: 'Assigned work', robots: { index: false, follow: false } };
 
@@ -9,7 +15,7 @@ function money(minor: number, currency: string) {
   catch { return `${currency} ${(minor / 100).toFixed(2)}`; }
 }
 
-export default async function ProviderAssignmentPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; scheduled?: string; started?: string; submitted?: string }> }) {
+export default async function ProviderAssignmentPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; scheduled?: string; started?: string; submitted?: string; accepted?: string }> }) {
   const { id } = await params;
   const query = await searchParams;
   const supabase = await createSupabaseServerClient();
@@ -18,11 +24,14 @@ export default async function ProviderAssignmentPage({ params, searchParams }: {
 
   const { data: assignment } = await supabase.from('assignments').select('id,request_id,provider_id,status,assigned_at').eq('id', id).maybeSingle();
   if (!assignment) notFound();
-  const [{ data: request }, { data: schedule }, { data: evidence }, { data: obligation }] = await Promise.all([
+  const [{ data: request }, { data: schedule }, { data: evidence }, { data: obligation }, { data: proposals }] = await Promise.all([
     supabase.from('requests').select('id,state,need_text,timezone').eq('id', assignment.request_id).maybeSingle(),
-    supabase.from('assignment_schedules').select('scheduled_start,scheduled_end,timezone,note').eq('assignment_id', id).maybeSingle(),
+    supabase.from('assignment_schedules').select('scheduled_start,scheduled_end,timezone,note,customer_status,confirmed_at').eq('assignment_id', id).maybeSingle(),
     supabase.from('work_evidence').select('id,kind,note,external_url,submitted_at').eq('assignment_id', id).order('submitted_at', { ascending: false }),
     supabase.from('payment_obligations').select('id,status,currency_code,amount_minor').eq('assignment_id', id).maybeSingle(),
+    // The customer's proposed times. Read here because a proposal nobody can act on is a message into a void:
+    // only the provider can move the booking, so this is the page where the ask has to arrive.
+    supabase.from('appointment_time_proposals').select('id,proposed_start,proposed_end,timezone,message,created_at').eq('assignment_id', id).eq('status', 'open').order('created_at', { ascending: false }),
   ]);
   if (!request) notFound();
 
@@ -37,6 +46,7 @@ export default async function ProviderAssignmentPage({ params, searchParams }: {
     {query.scheduled ? <p className="notice">Schedule saved.</p> : null}
     {query.started ? <p className="notice">Work marked as started.</p> : null}
     {query.submitted ? <p className="notice">Completion evidence submitted to the customer.</p> : null}
+    {query.accepted ? <p className="notice">Time accepted. The booking has moved and the customer has been asked to confirm it.</p> : null}
 
     <section className="provider-progress-card" aria-label="Assignment status">
       <div><span>Work state</span><strong>{request.state.replaceAll('_', ' ')}</strong></div>
@@ -61,7 +71,30 @@ export default async function ProviderAssignmentPage({ params, searchParams }: {
       <button type="submit">Confirm schedule</button>
     </form> : null}
 
-    {schedule ? <section className="action-panel"><h2>Schedule</h2><p>{new Date(schedule.scheduled_start).toLocaleString()} ({schedule.timezone}){schedule.scheduled_end ? ` to ${new Date(schedule.scheduled_end).toLocaleString()}` : ''}</p>{schedule.note ? <p>{schedule.note}</p> : null}</section> : null}
+    {schedule ? <section className="action-panel"><h2>Schedule</h2><p>{new Date(schedule.scheduled_start).toLocaleString()} ({schedule.timezone}){schedule.scheduled_end ? ` to ${new Date(schedule.scheduled_end).toLocaleString()}` : ''}</p>{schedule.note ? <p>{schedule.note}</p> : null}
+      <p className="hint">{schedule.customer_status === 'confirmed' && schedule.confirmed_at
+        ? `The customer confirmed this appointment on ${new Date(schedule.confirmed_at).toLocaleString()}.`
+        : schedule.customer_status === 'rescheduled'
+          ? 'You moved this appointment after it was confirmed, so the customer needs to confirm the new time.'
+          : 'Waiting for the customer to confirm this time.'}</p>
+    </section> : null}
+
+    {proposals?.length ? <section className="action-panel">
+      <h2>The customer asked for a different time</h2>
+      <p className="hint">They cannot move the booking themselves — only you can. Accepting moves it through the ordinary schedule rules and asks them to confirm.</p>
+      <ul>
+        {proposals.map(proposal => <li key={proposal.id}>
+          <strong>{new Date(proposal.proposed_start).toLocaleString()} ({proposal.timezone})</strong>
+          {proposal.proposed_end ? ` to ${new Date(proposal.proposed_end).toLocaleString()}` : ''}
+          {proposal.message ? <p>{proposal.message}</p> : null}
+          <form action={acceptAppointmentProposalAction}>
+            <input type="hidden" name="assignment_id" value={id} />
+            <input type="hidden" name="proposal_id" value={proposal.id} />
+            <button type="submit">Accept this time</button>
+          </form>
+        </li>)}
+      </ul>
+    </section> : null}
 
     {request.state === 'scheduled' && !paymentFunded ? <section className="action-panel"><h2>Start is locked</h2><p>Waiting for the customer payment to be confirmed. Refresh this page after payment; the Start work action appears only when the authoritative obligation state is funded.</p></section> : null}
 
@@ -78,6 +111,7 @@ export default async function ProviderAssignmentPage({ params, searchParams }: {
     {evidence?.length ? <section className="action-panel"><h2>Evidence submitted</h2><ul>{evidence.map(item => <li key={item.id}><strong>{item.kind}</strong>: {item.note ?? item.external_url ?? 'Evidence'} · {new Date(item.submitted_at).toLocaleString()}</li>)}</ul></section> : null}
 
     {request.state === 'submitted_for_approval' ? <p className="notice">Waiting for the customer to approve completion.</p> : null}
+    <p><Link className="secondary-link" href="/provider/assignments">All assignments</Link></p>
     {request.state === 'completed' ? <p className="notice">This work has been approved as completed.</p> : null}
   </section>;
 }

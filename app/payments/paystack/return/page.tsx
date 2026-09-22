@@ -13,12 +13,16 @@ export default async function PaystackReturnPage({ searchParams }: { searchParam
   const destination = safeReturnTo(returnTo);
   const supabase = await createSupabaseServerClient();
   const { data: paymentAttempt } = attempt
-    ? await supabase.from('payment_attempts').select('id,status,provider_adapter,created_at').eq('id', attempt).maybeSingle()
+    ? await supabase.from('payment_attempts').select('id,status,provider_adapter,created_at,obligation_id').eq('id', attempt).maybeSingle()
     : { data: null };
 
   const status = paymentAttempt?.status ?? 'pending_provider';
   const confirmed = status === 'succeeded';
   const failed = status === 'failed';
+  // ⚠️ THE ATTEMPT'S UUID IS NOT PRINTED. It identifies a row in this database and nothing the customer can
+  // act on; the payment record is where the reference they can quote, the itemised amount and the timeline
+  // live. What used to be an internal id on this page is now a link to that record.
+  const recordHref = paymentAttempt?.obligation_id ? `/customer/payments/${paymentAttempt.obligation_id}` : destination;
 
   return <section className="content-shell">
     <p className="eyebrow">Payment</p>
@@ -37,7 +41,7 @@ export default async function PaystackReturnPage({ searchParams }: { searchParam
         ? <p className="notice" role="alert"><strong>No funded payment is recorded.</strong><br />Return to the request to retry securely if payment is still required.</p>
         : <p className="notice"><strong>Confirmation is still in progress.</strong><br />A verified webhook may arrive shortly. Return to the request and refresh; the payment status there is authoritative.</p>}
 
-    <Link className="button-link" href={destination}>Back to your request</Link>
-    <p className="hint">Payment attempt reference: {attempt ?? 'pending'}</p>
+    <Link className="button-link" href={recordHref}>{paymentAttempt?.obligation_id ? 'Open the payment record' : 'Back to your request'}</Link>
+    <p className="hint">The payment record shows the reference you can quote, whether the payment has been reconciled, and its timeline. Returning to this page proves nothing on its own.</p>
   </section>;
 }

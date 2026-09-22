@@ -31,6 +31,11 @@ export const paystackAdapter: PaymentAdapter = {
         reference,
         callback_url: input.callbackUrl,
         metadata: JSON.stringify({ payment_attempt_id: input.attemptId, obligation_id: input.obligationId }),
+        // ⚠️ ONLY SENT WHEN THE CALLER CHOSE ONE, AND ONLY FROM THE ADAPTER'S OWN CONFIGURED LIST. The caller
+        // has already been checked against `payment_adapters.config.checkout_channels`; sending an empty
+        // `channels` array would mean "no channels at all" to the gateway rather than "your default", so it is
+        // omitted rather than passed through.
+        ...(input.channels && input.channels.length > 0 ? { channels: input.channels } : {}),
       }),
       cache: 'no-store',
     });
