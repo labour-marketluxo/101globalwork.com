@@ -74,12 +74,33 @@ type SearchParams = Promise<{
   error?: string;
   next?: string;
   redirect?: string;
+  /**
+   * A reason for arriving here, as opposed to an error. Currently only one: `session_revoked`, set by
+   * the settings page when somebody ends the session they were holding. It is a separate parameter
+   * from `error` because nothing went wrong — the visitor asked for this — and the notice is
+   * informational rather than a warning.
+   */
+  reason?: string;
 }>;
+
+/**
+ * Reasons this page is willing to display, as a fixed map.
+ *
+ * Same rule as the error vocabulary: the parameter is user-editable and this is a sign-in card, so an
+ * unrecognised value renders nothing at all rather than echoing whatever arrived.
+ */
+const ARRIVAL_NOTICES: Record<string, { title: string; body: string }> = {
+  session_revoked: {
+    title: 'You signed out of that device.',
+    body: 'The session ended, so this device no longer has access to your account. Sign in again to carry on — the other devices on your account were not touched.',
+  },
+};
 
 export default async function AuthSignInPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const destination = postAuthTarget(params);
   const code = authErrorCode(params.error);
+  const arrival = params.reason ? ARRIVAL_NOTICES[params.reason] : undefined;
 
   // Already signed in? The form is not the page they want — but only when the destination is not
   // this page, or a stale `?next=/auth/sign-in` would loop.
@@ -94,7 +115,15 @@ export default async function AuthSignInPage({ searchParams }: { searchParams: S
       eyebrow="Welcome back"
       title="Sign in to your account"
       lede="Pick up where you left off: your requests, your quotes and the work you are managing."
-      notice={code ? <AuthNotice tone="error">{authErrorMessage(code)}</AuthNotice> : null}
+      notice={
+        code ? (
+          <AuthNotice tone="error">{authErrorMessage(code)}</AuthNotice>
+        ) : arrival ? (
+          <AuthNotice tone="info" title={arrival.title}>
+            {arrival.body}
+          </AuthNotice>
+        ) : null
+      }
       footer={
         <>
           Don&rsquo;t have an account?{' '}
