@@ -1,31 +1,34 @@
 import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { createRequestAction } from './actions';
+import { CUSTOMER_PATHS } from '@/features/customer/intake';
 
-export const metadata = { title: 'Create request', robots: { index: false, follow: false } };
+/**
+ * The old one-screen intake, kept alive as a redirect.
+ *
+ * ⚠️ THIS ROUTE IS LINKED FROM EVERY MARKETING CTA ON THE SITE — the pricing page, how-it-works, the
+ * service pages, the provider profiles, the market search. The guided flow replaced what happens after
+ * the click, so the URL had to keep working: rewriting a dozen CTAs to point at a new path would have
+ * been a dozen chances to miss one, and any bookmark, email or ad pointing here would have broken
+ * silently. A permanent redirect would be wrong for the same reason this one exists — it is not a
+ * permanent relocation of content, it is the same destination reached by a different route, and the
+ * old one may be retired properly later.
+ *
+ * `q` is forwarded because some of those CTAs arrive with a description already typed — the search
+ * wizard's outcome prompt, the provider page's "start a request" — and dropping it would mean asking
+ * somebody to type what they had just written.
+ *
+ * There is no auth check here on purpose. The guided flow's first step checks, and it can do it better:
+ * it knows which step to come back to, so a signed-out visitor from a marketing CTA signs in and lands
+ * on the intent box rather than on the dashboard.
+ */
+export const metadata = { robots: { index: false, follow: false } };
 
-export default async function NewRequestPage({ searchParams }: { searchParams: Promise<{ q?: string; error?: string }> }) {
+export default async function LegacyNewRequestRedirect({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
   const params = await searchParams;
-  const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/auth/sign-in');
+  const query = params.q ? `?q=${encodeURIComponent(params.q)}` : '';
 
-  const [{ data: markets }, { data: services }, { data: locations }] = await Promise.all([
-    supabase.from('public_market_catalog').select('*').order('display_name'),
-    supabase.from('public_service_catalog').select('*').order('display_name'),
-    supabase.from('public_location_catalog').select('*').order('display_name'),
-  ]);
-
-  return <section className="content-shell">
-    <p className="eyebrow">Create request</p><h1>What do you need done?</h1>
-    <p className="lede left">Keep it simple. Choose the closest service and location; the scope can become more detailed only if the work needs it.</p>
-    {params.error ? <p className="notice" role="alert">{params.error}</p> : null}
-    <form action={createRequestAction} className="stack-form">
-      <label htmlFor="need_text">Describe the work</label><textarea id="need_text" name="need_text" required minLength={5} rows={5} defaultValue={params.q ?? ''} />
-      <label htmlFor="market_id">Market</label><select id="market_id" name="market_id" required>{markets?.map(m => <option key={m.market_id} value={m.market_id}>{m.display_name}</option>)}</select>
-      <label htmlFor="service_entity_id">Service</label><select id="service_entity_id" name="service_entity_id" required>{services?.map(s => <option key={s.service_entity_id} value={s.service_entity_id}>{s.display_name}</option>)}</select>
-      <label htmlFor="location_id">Location</label><select id="location_id" name="location_id" required>{locations?.map(l => <option key={l.location_id} value={l.location_id}>{l.display_name}</option>)}</select>
-      <button type="submit">Create request and find providers</button>
-    </form>
-  </section>;
+  redirect(`${CUSTOMER_PATHS.newRequest}${query}`);
 }
