@@ -15,18 +15,10 @@ export async function acceptQuoteAction(formData: FormData) {
   redirect(`/requests/${requestId}?accepted=1`);
 }
 
-export async function approveCompletionAction(formData: FormData) {
-  const requestId = String(formData.get('request_id') ?? '');
-  const assignmentId = String(formData.get('assignment_id') ?? '');
-  const note = String(formData.get('note') ?? '').trim() || null;
-  const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(`/requests/${requestId}`)}`);
-
-  const { error } = await supabase.rpc('approve_assignment_completion_command', {
-    p_assignment_id: assignmentId,
-    p_note: note,
-  });
-  if (error) redirect(`/requests/${requestId}?error=${encodeURIComponent('Unable to approve completion. Please refresh and try again.')}`);
-  redirect(`/requests/${requestId}?completed=1`);
-}
+/**
+ * ⚠️ THE APPROVAL ACTION THAT USED TO LIVE HERE IS GONE, NOT DISABLED. Approving a job releases money to the
+ * provider, and it now requires the agreed-criteria checklist and the financial warning on the completion page.
+ * Leaving a second action that posted the same command with a note and nothing else would have been the path
+ * around that gate — and a path around a gate is the gate not existing. The approval is
+ * `approveProjectCompletionAction` in features/customer/completion-actions.ts.
+ */

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { acceptQuoteAction, approveCompletionAction } from './actions';
+import { acceptQuoteAction } from './actions';
 
 export const metadata = { title: 'Your request', robots: { index: false, follow: false } };
 
@@ -97,13 +97,14 @@ export default async function RequestPage({ params, searchParams }: {
       <p>Your accepted quote is the authoritative assignment for this request.</p>
       {schedule ? <p><strong>Scheduled:</strong> {new Date(schedule.scheduled_start).toLocaleString()} ({schedule.timezone}){schedule.scheduled_end ? ` to ${new Date(schedule.scheduled_end).toLocaleString()}` : ''}</p> : <p className="hint">The provider has not scheduled the work yet.</p>}
       {evidence?.length ? <div><h3>Completion evidence</h3><ul>{evidence.map(item => <li key={item.id}><strong>{item.kind}</strong>: {item.note ?? item.external_url ?? 'Evidence submitted'} · {new Date(item.submitted_at).toLocaleString()}</li>)}</ul></div> : null}
-      {request.state === 'submitted_for_approval' ? <form action={approveCompletionAction} className="stack-form">
-        <input type="hidden" name="request_id" value={id} />
-        <input type="hidden" name="assignment_id" value={assignment.id} />
-        <label htmlFor="completion-note">Completion note (optional)</label>
-        <textarea id="completion-note" name="note" rows={3} placeholder="Add a note about the completed work." />
-        <button type="submit">Approve completed work</button>
-      </form> : null}
+      {/* ⚠️ APPROVAL LIVES ON THE COMPLETION PAGE, NOT HERE. Approving releases money, and it now requires the
+          agreed-criteria checklist to be ticked and the consequences to be read. A second, bare approve button on
+          this page would be the path that skipped all of that — which is exactly the "silent acceptance" the
+          completion gate exists to prevent. */}
+      {request.state === 'submitted_for_approval' ? <p>
+        <Link className="button-link" href={`/customer/projects/${assignment.id}/completion`}>Review the completed work</Link>
+        <span className="hint"> The evidence, what you agreed, and the decision to release the money are on the completion review.</span>
+      </p> : null}
     </section> : null}
 
     {obligation ? <section className="action-panel payment-panel">
