@@ -516,6 +516,264 @@
   .admin-quick-note{@apply inline-flex items-center bg-accent-soft text-accent-strong;gap:7px;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:700}
   .admin-quick-note:before{content:"";width:6px;height:6px;border-radius:50%;@apply bg-accent}
 
+  /* ------------------------------------------------- admin operational strip */
+
+  /* The strip that is always on screen: which deployment this is, and whether anything is
+     outstanding. It sticks because the question it answers ("am I in production?") is asked at the
+     moment an operator is about to press something, not when the page first loads. */
+  .admin-strip{
+    @apply flex flex-wrap items-center justify-between;
+    gap:12px;
+    padding:10px clamp(24px,4vw,54px);
+    background:var(--color-canvas-subtle);
+    border-bottom:1px solid var(--color-border);
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .admin-strip-group{@apply flex flex-wrap items-center;gap:8px}
+
+  .admin-env-badge{
+    @apply inline-flex items-center;
+    gap:6px;
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:760;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    border:1px solid var(--line-strong);
+    background:#fff;
+    color:var(--color-ink-soft);
+  }
+  .admin-env-badge[data-tone="production"]{background:#fde8e8;border-color:#f3b8b8;color:#8f1d1d}
+  .admin-env-badge[data-tone="preview"]{background:var(--color-secondary-light);border-color:#f0cf8a;color:#8a4b06}
+  .admin-env-badge[data-tone="development"],.admin-env-badge[data-tone="unknown"]{background:var(--color-primary-subtle);border-color:var(--color-primary-subtle);color:var(--color-primary-dark)}
+  .admin-env-detail{@apply text-muted;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  /* Amber when something is outstanding, teal when nothing is: the same two meanings the rest of the
+     platform uses, so this strip never needs its own legend. */
+  .admin-incident-banner{
+    @apply flex flex-wrap items-center;
+    gap:10px;
+    padding:9px 14px;
+    border-radius:10px;
+    font-size:13px;
+    border:1px solid var(--color-primary-subtle);
+    background:var(--color-primary-surface);
+    color:var(--color-ink-soft);
+  }
+  .admin-incident-banner[data-tone="attention"]{background:var(--color-secondary-light);border-color:var(--color-secondary);color:#7c3d05}
+  .admin-incident-banner strong{font-weight:760}
+  .admin-incident-banner a{@apply text-accent-strong;font-weight:700}
+
+  /* --------------------------------------------------- admin controls and forms */
+
+  .admin-filters{
+    @apply flex flex-wrap items-end;
+    gap:12px;
+    padding:16px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--color-surface);
+    margin-bottom:20px;
+  }
+  .admin-filters .admin-field-group{@apply grid;gap:5px;min-width:170px}
+  .admin-field-label{@apply block text-muted;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 5px}
+  .admin-filters .admin-field-label{margin:0}
+  .admin-field{
+    width:100%;
+    border:1px solid var(--line-strong);
+    border-radius:9px;
+    background:#fff;
+    padding:9px 11px;
+    font-size:13px;
+    color:var(--color-ink);
+  }
+  .admin-field:focus-visible{outline:2px solid var(--color-secondary);outline-offset:1px}
+
+  .admin-row-actions{@apply flex flex-wrap items-center;gap:8px}
+  .admin-row-actions form{@apply inline-flex}
+
+  .admin-control-unavailable{
+    @apply grid;
+    gap:2px;
+    padding:7px 0;
+    font-size:12px;
+    font-weight:700;
+    color:var(--color-outline);
+  }
+  .admin-control-unavailable-why{font-weight:400;font-size:11px;max-width:260px;line-height:1.4}
+
+  .admin-dialog-title{margin:0;font-size:19px;letter-spacing:-.015em}
+  .admin-dialog-lede{@apply text-ink-soft;font-size:13px;line-height:1.5;margin:8px 0 0}
+  .admin-dialog-hint{@apply text-muted;font-size:11px;line-height:1.5;margin:10px 0 0}
+  .admin-dialog-actions{@apply flex justify-end;gap:10px;margin-top:20px;border-top:1px solid var(--color-border);padding-top:16px}
+
+  .admin-confirm-danger{
+    @apply inline-flex items-center;gap:7px;
+    border:0;
+    border-radius:9px;
+    background:var(--color-error);
+    color:#fff;
+    padding:10px 16px;
+    font-size:13px;
+    font-weight:740;
+    cursor:pointer;
+  }
+  .admin-confirm-danger:disabled{opacity:.5;cursor:not-allowed}
+  .admin-confirm-danger:hover:not(:disabled){background:#8f1d1d}
+  .admin-confirm-amber{
+    @apply inline-flex items-center;gap:7px;
+    border:0;
+    border-radius:9px;
+    background:var(--color-secondary);
+    color:#fff;
+    padding:10px 16px;
+    font-size:13px;
+    font-weight:740;
+    cursor:pointer;
+  }
+  .admin-confirm-amber:disabled{opacity:.5;cursor:not-allowed}
+  .admin-confirm-amber:hover:not(:disabled){background:var(--color-secondary-dark)}
+
+  .admin-trigger-danger{
+    @apply inline-flex items-center;gap:6px;
+    border:1px solid #f3b8b8;
+    border-radius:9px;
+    background:#fdecec;
+    color:#8f1d1d;
+    padding:7px 12px;
+    font-size:12px;
+    font-weight:720;
+    cursor:pointer;
+  }
+  .admin-trigger-danger:hover{background:#fbdada}
+  .admin-trigger-quiet{
+    @apply inline-flex items-center;gap:6px;
+    border:1px solid var(--line-strong);
+    border-radius:9px;
+    background:#fff;
+    color:var(--color-ink-soft);
+    padding:7px 12px;
+    font-size:12px;
+    font-weight:720;
+    cursor:pointer;
+  }
+  .admin-trigger-quiet:hover{border-color:var(--color-primary);color:var(--color-primary-dark)}
+
+  .admin-reveal{@apply grid;gap:8px;margin-top:12px}
+  .admin-reveal code{
+    @apply block;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12px;
+    background:var(--color-canvas-subtle);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 10px;
+    word-break:break-all;
+  }
+  .admin-reveal-warning{
+    @apply flex items-start;
+    gap:8px;
+    border:1px solid #f0cf8a;
+    background:var(--color-secondary-light);
+    border-radius:9px;
+    padding:10px;
+    font-size:12px;
+    line-height:1.5;
+    color:#7c3d05;
+  }
+
+  /* Definition lists inside an admin panel: label above value, one column, no table semantics
+     pretended. Used for account facts, role lists and organisation memberships. */
+  .admin-facts{@apply grid;gap:10px;margin:14px 0 0;padding:0;list-style:none}
+  .admin-facts>div,.admin-facts>li{
+    @apply grid;
+    gap:2px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--color-border);
+  }
+  .admin-facts>div:last-child,.admin-facts>li:last-child{border-bottom:0;padding-bottom:0}
+  .admin-facts dt,.admin-facts strong{font-size:13px;font-weight:700;color:var(--color-ink)}
+  .admin-facts dd{margin:0;font-size:13px;color:var(--color-ink-soft)}
+  .admin-facts span{font-size:12px;color:var(--color-outline)}
+  .admin-facts a{@apply text-accent-strong;font-weight:700}
+
+  .admin-session-list{@apply grid;gap:0;margin:0;padding:0;list-style:none;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--color-surface)}
+  .admin-session-list li{@apply grid;gap:2px;padding:12px 14px;border-bottom:1px solid var(--color-border)}
+  .admin-session-list li:last-child{border-bottom:0}
+  .admin-session-list strong{font-size:13px}
+  .admin-session-list span,.admin-session-list small{font-size:12px;color:var(--color-outline)}
+
+  /* A structured scope record, printed as it was stored. Scrollable rather than truncated: an operator
+     investigating a disagreement needs the whole accepted scope, and a summary of it would be somebody
+     else's paraphrase. */
+  .admin-json{
+    @apply block;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:11px;
+    line-height:1.5;
+    background:var(--color-canvas-subtle);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:12px;
+    max-height:320px;
+    overflow:auto;
+    white-space:pre-wrap;
+    word-break:break-word;
+    margin:8px 0 0;
+  }
+
+  .admin-queue-tabs{@apply flex flex-wrap;gap:6px;margin-bottom:18px}
+  .admin-queue-tabs a{
+    @apply inline-flex items-center;
+    gap:6px;
+    border:1px solid var(--line-strong);
+    border-radius:999px;
+    padding:7px 13px;
+    font-size:12px;
+    font-weight:700;
+    text-decoration:none;
+    color:var(--color-ink-soft);
+    background:#fff;
+  }
+  .admin-queue-tabs a:hover{border-color:var(--color-primary)}
+  .admin-queue-tabs a[aria-current="true"]{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+
+  .admin-severity{
+    @apply inline-flex items-center;
+    gap:5px;
+    border-radius:999px;
+    padding:4px 9px;
+    font-size:10px;
+    font-weight:780;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    border:1px solid var(--line);
+    background:var(--color-canvas-subtle);
+    color:var(--color-ink-soft);
+  }
+  .admin-severity[data-severity="critical"],.admin-severity[data-severity="high"]{background:var(--color-secondary-light);border-color:#f0cf8a;color:#7c3d05}
+  .admin-severity[data-severity="low"]{background:#fff}
+
+  .admin-incident{@apply grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--color-surface)}
+  .admin-incident[data-state="clear"]{opacity:.72;border-style:dashed}
+  .admin-incident[data-state="acknowledged"]{border-color:var(--color-primary-subtle);background:var(--color-primary-surface)}
+  .admin-incident-head{@apply flex flex-wrap items-start justify-between;gap:12px}
+  .admin-incident-head h3{margin:0;font-size:15px;letter-spacing:-.01em}
+  .admin-incident-count{@apply grid justify-items-end;gap:2px}
+  .admin-incident-count strong{font-size:26px;letter-spacing:-.04em}
+  .admin-incident-meta{@apply flex flex-wrap;gap:12px;font-size:11px;color:var(--color-outline)}
+  .admin-incident p{margin:0;font-size:13px;line-height:1.5;color:var(--color-ink-soft)}
+  .admin-incident-grid{@apply grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-incident-ack{@apply flex flex-wrap items-center justify-between;gap:12px;border-top:1px solid var(--color-border);padding-top:12px;font-size:12px;color:var(--color-outline)}
+
+  @media (max-width:900px){
+    .admin-incident-grid{grid-template-columns:minmax(0,1fr)}
+    .admin-strip{position:static}
+  }
+
   /* -------------------------------------------------------- loading states */
 
   /* Consumed by components/ui/RouteSkeleton.tsx, which backs the route-group

@@ -101,7 +101,7 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
           <td>{userKinds(person).map(kind => <span className="pill" key={kind}>{kind}</span>)}</td>
           <td>{person.providers.length ? person.providers.map(provider => <span key={provider.id}><strong>{provider.display_name}</strong> · {provider.status.replaceAll('_',' ')}<br /></span>) : <span className="hint">None</span>}</td>
           <td><span className="status-dot">{person.email_confirmed ? 'Email confirmed' : 'Email not confirmed'}</span><br /><small>{person.last_sign_in_at ? `Last sign-in ${new Date(person.last_sign_in_at).toLocaleString()}` : 'Never signed in'}</small></td>
-          <td><Link className="text-button" href={`/admin/users/${person.account_id}`}>View details</Link></td>
+          <td><Link className="text-button" href={`/admin/accounts/${person.account_id}`}>View details</Link></td>
         </tr>)}
       </tbody></table></div> : <p className="empty-admin">No marketplace accounts are visible to this operator.</p>}
     </section>
@@ -146,7 +146,7 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
           <td><strong>{person.display_name || 'Profile not completed'}</strong></td>
           <td>{person.is_owner ? <span className="pill strong">Platform Owner</span> : person.roles.map(role => <span className="pill" key={role.key}>{role.name}</span>)}</td>
           <td><span className="status-dot">{accessStatus(person)}</span></td>
-          <td><Link className="text-button" href={`/admin/users/${person.account_id}`}>View account</Link>{!person.is_owner && person.roles[0] ? <form action={revokeRoleAction}><input type="hidden" name="account_id" value={person.account_id}/><input type="hidden" name="role_key" value={person.roles[0].key}/><input type="hidden" name="reason" value="Access removed from admin dashboard"/><button className="text-button" type="submit">Revoke access</button></form> : null}</td>
+          <td><Link className="text-button" href={`/admin/accounts/${person.account_id}`}>View account</Link>{!person.is_owner && person.roles[0] ? <form action={revokeRoleAction}><input type="hidden" name="account_id" value={person.account_id}/><input type="hidden" name="role_key" value={person.roles[0].key}/><input type="hidden" name="reason" value="Access removed from admin dashboard"/><button className="text-button" type="submit">Revoke access</button></form> : null}</td>
         </tr>)}
       </tbody></table></div>
     </section>
