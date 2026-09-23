@@ -6,6 +6,12 @@ import { LogOut, TriangleAlert } from 'lucide-react';
 /**
  * A submit button that asks first, in a modal dialog.
  *
+ * ⚠️ GENERIC, AND THAT IS WHY IT LIVES IN components/ui RATHER THAN BESIDE THE SETTINGS PAGE THAT
+ * FIRST NEEDED IT. Two surfaces now ask "are you sure" before a destructive write — the sessions page
+ * (end a device) and the provider workspace (withdraw a service, remove a portfolio item, go offline)
+ * — and a second copy of an accessible confirmation dialog is how one of them quietly loses the ARIA
+ * wiring in a later edit.
+ *
  * WHY A NATIVE <dialog> RATHER THAN A HAND-ROLLED OVERLAY. `showModal()` gives the three things an
  * accessible confirmation needs and all three are easy to get subtly wrong by hand: the rest of the
  * page becomes inert (so a keyboard user cannot tab into the page behind the question), Escape
@@ -16,8 +22,8 @@ import { LogOut, TriangleAlert } from 'lucide-react';
  * explicitly here because assistive technology support for the implicit role is still uneven.
  *
  * THE CONFIRM BUTTON SUBMITS THE ENCLOSING FORM, not a server action of its own: `button.form` walks
- * the DOM, and the <dialog> is inside the same <form> as the trigger. So the hidden session id and
- * any other field the page put in the form travel with the confirmation.
+ * the DOM, and the <dialog> is inside the same <form> as the trigger. So the hidden ids and any other
+ * field the page put in the form travel with the confirmation.
  *
  * WITHOUT JAVASCRIPT the trigger is an ordinary submit button and the action runs unconfirmed. That
  * is a deliberate trade in favour of the flow still working: the alternative — rendering the trigger

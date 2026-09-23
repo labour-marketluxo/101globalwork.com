@@ -12,7 +12,7 @@ import {
   Tablet,
 } from 'lucide-react';
 import { BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
-import ConfirmSubmit from '@/components/settings/ConfirmSubmit';
+import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { formatRelativeTime } from '@/features/settings/device-label';
 import { revokeOtherSessionsAction, revokeSessionAction } from '@/features/settings/actions';
 import type { SessionRecord, SessionsSummary } from '@/features/settings/sessions';
