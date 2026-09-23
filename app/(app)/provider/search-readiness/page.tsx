@@ -1,62 +1,72 @@
 import type { Metadata } from 'next';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
+import {
+  PlatformReasons,
+  ReadinessChecklist,
+  ReadinessFacts,
+  ReadinessHeader,
+  ReadinessScore,
+} from '@/components/provider/ReadinessSections';
+import { WorkspaceNotice, WorkspaceSkeleton, WorkspaceUnavailable } from '@/components/provider/WorkspaceNotices';
+import { getProviderContext } from '@/features/provider-workspace/context';
+import { getProviderReadiness } from '@/features/provider-workspace/readiness';
+import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
 
-export const metadata: Metadata = { title: 'Search readiness', robots: { index: false, follow: false } };
-
-const reasonLabels: Record<string, string> = {
-  add_service: 'Add at least one active service.',
-  add_service_area: 'Add at least one active service area.',
-  improve_public_description: 'Add a useful public description of the work you do.',
-  provider_not_active: 'Complete onboarding before your provider profile can be active.',
+/**
+ * /provider/search-readiness — the discoverability dashboard.
+ *
+ * ⚠️ THIS PAGE REPLACES ONE THE AUDIT MARKED `Incorrect`, AND THE BUG IS WORTH NAMING SO IT IS NOT
+ * REINTRODUCED: the previous version read `supabase.from('providers').select(...).limit(1)` with no
+ * ownership filter, so an account with more than one provider profile saw another business's score and
+ * reasons list. Every read here goes through the workspace context, which resolves the provider from
+ * the signed-in account, and the score shown is that row's.
+ *
+ * ⚠️ IT NO LONGER RENDERS A SIGNED-OUT BRANCH. The layout guards the session, and a page inside an
+ * authenticated workspace that answers a signed-out request with a 200 and a sentence looks reachable
+ * when it is not. A signed-out visitor is sent to sign-in by the shell; a missing provider is sent to
+ * onboarding.
+ */
+export const metadata: Metadata = {
+  title: 'Search readiness',
+  description: 'Whether your provider profile is complete enough to be discovered.',
+  robots: { index: false, follow: false },
 };
 
 export default async function ProviderSearchReadinessPage() {
-  const supabase = await createSupabaseServerClient();
-  const { data: auth } = await supabase.auth.getUser();
-
-  if (!auth.user) {
-    return <section className="content-shell"><h1>Search readiness</h1><p>Sign in to view provider discoverability readiness.</p></section>;
-  }
-
-  const { data: providers } = await supabase.from('providers').select('id,display_name,status').limit(1);
-  const provider = providers?.[0];
-  if (!provider) {
-    return <section className="content-shell"><h1>Search readiness</h1><p>Create a provider profile before search readiness can be evaluated.</p></section>;
-  }
-
-  const { data: readiness } = await supabase
-    .from('provider_search_readiness')
-    .select('identity_score,service_score,location_score,trust_score,content_score,operations_score,total_score,readiness,reasons,evaluated_at')
-    .eq('provider_id', provider.id)
-    .maybeSingle();
+  const context = await getProviderContext();
+  const provider = context?.active ?? null;
+  if (!provider) redirect(PROVIDER_PATHS.onboarding);
 
   return (
-    <section className="content-shell">
-      <p className="eyebrow">Provider tools</p>
-      <h1>Search readiness</h1>
-      <p className="lede">This measures whether your profile is complete enough to participate in discovery. It does not promise or predict a search-engine ranking.</p>
+    <div className="grid gap-6">
+      <Suspense fallback={<WorkspaceSkeleton />}>
+        <ReadinessBody providerId={provider.id} />
+      </Suspense>
+    </div>
+  );
+}
 
-      {!readiness ? (
-        <div className="notice">Your readiness has not been evaluated yet. It will be recalculated when profile, service, location or trust information changes.</div>
-      ) : (
-        <>
-          <div className="score-card">
-            <strong>{readiness.total_score}/100</strong>
-            <span>{readiness.readiness.replace('_', ' ')}</span>
-          </div>
-          <dl className="readiness-grid">
-            <div><dt>Identity</dt><dd>{readiness.identity_score}</dd></div>
-            <div><dt>Services</dt><dd>{readiness.service_score}</dd></div>
-            <div><dt>Location</dt><dd>{readiness.location_score}</dd></div>
-            <div><dt>Trust</dt><dd>{readiness.trust_score}</dd></div>
-            <div><dt>Content</dt><dd>{readiness.content_score}</dd></div>
-            <div><dt>Operations</dt><dd>{readiness.operations_score}</dd></div>
-          </dl>
-          {Array.isArray(readiness.reasons) && readiness.reasons.length ? (
-            <div className="action-panel"><h2>Improve readiness</h2><ul>{readiness.reasons.map((reason: string) => <li key={reason}>{reasonLabels[reason] ?? reason}</li>)}</ul></div>
-          ) : null}
-        </>
-      )}
-    </section>
+async function ReadinessBody({ providerId }: { providerId: string }) {
+  const { data, unavailable } = await getProviderReadiness(providerId, new Date());
+  if (unavailable || !data) return <WorkspaceUnavailable what="Search readiness" />;
+
+  return (
+    <>
+      <ReadinessHeader data={data} />
+      <ReadinessScore data={data} />
+      {data.remaining === 0 ? (
+        <WorkspaceNotice tone="teal" role="status" title="Every item on this list is done.">
+          <p>
+            That means your profile is complete enough to be matched, and eligible to be indexed. It is
+            not a promise about where it appears in a search result — that ordering belongs to the search
+            engine, and this platform has no control over it.
+          </p>
+        </WorkspaceNotice>
+      ) : null}
+      <ReadinessChecklist data={data} />
+      <PlatformReasons data={data} />
+      <ReadinessFacts data={data} />
+    </>
   );
 }
