@@ -25,7 +25,8 @@ begin
   select id into v_reviewer_account from public.accounts where auth_user_id=v_reviewer_auth;
   insert into public.account_capabilities(account_id,capability) values(v_reviewer_account,'platform.verification.review');
   perform set_config('request.jwt.claim.sub',v_reviewer_auth::text,true);
-  perform public.review_provider_verification_command(v_verification,'verified','controlled test approval');
+  perform set_config('request.jwt.claim.aal','aal2',true);
+  perform public.decide_provider_verification_command(v_verification,'verified','document_matches_claim','Controlled test approval','identity-and-business-v1');
 
   perform set_config('request.jwt.claim.sub',v_provider_auth::text,true);
   perform public.publish_provider_profile_command(v_provider);

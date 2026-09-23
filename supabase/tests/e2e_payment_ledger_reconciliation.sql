@@ -23,7 +23,8 @@ begin
   select id into v_trust_role from public.platform_roles where role_key='trust_admin' and is_active;
   insert into public.platform_admin_memberships(account_id,role_id,status,reason) values(v_reviewer_account,v_trust_role,'active','rollback-safe financial integrity test');
   perform set_config('request.jwt.claim.sub',v_reviewer_auth::text,true);
-  perform public.review_provider_verification_command(v_verification,'verified','test');
+  perform set_config('request.jwt.claim.aal','aal2',true);
+  perform public.decide_provider_verification_command(v_verification,'verified','document_matches_claim','Ledger reconciliation test approval','identity-and-business-v1');
   insert into pay_result values('trust_admin_review',exists(select 1 from public.provider_verifications where id=v_verification and status='verified'),'canonical Trust Admin capability can perform review');
 
   perform set_config('request.jwt.claim.sub',v_provider_auth::text,true); perform public.publish_provider_profile_command(v_provider);
