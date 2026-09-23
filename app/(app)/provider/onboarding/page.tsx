@@ -1,184 +1,629 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { ArrowRight, CircleCheck } from 'lucide-react';
+import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
+import { EligibilityPanel, HelpPanel, OnboardingSteps, type OnboardingStep } from '@/components/provider/OnboardingSections';
+import { PendingButton } from '@/components/provider/ProviderControls';
+import { WorkspaceNotice } from '@/components/provider/WorkspaceNotices';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { addProviderAreaAction, addProviderServiceAction, createProviderAction, publishProviderProfileAction, submitVerificationAction, updateProviderProfileAction } from './actions';
+import { PROVIDER_PATHS, PROVIDER_FAILURE_COPY, providerFailureCode } from '@/features/provider-workspace/paths';
+import {
+  createProviderAction,
+  publishProfileAction,
+  setPrimaryAreaAction,
+  setPrimaryServiceAction,
+  submitVerificationAction,
+  updateProviderProfileAction,
+} from '@/features/provider-workspace/actions';
 
-export const metadata = { title: 'Provider onboarding', robots: { index: false, follow: false } };
-type Search = Promise<{ provider?: string; error?: string; success?: string; welcome?: string; signed_in?: string; new?: string; edit?: string }>;
+/**
+ * /provider/onboarding — the setup flow.
+ *
+ * ⚠️ THE FOUR STEPS ARE FOUR FACTS ABOUT THE RECORDS, NOT FOUR SCREENS. A wizard that advances on a
+ * "Continue" click tells a provider they are finished when they have typed a value the platform will
+ * refuse to publish on. The progress list here is derived from the same rows the publish command reads,
+ * so "3 of 4" means three things are actually true.
+ *
+ * ⚠️ NOTHING IS LOST BY LEAVING. Every step saves itself; "Save & exit" is a link back to the workspace,
+ * not a command, because there is no unsaved state to protect. The page says that where a visitor would
+ * expect a save button, because the alternative is somebody staying on a form they do not want to fill
+ * in out of fear of losing it.
+ *
+ * ⚠️ IT IS STILL A LONG SINGLE PAGE, DELIBERATELY. The brief asks for a step bar, not a wizard; a real
+ * multi-route wizard would mean four server round trips and four ways to lose a half-filled form. The
+ * steps are anchors into this document.
+ */
+export const metadata: Metadata = {
+  title: 'Provider setup',
+  description: 'Business info, services, coverage, verification and payouts.',
+  robots: { index: false, follow: false },
+};
+
+type SearchParams = Promise<{
+  provider?: string;
+  new?: string;
+  edit?: string;
+  welcome?: string;
+  signed_in?: string;
+  created?: string;
+  saved?: string;
+  published?: string;
+  failed?: string;
+}>;
+
 type OwnedProvider = { id: string; display_name: string; status: string };
 
-function nextActionLabel(value?: string | null) {
-  switch (value) {
-    case 'add_service': return 'Choose the service customers should hire you for.';
-    case 'add_service_area': return 'Choose where you can actually perform the work.';
-    case 'complete_public_profile': return 'Finish the public description, then save the profile.';
-    case 'submit_verification':
-    case 'start_verification': return 'Submit identity verification for review.';
-    default: return 'Finish the remaining requirement shown below.';
-  }
-}
-
-export default async function ProviderOnboardingPage({ searchParams }: { searchParams: Search }) {
+export default async function ProviderOnboardingPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/auth/sign-in?next=/provider/onboarding');
+  if (!user) redirect(`/auth/sign-in?next=${encodeURIComponent(PROVIDER_PATHS.onboarding)}`);
 
   const { data: account } = await supabase.from('accounts').select('id').eq('auth_user_id', user.id).maybeSingle();
   if (!account) redirect('/auth/sign-in?error=account_not_ready&next=/provider/onboarding');
 
   const [{ data: markets }, { data: services }, { data: locations }, { data: ownedProviderRows }] = await Promise.all([
-    supabase.from('public_market_catalog').select('*').order('display_name'),
-    supabase.from('public_service_catalog').select('*').order('display_name'),
-    supabase.from('public_location_catalog').select('*').order('display_name'),
+    supabase.from('public_market_catalog').select('market_id,display_name').order('display_name'),
+    supabase.from('public_service_catalog').select('service_entity_id,display_name').order('display_name'),
+    supabase.from('public_location_catalog').select('location_id,display_name').order('display_name'),
     supabase.from('providers').select('id,display_name,status').eq('owner_account_id', account.id).order('created_at'),
   ]);
   const ownedProviders = (ownedProviderRows ?? []) as OwnedProvider[];
 
+  // A single owned profile needs no chooser: go straight to it, and send a finished one to the workspace
+  // unless they explicitly asked to edit it.
   if (!params.provider && !params.new && ownedProviders.length === 1) {
     const onlyProvider = ownedProviders[0];
-    if (onlyProvider.status === 'active' && params.edit !== '1') redirect('/provider');
-    redirect(`/provider/onboarding?provider=${encodeURIComponent(onlyProvider.id)}${params.welcome ? '&welcome=1' : ''}${params.signed_in ? '&signed_in=1' : ''}${params.edit === '1' ? '&edit=1' : ''}`);
+    if (onlyProvider.status === 'active' && params.edit !== '1') redirect(PROVIDER_PATHS.today);
+    redirect(
+      `/provider/onboarding?provider=${encodeURIComponent(onlyProvider.id)}${params.created ? '&created=1' : ''}`,
+    );
   }
 
-  let provider = null, progress = null, verifications = null, profile = null, readiness = null, currentService = null, currentArea = null;
-  if (params.provider) {
-    if (!ownedProviders.some(item => item.id === params.provider)) {
-      if (ownedProviders.length) redirect(`/provider/onboarding?provider=${encodeURIComponent(ownedProviders[0].id)}&error=${encodeURIComponent('That provider profile is not available to this account.')}`);
-      redirect(`/provider/onboarding?error=${encodeURIComponent('That provider profile is not available to this account.')}`);
-    }
-    ({ data: provider } = await supabase.from('providers').select('id,display_name,status,public_description').eq('id', params.provider).maybeSingle());
-    ({ data: progress } = await supabase.from('provider_onboarding_progress').select('*').eq('provider_id', params.provider).maybeSingle());
-    ({ data: verifications } = await supabase.from('provider_verifications').select('id,kind,status,jurisdiction_code,reference_label,created_at,reviewed_at').eq('provider_id', params.provider).order('created_at', { ascending: false }));
-    ({ data: profile } = await supabase.from('provider_public_profiles').select('headline,public_description,years_experience,accepts_new_work,is_public,published_at').eq('provider_id', params.provider).maybeSingle());
-    ({ data: readiness } = await supabase.from('provider_search_readiness').select('total_score,readiness,reasons').eq('provider_id', params.provider).maybeSingle());
-    ({ data: currentService } = await supabase.from('provider_services').select('service_entity_id,is_primary').eq('provider_id', params.provider).eq('is_active', true).order('is_primary', { ascending: false }).limit(1).maybeSingle());
-    ({ data: currentArea } = await supabase.from('provider_service_areas').select('location_id,is_primary').eq('provider_id', params.provider).eq('is_active', true).order('is_primary', { ascending: false }).limit(1).maybeSingle());
-  }
-
-  if (profile?.is_public && params.edit !== '1') redirect('/provider');
-
-  const currentServiceName = services?.find(item => item.service_entity_id === currentService?.service_entity_id)?.display_name;
-  const currentAreaName = locations?.find(item => item.location_id === currentArea?.location_id)?.display_name;
-  const identityVerified = Boolean(verifications?.some(v => v.kind === 'identity' && v.status === 'verified'));
-  const identityPending = Boolean(verifications?.some(v => v.kind === 'identity' && v.status === 'pending'));
-  const description = String(profile?.public_description ?? provider?.public_description ?? '').trim();
-  const descriptionLength = description.length;
-  const descriptionRemaining = Math.max(0, 80 - descriptionLength);
-  const serviceComplete = Boolean(progress?.services_complete);
-  const areaComplete = Boolean(progress?.service_area_complete);
-  const profileComplete = Boolean(progress?.profile_complete);
-  const publicationChecks = [serviceComplete, areaComplete, profileComplete, identityVerified];
-  const publicationComplete = publicationChecks.filter(Boolean).length;
-  const setupComplete = serviceComplete && areaComplete && profileComplete;
-  const canPublish = Boolean(provider && identityVerified && setupComplete && !profile?.is_public);
-  const showCreateForm = !provider && (ownedProviders.length === 0 || params.new === '1');
-  const nextTarget = !serviceComplete ? '#service' : !areaComplete ? '#service-area' : !profileComplete ? '#public-profile' : !identityVerified ? '#verification' : '#publish';
-  const editingLiveProfile = Boolean(profile?.is_public && params.edit === '1');
-
-  return <section className="content-shell">
-    <p className="eyebrow">{editingLiveProfile ? 'Provider profile' : 'Provider setup'}</p>
-    <h1>{editingLiveProfile ? 'Edit your public profile' : 'Build your work profile'}</h1>
-    <p className="lede left">{editingLiveProfile ? 'Your accepted service and service area control marketplace matching. Changes here take effect on future eligibility, so keep them accurate.' : 'Finish only what is missing. Every requirement below maps directly to the backend rule that controls whether customers can discover you.'}</p>
-    {editingLiveProfile ? <p><Link className="secondary-link" href="/provider">← Back to provider workspace</Link></p> : null}
-    {params.welcome ? <p className="notice" role="status"><strong>Account created and signed in.</strong><br />Your account is ready. Continue with provider setup below.</p> : null}
-    {params.signed_in ? <p className="notice" role="status"><strong>Signed in successfully.</strong><br />You are continuing your provider setup.</p> : null}
-    {params.success ? <p className="notice" role="status">{params.success}</p> : null}
-    {params.error ? <p className="notice" role="alert">{params.error}</p> : null}
-
-    {!provider && ownedProviders.length > 1 && !params.new ? <section className="action-panel">
-      <h2>Choose a provider profile</h2>
-      <p>You already manage more than one provider identity. Continue the one you want to update.</p>
-      <div className="quote-list">{ownedProviders.map(item => <article className="quote-card" key={item.id}><div><strong>{item.display_name}</strong><br /><span className="hint">{item.status.replaceAll('_',' ')}</span></div><Link className="button-link" href={item.status === 'active' ? `/provider/onboarding?provider=${item.id}&edit=1` : `/provider/onboarding?provider=${item.id}`}>{item.status === 'active' ? 'Edit profile' : 'Continue setup'}</Link></article>)}</div>
-      <p className="hint"><Link href="/provider/onboarding?new=1">Create another provider identity</Link></p>
-    </section> : null}
-
-    {showCreateForm ? <form action={createProviderAction} className="stack-form action-panel">
-      <h2>1. Provider identity</h2>
-      <p className="hint">Create the public work identity attached to this account. The description requirement is enforced here so you do not discover a hidden blocker later.</p>
-      <label htmlFor="display_name">Public name</label><input id="display_name" name="display_name" required minLength={2} />
-      <label htmlFor="market_id">Primary market</label><select id="market_id" name="market_id" required defaultValue=""><option value="" disabled>Choose a market</option>{markets?.map(m => <option key={m.market_id} value={m.market_id}>{m.display_name}</option>)}</select>
-      <label htmlFor="slug">Profile URL name</label><input id="slug" name="slug" required minLength={3} placeholder="amina-tailoring" />
-      <label htmlFor="description">Describe the work you do</label><textarea id="description" name="description" rows={5} required minLength={80} aria-describedby="new-description-help" />
-      <p id="new-description-help" className="hint">At least 80 characters. Explain the work, the customer problem you solve and the kind of job you want to receive.</p>
-      <button type="submit">Create provider profile</button>
-    </form> : null}
-
-    {provider ? <>
-      <section className="provider-progress-card" aria-label="Provider publication status">
-        <div><span>Publish requirements</span><strong>{publicationComplete}/4</strong></div>
-        <div><span>Search readiness</span><strong>{readiness?.total_score ?? 0}/100</strong></div>
-        <div><span>Visibility</span><strong>{profile?.is_public ? 'Live' : 'Not live'}</strong></div>
-      </section>
-
-      {!profile?.is_public ? <section className="action-panel" aria-labelledby="publish-checklist-title">
-        <h2 id="publish-checklist-title">What is stopping publication?</h2>
-        <div className="admin-list">
-          <article><div><strong>{serviceComplete ? '✓ Service selected' : 'Service needed'}</strong><span>{currentServiceName ?? 'Choose the service customers can hire you for.'}</span></div><small><a href="#service">{serviceComplete ? 'Review or change' : 'Choose service'}</a></small></article>
-          <article><div><strong>{areaComplete ? '✓ Service area selected' : 'Service area needed'}</strong><span>{currentAreaName ?? 'Choose where you can actually perform the work.'}</span></div><small><a href="#service-area">{areaComplete ? 'Review or change' : 'Choose area'}</a></small></article>
-          <article><div><strong>{profileComplete ? '✓ Public profile complete' : 'Public description needs more detail'}</strong><span>{profileComplete ? `${descriptionLength} characters saved.` : `${descriptionLength}/80 characters saved — add at least ${descriptionRemaining} more.`}</span></div><small><a href="#public-profile">{profileComplete ? 'Review profile' : 'Finish description'}</a></small></article>
-          <article><div><strong>{identityVerified ? '✓ Identity verified' : identityPending ? 'Identity review in progress' : 'Identity verification needed'}</strong><span>{identityVerified ? 'Verification is complete and remains in your history.' : identityPending ? 'No action needed while the review is pending.' : 'Submit identity verification before publication.'}</span></div><small><a href="#verification">View verification</a></small></article>
-        </div>
-      </section> : null}
-
-      <div className="notice">
-        <strong>Next action</strong><br />
-        {profile?.is_public ? 'Your profile is live. Keep service, area and availability accurate.' : canPublish ? 'All four publication requirements are complete. Publish now.' : !profileComplete ? `Add at least ${descriptionRemaining} more characters to your public description and save it.` : identityPending ? 'Your setup is complete; identity review is the only remaining gate.' : nextActionLabel(progress?.next_action)}
-        {!profile?.is_public && !canPublish ? <><br /><a href={nextTarget}>Go to the required step ↓</a></> : null}
+  /** A provider the form names, but only when this account owns it. */
+  const providerId = params.provider && ownedProviders.some(item => item.id === params.provider) ? params.provider : null;
+  if (params.provider && !providerId) {
+    return (
+      <div className="grid gap-6">
+        <WorkspaceNotice tone="amber" role="alert" title="That provider profile is not available to this account.">
+          <p>
+            Nothing was changed. Open the workspace to see the profiles this account does own.
+          </p>
+          <p className="mt-1">
+            <Link href={PROVIDER_PATHS.today} className={LINK_ARROW}>
+              Back to the workspace
+            </Link>
+          </p>
+        </WorkspaceNotice>
       </div>
+    );
+  }
 
-      {canPublish ? <form action={publishProviderProfileAction} className="notice provider-ready-notice" id="publish-ready">
-        <input type="hidden" name="provider_id" value={provider.id} />
-        <strong>Ready to go live.</strong>
-        <p>Publishing changes provider state to active and allows matching when service, geography and market rules also match.</p>
-        <button type="submit">Publish and become discoverable</button>
-      </form> : null}
+  const setup = providerId ? await loadSetup(providerId) : null;
+  const provider = setup?.provider ?? null;
+  const profileRow = setup?.profile ?? null;
 
-      <form id="service" action={addProviderServiceAction} className="stack-form action-panel">
-        <h2>2. Service {serviceComplete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
-        <p className="hint">Current service: <strong>{currentServiceName ?? 'Not chosen'}</strong>. If this does not describe the work you sell, change it now; matching uses this exact service record.</p>
-        <label htmlFor="service_entity_id">What do you offer?</label><select id="service_entity_id" name="service_entity_id" required defaultValue={currentService?.service_entity_id ?? ''}><option value="" disabled>Choose a service</option>{services?.map(s => <option key={s.service_entity_id} value={s.service_entity_id}>{s.display_name}</option>)}</select>
-        <button type="submit">{serviceComplete ? 'Save service choice' : 'Add service'}</button>
-      </form>
+  // A published profile has nothing to set up. The workspace is where it is edited.
+  if (profileRow?.is_public && params.edit !== '1') redirect(PROVIDER_PATHS.today);
 
-      <form id="service-area" action={addProviderAreaAction} className="stack-form action-panel">
-        <h2>3. Service area {areaComplete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
-        <p className="hint">Current area: <strong>{currentAreaName ?? 'Not chosen'}</strong>. Matching uses this exact location record.</p>
-        <label htmlFor="location_id">Where can you work?</label><select id="location_id" name="location_id" required defaultValue={currentArea?.location_id ?? ''}><option value="" disabled>Choose an area</option>{locations?.map(l => <option key={l.location_id} value={l.location_id}>{l.display_name}</option>)}</select>
-        <button type="submit">{areaComplete ? 'Save service area' : 'Add service area'}</button>
-      </form>
+  const identityVerified = (setup?.verifications ?? []).some(row => row.kind === 'identity' && row.status === 'verified');
+  const identityPending = (setup?.verifications ?? []).some(row => row.kind === 'identity' && row.status === 'pending');
+  const description = String(profileRow?.public_description ?? provider?.public_description ?? '').trim();
+  const serviceComplete = Boolean(setup?.progress?.services_complete);
+  const areaComplete = Boolean(setup?.progress?.service_area_complete);
+  const businessComplete = Boolean(provider && provider.display_name.trim().length >= 2 && description.length >= 80);
+  const payoutComplete = Boolean(setup?.payout);
+  const readinessScore = Number(setup?.readiness?.total_score ?? 0);
+  const canPublish = Boolean(provider && identityVerified && serviceComplete && areaComplete && businessComplete && readinessScore >= 60 && !profileRow?.is_public);
+  const showCreateForm = !provider && (ownedProviders.length === 0 || params.new === '1');
+  const failure = providerFailureCode(params.failed);
 
-      <form id="public-profile" action={updateProviderProfileAction} className="stack-form action-panel">
-        <h2>4. Public profile {profileComplete ? '✓' : ''}</h2><input type="hidden" name="provider_id" value={provider.id} />
-        {!profileComplete ? <p className="notice" role="status"><strong>This is the current blocker.</strong><br />Your saved description is {descriptionLength}/80 characters. Add at least {descriptionRemaining} more characters, then save.</p> : null}
-        <label htmlFor="headline">Headline</label><input id="headline" name="headline" defaultValue={profile?.headline ?? ''} placeholder="Tailor and alterations specialist" />
-        <label htmlFor="description">Public description</label><textarea id="description" name="description" required minLength={80} rows={7} defaultValue={description} aria-describedby="description-help" />
-        <p id="description-help" className="hint">Minimum 80 characters. Current saved length: {descriptionLength}. A strong description explains the work you perform and the jobs you accept. The structured service area above is the authoritative geography used for matching.</p>
-        <label htmlFor="years_experience">Years of experience <span className="hint">(optional)</span></label><input id="years_experience" name="years_experience" type="number" min={0} max={80} defaultValue={profile?.years_experience ?? ''} />
-        <label><input name="accepts_new_work" type="checkbox" defaultChecked={profile?.accepts_new_work ?? true} /> Accepting new work</label>
-        <button type="submit">Save public profile and recheck readiness</button>
-      </form>
+  const steps: OnboardingStep[] = [
+    {
+      key: 'identity',
+      done: businessComplete,
+      detail: businessComplete
+        ? `Public name and a ${description.length}-character description saved.`
+        : 'A public name, a market and a description of at least 80 characters. This is the text customers read.',
+      href: provider ? '#profile' : '#create',
+      cta: businessComplete ? 'Review business info' : 'Fix missing item',
+    },
+    {
+      key: 'services',
+      done: serviceComplete && areaComplete,
+      detail:
+        serviceComplete && areaComplete
+          ? 'A service and a coverage area are both active — matching reads exactly these two records.'
+          : 'One service category and one coverage area. Without both, matching cannot reach you at all.',
+      href: '#services',
+      cta: serviceComplete && areaComplete ? 'Review services and coverage' : 'Fix missing item',
+    },
+    {
+      key: 'verification',
+      done: identityVerified,
+      detail: identityVerified
+        ? 'Identity verified. This is what publication depends on.'
+        : identityPending
+          ? 'In review. Nothing is needed from you while a reviewer reads it.'
+          : 'Identity checks are reviewed by hand. Submit it and keep going with the rest.',
+      href: '#verification',
+      cta: identityVerified ? 'View verification' : 'Fix missing item',
+    },
+    {
+      key: 'payout',
+      done: payoutComplete,
+      detail: payoutComplete
+        ? 'A verified payout destination is on file, so cleared money has somewhere to go.'
+        : 'Not required to publish. Required before any cleared money can be sent to you.',
+      href: PROVIDER_PATHS.payouts,
+      cta: payoutComplete ? 'View payout account' : 'Set up payouts',
+    },
+  ];
 
-      <section id="verification" className="action-panel">
-        <h2>5. Verification {identityVerified ? '✓' : ''}</h2>
-        {identityVerified ? <p className="hint">Identity verified. No further action is required for this publication gate.</p> : identityPending ? <p className="hint">Identity verification is in review. Do not submit the same check again while it is pending.</p> : <form action={submitVerificationAction} className="stack-form">
-          <input type="hidden" name="provider_id" value={provider.id} />
-          <label htmlFor="kind">Verification type</label><select id="kind" name="kind"><option value="identity">Identity</option><option value="business">Business</option><option value="address">Address</option><option value="credential">Credential</option><option value="insurance">Insurance</option><option value="licence">Licence</option></select>
-          <label htmlFor="jurisdiction_code">Jurisdiction</label><input id="jurisdiction_code" name="jurisdiction_code" placeholder="e.g. NG-FCT" />
-          <label htmlFor="reference_label">Reference label</label><input id="reference_label" name="reference_label" />
-          <button type="submit">Submit for review</button>
-        </form>}
-      </section>
+  return (
+    <div className="grid gap-6">
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Setup</p>
+          <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            Build your work profile
+          </h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
+            Four steps, in any order. Every step saves on its own — leaving the page loses nothing, so
+            fill in what you can and come back.
+          </p>
+        </div>
+        <div className="flex flex-col items-start gap-2">
+          <Link href={PROVIDER_PATHS.today} className={LINK_ARROW}>
+            Save &amp; exit to the workspace
+            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </Link>
+          {provider ? (
+            <Link href={PROVIDER_PATHS.profile} className={LINK_ARROW}>
+              Open the full profile editor
+              <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+            </Link>
+          ) : null}
+        </div>
+      </header>
 
-      {verifications?.length ? <section className="action-panel"><h2>Verification history</h2><ul>{verifications.map(v => <li key={v.id}>{v.kind}: <strong>{v.status}</strong>{v.reviewed_at ? ` · reviewed ${new Date(v.reviewed_at).toLocaleString()}` : ` · submitted ${new Date(v.created_at).toLocaleString()}`}</li>)}</ul></section> : null}
+      {failure ? (
+        <WorkspaceNotice tone="amber" role="alert" title="That step did not save.">
+          <p>{PROVIDER_FAILURE_COPY[failure]}</p>
+        </WorkspaceNotice>
+      ) : null}
+      {params.created ? (
+        <WorkspaceNotice tone="teal" role="status" title="Provider profile created.">
+          <p>Credentials and details below are saved against it from now on.</p>
+        </WorkspaceNotice>
+      ) : null}
+      {params.saved ? (
+        <WorkspaceNotice tone="teal" role="status" title="Saved.">
+          <p>The step is stored on the profile and the readiness score has been recalculated.</p>
+        </WorkspaceNotice>
+      ) : null}
+      {params.published === '1' ? (
+        <WorkspaceNotice tone="teal" role="status" title="Published.">
+          <p>You are in the marketplace. The workspace is where you run the day-to-day from here.</p>
+        </WorkspaceNotice>
+      ) : null}
+      {params.welcome || params.signed_in ? (
+        <WorkspaceNotice tone="slate" role="status">
+          <p>
+            {params.welcome ? 'Account created and signed in. ' : 'Signed in. '}
+            Provider setup is the next step, and nothing here needs to be finished in one sitting.
+          </p>
+        </WorkspaceNotice>
+      ) : null}
 
-      {!profile?.is_public ? <form id="publish" action={publishProviderProfileAction} className="action-panel">
-        <input type="hidden" name="provider_id" value={provider.id} />
-        <h2>6. Publish</h2>
-        {canPublish ? <p>All publication gates are satisfied. Search readiness will be recalculated after the provider becomes active.</p> : <p>Publication is locked because {4 - publicationComplete} of 4 required checks {4 - publicationComplete === 1 ? 'is' : 'are'} still incomplete.</p>}
-        <button type="submit" disabled={!canPublish}>{canPublish ? 'Publish provider profile' : `Complete ${4 - publicationComplete} remaining requirement${4 - publicationComplete === 1 ? '' : 's'}`}</button>
-        {!canPublish ? <p className="hint">Do not use the search-readiness score as the task list. The publication checklist above is the authoritative gate.</p> : null}
-      </form> : null}
-    </> : null}
-  </section>;
+      <OnboardingSteps steps={steps} />
+
+      {ownedProviders.length > 1 && !params.new ? (
+        <section className={`${CARD} p-5`} aria-labelledby="choose-provider-heading">
+          <h2 id="choose-provider-heading" className="text-sm font-bold tracking-tight text-slate-900">
+            Which profile are you setting up?
+          </h2>
+          <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+            This account owns more than one provider identity. Each has its own services, verification and
+            payouts.
+          </p>
+          <ul className="mt-3 grid gap-2">
+            {ownedProviders.map(item => (
+              <li key={item.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-solid border-slate-200 p-3">
+                <span className="text-sm font-semibold text-slate-800">
+                  {item.display_name}
+                  <span className="ml-2 align-middle">
+                    <span className={item.status === 'active' ? BADGE_SLATE : BADGE_AMBER}>{item.status}</span>
+                  </span>
+                </span>
+                <Link
+                  href={item.status === 'active' ? `${PROVIDER_PATHS.onboarding}?provider=${item.id}&edit=1` : `${PROVIDER_PATHS.onboarding}?provider=${item.id}`}
+                  className={LINK_ARROW}
+                >
+                  {item.status === 'active' ? 'Edit it' : 'Continue setup'}
+                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3">
+            <Link href={`${PROVIDER_PATHS.onboarding}?new=1`} className={LINK_ARROW}>
+              Create another provider identity
+            </Link>
+          </p>
+        </section>
+      ) : null}
+
+      {showCreateForm ? (
+        <form id="create" action={createProviderAction} className={`${CARD} grid gap-4 p-5`}>
+          <input type="hidden" name="next" value={PROVIDER_PATHS.onboarding} />
+          <div>
+            <h2 className="text-sm font-bold tracking-tight text-slate-900">1. Business info</h2>
+            <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+              The public identity customers will see. The description requirement is enforced here, so you
+              do not discover a hidden blocker three steps later.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="display_name" className={LABEL}>
+                Public name
+              </label>
+              <input id="display_name" name="display_name" required minLength={2} className={FIELD} />
+            </div>
+            <div>
+              <label htmlFor="slug" className={LABEL}>
+                Profile URL name
+              </label>
+              <input id="slug" name="slug" required minLength={3} placeholder="amina-tailoring" className={FIELD} />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="market_id" className={LABEL}>
+              Primary market
+            </label>
+            <select id="market_id" name="market_id" required defaultValue="" className={FIELD}>
+              <option value="" disabled>
+                Choose a market
+              </option>
+              {(markets ?? []).map(market => (
+                <option key={market.market_id} value={market.market_id}>
+                  {market.display_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="description" className={LABEL}>
+              Describe the work you do
+            </label>
+            <textarea id="description" name="description" rows={5} required minLength={80} aria-describedby="new-description-help" className={FIELD} />
+            <p id="new-description-help" className="mt-1.5 text-xs leading-relaxed text-slate-500">
+              At least 80 characters: the work, the customer problem you solve, and the kind of job you
+              want to receive.
+            </p>
+          </div>
+          <div className="border-t border-solid border-slate-200 pt-4">
+            <PendingButton
+              idle="Create provider profile"
+              pending="Creating…"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+            />
+          </div>
+        </form>
+      ) : null}
+
+      {provider ? (
+        <>
+          <section className={`${CARD} p-5`} aria-labelledby="publish-status-heading">
+            <h2 id="publish-status-heading" className="text-sm font-bold tracking-tight text-slate-900">
+              Publication status
+            </h2>
+            <dl className="mt-3 grid gap-3 sm:grid-cols-3">
+              <div>
+                <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Visibility</dt>
+                <dd className="mt-0.5 text-sm font-bold text-slate-900">{profileRow?.is_public ? 'Published' : 'Not published'}</dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Readiness</dt>
+                <dd className="mt-0.5 text-sm font-bold text-slate-900">{readinessScore}/100</dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Checklist</dt>
+                <dd className="mt-0.5 text-sm font-bold text-slate-900">
+                  {steps.slice(0, 3).filter(step => step.done).length}/3 required
+                </dd>
+              </div>
+            </dl>
+            <p className="mt-3 text-xs leading-relaxed text-slate-600">
+              Publication requires identity verification, an active service, an active area, a description
+              of 80 characters or more, and a readiness score of at least 60. The payout account is step
+              four and is not part of that gate.
+            </p>
+            <div className="mt-4 border-t border-solid border-slate-200 pt-4">
+              {profileRow?.is_public ? (
+                <Link href={PROVIDER_PATHS.today} className={LINK_ARROW}>
+                  Go to the workspace
+                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                </Link>
+              ) : (
+                <form action={publishProfileAction}>
+                  <input type="hidden" name="provider_id" value={provider.id} />
+                  {/* Publishing from setup lands on the workspace, which is where the provider now works
+                      from — not back on a setup page they have finished with. */}
+                  <input type="hidden" name="next" value={PROVIDER_PATHS.today} />
+                  <PendingButton
+                    idle={canPublish ? 'Publish and go live' : 'Publish (requirements open)'}
+                    pending="Publishing…"
+                    className={`inline-flex items-center gap-2 rounded-lg border-0 px-5 py-2.5 font-mono text-xs font-bold tracking-wide uppercase shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-70 ${
+                      canPublish ? 'bg-secondary text-white hover:bg-secondary-dark' : 'bg-slate-300 text-slate-600'
+                    }`}
+                  />
+                </form>
+              )}
+            </div>
+          </section>
+
+          <form id="profile" action={updateProviderProfileAction} className={`${CARD} grid gap-4 p-5`}>
+            <input type="hidden" name="provider_id" value={provider.id} />
+            <input type="hidden" name="next" value={`${PROVIDER_PATHS.onboarding}?provider=${provider.id}`} />
+            <div>
+              <h2 className="text-sm font-bold tracking-tight text-slate-900">Business info</h2>
+              <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+                The description is the part customers read. Hours, languages and a coverage radius are in
+                the full profile editor.
+              </p>
+            </div>
+            <div>
+              <label htmlFor="headline" className={LABEL}>
+                Headline
+              </label>
+              <input
+                id="headline"
+                name="headline"
+                defaultValue={profileRow?.headline ?? ''}
+                placeholder="Tailor and alterations specialist"
+                className={FIELD}
+              />
+            </div>
+            <div>
+              <label htmlFor="description" className={LABEL}>
+                Public description
+              </label>
+              <textarea id="description" name="description" rows={6} required minLength={80} defaultValue={description} aria-describedby="description-help" className={FIELD} />
+              <p id="description-help" className="mt-1.5 text-xs leading-relaxed text-slate-500">
+                {description.length} characters saved. Minimum 80; the platform scores 120 as complete.
+              </p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="years_experience" className={LABEL}>
+                  Years of experience (optional)
+                </label>
+                <input
+                  id="years_experience"
+                  name="years_experience"
+                  type="number"
+                  min={0}
+                  max={80}
+                  defaultValue={profileRow?.years_experience ?? ''}
+                  className={FIELD}
+                />
+              </div>
+              <label className="mt-6 flex items-center gap-2 text-sm text-slate-700">
+                <input name="accepts_new_work" type="checkbox" defaultChecked={profileRow?.accepts_new_work ?? true} />
+                Accepting new work
+              </label>
+            </div>
+            <div className="border-t border-solid border-slate-200 pt-4">
+              <PendingButton
+                idle="Save business info"
+                pending="Saving…"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              />
+            </div>
+          </form>
+
+          <div id="services" className="grid gap-4 sm:grid-cols-2">
+            <form action={setPrimaryServiceAction} className={`${CARD} grid gap-3 p-5`}>
+              <input type="hidden" name="provider_id" value={provider.id} />
+              <input type="hidden" name="next" value={`${PROVIDER_PATHS.onboarding}?provider=${provider.id}`} />
+              <h2 className="text-sm font-bold tracking-tight text-slate-900">Services and coverage</h2>
+              <p className="text-xs leading-relaxed text-slate-600">
+                The service customers can hire you for. Matching reads this exact record. More than one
+                category can be added in the full profile editor.
+              </p>
+              <div>
+                <label htmlFor="service_entity_id" className={LABEL}>
+                  What do you offer?
+                </label>
+                <select id="service_entity_id" name="service_entity_id" required defaultValue={setup?.currentService?.service_entity_id ?? ''} className={FIELD}>
+                  <option value="" disabled>
+                    Choose a service
+                  </option>
+                  {(services ?? []).map(service => (
+                    <option key={service.service_entity_id} value={service.service_entity_id}>
+                      {service.display_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {serviceComplete ? (
+                <p className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+                  <CircleCheck aria-hidden="true" className="h-3.5 w-3.5" />
+                  Service selected
+                </p>
+              ) : null}
+              <div>
+                <PendingButton
+                  idle={serviceComplete ? 'Save service choice' : 'Add service'}
+                  pending="Saving…"
+                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                />
+              </div>
+            </form>
+
+            <form action={setPrimaryAreaAction} className={`${CARD} grid gap-3 p-5`}>
+              <input type="hidden" name="provider_id" value={provider.id} />
+              <input type="hidden" name="next" value={`${PROVIDER_PATHS.onboarding}?provider=${provider.id}`} />
+              <h2 className="text-sm font-bold tracking-tight text-slate-900">Coverage</h2>
+              <p className="text-xs leading-relaxed text-slate-600">
+                Where you can actually perform the work. The platform matches area to area — it holds no
+                street address for you or for the customer.
+              </p>
+              <div>
+                <label htmlFor="location_id" className={LABEL}>
+                  Where can you work?
+                </label>
+                <select id="location_id" name="location_id" required defaultValue={setup?.currentArea?.location_id ?? ''} className={FIELD}>
+                  <option value="" disabled>
+                    Choose an area
+                  </option>
+                  {(locations ?? []).map(location => (
+                    <option key={location.location_id} value={location.location_id}>
+                      {location.display_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {areaComplete ? (
+                <p className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+                  <CircleCheck aria-hidden="true" className="h-3.5 w-3.5" />
+                  Area selected
+                </p>
+              ) : null}
+              <div>
+                <PendingButton
+                  idle={areaComplete ? 'Save coverage' : 'Add coverage'}
+                  pending="Saving…"
+                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                />
+              </div>
+            </form>
+          </div>
+
+          {!identityVerified && !identityPending ? (
+            <form id="verification" action={submitVerificationAction} className={`${CARD} grid gap-4 p-5`}>
+              <input type="hidden" name="provider_id" value={provider.id} />
+              <input type="hidden" name="kind" value="identity" />
+              <input type="hidden" name="next" value={`${PROVIDER_PATHS.onboarding}?provider=${provider.id}`} />
+              <div>
+                <h2 className="text-sm font-bold tracking-tight text-slate-900">Identity verification</h2>
+                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+                  Reviewed by hand. It is the one requirement publication cannot proceed without, and it
+                  can be submitted at any point in setup.
+                </p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="jurisdiction_code" className={LABEL}>
+                    Jurisdiction (optional)
+                  </label>
+                  <input id="jurisdiction_code" name="jurisdiction_code" placeholder="e.g. NG-LA" className={FIELD} />
+                </div>
+                <div>
+                  <label htmlFor="reference_label" className={LABEL}>
+                    Reference you have (optional)
+                  </label>
+                  <input id="reference_label" name="reference_label" className={FIELD} />
+                </div>
+              </div>
+              <div className="border-t border-solid border-slate-200 pt-4">
+                <PendingButton
+                  idle="Submit identity for review"
+                  pending="Submitting…"
+                  className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                />
+              </div>
+            </form>
+          ) : (
+            <section id="verification" className={`${CARD} p-5`}>
+              <h2 className="text-sm font-bold tracking-tight text-slate-900">Identity verification</h2>
+              <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+                {identityVerified
+                  ? 'Verified. Publication is not blocked by verification any more.'
+                  : 'In review. Nothing is needed from you while a reviewer reads it — keep setting the rest up.'}
+              </p>
+              <p className="mt-3">
+                <Link href={PROVIDER_PATHS.verification} className={LINK_ARROW}>
+                  Open the verification centre
+                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                </Link>
+              </p>
+            </section>
+          )}
+        </>
+      ) : null}
+
+      <EligibilityPanel />
+      <HelpPanel providerName={provider?.display_name ?? null} />
+    </div>
+  );
+}
+
+/**
+ * The eight reads the setup page needs, in one pass.
+ *
+ * ⚠️ A NAMED FUNCTION RATHER THAN EIGHT DESTRUCTURED RESULTS AT THE TOP OF THE PAGE, because the page
+ * also has to cope with "there is no provider yet": threading eight nullable variables through the JSX
+ * is how a page like this grows a `?.` on every field, and eventually on the wrong one.
+ */
+async function loadSetup(providerId: string) {
+  const supabase = await createSupabaseServerClient();
+  const [provider, progress, verifications, profile, readiness, currentService, currentArea, payout] = await Promise.all([
+    supabase.from('providers').select('id,display_name,status,public_description,primary_market_id').eq('id', providerId).maybeSingle(),
+    supabase
+      .from('provider_onboarding_progress')
+      .select('services_complete,service_area_complete,profile_complete,completion_percent,next_action,updated_at')
+      .eq('provider_id', providerId)
+      .maybeSingle(),
+    supabase
+      .from('provider_verifications')
+      .select('id,kind,status,created_at,reviewed_at')
+      .eq('provider_id', providerId)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('provider_public_profiles')
+      .select('slug,headline,public_description,years_experience,accepts_new_work,is_public,published_at')
+      .eq('provider_id', providerId)
+      .maybeSingle(),
+    supabase.from('provider_search_readiness').select('total_score,readiness').eq('provider_id', providerId).maybeSingle(),
+    // The current primary choice, so a provider editing later sees what is selected rather than an
+    // empty dropdown that looks like nothing was ever chosen.
+    supabase
+      .from('provider_services')
+      .select('service_entity_id')
+      .eq('provider_id', providerId)
+      .eq('is_active', true)
+      .order('is_primary', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('provider_service_areas')
+      .select('location_id')
+      .eq('provider_id', providerId)
+      .eq('is_active', true)
+      .order('is_primary', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('provider_payout_destinations')
+      .select('id,verification_status')
+      .eq('provider_id', providerId)
+      .eq('verification_status', 'verified')
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
+  return {
+    provider: provider.data,
+    progress: progress.data,
+    verifications: verifications.data ?? [],
+    profile: profile.data,
+    readiness: readiness.data,
+    currentService: currentService.data,
+    currentArea: currentArea.data,
+    payout: payout.data,
+  };
 }
