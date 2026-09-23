@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, BadgeCheck, Download, FileText, FileWarning, Lock } from 'lucide-react';
 import { ExpirationTimer } from '@/components/customer/ExpirationTimer';
+import QuoteMessages from '@/components/quotes/QuoteMessages';
 import {
   ChangeRequestList,
   DecisionNotice,
@@ -15,6 +16,7 @@ import { expiryState } from '@/features/customer/expiry';
 import { formatMoney, groupQuotes, lineItemSubtotal, quoteActionability } from '@/features/customer/quotes';
 import { getChangeRequests } from '@/features/customer/quotes';
 import { getCustomerRequestDetail } from '@/features/customer/requests';
+import { getProviderMessages } from '@/features/quotes/messages';
 
 export const metadata = {
   title: 'Quote',
@@ -66,6 +68,8 @@ export default async function QuoteDetailPage({
   if (!group) notFound();
 
   const changes = (await getChangeRequests(requestId)).filter(change => change.quoteId === quoteId);
+  /** Both halves of the conversation: the provider's messages here, the customer's own questions below. */
+  const providerMessages = await getProviderMessages(requestId, quoteId);
   const actions = quoteActionability(quote, {
     requestState: request.state,
     hasActiveAssignment: Boolean(request.assignment),
@@ -295,6 +299,14 @@ export default async function QuoteDetailPage({
           </section>
 
           <VersionHistory versions={group.versions} currentQuoteId={quote.quoteId} requestId={requestId} />
+
+          {/* The provider's own messages. The customer's questions are the list below — two directions of one
+              conversation, rendered beside each other so neither side is talking into a void. */}
+          <QuoteMessages
+            messages={providerMessages}
+            providerName={group.providerName}
+            emptyNote="The provider has not sent a message about this request yet. Their questions and yours appear here if they do."
+          />
 
           <ChangeRequestList changes={changes} requestId={requestId} quoteId={quoteId} />
         </div>

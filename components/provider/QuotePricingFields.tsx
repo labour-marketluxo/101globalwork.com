@@ -21,6 +21,25 @@ import { FIELD, LABEL } from '@/components/discovery/tokens';
 type Row = { key: number };
 
 /**
+ * The rows every new quote starts with.
+ *
+ * ⚠️ PREFILLED LABELS, NOT PREFILLED PRICES, AND NOT FIXED CATEGORIES. The brief lists the parts of a job a
+ * quote usually breaks into — labour, travel, inspection, materials, equipment, subcontractors — and an empty
+ * box labelled "e.g. Labour" is where a provider either types something worse or leaves the price
+ * un-itemised. The labels are defaults a provider can rename or delete, because a row the schema cannot
+ * remove is a row that eventually describes the wrong job. `taxes_and_fees` and `exclusions` are not rows:
+ * the platform stores them as their own fields, which is why they are absent from this list.
+ */
+export const SUGGESTED_LINE_LABELS = [
+  'Labour',
+  'Travel and call-out',
+  'Inspection',
+  'Materials',
+  'Equipment hire',
+  'Subcontractors',
+] as const;
+
+/**
  * Row identity lives in a ref, not in module scope.
  *
  * ⚠️ A MODULE-LEVEL COUNTER IS SHARED BY EVERY REQUEST the server handles, so the keys a page renders would
@@ -32,6 +51,14 @@ function makeKeys(start: number, count: number): Row[] {
   return Array.from({ length: count }, (_, index) => ({ key: start + index }));
 }
 
+export type SeedRow = { label: string; amount: string };
+
+/** `undefined` or an empty list means "one blank row", which is what a form needs to be usable. */
+function seedRows(values: readonly SeedRow[] | undefined, start: number): { rows: Row[]; values: SeedRow[] } {
+  const list = values && values.length > 0 ? values.map(value => ({ ...value })) : [{ label: '', amount: '' }];
+  return { rows: makeKeys(start, list.length), values: list };
+}
+
 function toMinor(value: string): number | null {
   const trimmed = value.trim();
   if (!trimmed) return 0;
@@ -40,14 +67,40 @@ function toMinor(value: string): number | null {
   return Math.round(major * 100);
 }
 
-export function QuotePricingFields({ currency }: { currency: string }) {
+export function QuotePricingFields({
+  currency,
+  initialLines,
+  initialAddons,
+  initialTaxes,
+}: {
+  currency: string;
+  /** Rows to open with. Defaults to the suggested line labels; a draft or a revision passes what it has. */
+  initialLines?: readonly SeedRow[];
+  initialAddons?: readonly SeedRow[];
+  initialTaxes?: string;
+}) {
+  /**
+   * ⚠️ THE INITIAL ROWS ARE SEEDED ONCE, NOT COMPUTED FROM A COUNTER. Keys live in a ref so the first
+   * server paint and the first client paint produce the same list — a module-level counter would make the
+   * keys depend on how many other pages the server had rendered.
+   */
+  const seedLines = seedRows(
+    initialLines ?? SUGGESTED_LINE_LABELS.map(label => ({ label, amount: '' as const })),
+    1,
+  );
+  const seedAddons = seedRows(initialAddons, 101);
+
   // Two counters, one per list, so a key is unique in the whole form and not only within its list.
-  const nextLineKey = useRef(4);
-  const nextAddonKey = useRef(102);
-  const [lines, setLines] = useState<Row[]>(() => makeKeys(1, 3));
-  const [addons, setAddons] = useState<Row[]>(() => makeKeys(101, 1));
-  const [minorTotal, setMinorTotal] = useState(0);
-  const [minorTaxes, setMinorTaxes] = useState(0);
+  const nextLineKey = useRef(1 + seedLines.rows.length);
+  const nextAddonKey = useRef(101 + seedAddons.rows.length);
+  const [lines, setLines] = useState<Row[]>(() => seedLines.rows);
+  const [addons, setAddons] = useState<Row[]>(() => seedAddons.rows);
+  // Seeded from the rows above rather than from zero: a resumed draft or a revision opens with a total
+  // that matches the figures on screen, and only diverges from it once somebody edits a field.
+  const [minorTotal, setMinorTotal] = useState(
+    () => seedLines.values.reduce((sum, row) => sum + (toMinor(row.amount) ?? 0), 0),
+  );
+  const [minorTaxes, setMinorTaxes] = useState(() => toMinor(initialTaxes ?? '0') ?? 0);
 
   const addRow = (
     setter: React.Dispatch<React.SetStateAction<Row[]>>,
@@ -102,6 +155,7 @@ export function QuotePricingFields({ currency }: { currency: string }) {
                 name="line_item_label"
                 type="text"
                 maxLength={200}
+                defaultValue={seedLines.values[index]?.label ?? ''}
                 placeholder={index === 0 ? 'e.g. Labour, two hours' : 'e.g. Replacement washer'}
                 className={FIELD}
               />
@@ -115,6 +169,7 @@ export function QuotePricingFields({ currency }: { currency: string }) {
                 min="0"
                 step="0.01"
                 inputMode="decimal"
+                defaultValue={seedLines.values[index]?.amount ?? ''}
                 placeholder="0.00"
                 className={`${FIELD} w-32 shrink-0`}
               />
@@ -153,7 +208,7 @@ export function QuotePricingFields({ currency }: { currency: string }) {
             min="0"
             step="0.01"
             inputMode="decimal"
-            defaultValue="0"
+            defaultValue={initialTaxes ?? '0'}
             className={FIELD}
           />
           <p className="mt-1.5 text-xs text-slate-500">
@@ -190,6 +245,7 @@ export function QuotePricingFields({ currency }: { currency: string }) {
                 name="addon_label"
                 type="text"
                 maxLength={200}
+                defaultValue={seedAddons.values[index]?.label ?? ''}
                 placeholder="e.g. Replace the trap as well"
                 className={FIELD}
               />
@@ -203,6 +259,7 @@ export function QuotePricingFields({ currency }: { currency: string }) {
                 min="0"
                 step="0.01"
                 inputMode="decimal"
+                defaultValue={seedAddons.values[index]?.amount ?? ''}
                 placeholder="0.00"
                 className={`${FIELD} w-32 shrink-0`}
               />
