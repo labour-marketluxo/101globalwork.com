@@ -69,6 +69,14 @@ export default async function ProjectCompletionPage({
         <Link href={`/customer/projects/${agreement.assignmentId}/agreement`} className={LINK_ARROW}>
           The agreement
         </Link>
+        {/* The shared workspace, from the customer's side: the same assignment as the plan and the conversation
+            both parties can see. */}
+        <span className="text-slate-300" aria-hidden="true">
+          /
+        </span>
+        <Link href={`/projects/${agreement.assignmentId}`} className={LINK_ARROW}>
+          Shared project view
+        </Link>
         {agreement.obligation ? (
           <>
             <span className="text-slate-300" aria-hidden="true">
