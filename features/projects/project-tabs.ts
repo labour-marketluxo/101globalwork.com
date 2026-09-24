@@ -15,5 +15,6 @@ export const PROJECT_TABS = [
   { key: 'timeline', label: 'Timeline', href: (id: string) => `/projects/${id}/timeline` },
   { key: 'documents', label: 'Documents', href: (id: string) => `/projects/${id}/documents` },
   { key: 'changes', label: 'Changes', href: (id: string) => `/projects/${id}/changes` },
+  { key: 'orders', label: 'Goods', href: (id: string) => `/projects/${id}/orders` },
   { key: 'milestones', label: 'Milestones', href: (id: string) => `/projects/${id}/milestones` },
 ] as const;
