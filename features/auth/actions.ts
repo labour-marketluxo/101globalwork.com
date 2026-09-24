@@ -315,19 +315,6 @@ export async function requestPasswordResetAction(formData: FormData) {
   redirect(hrefWith(AUTH_PATHS.recovery, { sent: '1' }));
 }
 
-export async function updatePasswordAction(formData: FormData) {
-  const password = String(formData.get('password') ?? '');
-  const confirm = String(formData.get('confirm_password') ?? '');
-  if (password.length < 10 || password !== confirm) redirect(`/account/update-password?error=${encodeURIComponent('Passwords must match and contain at least 10 characters.')}`);
-
-  const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(hrefWith(AUTH_PATHS.signIn, { next: '/account/update-password' }));
-  const { error } = await supabase.auth.updateUser({ password });
-  if (error) redirect(`/account/update-password?error=${encodeURIComponent('Password could not be updated. Please request a new recovery link.')}`);
-  redirect('/?password_updated=1');
-}
-
 export async function signOutAction() {
   const supabase = await createSupabaseServerClient();
   await supabase.auth.signOut({ scope: 'local' });

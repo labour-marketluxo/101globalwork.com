@@ -6,51 +6,54 @@
  * server client, which cannot cross into a client bundle.
  */
 
+export const PROFILE_PATH = '/settings/profile';
+export const SECURITY_PATH = '/settings/security';
+export const NOTIFICATION_SETTINGS_PATH = '/settings/notifications';
 export const SESSIONS_PATH = '/settings/security/sessions';
+/** The account's two inboxes. Named here because several surfaces link to them. */
+export const NOTIFICATIONS_PATH = '/notifications';
+export const MESSAGES_PATH = '/messages';
 
 export type SettingsTab = {
   label: string;
-  /** Null when the area does not exist yet — rendered as a non-interactive tab with a reason. */
-  href: string | null;
-  /** Shown as a tooltip and to screen readers. Required when href is null. */
-  note?: string;
+  href: string;
+  /** Read out to a screen reader; the bar itself shows only the label. */
+  description: string;
 };
 
 /**
- * ⚠️ THE BRIEF ASKED FOR [ Profile | Account | Security & Sessions | Notifications ], AND THIS
- * PLATFORM DOES NOT HAVE THAT INFORMATION ARCHITECTURE. Rather than rename two real pages into tabs
- * that misdescribe them, the bar lists the three settings surfaces that exist and the two the brief
- * names that do not. The unavailable pair are rendered as non-interactive tabs carrying the reason,
- * for the same purpose as the disabled "Manage a team" card on /onboarding: a visitor who was told
- * to look for a setting can see it is genuinely not there, instead of hunting for a control that
- * silently never appears.
+ * The three account settings surfaces, and only those three.
  *
- * The two that DO exist point at the account pages that already own them. Two-factor enrolment and
- * password change are not duplicated into /settings — a second copy of a security form is how two
- * copies of a security policy start disagreeing.
+ * ⚠️ THE BAR USED TO LIST TWO DEAD TABS AND TWO PAGES THAT LIVE SOMEWHERE ELSE. "Profile" and
+ * "Notifications" were rendered as disabled text carrying the reason there was nothing to configure
+ * yet, and "Two-factor" and "Password" pointed out to /account/*. Both halves of that are gone: profile
+ * and notification preferences are real pages now, so the security hub links out to the enrolment and
+ * password pages instead of the tab bar doing it — a tab bar whose third entry leaves the settings area
+ * is a tab bar people stop trusting to stay put.
+ *
+ * ⚠️ "SESSIONS" IS DELIBERATELY ABSENT. Active sessions are one section of the security hub and one
+ * click from it; promoting them to a sibling tab would say they are a different subject from the
+ * account's protection, which is the mistake the old bar made.
  */
 export const SETTINGS_TABS: readonly SettingsTab[] = [
-  { label: 'Security & sessions', href: SESSIONS_PATH },
-  { label: 'Two-factor', href: '/account/security' },
-  { label: 'Password', href: '/account/update-password' },
   {
     label: 'Profile',
-    href: null,
-    note: 'There is no profile editor. The account holds a display name and no page edits it yet.',
+    href: PROFILE_PATH,
+    description: 'Your name, contacts, language, timezone and the workspaces you can switch between.',
+  },
+  {
+    label: 'Security',
+    href: SECURITY_PATH,
+    description: 'Password, two-factor authentication, recovery and the devices signed in.',
   },
   {
     label: 'Notifications',
-    href: null,
-    note: 'There are no notification preferences to set: the platform sends no email of its own yet, so there is nothing to switch off.',
+    href: NOTIFICATION_SETTINGS_PATH,
+    description: 'Which events reach you, and on which channel.',
   },
 ];
 
-/**
- * Failure codes that may appear in `?failed=` on the sessions page.
- *
- * A fixed vocabulary for the same reason the sign-in page has one: the parameter is user-editable,
- * and rendering whatever it contains inside a card is how a page becomes a phishing surface.
- */
+/** Failure codes that may appear in `?failed=` on the sessions page. */
 export const SESSION_FAILURE_CODES = ['not_authorized', 'bad_request', 'unavailable'] as const;
 export type SessionFailureCode = (typeof SESSION_FAILURE_CODES)[number];
 

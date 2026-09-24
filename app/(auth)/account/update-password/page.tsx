@@ -1,25 +1,19 @@
 import { redirect } from 'next/navigation';
-import { updatePasswordAction } from '@/features/auth/actions';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { SECURITY_PATH } from '@/features/settings/paths';
 
-export const metadata = { title: 'Choose new password', robots: { index: false, follow: false } };
-
-export default async function UpdatePasswordPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
-  const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/auth/sign-in?next=/account/update-password');
-  const { error } = await searchParams;
-
-  return <section className="content-shell auth-shell">
-    <p className="eyebrow">Account security</p>
-    <h1>Choose a new password</h1>
-    {error ? <p className="notice" role="alert">{error}</p> : null}
-    <form action={updatePasswordAction} className="stack-form">
-      <label htmlFor="password">New password</label>
-      <input id="password" name="password" type="password" minLength={10} required autoComplete="new-password" />
-      <label htmlFor="confirm_password">Confirm new password</label>
-      <input id="confirm_password" name="confirm_password" type="password" minLength={10} required autoComplete="new-password" />
-      <button type="submit">Update password</button>
-    </form>
-  </section>;
+/**
+ * /account/update-password now redirects to the security hub.
+ *
+ * ⚠️ THIS IS A CONSOLIDATION, NOT A RENAME. The password form used to live here and nowhere else, and it was
+ * the one way to change a password — with no step-up check at all, because the authentication provider's own
+ * password update has none. The security hub's form posts to an action that refuses an aal1 session on an
+ * account that has a factor, and two password forms would be two different policies for the same operation,
+ * with the weaker one reachable from the browser history of anybody who used it before.
+ *
+ * The path stays alive rather than 404ing: it is in bookmarks, it was linked from the old settings tab bar, and
+ * `?error=` parameters reference it in older email copy. A redirect costs nothing and a broken link at a
+ * security page is the wrong place to save four lines.
+ */
+export default function UpdatePasswordPage() {
+  redirect(SECURITY_PATH);
 }

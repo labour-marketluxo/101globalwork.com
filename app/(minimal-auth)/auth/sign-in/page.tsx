@@ -75,9 +75,10 @@ type SearchParams = Promise<{
   next?: string;
   redirect?: string;
   /**
-   * A reason for arriving here, as opposed to an error. Currently only one: `session_revoked`, set by
-   * the settings page when somebody ends the session they were holding. It is a separate parameter
-   * from `error` because nothing went wrong — the visitor asked for this — and the notice is
+   * A reason for arriving here, as opposed to an error. Two today: `session_revoked`, set by the
+   * sessions page when somebody ends the session they were holding, and `factor_removed`, set by the
+   * security hub after a second factor is deleted — which the provider answers by ending every session.
+   * It is a separate parameter from `error` because nothing went wrong — the visitor asked for this — and the notice is
    * informational rather than a warning.
    */
   reason?: string;
@@ -90,6 +91,10 @@ type SearchParams = Promise<{
  * unrecognised value renders nothing at all rather than echoing whatever arrived.
  */
 const ARRIVAL_NOTICES: Record<string, { title: string; body: string }> = {
+  factor_removed: {
+    title: 'That security method was removed.',
+    body: 'The account falls back to a password alone, and the authentication provider ended every signed-in session when the factor was deleted — including the one you were using. Sign in again with your password.',
+  },
   session_revoked: {
     title: 'You signed out of that device.',
     body: 'The session ended, so this device no longer has access to your account. Sign in again to carry on — the other devices on your account were not touched.',
