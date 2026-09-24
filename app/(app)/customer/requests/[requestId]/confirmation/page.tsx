@@ -39,16 +39,16 @@ const STATE_SUMMARY: Record<string, { label: string; detail: string }> = {
  * plainly that nothing is sent and what to do instead. The delivered truth is "watch this page", and it
  * is said in the place where the fiction would have been.
  *
- * The reference is derived from the id rather than stored (see `requestReference`), so the number a
+ * The reference is derived from the request id rather than stored (see `requestReference`), so the number a
  * customer reads out to support cannot disagree with the row it names.
  */
 export default async function RequestConfirmationPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ requestId: string }>;
 }) {
-  const { id } = await params;
-  const confirmation = await getRequestConfirmation(id);
+  const { requestId } = await params;
+  const confirmation = await getRequestConfirmation(requestId);
 
   // A request that is not this account's is treated as not existing, the same way the draft reader
   // treats somebody else's draft. There is no "you are not allowed to see this" — that would confirm
