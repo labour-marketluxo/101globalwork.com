@@ -32,6 +32,7 @@ const columnsFor = (marketSlug: string) => [
     heading: 'Platform',
     links: [
       { href: '/how-it-works', label: 'How it works' },
+      { href: '/help', label: 'Help centre' },
       { href: '/pricing', label: 'Pricing & fees' },
       { href: '/trust-and-safety', label: 'Trust & safety' },
       { href: '/#verticals', label: 'Trade network' },
@@ -45,6 +46,7 @@ const columnsFor = (marketSlug: string) => [
       { href: '/auth/sign-up?intent=customer', label: 'Create an account' },
       { href: '/auth/sign-in', label: 'Sign in' },
       { href: '/work', label: 'My work' },
+      { href: '/support', label: 'Support' },
       { href: '/providers', label: 'Become a provider' },
     ],
   },

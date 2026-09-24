@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { allHelpCategories, allPublishedArticles } from '@/features/help/knowledge-base';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://101globalwork.com';
@@ -21,6 +22,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.8,
+    })),
+
+    /**
+     * The help centre: the hub, its six sections and every PUBLISHED article.
+     *
+     * Listed from the content module rather than from a hand-written array, for the reason the whole knowledge
+     * base is built the way it is — `allPublishedArticles()` is the same function the routes, the search and the
+     * article pages use, so a draft cannot be advertised in a sitemap that a page would refuse to serve, and a
+     * new article cannot be published without appearing here.
+     *
+     * `lastModified` on an article is its review date, which is the only date this platform records about it.
+     * That is a real claim — the copy was checked against the product on that day — rather than the
+     * `new Date()` that the marketing routes above use, which only says when the sitemap was generated.
+     */
+    {
+      url: new URL('/help', site).toString(),
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    ...allHelpCategories().map((category) => ({
+      url: new URL(category.href, site).toString(),
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })),
+    ...allPublishedArticles().map((article) => ({
+      url: new URL(article.href, site).toString(),
+      lastModified: new Date(article.reviewedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     })),
   ];
 
