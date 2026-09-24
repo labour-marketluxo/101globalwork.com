@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "check": "npm run lint && npm run typecheck && npm run build"
+    "check:routes": "node scripts/check-route-conflicts.mjs",
+    "check": "npm run check:routes && npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
