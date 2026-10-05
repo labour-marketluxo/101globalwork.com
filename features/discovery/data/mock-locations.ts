@@ -256,6 +256,17 @@ function normalise(value: string): string {
   return value.trim().toLowerCase();
 }
 
+/**
+ * The market slugs that have a published hub.
+ *
+ * Exported for the header: a market URL is one of the few places where Home is genuinely the parent
+ * of the page on screen, so the nav has to recognise one. It reads the list from here rather than
+ * keeping its own copy, so a country cannot be added to the hubs and forgotten in the chrome.
+ */
+export function getCountrySlugs(): string[] {
+  return COUNTRIES.map((country) => country.slug);
+}
+
 export function getCountryHub(countrySlug: string): CountryHub | undefined {
   const slug = normalise(countrySlug);
   return COUNTRIES.find((country) => country.slug === slug);

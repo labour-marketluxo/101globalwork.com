@@ -21,9 +21,10 @@ import { ArrowRight, Menu, X } from 'lucide-react';
  *
  * The links were server-rendered with no notion of where you are, and there was
  * no mobile navigation at all: below `lg` the list simply disappeared and the
- * only way to reach those pages on a phone was the footer. Now the same four
- * links appear in the bar from `lg` up and in the drawer below it, both driven
- * from one list, both marking the current route.
+ * only way to reach those pages on a phone was the footer. Now the same links
+ * appear in the bar from `lg` up and in the drawer below it, both driven from one
+ * list, both marking the current route. Home leads the list and marks itself wherever the page is
+ * a child of it — see `isHomeActive` below.
  *
  * ACTIVE STATE: an amber `::after` bar under the current route, plus white text.
  * Two details matter here:
@@ -54,10 +55,12 @@ import { ArrowRight, Menu, X } from 'lucide-react';
  *
  * ROUTE MATCHING is exact, with a trailing slash normalised away, so `/services/`
  * still marks `/services`. It is deliberately not a prefix match: `/services` must
- * not light up while you are on `/services/plumbing`.
+ * not light up while you are on `/services/plumbing`. That is also what keeps Home
+ * honest — a prefix rule would make `/` match every route on the site.
  */
 
 export const SECTION_LINKS = [
+  { href: '/', label: 'Home' },
   { href: '/how-it-works', label: 'How It Works' },
   { href: '/services', label: 'Services' },
   { href: '/trust-and-safety', label: 'Trust & Safety' },
@@ -73,19 +76,47 @@ const LINK_INACTIVE = 'text-slate-200 hover:text-amber-400';
 const LINK_ACTIVE =
   "text-white after:absolute after:bottom-[-8px] after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-amber-400 after:content-['']";
 
+function normalise(path: string): string {
+  return path.length > 1 ? path.replace(/\/+$/, '') : path;
+}
+
 function isActive(pathname: string, href: string): boolean {
-  const normalise = (path: string) => (path.length > 1 ? path.replace(/\/+$/, '') : path);
   return normalise(pathname) === normalise(href);
 }
 
+/** Static branches whose pages also trail from Home. */
+const HOME_ROOTED_ROOTS = ['legal', 'help'] as const;
+
+/**
+ * Home is the parent of the page, not only the homepage.
+ *
+ * Every public page that draws a breadcrumb trail beginning at Home should mark it, and in this app
+ * that means the market branches — `/ng`, `/ng/abuja/gwarinpa/plumbers`, `/ng/search` — plus
+ * `/legal` and `/help`. The market slugs are passed in from the server header (see MainNav) rather
+ * than guessed from the shape of the URL, so a new country is recognised the moment its hub exists.
+ *
+ * Two exclusions keep it honest. A section page owns its own link, so `/services` and `/pricing`
+ * never light Home as well. And the signed-in workspace — `/settings`, `/admin`, `/customer` — is
+ * not a child of Home even though the customer layout draws its own trail, so those roots are simply
+ * not in the list.
+ */
+function isHomeActive(pathname: string, marketSlugs: readonly string[]): boolean {
+  const path = normalise(pathname);
+  if (path === '/') return true;
+  if (SECTION_LINKS.some((link) => link.href !== '/' && normalise(link.href) === path)) return false;
+
+  const root = normalise(path.split('/')[1] ?? '');
+  return marketSlugs.includes(root) || (HOME_ROOTED_ROOTS as readonly string[]).includes(root);
+}
+
 /** Desktop link group. Hidden below `lg`, where MobileNav takes over. */
-export function NavLinks() {
+export function NavLinks({ marketSlugs }: { marketSlugs: readonly string[] }) {
   const pathname = usePathname();
 
   return (
     <nav aria-label="Sections" className="hidden items-center gap-8 lg:flex">
       {SECTION_LINKS.map((link) => {
-        const active = isActive(pathname, link.href);
+        const active = link.href === '/' ? isHomeActive(pathname, marketSlugs) : isActive(pathname, link.href);
 
         return (
           <Link
@@ -117,7 +148,7 @@ export function NavLinks() {
  * the cascading render the lint config rejects, and the link's own onClick
  * already covers the case.
  */
-export function MobileNav() {
+export function MobileNav({ marketSlugs }: { marketSlugs: readonly string[] }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -165,7 +196,8 @@ export function MobileNav() {
           <nav aria-label="Sections" className="mx-auto w-full max-w-[1536px] px-4 py-4 sm:px-6">
             <ul className="grid gap-1">
               {SECTION_LINKS.map((link) => {
-                const active = isActive(pathname, link.href);
+                const active =
+                  link.href === '/' ? isHomeActive(pathname, marketSlugs) : isActive(pathname, link.href);
 
                 return (
                   <li key={link.href}>
