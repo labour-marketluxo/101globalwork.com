@@ -220,6 +220,21 @@
 
   *{box-sizing:border-box}
 
+  /* ⚠️ THE BORDER-WIDTH RESET — the rule Tailwind's preflight would have given us, and the
+     reason it is needed here is that preflight is deliberately not imported (see the header).
+     Preflight zeroes every element's border before utilities opt back in. Without it the
+     browser's initial `medium` width (3px) is live on all four sides, while `border-solid` sets
+     `border-style: solid` on ALL FOUR sides and a side utility like `border-b` sets a width for
+     only one. The other three sides therefore painted themselves, and a section that wanted a
+     single bottom rule rendered as a full box. Verified in the generated CSS:
+     `.border-solid{--tw-border-style:solid;border-style:solid}`, with no width reset anywhere.
+
+     Layer order does the rest: this sits in `base`, so width utilities (utilities layer) and
+     every unlayered class rule in entry-points.css override it. Audited before adding — no
+     className in app/, components/, features/ or layouts/ uses `border-solid` without also
+     naming a width, so nothing that was meant to show a border loses one. */
+  *,::before,::after{border-width:0}
+
   html{
     font-family:var(--font-sans);
     /* Option A base: Surface Canvas #FAFAF9, Text Main #0F172A.
