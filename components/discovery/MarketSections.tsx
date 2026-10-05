@@ -11,7 +11,7 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import type { MarketLocation, MarketProvider, MarketService } from '@/features/discovery/data/market-catalog';
-import { BADGE_AMBER, CTA_AMBER, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
+import { BADGE_AMBER, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 
 /**
  * MarketSections — the pieces the two market routes are built from.
@@ -95,7 +95,7 @@ export function AreaQuickLinks({
   return (
     <section className="mt-14">
       <h2 className="text-2xl font-bold tracking-tight text-ink">Areas we cover</h2>
-      <p className="mt-1 text-ink-soft">
+      <p className="mt-1 max-w-3xl text-ink-soft">
         Every area in this market&rsquo;s catalog. Choosing a city includes the areas inside it.
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
@@ -300,15 +300,19 @@ export function MarketFilterPanel({
 
       <div className="hidden lg:block">
         <div className="rounded-xl border border-solid border-slate-200/80 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center justify-between gap-3 border-b border-solid border-slate-100 pb-3.5">
-            <h2 className="inline-flex items-center gap-2.5 text-sm font-bold text-slate-900">
-              <SlidersHorizontal aria-hidden="true" className="h-4 w-4 text-primary" />
-              Filters
-            </h2>
+          {/* THE HEADER IS THE ROW ITSELF — no wrapper box around the label, so
+              the hairline is the only rule between it and the form and the
+              heading sits flush with the card's own padding. `mt-0` cancels the
+              UA h2 margin (this project ships no preflight), `mb-4` puts the
+              spacing back where it is wanted, and `ml-auto` keeps the applied
+              count on the right now that `justify-between` is gone. */}
+          <h2 className="mt-0 mb-4 flex items-center gap-2 border-b border-slate-100 pb-4 text-base font-bold text-slate-900">
+            <SlidersHorizontal aria-hidden="true" className="h-4 w-4 text-primary" />
+            Filters
             {/* Amber on white has to be amber-800: --color-secondary (#d97706)
                 measures ~3.1:1 here and fails AA. */}
-            {applied > 0 ? <span className={BADGE_AMBER}>{applied} applied</span> : null}
-          </div>
+            {applied > 0 ? <span className={`${BADGE_AMBER} ml-auto`}>{applied} applied</span> : null}
+          </h2>
           <FilterForm
             marketSlug={marketSlug}
             marketName={marketName}
@@ -470,47 +474,58 @@ export function MarketEmptyState({
   unavailable: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-solid border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
-      {/* The badge is the illustration: amber when the search could not run
-          (our fault, our colour to own), teal when the catalog is simply
-          empty. No spot-art asset exists for this state, and drawing one in
-          CSS beats shipping a stock illustration that claims nothing. */}
+    <div className="relative flex flex-col items-start gap-6 overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm md:p-10">
+      {/* The accent tile is the illustration: the band's own deep teal, the
+          amber glyph, an emerald-edged shadowed box — one spot of colour on an
+          otherwise quiet card. No spot-art asset exists for this state, and
+          drawing it in CSS beats shipping a stock illustration that claims
+          nothing. Amber glyph either way, including when the search failed:
+          it is the "look again" colour here, the warning sits in the copy. */}
       <span
         aria-hidden="true"
-        className={`flex h-12 w-12 items-center justify-center rounded-xl border border-solid ${
-          unavailable
-            ? 'border-amber-200 bg-secondary-light text-amber-700'
-            : 'border-primary-subtle bg-primary-surface text-primary'
-        }`}
+        className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-900/40 bg-[#0D282E] shadow-md"
       >
-        {unavailable ? <TriangleAlert className="h-6 w-6" /> : <SearchX className="h-6 w-6" />}
+        {unavailable ? (
+          <TriangleAlert className="h-6 w-6 text-[#F59E0B]" />
+        ) : (
+          <SearchX className="h-6 w-6 text-[#F59E0B]" />
+        )}
       </span>
 
-      <h3 className="mt-4 text-xl font-bold tracking-tight text-slate-900">
-        {unavailable
-          ? 'We cannot search this market right now'
-          : hasFilters
-            ? `No providers in ${marketName} match those filters`
-            : `No providers are published in ${marketName} yet`}
-      </h3>
-      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-        {unavailable
-          ? 'The provider catalog did not respond. This is a problem on our side, not a statement about what is available — try again in a moment.'
-          : 'Providers appear here once they have been verified and published. Nothing is shown for a market we cannot fill, because a list of unverified names would be worse than an empty list.'}
-      </p>
+      {/* Heading + body are one flex child so the card's `gap-6` spaces the
+          three blocks (icon / copy / actions) rather than every line. */}
+      <div className="flex flex-col gap-2">
+        <h3 className="m-0 text-xl font-bold tracking-tight text-slate-900">
+          {unavailable
+            ? 'We cannot search this market right now'
+            : hasFilters
+              ? `No providers in ${marketName} match those filters`
+              : `No providers published in ${marketName} yet`}
+        </h3>
+        {/* `m-0` because there is no preflight here: the UA `p` margins would
+            otherwise add 14px on top of the flex gaps and push the copy apart. */}
+        <p className="m-0 max-w-xl text-sm leading-relaxed text-slate-600">
+          {unavailable
+            ? 'The provider catalog did not respond. This is a problem on our side, not a statement about what is available — try again in a moment.'
+            : 'Providers appear here once they pass supply verification and quality thresholds. Post an open request to notify providers as soon as they onboard.'}
+        </p>
+      </div>
 
-      {/* Amber is the CTA colour, so the primary action here is the same filled
-          pill as the navbar's — one destination, one look. The secondary is a
-          text link whose arrow travels on hover; the gap is declared on the
-          variant, not the base, or `hover:gap-2.5` would never win. */}
-      <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-        <Link href="/requests/new" className={CTA_AMBER}>
-          Post an open request
-          <ArrowRight aria-hidden="true" className="h-4 w-4" />
+      {/* Amber is the CTA colour, so the primary action here is the same amber
+          as the navbar's — one destination, one look — and the secondary is an
+          underlined mono link beside it. */}
+      <div className="mt-2 flex flex-wrap items-center gap-4">
+        <Link
+          href="/requests/new"
+          className="no-underline flex items-center gap-2 rounded-xl bg-[#F59E0B] px-6 py-3.5 font-mono text-xs font-bold text-slate-950 shadow-sm transition-all hover:bg-[#D97706] active:scale-95"
+        >
+          [ Post an open request → ]
         </Link>
-        <Link href="/how-it-works" className={LINK_ARROW}>
-          See how matching works
-          <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+        <Link
+          href="/how-it-works"
+          className="font-mono text-xs font-semibold text-slate-600 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-slate-900"
+        >
+          See how matching works →
         </Link>
       </div>
     </div>

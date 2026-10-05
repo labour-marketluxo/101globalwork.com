@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { FlaskConical, MapPin, TriangleAlert } from 'lucide-react';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import {
   MarketDataNotice,
   MarketEmptyState,
@@ -12,6 +11,7 @@ import {
   activeFilterCount,
   type FilterState,
 } from '@/components/discovery/MarketSections';
+import { PUBLIC_BAND, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import {
   getMarket,
   getMarketLocations,
@@ -65,8 +65,9 @@ import { PREVIEW_PROVIDERS } from '@/features/discovery/data/preview-providers';
  *
  *   - The band is FULL-BLEED under the navbar, not a boxed header inside the
  *     content column. The bar is solid teal and the band continues it, so the
- *     page opens as one dark block. Its container is `max-w-7xl`, the width the
- *     grid below it also uses, so the query still lines up with the sidebar.
+ *     page opens as one dark block. Its container is `PUBLIC_BAND` — the same
+ *     1320px measure the landing sections use, and the width the grid below it
+ *     also uses (`PUBLIC_SHELL`), so the query still lines up with the sidebar.
  *   - The result count moved DOWN into the results column, where "0 providers"
  *     heads the answer rather than competing with the query on the band.
  */
@@ -108,9 +109,18 @@ function previewEnabled(value: string | undefined): boolean {
 const META_CHIP =
   'inline-flex items-center gap-1.5 rounded-full border border-solid border-amber-400/30 bg-amber-400/10 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-amber-300 uppercase';
 
-/** Result-count badge on the light canvas. Amber text on white must be amber-800. */
-const COUNT_BADGE_ON = 'rounded-full bg-secondary-light px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-amber-800 uppercase';
-const COUNT_BADGE_OFF = 'rounded-full bg-slate-100 px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase';
+/**
+ * The count badge on the light canvas. Both variants are the SAME shape — a
+ * quiet mono pill — so the row reads as one bar whichever way it lands; only
+ * the tone changes. Amber TEXT on white must be amber-800 (#d97706 measures
+ * ~3.1:1 and fails AA), so the applied variant keeps amber-800 on amber-100.
+ * Labels are written in caps rather than uppercased by a utility: the badge
+ * class is now the spec's exact string and carries no `uppercase`.
+ */
+const COUNT_BADGE_ON =
+  'font-mono text-xs font-semibold text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200/70';
+const COUNT_BADGE_OFF =
+  'font-mono text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/60';
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { market } = await params;
@@ -216,23 +226,29 @@ export default async function MarketSearchPage({
           column. On a dark band it competed with the query for the first read,
           and "0 providers" is the answer to the query, not a peer of it.
          ------------------------------------------------------------------ */}
-      <section className="relative w-full overflow-hidden bg-primary">
-        <div className="pointer-events-none absolute -top-32 -right-16 h-72 w-lg rounded-full bg-secondary/10 blur-[130px]" />
+      <section className="w-full bg-primary px-4 pt-8 pb-14 text-white sm:px-6 lg:px-8">
+        <div className={PUBLIC_BAND}>
+          <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center">
+            <Link href="/" className="font-sans text-sm text-slate-300 underline decoration-slate-500/60 underline-offset-4 transition-colors hover:text-white">
+              Home
+            </Link>
+            <span aria-hidden="true" className="mx-2 text-sm text-slate-500 select-none">
+              /
+            </span>
+            <Link href={`/${found.slug}`} className="font-sans text-sm text-slate-300 underline decoration-slate-500/60 underline-offset-4 transition-colors hover:text-white">
+              {found.displayName}
+            </Link>
+            <span aria-hidden="true" className="mx-2 text-sm text-slate-500 select-none">
+              /
+            </span>
+            <span className="font-sans text-sm text-slate-400">Search</span>
+          </nav>
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-          <Breadcrumbs
-            tone="dark"
-            className="mb-6"
-            items={[
-              { label: 'Home', href: '/' },
-              { label: found.displayName, href: `/${found.slug}` },
-              { label: 'Search' },
-            ]}
-          />
-
-          <span className="inline-flex items-center gap-2 rounded-full border border-solid border-white/15 bg-white/10 px-2.5 py-1 font-mono text-xs font-bold tracking-wider text-amber-300 uppercase">
-            <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
-            Market · {found.code}
+          <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 shadow-none">
+            <MapPin aria-hidden="true" className="h-3.5 w-3.5 text-amber-400" />
+            <span className="font-mono text-[11px] font-bold tracking-wider text-amber-400 uppercase">
+              MARKET · {found.code}
+            </span>
           </span>
 
           <h1 className="mt-4 text-3xl leading-tight font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -262,7 +278,7 @@ export default async function MarketSearchPage({
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+      <div className={PUBLIC_SHELL}>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,300px)_minmax(0,1fr)] lg:items-start">
           <aside className="lg:sticky lg:top-28">
             <MarketFilterPanel
@@ -275,16 +291,21 @@ export default async function MarketSearchPage({
           </aside>
 
           <section className="min-w-0">
-            <div className="flex flex-wrap items-end justify-between gap-3 border-b border-solid border-slate-200 pb-4">
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            {/* THE COUNT ROW IS A BAR, NOT A BOX: no wrapping card, no
+                `flex-wrap`/`items-end` — one hairline under it and `mb-6`
+                before the grid. `m-0` on the h2 cancels the UA margin this
+                project has no preflight to reset, which is what used to make
+                the row sit low and look boxed in. */}
+            <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-200/80 w-full">
+              <h2 className="m-0 text-2xl font-bold text-slate-900 tracking-tight">
                 {unavailable
                   ? 'Results unavailable'
                   : `${providers.length} provider${providers.length === 1 ? '' : 's'}`}
               </h2>
               <span className={applied > 0 ? COUNT_BADGE_ON : COUNT_BADGE_OFF}>
                 {applied > 0
-                  ? `${applied} filter${applied === 1 ? '' : 's'} applied`
-                  : 'No filters applied'}
+                  ? `${applied} FILTER${applied === 1 ? '' : 'S'} APPLIED`
+                  : 'NO FILTERS APPLIED'}
               </span>
             </div>
 
@@ -335,7 +356,7 @@ export default async function MarketSearchPage({
 
             <MarketDataNotice className="mt-8" />
 
-            <p className="mt-6 text-sm leading-relaxed text-slate-500">
+            <p className="mt-6 max-w-3xl text-sm leading-relaxed text-slate-500">
               Need something this list does not cover?{' '}
               <Link
                 href="/requests/new"
