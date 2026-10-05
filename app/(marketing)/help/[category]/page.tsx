@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { PAGE_SHELL } from '@/components/discovery/tokens';
+import { PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import { HelpArticleList, HelpCategoryGrid, JsonLd, SupportActionCards } from '@/components/help/HelpSections';
 import {
@@ -78,7 +78,7 @@ export default async function HelpCategoryPage({ params }: { params: Params }) {
         lede={category.summary}
       />
 
-      <div className={`${PAGE_SHELL} grid gap-10`}>
+      <div className={`${PUBLIC_SHELL} grid gap-10`}>
         <section aria-labelledby="articles-heading" className="grid gap-4">
           <h2 id="articles-heading" className="text-lg font-bold tracking-tight text-slate-900">
             {articles.length} article{articles.length === 1 ? '' : 's'}

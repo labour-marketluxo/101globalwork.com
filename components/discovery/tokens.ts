@@ -88,7 +88,34 @@ export const HERO_GLOW =
 
 /** The one band shape: full-bleed deep teal, continued from the sticky navbar. */
 export const HERO_BAND = 'relative w-full overflow-hidden bg-primary';
-export const HERO_INNER = 'relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8';
 
-/** Long-form page container, matching the search page and the landing sections. */
+/**
+ * THE PUBLIC MEASURE — the same 1320px band every landing section sits in.
+ *
+ * PageSections' `Section`, ServiceVectors and TradeVerticals all wrap their
+ * content in `max-w-[1320px] px-4 sm:px-6 lg:px-8`, so that is the width a
+ * visitor has just been looking at when they land on a public page. Anything
+ * narrower reads as a different site: the region hubs were on `max-w-5xl`
+ * (1024px) and the market hub and search page on `max-w-6xl` (1152px), i.e.
+ * 296px and 168px short of the landing.
+ *
+ * `PUBLIC_BAND` is the bare measure, for a container that supplies its own
+ * gutters — a full-bleed hero band already carries `px-4 sm:px-6 lg:px-8`, so
+ * its inner div must not repeat them or the padding doubles.
+ * `PUBLIC_SHELL` is that measure with the page's gutters and rhythm, for a
+ * page body that is not inside a band.
+ */
+export const PUBLIC_BAND = 'mx-auto w-full max-w-[1320px]';
+export const PUBLIC_SHELL = 'mx-auto w-full max-w-[1320px] px-4 py-8 sm:px-6 lg:px-8 lg:py-10';
+
+/** The taxonomy hero's inner container: the public band, on the band's own padding. */
+export const HERO_INNER = `relative z-10 ${PUBLIC_BAND} px-4 py-8 sm:px-6 sm:py-10 lg:px-8`;
+
+/**
+ * Signed-in workspace container — deliberately NOT the public 1320 band.
+ *
+ * The dashboard pages are laid out for tables, sidebars and forms; the public
+ * pages are laid out for browsing, and they follow the landing page's width
+ * (`PUBLIC_SHELL`) instead. 7xl = 1280px, 40px tighter than the landing.
+ */
 export const PAGE_SHELL = 'mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10';

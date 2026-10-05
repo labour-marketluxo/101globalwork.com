@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, MapPin } from 'lucide-react';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import {
   HubHero,
   IndexabilityNotice,
@@ -15,7 +14,7 @@ import {
   CARD,
   CTA_AMBER,
   LINK_ARROW,
-  PAGE_SHELL,
+  PUBLIC_SHELL,
 } from '@/components/discovery/tokens';
 import { MetaChip, TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import {
@@ -129,7 +128,7 @@ function CatalogueLocalityHub({
         }
       />
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         <div className="grid gap-12">
           <section aria-labelledby="locality-trades">
             <h2 id="locality-trades" className="text-2xl font-bold tracking-tight text-slate-900">
@@ -318,38 +317,37 @@ export default async function RegionLevelPage({ params }: { params: Params }) {
   const basePath = `${cityPath}/${localityHub.slug}`;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 pt-14 pb-24">
-      <Breadcrumbs
-        items={[
+    <>
+      <HubHero
+        breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: countryHub.name, href: countryPath },
           { label: cityHub.name, href: cityPath },
           { label: localityHub.name },
         ]}
-      />
-
-      <HubHero
-        eyebrow="Locality"
+        badge={`LOCALITY · ${localityHub.name}`}
         title={`Services in ${localityHub.name}, ${cityHub.name}`}
         lede={localityHub.intro}
         marketSlug={countryHub.slug}
       />
 
-      <IndexabilityNotice />
+      <div className="mx-auto w-full max-w-6xl px-4 pt-12 pb-24 sm:px-6 lg:px-8">
+        <ServiceChips
+          heading={`Services in ${localityHub.name}`}
+          description="Pick a service to see local availability and provider detail."
+          services={localityHub.popularServices}
+          marketSlug={countryHub.slug}
+          leafBasePath={basePath}
+        />
 
-      <ServiceChips
-        heading={`Services in ${localityHub.name}`}
-        description="Pick a service to see local availability and provider detail."
-        services={localityHub.popularServices}
-        marketSlug={countryHub.slug}
-        leafBasePath={basePath}
-      />
+        <ProviderGrid
+          heading={`Providers in ${localityHub.name}`}
+          description="A preview of providers building reputation on 101GlobalWork."
+          providers={localityHub.featuredProviders}
+        />
 
-      <ProviderGrid
-        heading={`Providers in ${localityHub.name}`}
-        description="A preview of providers building reputation on 101GlobalWork."
-        providers={localityHub.featuredProviders}
-      />
-    </div>
+        <IndexabilityNotice />
+      </div>
+    </>
   );
 }

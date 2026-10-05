@@ -6,7 +6,7 @@ import { ArrowRight, MapPin, Tag } from 'lucide-react';
 import { ProblemPageView, placeOf, type LocalizedPlace } from '@/components/discovery/IntentSections';
 import { LocalPageBody } from '@/components/discovery/LocalServiceSections';
 import { MetaChip, TaxonomyHero, TaxonomySkeleton } from '@/components/discovery/TaxonomySections';
-import { CTA_AMBER, LINK_ARROW_DARK, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CTA_AMBER, LINK_ARROW_DARK, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import {
   CONTEXTUAL_VARIANT_ROBOTS,
   intentCanonicalHref,
@@ -320,7 +320,7 @@ export default async function LocalLeafPage({
         }
       />
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         <Suspense fallback={<TaxonomySkeleton count={2} />}>
           <LocalPageBody context={context} preview={preview} />
         </Suspense>

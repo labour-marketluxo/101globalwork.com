@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BookOpen, LifeBuoy } from 'lucide-react';
-import { PAGE_SHELL } from '@/components/discovery/tokens';
+import { PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import {
   HelpArticleList,
@@ -100,7 +100,7 @@ export default async function HelpCentrePage({ searchParams }: { searchParams: S
         </div>
       </TaxonomyHero>
 
-      <div className={`${PAGE_SHELL} grid gap-10`}>
+      <div className={`${PUBLIC_SHELL} grid gap-10`}>
         <StatusStrip status={status} />
 
         {searching ? (

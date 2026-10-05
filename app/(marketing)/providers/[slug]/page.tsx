@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import PublicProfileView from '@/components/providers/PublicProfileView';
-import { PAGE_SHELL } from '@/components/discovery/tokens';
+import { PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { getPublicProviderProfile } from '@/lib/providers/public-profile';
 
 type Params = Promise<{ slug: string }>;
@@ -34,7 +34,7 @@ export default async function PublicProviderPage({ params }: { params: Params })
   if (!profile) notFound();
 
   return (
-    <div className={PAGE_SHELL}>
+    <div className={PUBLIC_SHELL}>
       <PublicProfileView profile={profile} />
     </div>
   );

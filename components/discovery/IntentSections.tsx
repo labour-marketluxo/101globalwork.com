@@ -8,7 +8,7 @@ import {
   CARD,
   CTA_AMBER,
   LINK_ARROW,
-  PAGE_SHELL,
+  PUBLIC_SHELL,
 } from '@/components/discovery/tokens';
 import {
   MarketDataNotice,
@@ -431,7 +431,7 @@ export function ProblemPageView({
         }
       />
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         <ProblemBody market={market} problem={problem} catalog={catalog} localized={localized} />
       </div>
     </div>
@@ -495,7 +495,7 @@ export function OutcomePageView({
         }
       />
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         <OutcomeBody market={market} outcome={outcome} catalog={catalog} localized={localized} />
       </div>
     </div>

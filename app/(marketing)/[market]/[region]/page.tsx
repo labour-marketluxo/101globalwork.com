@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import {
   HubHero,
   IndexabilityNotice,
@@ -46,43 +45,42 @@ export default async function CityHubPage({ params }: { params: Params }) {
   const basePath = `${countryPath}/${cityHub.slug}`;
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 pt-14 pb-24">
-      <Breadcrumbs
-        items={[
+    <>
+      <HubHero
+        breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: countryHub.name, href: countryPath },
           { label: cityHub.name },
         ]}
-      />
-
-      <HubHero
-        eyebrow="City"
+        badge={`CITY · ${cityHub.name}`}
         title={`Services in ${cityHub.name}, ${countryHub.name}`}
         lede={cityHub.intro}
         marketSlug={countryHub.slug}
       />
 
-      <IndexabilityNotice />
+      <div className="mx-auto w-full max-w-6xl px-4 pt-12 pb-24 sm:px-6 lg:px-8">
+        <LocationGrid
+          heading={`Neighbourhoods in ${cityHub.name}`}
+          description="Choose a neighbourhood to see which services are available and how well supplied it is."
+          items={cityHub.localities.map((item) => ({ slug: item.slug, name: item.name }))}
+          basePath={basePath}
+        />
 
-      <LocationGrid
-        heading={`Neighbourhoods in ${cityHub.name}`}
-        description="Choose a neighbourhood to see which services are available and how well supplied it is."
-        items={cityHub.localities.map((item) => ({ slug: item.slug, name: item.name }))}
-        basePath={basePath}
-      />
+        <ServiceChips
+          heading="Popular services"
+          description="Tell us what needs doing and we will match you with eligible providers."
+          services={cityHub.popularServices}
+          marketSlug={countryHub.slug}
+        />
 
-      <ServiceChips
-        heading="Popular services"
-        description="Tell us what needs doing and we will match you with eligible providers."
-        services={cityHub.popularServices}
-        marketSlug={countryHub.slug}
-      />
+        <ProviderGrid
+          heading={`Providers near ${cityHub.name}`}
+          description="A preview of providers building reputation on 101GlobalWork."
+          providers={cityHub.featuredProviders}
+        />
 
-      <ProviderGrid
-        heading={`Providers near ${cityHub.name}`}
-        description="A preview of providers building reputation on 101GlobalWork."
-        providers={cityHub.featuredProviders}
-      />
-    </div>
+        <IndexabilityNotice />
+      </div>
+    </>
   );
 }

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { ArrowRight, BadgeCheck, Building2, MapPin } from 'lucide-react';
-import { BADGE_AMBER, BADGE_SLATE, CTA_AMBER, PAGE_SHELL } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CTA_AMBER, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { NoticePanel } from '@/components/discovery/MarketSections';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import {
@@ -248,7 +248,7 @@ export default async function ContextualProviderProfilePage({
       {/* No Suspense boundary: every read this page needs has already completed — the
           name, the place and the service all had to resolve before the page could decide
           whether it was a 404. There is nothing left to stream. */}
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         {preview ? (
           <div className="mb-8">
             <NoticePanel tone="amber" title="Sample profile">

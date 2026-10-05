@@ -10,7 +10,7 @@ import {
   ShieldAlert,
   Users,
 } from 'lucide-react';
-import { BADGE_SLATE, CARD, CARD_INTERACTIVE, FIELD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { BADGE_SLATE, CARD, CARD_INTERACTIVE, FIELD, LINK_ARROW, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import {
   COMPONENT_STATE_COPY,
   OVERALL_STATE_COPY,
@@ -454,7 +454,7 @@ export function ArticleMeta({ article }: { article: PublicHelpArticle }) {
 /** Related links plus the case CTA, under every article. */
 export function ArticleFooter({ article }: { article: PublicHelpArticle }) {
   return (
-    <div className={PAGE_SHELL}>
+    <div className={PUBLIC_SHELL}>
       <div className="grid max-w-3xl gap-6">
         {article.related.length > 0 ? (
           <section aria-labelledby="related-heading">

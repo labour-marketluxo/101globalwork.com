@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { ArrowRight, BadgeCheck, Building2, MapPin } from 'lucide-react';
-import { BADGE_AMBER, BADGE_SLATE, CTA_AMBER, PAGE_SHELL } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CTA_AMBER, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { NoticePanel } from '@/components/discovery/MarketSections';
 import { ProviderProfileSections } from '@/components/discovery/ProviderProfileSections';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
@@ -177,7 +177,7 @@ export default async function MarketProviderProfilePage({
         }
       />
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         {preview ? (
           <div className="mb-8">
             <NoticePanel tone="amber" title="Sample profile">

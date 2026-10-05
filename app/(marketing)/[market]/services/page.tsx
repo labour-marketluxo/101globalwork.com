@@ -11,7 +11,7 @@ import {
   TaxonomySearchForm,
   TaxonomySkeleton,
 } from '@/components/discovery/TaxonomySections';
-import { CARD, CTA_AMBER, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, CTA_AMBER, LINK_ARROW, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { previewMode } from '@/features/discovery/data/preview-taxonomy';
 import {
   getMarket,
@@ -123,7 +123,7 @@ export default async function MarketServicesPage({
         />
       </TaxonomyHero>
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         <div className="grid gap-10">
           {preview ? <PreviewNotice clearHref={`/${found.slug}/services`} /> : null}
           {!unavailable && providers.length === 0 ? (

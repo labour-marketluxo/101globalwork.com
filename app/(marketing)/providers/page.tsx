@@ -6,8 +6,12 @@ export const metadata = {
 };
 
 export default function ProvidersPage() {
+  // `.content-shell` owns this page's typography (the h1 clamp, the 700px
+  // `.lede`), so the class stays; only its 820px measure moves to the
+  // landing's 1320px band, with the landing gutter so it lines up with every
+  // other public page. Utilities beat the components layer.
   return (
-    <section className="content-shell">
+    <section className="content-shell max-w-[1320px] px-4 sm:px-6 lg:px-8">
       <p className="eyebrow">For providers</p>
       <h1>Turn your skills into trusted work.</h1>
       <p className="lede left">Use the same 101GlobalWork account you use as a customer, or create one now. Add the services and areas you cover, complete the required verification, then publish when your profile is ready.</p>

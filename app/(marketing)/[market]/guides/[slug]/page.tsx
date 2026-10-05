@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { ArrowRight, BookOpen, BadgeCheck } from 'lucide-react';
-import { CARD, CTA_AMBER, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, CTA_AMBER, LINK_ARROW, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import { Prose, ReaderLayout } from '@/components/marketing/ReaderLayout';
 import { getMarket } from '@/features/discovery/data/market-catalog';
@@ -162,7 +162,7 @@ export default async function GuidePage({ params }: { params: Params }) {
         <Prose sections={guide.sections} />
       </ReaderLayout>
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         <section
           className={`${CARD} flex max-w-3xl flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8`}
         >

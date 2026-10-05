@@ -13,7 +13,7 @@ import {
   TaxonomyHero,
   TaxonomySkeleton,
 } from '@/components/discovery/TaxonomySections';
-import { CTA_AMBER, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CTA_AMBER, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { getMarket, getMarketLocations } from '@/features/discovery/data/market-catalog';
 import { previewMode, previewResolveSegment } from '@/features/discovery/data/preview-taxonomy';
 import {
@@ -240,7 +240,7 @@ export default async function TaxonomySegmentPage({
           }
         />
 
-        <div className={PAGE_SHELL}>
+        <div className={PUBLIC_SHELL}>
           <div className="grid gap-10">
             {preview ? (
               <PreviewNotice clearHref={`/${found.slug}/services/${service.slug ?? segment}`} />
@@ -316,7 +316,7 @@ export default async function TaxonomySegmentPage({
         }
       />
 
-      <div className={PAGE_SHELL}>
+      <div className={PUBLIC_SHELL}>
         <div className="grid gap-10">
           {preview ? (
             <PreviewNotice clearHref={`/${found.slug}/services/${category.slug}`} />
