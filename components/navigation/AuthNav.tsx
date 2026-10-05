@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { IS_MOCK_MODE } from '@/lib/supabase/mock';
 
 /**
  * AuthNav — the header's right-hand action group, rendered per session state.
@@ -77,7 +78,35 @@ const GHOST =
 const CTA =
   'inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-4 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95 sm:px-5';
 
+/**
+ * The signed-out pair. Extracted so the mock branch below and the real no-session branch cannot
+ * drift: they are the same two controls.
+ */
+function SignedOutActions() {
+  return (
+    <div className="flex shrink-0 items-center gap-3">
+      <Link href="/auth/sign-in" className={`hidden sm:inline-flex ${GHOST}`}>
+        Sign In
+      </Link>
+      <Link href="/auth/sign-in" className={CTA}>
+        Post a Request
+        <ArrowRight aria-hidden="true" className="h-4 w-4" />
+      </Link>
+    </div>
+  );
+}
+
 export default async function AuthNav() {
+  /**
+   * MOCK MODE RETURNS THE SIGNED-OUT BAR. The dummy user in lib/supabase/mock.ts is always
+   * present, and without this the public header would render the workspace nav ("My work",
+   * "Provider workspace", "Account") in place of the Sign In button on every marketing page — which
+   * is what it did. The workspace routes still see the mock session; only the public chrome stays
+   * in its signed-out shape so it can be reviewed. Set IS_MOCK_MODE to false and this disappears
+   * with the rest of the mock layer.
+   */
+  if (IS_MOCK_MODE) return <SignedOutActions />;
+
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -112,15 +141,5 @@ export default async function AuthNav() {
     );
   }
 
-  return (
-    <div className="flex shrink-0 items-center gap-3">
-      <Link href="/auth/sign-in" className={`hidden sm:inline-flex ${GHOST}`}>
-        Sign In
-      </Link>
-      <Link href="/auth/sign-in" className={CTA}>
-        Post a Request
-        <ArrowRight aria-hidden="true" className="h-4 w-4" />
-      </Link>
-    </div>
-  );
+  return <SignedOutActions />;
 }

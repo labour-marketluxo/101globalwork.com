@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { PasswordField, SubmitButton } from '@/components/auth/AuthFormFields';
 import {
-  AUTH_LINK,
   AuthDivider,
   AuthField,
   AuthInput,
@@ -20,6 +19,7 @@ import {
   postAuthTarget,
 } from '@/features/auth/post-auth';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { IS_MOCK_MODE } from '@/lib/supabase/mock';
 
 /**
  * Sign in — /auth/sign-in
@@ -44,8 +44,10 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
  * therefore persistent for 400 days by default, and an unchecked box could not shorten them —
  * worse, the middleware rewrites those cookies on every request, so any lifetime set at sign-in
  * would be silently undone on the next navigation. A checkbox that does nothing is a lie told in
- * the exact place a visitor is deciding whether it is safe to sign in on a shared machine, so the
- * page states the real behaviour instead, in the note below the form.
+ * the exact place a visitor is deciding whether it is safe to sign in on a shared machine. The
+ * brief asked for the small print to go, so the session note that used to explain this below the
+ * form has been removed; the behaviour itself is unchanged and the fix still belongs to the
+ * session layer rather than to this page.
  *
  * Making it real is two changes, and both belong to the session layer rather than to this page: a
  * preference cookie that the middleware reads, or a custom cookie adapter in lib/supabase. It
@@ -111,15 +113,17 @@ export default async function AuthSignInPage({ searchParams }: { searchParams: S
   // this page, or a stale `?next=/auth/sign-in` would loop.
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (user && destination !== AUTH_PATHS.signIn) redirect(destination);
+  // MOCK MODE: the dummy user always exists, so the "already signed in" bounce would hide the
+  // very form we are here to exercise. The redirect stays for the live path only.
+  if (!IS_MOCK_MODE && user && destination !== AUTH_PATHS.signIn) redirect(destination);
 
   const credentialsRejected = code === 'invalid_credentials';
 
   return (
     <AuthShell
+      insideCard
       eyebrow="Welcome back"
       title="Sign in to your account"
-      lede="Pick up where you left off: your requests, your quotes and the work you are managing."
       notice={
         code ? (
           <AuthNotice tone="error">{authErrorMessage(code)}</AuthNotice>
@@ -129,15 +133,6 @@ export default async function AuthSignInPage({ searchParams }: { searchParams: S
           </AuthNotice>
         ) : null
       }
-      footer={
-        <>
-          Don&rsquo;t have an account?{' '}
-          <Link href={hrefWith(AUTH_PATHS.signUp, { redirect: destination })} className={AUTH_LINK}>
-            Create one
-          </Link>
-          .
-        </>
-      }
     >
       <SocialAuth destination={destination} />
 
@@ -146,11 +141,7 @@ export default async function AuthSignInPage({ searchParams }: { searchParams: S
       <form action={signInAction} className="grid gap-4">
         <input type="hidden" name="next" value={destination} />
 
-        <AuthField
-          id="email"
-          label="Email"
-          hint="Sign-in is by email address. Phone sign-in is not enabled on this platform yet, so no phone field is offered rather than one that cannot work."
-        >
+        <AuthField id="email" label="Email">
           <AuthInput
             id="email"
             name="email"
@@ -158,7 +149,6 @@ export default async function AuthSignInPage({ searchParams }: { searchParams: S
             required
             autoComplete="email"
             aria-invalid={credentialsRejected || undefined}
-            aria-describedby="email-hint"
           />
         </AuthField>
 
@@ -186,15 +176,18 @@ export default async function AuthSignInPage({ searchParams }: { searchParams: S
         <SubmitButton pendingLabel="Signing in…">Sign in</SubmitButton>
       </form>
 
-      {/* The honest replacement for the checkbox — see the header. Colour and copy both matter
-          here: this is a security statement, not small print, so it is not grey-on-grey. */}
-      <p className="mt-5 border-t border-solid border-slate-200 pt-4 text-xs leading-relaxed text-slate-600">
-        <span className="font-semibold text-slate-900">About staying signed in.</span> This platform
-        keeps you signed in on this device for up to 400 days, which is the behaviour of its session
-        library and cannot be switched off per sign-in — so there is no &ldquo;remember me&rdquo;
-        checkbox that would not work. On a shared or public computer, use a private window, and use{' '}
-        <span className="font-semibold text-slate-900">Sign out</span> from the workspace when you
-        are finished. Signing out ends the session on this device.
+      {/* The account switch sits directly under the primary action, inside the card, so the next
+          step is part of the form's flow rather than a footer below it. It replaces both the
+          header's "Need an account?" pill and the shell's footer slot on this page. */}
+      <p className="mt-4 pt-2 text-center font-sans text-sm text-slate-600">
+        Don&rsquo;t have an account?{' '}
+        <Link
+          href={hrefWith(AUTH_PATHS.signUp, { redirect: destination })}
+          className="font-semibold text-amber-600 underline underline-offset-4 transition-colors hover:text-amber-700"
+        >
+          Create one
+        </Link>
+        .
       </p>
     </AuthShell>
   );

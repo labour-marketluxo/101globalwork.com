@@ -100,17 +100,27 @@ export function AuthShell({
   children,
   footer,
   aside,
+  /** Optional node rendered above the card. */
+  back,
+  /**
+   * Moves the eyebrow and title inside the card, above the page's own children. Sign-in and
+   * sign-up use this; the other credential screens keep their heading above the card.
+   */
+  insideCard = false,
   size = 'md',
 }: {
   eyebrow: string;
   /** Rendered as an h1 — exactly one per page. */
   title: string;
-  lede: string;
-  /** Error or status callout, above the form. */
+  /** Optional: the sign-in and sign-up cards no longer carry one. */
+  lede?: string;
+  /** Error or status callout, above the form — or inside it in `insideCard` mode. */
   notice?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
   aside?: ReactNode;
+  back?: ReactNode;
+  insideCard?: boolean;
   /**
    * `md` is the sign-in card. `lg` is for a page that has to explain something before asking for a
    * decision — the invitation, where role, inviter, permissions and expiry all belong above the
@@ -120,17 +130,35 @@ export function AuthShell({
 }) {
   return (
     <div className={`flex w-full flex-col ${size === 'lg' ? 'max-w-xl' : 'max-w-md'}`}>
-      <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
-        {eyebrow}
-      </p>
-      <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-        {title}
-      </h1>
-      <p className="mt-2 text-sm leading-relaxed text-slate-600">{lede}</p>
+      {back}
 
-      {notice ? <div className="mt-5">{notice}</div> : null}
+      {/* The default shape keeps the heading on the canvas; sign-in and sign-up opt into the
+          in-card shape so the card opens with its own badge and title. */}
+      {insideCard ? null : (
+        <>
+          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+            {eyebrow}
+          </p>
+          <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            {title}
+          </h1>
+          {lede ? <p className="mt-2 text-sm leading-relaxed text-slate-600">{lede}</p> : null}
+        </>
+      )}
 
-      <div className={`${AUTH_CARD} mt-6 p-6 sm:p-8`}>{children}</div>
+      {insideCard ? null : notice ? <div className="mt-5">{notice}</div> : null}
+
+      <div className={`${AUTH_CARD} ${insideCard ? 'flex flex-col p-8' : 'mt-6 p-6 sm:p-8'}`}>
+        {insideCard ? (
+          <>
+            <p className="mb-1 text-sm text-slate-500">{eyebrow}</p>
+            <h1 className="mb-6 text-2xl font-bold text-slate-900">{title}</h1>
+            {lede ? <p className="mb-6 text-sm leading-relaxed text-slate-600">{lede}</p> : null}
+            {notice ? <div className="mb-6">{notice}</div> : null}
+          </>
+        ) : null}
+        {children}
+      </div>
 
       {aside ? <div className="mt-4">{aside}</div> : null}
       {footer ? <div className="mt-6 text-sm text-slate-600">{footer}</div> : null}
@@ -226,27 +254,22 @@ export function AuthDivider({ label = 'or' }: { label?: string }) {
  * password form beside it. The destination rides along in a hidden field, so a visitor who
  * arrived from /ng/lagos/ikeja/plumbers still lands there.
  *
- * GOOGLE IS THE ONLY PROVIDER RENDERED, and the note under it says so. The brief asks for
- * "Google/Apple if configured": Apple is not configured on this project, and a button that
- * cannot complete — because the provider has no client id, no key and no verified domain — is
- * worse than an honest sentence. Adding Apple is a provider change in the Supabase project plus
- * an action, not a second button here.
+ * GOOGLE IS THE ONLY PROVIDER RENDERED. The brief asks for "Google/Apple if configured": Apple
+ * is not configured on this project, and a button that cannot complete — because the provider
+ * has no client id, no key and no verified domain — is worse than no button at all. The
+ * explanatory sentence that used to sit under the button was removed at the brief's request.
+ * Adding Apple is a provider change in the Supabase project plus an action, not a second button
+ * here.
  */
 export function SocialAuth({ destination }: { destination: string }) {
   return (
-    <div>
-      <form action={signInWithGoogleAction}>
-        <input type="hidden" name="next" value={destination} />
-        <button type="submit" className={AUTH_CTA_SECONDARY}>
-          <GoogleMark />
-          Continue with Google
-        </button>
-      </form>
-      <p className="mt-3 text-xs leading-relaxed text-slate-500">
-        Google is the only social provider configured on this platform today. Apple is not
-        available, and no button is shown for it rather than one that cannot complete.
-      </p>
-    </div>
+    <form action={signInWithGoogleAction}>
+      <input type="hidden" name="next" value={destination} />
+      <button type="submit" className={AUTH_CTA_SECONDARY}>
+        <GoogleMark />
+        Continue with Google
+      </button>
+    </form>
   );
 }
 
@@ -272,80 +295,13 @@ function GoogleMark() {
 }
 
 /**
- * The two paths a new account can take.
- *
- * A RADIO GROUP, NOT A PAIR OF LINKS. The intent used to be switched by two links that reloaded
- * the page with `?intent=`, which meant the choice was invisible to the form: whatever was last
- * clicked in the URL decided, and the submitted data never said which path the visitor had
- * chosen. A radio group inside the form makes it part of what is submitted, keeps working without
- * JavaScript, and cannot fall out of step with the URL.
- *
- * WHAT THE CHOICE DOES, exactly — because "role intent" invites over-reading. It is stored on the
- * account as an INTENT HINT and it decides the default destination after sign-up (the provider
- * onboarding flow, or the homepage). It grants nothing: provider capability is decided in the
- * database, per account, after verification, and nothing in the sign-up form can confer it.
- */
-export function RoleIntentField({ selected }: { selected: 'customer' | 'provider' }) {
-  const options = [
-    {
-      value: 'customer',
-      label: 'I want to hire services',
-      detail: 'Request work, compare itemized quotes and manage jobs in your workspace.',
-    },
-    {
-      value: 'provider',
-      label: 'I want to offer services',
-      detail:
-        'Start the same account with the provider journey: services, service area and verification.',
-    },
-  ] as const;
-
-  return (
-    // THE FIELDSET RESET IS NOT OPTIONAL. Preflight is deliberately not imported in this
-    // project, so a <fieldset> keeps the browser's default `2px groove` border and its own
-    // padding — which drew a grey box around the role selector and left the legend sitting on
-    // the border. `min-w-0` is the other half: a fieldset's default `min-width: min-content`
-    // refuses to shrink past its content, which is exactly what breaks a form on a narrow phone.
-    <fieldset className="m-0 min-w-0 border-0 p-0">
-      <legend className={LABEL}>What brings you here?</legend>
-      <div className="grid gap-2">
-        {options.map((option) => (
-          <label
-            key={option.value}
-            className="flex cursor-pointer gap-3 rounded-lg border border-solid border-slate-300 p-3 transition-colors has-checked:border-primary has-checked:bg-primary-surface hover:border-primary"
-          >
-            <input
-              type="radio"
-              name="intent"
-              value={option.value}
-              defaultChecked={selected === option.value}
-              className="mt-1 h-4 w-4 shrink-0 accent-secondary"
-            />
-            <span>
-              <span className="block text-sm font-bold text-slate-900">{option.label}</span>
-              <span className="mt-0.5 block text-xs leading-relaxed text-slate-600">
-                {option.detail}
-              </span>
-            </span>
-          </label>
-        ))}
-      </div>
-      <p className="mt-2 text-xs leading-relaxed text-slate-500">
-        Both paths use one account. This choice sets the journey you start with, not a permission —
-        provider capability is granted by the platform after verification, never by a sign-up form.
-      </p>
-    </fieldset>
-  );
-}
-
-/**
  * The consent line.
  *
  * Two separate links rather than one, because the two documents are different agreements, and
  * they point at /legal/terms and /legal/privacy — which today render as "not in force", with the
- * reason stated on the page. That is not a broken link: the destination is honest that the
- * document is unpublished, and the checkbox must not imply an agreement that no text yet
- * supports. The copy says exactly that rather than the usual "you agree to our Terms".
+ * reason stated on the page. The explanatory line under the checkbox was removed at the brief's
+ * request; the links still open the current drafts, and the checkbox copy still asks the visitor
+ * to confirm they have read them.
  */
 export function ConsentField() {
   return (
@@ -355,26 +311,19 @@ export function ConsentField() {
         name="consent"
         type="checkbox"
         required
-        aria-describedby="consent-hint"
         className="mt-0.5 h-4 w-4 shrink-0 accent-secondary"
       />
-      <div>
-        <label htmlFor="consent" className="text-xs leading-relaxed text-slate-700">
-          I have read the{' '}
-          <Link href="/legal/terms" className={AUTH_LINK}>
-            Terms of Service
-          </Link>{' '}
-          and the{' '}
-          <Link href="/legal/privacy" className={AUTH_LINK}>
-            Privacy Policy
-          </Link>
-          , and I understand how this platform handles my work and my data.
-        </label>
-        <p id="consent-hint" className="mt-1.5 text-xs leading-relaxed text-amber-800">
-          Both documents are drafted but not yet in force, and each says so on its own page. The
-          links open the current drafts rather than claiming an agreement that is not in place.
-        </p>
-      </div>
+      <label htmlFor="consent" className="text-xs leading-relaxed text-slate-700">
+        I have read the{' '}
+        <Link href="/legal/terms" className={AUTH_LINK}>
+          Terms of Service
+        </Link>{' '}
+        and the{' '}
+        <Link href="/legal/privacy" className={AUTH_LINK}>
+          Privacy Policy
+        </Link>
+        , and I understand how this platform handles my work and my data.
+      </label>
     </div>
   );
 }

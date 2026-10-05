@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ShieldCheck, Sparkles, Wallet } from 'lucide-react';
 import { PasswordField, SubmitButton } from '@/components/auth/AuthFormFields';
 import {
   AUTH_LINK,
@@ -11,7 +10,6 @@ import {
   AuthNotice,
   AuthShell,
   ConsentField,
-  RoleIntentField,
   SocialAuth,
 } from '@/components/auth/AuthSections';
 import { signUpAction } from '@/features/auth/actions';
@@ -23,26 +21,26 @@ import {
   postAuthTarget,
 } from '@/features/auth/post-auth';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { IS_MOCK_MODE } from '@/lib/supabase/mock';
 
 /**
  * Create an account — /auth/sign-up
  *
  * ONE IDENTITY ROOT, TWO JOURNEYS. The account created here is the same record either way: a
  * person can hire work on Monday and offer a trade later without a second account, which is why
- * the role choice is an intent and not a fork in the sign-up. What it changes is the destination
- * after sign-up and the journey the workspace starts the visitor on.
+ * the role choice is an intent and not a fork in the sign-up. The visible "what brings you here?"
+ * chooser was removed at the brief's request; the intent still arrives as a `?intent=` hint from
+ * the pages that link here and rides through a hidden field, so a provider-intent visitor is not
+ * silently turned into a customer one. What it changes is the destination after sign-up and the
+ * journey the workspace starts the visitor on.
  *
- * WHAT THE TRUST POINTS UNDER THE HEADING MAY SAY — this is the part of the brief most likely to
- * turn into marketing copy, so each of the three is tied to a fact that exists in the codebase:
- *
- *   verification before quoting   the provider path checks identity before a provider can quote
- *                                 (provider profiles and /trust-and-safety say exactly this)
- *   itemized quotes               the request flow collects a scope and quotes are compared line
- *                                 by line against it — the guide at /{market}/guides explains how
- *   payment released on approval  stated on every provider profile and on /how-it-works
- *
- * Nothing here claims a review score, a completion count, a price range or a response time: none
- * of those exist in the database, and a sign-up page is the worst place to start inventing them.
+ * THE OLD TRUST POINTS ARE GONE. Three fact-checked bullets — verification before quoting,
+ * itemized quotes, payment on approval — used to sit under the card. The brief asked the card to
+ * carry only the form, so they were removed rather than redesigned. The claims themselves still
+ * live where they are made properly: provider profiles and /trust-and-safety for verification,
+ * the request flow and /{market}/guides for itemized quotes, and /how-it-works for the
+ * release-on-approval sequence. Nothing here invents a review score, a completion count, a price
+ * range or a response time.
  *
  * ⚠️ PASSWORDS: the rule is 10 characters, and that number appears in three places that must agree —
  * `minLength` on the field, the strength meter's threshold, and the check in signUpAction. The meter
@@ -53,8 +51,9 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
  * referrer headers, and an email address is personal data. The resend form asks for it instead.
  *
  * THE CONSENT CHECKBOX IS VERIFIED SERVER-SIDE as well as by the browser, and it links to the two
- * policy pages — which are honest that they are drafted but not yet in force. An account cannot be
- * created without it, which is the point of asking.
+ * policy pages. An account cannot be created without it, which is the point of asking. The line
+ * that used to explain, under the checkbox, that the documents are drafted but not yet in force
+ * was removed at the brief's request.
  */
 
 export const metadata: Metadata = {
@@ -70,24 +69,6 @@ type SearchParams = Promise<{
   intent?: string;
 }>;
 
-const TRUST_POINTS = [
-  {
-    icon: ShieldCheck,
-    title: 'Identity is checked before anyone quotes',
-    body: 'Providers are verified before they can price your work, and the checks that run are described on the provider profile rather than implied.',
-  },
-  {
-    icon: Wallet,
-    title: 'Quotes are compared line by line',
-    body: 'You describe the work once, and every quote is itemized against that same scope — so two numbers can actually be compared.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Payment is released when you approve the work',
-    body: 'Money is released to the provider after you approve what was done, not when they accept the job.',
-  },
-];
-
 export default async function AuthSignUpPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const destination = postAuthTarget(params, '');
@@ -96,13 +77,14 @@ export default async function AuthSignUpPage({ searchParams }: { searchParams: S
 
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (user && destination) redirect(destination);
+  // MOCK MODE: keep the form reachable even though the dummy user is always present.
+  if (!IS_MOCK_MODE && user && destination) redirect(destination);
 
   return (
     <AuthShell
-      eyebrow="Get started"
+      insideCard
+      eyebrow="Create an account"
       title="Create your account"
-      lede="One account, whichever side of the work you are on. It takes a minute, and nothing is published about you until you choose to publish it."
       notice={
         code ? (
           <AuthNotice tone="error">
@@ -132,28 +114,6 @@ export default async function AuthSignUpPage({ searchParams }: { searchParams: S
           </AuthNotice>
         ) : null
       }
-      aside={
-        <ul className="grid gap-3">
-          {TRUST_POINTS.map((point) => (
-            <li key={point.title} className="flex gap-3">
-              <point.icon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>
-                <span className="block text-sm font-semibold text-slate-900">{point.title}</span>
-                <span className="mt-0.5 block text-xs leading-relaxed text-slate-600">{point.body}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      }
-      footer={
-        <>
-          Already have an account?{' '}
-          <Link href={hrefWith(AUTH_PATHS.signIn, { redirect: destination })} className={AUTH_LINK}>
-            Sign in
-          </Link>
-          .
-        </>
-      }
     >
       <SocialAuth destination={destination || '/'} />
 
@@ -162,7 +122,10 @@ export default async function AuthSignUpPage({ searchParams }: { searchParams: S
       <form action={signUpAction} className="grid gap-4">
         <input type="hidden" name="next" value={destination} />
 
-        <RoleIntentField selected={intent} />
+        {/* The chooser is gone from the card, but the intent hint the visitor arrived with still
+            has to reach signUpAction — without it, a provider-intent link would create a
+            customer-intent account. */}
+        <input type="hidden" name="intent" value={intent} />
 
         <AuthField id="display_name" label="Full name">
           <AuthInput
@@ -174,18 +137,13 @@ export default async function AuthSignUpPage({ searchParams }: { searchParams: S
           />
         </AuthField>
 
-        <AuthField
-          id="signup-email"
-          label="Email"
-          hint="This is how you sign in and how the platform reaches you about your requests. Phone sign-up is not enabled yet."
-        >
+        <AuthField id="signup-email" label="Email">
           <AuthInput
             id="signup-email"
             name="email"
             type="email"
             required
             autoComplete="email"
-            aria-describedby="signup-email-hint"
           />
         </AuthField>
 
@@ -202,6 +160,20 @@ export default async function AuthSignUpPage({ searchParams }: { searchParams: S
 
         <SubmitButton pendingLabel="Creating your account…">Create account</SubmitButton>
       </form>
+
+      {/* The account switch sits directly under the primary action, inside the card, so the next
+          step is part of the form's flow rather than a footer below it. It replaces both the
+          header's "Already registered?" pill and the shell's footer slot on this page. */}
+      <p className="mt-4 pt-2 text-center font-sans text-sm text-slate-600">
+        Already have an account?{' '}
+        <Link
+          href={hrefWith(AUTH_PATHS.signIn, { redirect: destination })}
+          className="font-semibold text-amber-600 underline underline-offset-4 transition-colors hover:text-amber-700"
+        >
+          Sign in
+        </Link>
+        .
+      </p>
     </AuthShell>
   );
 }

@@ -120,6 +120,7 @@ function RecoveryRequestView({
 }) {
   return (
     <AuthShell
+      insideCard
       eyebrow="Account recovery"
       title="Reset your password"
       lede="Enter the email address on your account and we will send a secure link to set a new password."
@@ -138,40 +139,30 @@ function RecoveryRequestView({
           </AuthNotice>
         ) : null
       }
-      footer={
-        <>
-          Remembered it?{' '}
-          <Link href={AUTH_PATHS.signIn} className={AUTH_LINK}>
-            Back to sign in
-          </Link>
-          .
-        </>
-      }
     >
       <form action={requestPasswordResetAction} className="grid gap-4">
-        <AuthField
-          id="recovery-email"
-          label="Email"
-          hint="We answer the same way whether or not an account exists for the address, so this form cannot be used to find out who has an account here."
-        >
+        <AuthField id="recovery-email" label="Email">
           <AuthInput
             id="recovery-email"
             name="email"
             type="email"
             required
             autoComplete="email"
-            aria-describedby="recovery-email-hint"
           />
         </AuthField>
 
         <SubmitButton pendingLabel="Sending the link…">Send Reset Instructions</SubmitButton>
       </form>
 
-      <p className="mt-5 border-t border-solid border-slate-200 pt-4 text-xs leading-relaxed text-slate-600">
-        <span className="font-semibold text-slate-900">Phone recovery is not offered yet</span> —
-        there is no SMS sender configured on this platform, and a &ldquo;text me a code&rdquo;
-        option that could not arrive would be worse than asking for the address. If you no longer
-        have access to the email on the account, contact support.
+      <p className="mt-4 pt-2 text-center font-sans text-sm text-slate-600">
+        Remembered it?{' '}
+        <Link
+          href={AUTH_PATHS.signIn}
+          className="font-semibold text-amber-600 underline underline-offset-4 transition-colors hover:text-amber-700"
+        >
+          Back to sign in
+        </Link>
+        .
       </p>
     </AuthShell>
   );
@@ -193,6 +184,7 @@ function RecoveryResetView({
 }) {
   return (
     <AuthShell
+      insideCard
       eyebrow="Account recovery"
       title="Set new password"
       lede="Choose a new password for your account. The recovery link has already proved the address, so this is the last step."
@@ -209,15 +201,6 @@ function RecoveryResetView({
             .
           </AuthNotice>
         )
-      }
-      footer={
-        <>
-          Change your mind?{' '}
-          <Link href={AUTH_PATHS.signIn} className={AUTH_LINK}>
-            Return to sign in
-          </Link>{' '}
-          — the old password still works until you save a new one.
-        </>
       }
     >
       <form action={resetPasswordAction} className="grid gap-4">
@@ -253,6 +236,17 @@ function RecoveryResetView({
           until their sessions expire, unless you end them from account security.
         </span>
       </p>
+
+      <p className="mt-4 pt-2 text-center font-sans text-sm text-slate-600">
+        Change your mind?{' '}
+        <Link
+          href={AUTH_PATHS.signIn}
+          className="font-semibold text-amber-600 underline underline-offset-4 transition-colors hover:text-amber-700"
+        >
+          Return to sign in
+        </Link>{' '}
+        — the old password still works until you save a new one.
+      </p>
     </AuthShell>
   );
 }
@@ -261,6 +255,7 @@ function RecoveryResetView({
 function RecoveryUpdatedView({ destination }: { destination: string }) {
   return (
     <AuthShell
+      insideCard
       eyebrow="Account recovery"
       title="Password updated"
       lede="Your new password is saved and this session is signed in with it."
@@ -270,15 +265,6 @@ function RecoveryUpdatedView({ destination }: { destination: string }) {
           contact support — the recovery link is the only route that can change it.
         </AuthNotice>
       }
-      footer={
-        <>
-          Prefer to sign in again?{' '}
-          <Link href={AUTH_PATHS.signIn} className={AUTH_LINK}>
-            Go to sign in
-          </Link>
-          .
-        </>
-      }
     >
       <Link
         href={destination || '/'}
@@ -287,6 +273,17 @@ function RecoveryUpdatedView({ destination }: { destination: string }) {
         <CheckCircle2 aria-hidden="true" className="h-4 w-4" />
         Continue
       </Link>
+
+      <p className="mt-4 pt-2 text-center font-sans text-sm text-slate-600">
+        Prefer to sign in again?{' '}
+        <Link
+          href={AUTH_PATHS.signIn}
+          className="font-semibold text-amber-600 underline underline-offset-4 transition-colors hover:text-amber-700"
+        >
+          Go to sign in
+        </Link>
+        .
+      </p>
     </AuthShell>
   );
 }

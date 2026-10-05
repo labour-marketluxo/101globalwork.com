@@ -8,8 +8,9 @@ import { SETTINGS_TABS } from '@/features/settings/paths';
  * The settings tab bar — horizontal, at the top of the content area, not a sidebar.
  *
  * WHY THIS IS A CLIENT COMPONENT. It has to mark the current tab, and a server layout receives `params`,
- * not `pathname`. Same reason AuthTopBar is one: the only thing needed from the URL is the path, so the
- * component stays tiny and reads it in the browser and on the server alike.
+ * not `pathname`. The only thing needed from the URL is the path, so the component stays tiny and reads it
+ * in the browser. (AuthTopBar used to be a client component for the same reason; it is logo-only now and
+ * reads no URL at all.)
  *
  * WHY THESE ARE LINKS AND NOT `role="tab"`. The ARIA tabs pattern describes one document with panels swapped
  * in place — a keyboard user is expected to move between tabs with arrow keys and never leave the page.

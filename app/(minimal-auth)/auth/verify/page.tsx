@@ -21,6 +21,7 @@ import {
 } from '@/features/auth/post-auth';
 import { readPendingVerification } from '@/features/auth/verify-cookie';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { IS_MOCK_MODE } from '@/lib/supabase/mock';
 
 /**
  * Confirm your email — /auth/verify
@@ -71,7 +72,9 @@ export default async function AuthVerifyPage({ searchParams }: { searchParams: S
   // someone opens the confirmation link in the browser that signed up, or returns with Back.
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (user) redirect(destination || '/');
+  // MOCK MODE: the dummy user always exists, so this bounce would hide the verification screen we
+  // are previewing. Live behaviour is unchanged.
+  if (!IS_MOCK_MODE && user) redirect(destination || '/');
 
   const pending = await readPendingVerification();
   const masked = maskContact(pending.email);

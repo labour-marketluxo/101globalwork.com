@@ -3,6 +3,7 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { IS_MOCK_MODE, MOCK_DASHBOARD_PATH } from '@/lib/supabase/mock';
 import {
   AUTH_PATHS,
   classifyAuthError,
@@ -83,6 +84,10 @@ export async function signUpAction(formData: FormData) {
   if (!email || password.length < 10) {
     redirect(failure(AUTH_PATHS.signUp, password.length < 10 ? 'weak_password' : 'unknown', back));
   }
+
+  // MOCK MODE: no account is created and no email is sent; the form succeeds and opens the
+  // dashboard (or the destination the visitor arrived with).
+  if (IS_MOCK_MODE) redirect(withFlag(requested || MOCK_DASHBOARD_PATH, 'welcome'));
 
   const supabase = await createSupabaseServerClient();
   const origin = await siteOrigin();
@@ -256,7 +261,11 @@ export async function cancelChallengeAction() {
 export async function signInAction(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
   const password = String(formData.get('password') ?? '');
-  const next = safeNext(formData.get('next'), '/');
+  const next = safeNext(formData.get('next'), IS_MOCK_MODE ? MOCK_DASHBOARD_PATH : '/');
+
+  // MOCK MODE: no credential round trip, no MFA step-up, no env vars.
+  if (IS_MOCK_MODE) redirect(withFlag(next, 'signed_in'));
+
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -282,7 +291,11 @@ export async function signInAction(formData: FormData) {
 }
 
 export async function signInWithGoogleAction(formData: FormData) {
-  const next = safeNext(formData.get('next'), '/');
+  const next = safeNext(formData.get('next'), IS_MOCK_MODE ? MOCK_DASHBOARD_PATH : '/');
+
+  // MOCK MODE: no OAuth redirect to Google; the button opens the dashboard directly.
+  if (IS_MOCK_MODE) redirect(withFlag(next, 'signed_in'));
+
   const supabase = await createSupabaseServerClient();
   const origin = await siteOrigin();
   const { data, error } = await supabase.auth.signInWithOAuth({
