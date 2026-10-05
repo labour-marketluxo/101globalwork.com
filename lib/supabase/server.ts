@@ -1,5 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies, headers } from 'next/headers';
+import { IS_MOCK_MODE, createMockSupabaseClient } from '@/lib/supabase/mock';
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
@@ -34,7 +36,10 @@ async function clientHeaders(): Promise<Record<string, string>> {
   return forwarded;
 }
 
-export async function createSupabaseServerClient() {
+export async function createSupabaseServerClient(): Promise<SupabaseClient> {
+  // MOCK MODE: no network, no env, no cookies. See lib/supabase/mock.ts for the single switch.
+  if (IS_MOCK_MODE) return createMockSupabaseClient();
+
   const cookieStore = await cookies();
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
