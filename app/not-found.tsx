@@ -1,41 +1,20 @@
-import Link from 'next/link';
-import SiteChrome from '@/components/navigation/SiteChrome';
+import NotFoundContent from '@/components/ui/NotFoundContent';
 
 /**
- * Global 404.
+ * Global 404 — content only.
  *
- * Replaces Next's bare default page. This is reached from unmatched URLs and
- * from every `notFound()` call in the app — most notably the discovery route
- * (app/(marketing)/[market]/…/[service]/page.tsx), which calls notFound() when
- * no public document exists for the requested path.
+ * Next marks 404 responses noindex automatically, so no robots metadata is needed here.
  *
- * Next marks 404 responses noindex automatically, so no robots metadata is
- * needed here.
+ * WHY THERE IS NO SiteChrome HERE. A `not-found.tsx` is rendered inside the layout of the segment
+ * that owns it; the root file's owner is app/layout.tsx, which draws no chrome, and the marketing
+ * file's owner is app/(marketing)/layout.tsx, which draws SiteChrome. The old version drew
+ * SiteChrome itself, so a marketing 404 rendered the header and footer twice — once from the
+ * marketing layout and once from here. The chrome is now the layout's job and the 404 only supplies
+ * the body. See components/ui/NotFoundContent.tsx.
  *
- * It renders the site chrome explicitly. app/layout.tsx no longer draws a header or footer (see
- * components/navigation/SiteChrome.tsx), and a 404 is a dead end people need a way out of — a
- * bare card with no nav would be worse on a 404 than anywhere else, because the visitor is
- * already lost.
+ * A path that matches no group at all has no chrome to inherit and renders this block on its own;
+ * that is the one case with no navigation, and the block still carries both escape links.
  */
 export default function NotFound() {
-  return (
-    <SiteChrome>
-      <section className="content-shell">
-        <p className="eyebrow">404</p>
-        <h1>We couldn’t find that page</h1>
-        <p className="lede left">
-          The link may be out of date, or the page may never have existed. Nothing is
-          broken on your side.
-        </p>
-        <div className="entry-actions">
-          <Link href="/" className="button-link">
-            Go to the homepage
-          </Link>
-          <Link href="/services" className="secondary-link">
-            Browse services
-          </Link>
-        </div>
-      </section>
-    </SiteChrome>
-  );
+  return <NotFoundContent />;
 }
