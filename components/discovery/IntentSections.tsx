@@ -198,7 +198,7 @@ function ServiceBundle({
   return (
     <>
       <p className="max-w-3xl text-sm leading-relaxed text-slate-600">{description}</p>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((service) => (
           <ServiceCard key={service.serviceEntityId} marketSlug={marketSlug} service={service} />
         ))}

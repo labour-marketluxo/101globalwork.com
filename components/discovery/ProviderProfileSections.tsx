@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { ArrowRight, BadgeCheck, Clock, Info, MapPin, ShieldCheck } from '@/components/ui/icons';
 import { CARD, CTA_AMBER, LINK_ARROW } from '@/components/discovery/tokens';
 import { NoticePanel } from '@/components/discovery/MarketSections';
+import { CardImage } from '@/components/discovery/CardImage';
 import type { Market } from '@/features/discovery/data/market-catalog';
 import type { ProviderProfileView } from '@/features/discovery/data/provider-profile';
 
@@ -87,18 +88,54 @@ export function ProviderProfileSections({
         <h2 id="provider-services" className="text-2xl font-bold tracking-tight text-slate-900">
           Services and area
         </h2>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <div className={`${CARD} p-5`}>
-            <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-              Canonical service
-            </h3>
-            {view.serviceName ? (
-              <p className="mt-2">
+        {/* Three columns, so neither card takes half the width of the section. Each carries the
+            same card art block as the rest of the discovery cards; `provider:service` and
+            `provider:area` are the keys to map in components/discovery/CardImage.tsx. */}
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className={`${CARD} flex flex-col overflow-hidden`}>
+            <CardImage artKey="provider:service" />
+            <div className="flex flex-1 flex-col p-5">
+              <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                Canonical service
+              </h3>
+              {view.serviceName ? (
+                <p className="mt-2">
+                  <Link
+                    href={`/${market.slug}/search?q=${encodeURIComponent(view.serviceName)}`}
+                    className="rounded-full border border-solid border-primary-subtle bg-primary-surface px-2.5 py-1 text-xs font-medium text-primary no-underline transition-colors hover:border-primary hover:bg-white"
+                  >
+                    {view.serviceName}
+                  </Link>
+                </p>
+              ) : (
+                <p className="mt-2 text-sm text-slate-600">No service is recorded yet.</p>
+              )}
+              <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                The catalog service this provider is eligible for. Eligibility is checked per
+                service and per area, so it is the same scope their quotes are matched against.
+              </p>
+            </div>
+          </div>
+          <div className={`${CARD} flex flex-col overflow-hidden`}>
+            <CardImage artKey="provider:area" />
+            <div className="flex flex-1 flex-col p-5">
+              <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                Based in
+              </h3>
+              <p className="mt-2 text-sm font-bold text-slate-900">{place}</p>
+              <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                The locality on record, which is as precise as this platform publishes. Exact
+                addresses are not collected for publication and never appear on a public page.
+              </p>
+              <div className="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-4">
                 <Link
-                  href={`/${market.slug}/search?q=${encodeURIComponent(view.serviceName)}`}
-                  className="rounded-full border border-solid border-primary-subtle bg-primary-surface px-2.5 py-1 text-xs font-medium text-primary no-underline transition-colors hover:border-primary hover:bg-white"
+                  href={`/${market.slug}/search?area=${encodeURIComponent(
+                    (view.locationName ?? '').toLowerCase().replace(/\s+/g, '-'),
+                  )}`}
+                  className={LINK_ARROW}
                 >
-                  {view.serviceName}
+                  Local providers
+                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapPin } from '@/components/ui/icons';
@@ -9,7 +10,6 @@ import { getMarket, getMarketLocations } from '@/features/discovery/data/market-
 import {
   categoryHref,
   getServiceTaxonomy,
-  serviceHref,
 } from '@/features/discovery/data/service-taxonomy';
 import { getIntentCatalog, outcomeHref, problemHref } from '@/features/discovery/data/intent-taxonomy';
 import { GUIDES } from '@/features/marketing/guides';
@@ -66,10 +66,117 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-const CHIP =
-  'flex cursor-pointer items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-3.5 py-2 font-mono text-xs text-slate-700 no-underline transition-all hover:border-primary hover:bg-primary hover:text-white';
+/** The jump-off link in a section header — a touch larger than the inline links inside a card. */
+const SECTION_LINK =
+  'shrink-0 font-sans text-sm font-semibold text-slate-700 no-underline transition-colors hover:text-amber-600';
+
+/**
+ * A section header: title, description, and the way out of the section.
+ *
+ * The link is optional and per-section, because the destinations are: the directory has a real index
+ * (`/{market}/services`), the problem and outcome lists and the provider list fall back to market
+ * search (there is no index route for those families yet), and guides hand off to the help centre.
+ * `items-start` puts it in the top-right corner of the section rather than on the baseline of the
+ * copy, which is where the design puts it.
+ */
+function SectionHeading({
+  title,
+  description,
+  link,
+}: {
+  title: string;
+  description: string;
+  link?: { href: string; label: string };
+}) {
+  return (
+    <div className="mb-6 flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+      <div className="max-w-3xl">
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">{title}</h2>
+        <p className="mt-3 text-base leading-relaxed text-slate-600">{description}</p>
+      </div>
+      {link ? (
+        <Link href={link.href} className={SECTION_LINK}>
+          {link.label} →
+        </Link>
+      ) : null}
+    </div>
+  );
+}
+
 const LINK_ROW =
-  'font-mono text-xs font-semibold text-slate-700 no-underline transition-colors hover:text-amber-600';
+  'font-sans text-xs font-semibold text-slate-700 no-underline transition-colors hover:text-amber-600';
+
+/** How many art tiles a directory card draws, in the 2×2 grid from the design. */
+const DIRECTORY_CARD_TILES = 4;
+
+/**
+ * Card art per directory entry. Empty by default: drop files in `public/images/directory/` and add
+ * the paths here, keyed by the catalogue's `canonical_key` (e.g. `home_property_maintenance`). Up to
+ * four are shown; a slot without a path keeps the grey placeholder, so a half-filled gallery still
+ * renders.
+ */
+const DIRECTORY_CARD_IMAGES: Record<string, readonly string[]> = {
+  // home_property_maintenance: ['/images/directory/home-1.jpg', '/images/directory/home-2.jpg'],
+};
+
+/** Shown when the catalogue carries no definition for an entry. Describes the page, not the trade. */
+const DIRECTORY_CARD_FALLBACK =
+  'What the work covers, where it is available, and who is eligible to quote on it.';
+
+/**
+ * One entry in the directory, as a card.
+ *
+ * The whole card is the link, so the heading and the arrow are one target rather than two. The
+ * arrow is the same forward chevron the rest of the site uses for "go deeper" links; it is here as
+ * text rather than an icon so it inherits the link's colour transition on hover.
+ */
+function DirectoryCard({
+  name,
+  description,
+  href,
+  images,
+  footer,
+}: {
+  name: string;
+  description: string;
+  href: string;
+  images: readonly string[];
+  /** The line at the foot of the card — a count, and the arrow. */
+  footer: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 no-underline shadow-sm transition-all hover:border-emerald-500/50"
+    >
+      <h3 className="text-lg font-bold text-slate-900">{name}</h3>
+      <p className="mt-2 mb-5 text-sm leading-relaxed text-slate-600">{description}</p>
+
+      <div className="grid grid-cols-2 gap-3">
+        {Array.from({ length: DIRECTORY_CARD_TILES }).map((_, index) => {
+          const art = images[index];
+          return (
+            <div key={index} className="relative aspect-square overflow-hidden rounded-xl bg-slate-200">
+              {art ? (
+                <Image
+                  src={art}
+                  alt=""
+                  fill
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                  className="object-cover"
+                />
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+
+      <span className="mt-5 inline-flex w-fit items-center gap-2 font-sans text-xs font-semibold text-slate-700 transition-colors group-hover:text-amber-600">
+        {footer}
+      </span>
+    </Link>
+  );
+}
 
 export default async function CountryHubPage({ params }: { params: Params }) {
   const { market } = await params;
@@ -89,9 +196,34 @@ export default async function CountryHubPage({ params }: { params: Params }) {
   const marketSlug = catalogMarket?.slug ?? hub.slug;
   const currency = catalogMarket?.currencyCode ?? null;
   const categories = taxonomy?.categories ?? [];
-  const services = taxonomy?.services ?? [];
   const problems = intents?.problems ?? [];
   const outcomes = intents?.outcomes ?? [];
+
+  /**
+   * The directory lists CATEGORIES ONLY — the services underneath are one click away on each
+   * category page, and showing both layers here duplicated the same four trades twice.
+   *
+   * When no category layer has been curated, the section falls back to the mock scopes, which hand
+   * off to market search — the honest "nothing published yet" state, and the only case where a
+   * service-shaped entry appears at this level.
+   */
+  const directoryCards = categories.length
+    ? categories.map((category) => ({
+        key: category.categoryId,
+        name: category.displayName,
+        description: category.definition,
+        href: categoryHref(marketSlug, category),
+        images: DIRECTORY_CARD_IMAGES[category.canonicalKey] ?? [],
+        footer: `${category.services.length} service${category.services.length === 1 ? '' : 's'} →`,
+      }))
+    : hub.popularServices.map((service) => ({
+        key: service.slug,
+        name: service.name,
+        description: DIRECTORY_CARD_FALLBACK,
+        href: searchHref(service.name),
+        images: [] as readonly string[],
+        footer: `Search ${service.name} →`,
+      }));
 
   // Only providers the mock data marks verified, so the "Vetted Regional Providers"
   // heading and the badge on every card are both true of what is on screen.
@@ -159,13 +291,17 @@ export default async function CountryHubPage({ params }: { params: Params }) {
       <div className={`${PUBLIC_BAND} px-4 pt-12 pb-24 sm:px-6 lg:px-8`}>
         {/* ── cities ──────────────────────────────────────────────────────────────────── */}
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-slate-900">Cities &amp; Active Hubs</h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <SectionHeading
+            title="Cities & Active Hubs"
+            description="Pick a city to see the neighbourhoods and the services available there."
+            link={{ href: `${basePath}/search`, label: 'Search all providers' }}
+          />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {hub.cities.map((city) => (
               <Link
                 key={city.slug}
                 href={`${basePath}/${city.slug}`}
-                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 no-underline shadow-sm transition-all hover:border-emerald-500/50"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white no-underline shadow-sm transition-all hover:border-emerald-500/50"
               >
                 {/* THE IMAGE SLOT, FULL-BLEED. It sits flush against the card's top, left and
                     right edges — the card carries the padding for the text below instead, and
@@ -202,122 +338,89 @@ export default async function CountryHubPage({ params }: { params: Params }) {
         </section>
 
         {/* ── the real directory: categories + services ───────────────────────────────── */}
-        <section className="mt-10 mb-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="text-xl font-bold text-slate-900">The {hub.name} directory</h2>
-              <p className="mt-1 max-w-2xl text-sm text-slate-600">
-                Catalogue entries the platform publishes for this market. Each one opens its own
-                page rather than a keyword search.
-              </p>
-            </div>
-            <Link href={`${basePath}/services`} className={LINK_ROW}>
-              All trades and services →
-            </Link>
+        <section className="mt-16">
+          <SectionHeading
+            title={`The ${hub.name} directory`}
+            description="Catalogue entries the platform publishes for this market. Each one opens its own page rather than a keyword search."
+            link={{ href: `${basePath}/services`, label: 'All trades and services' }}
+          />
+
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {directoryCards.map((card) => (
+              <DirectoryCard
+                key={card.key}
+                name={card.name}
+                description={card.description}
+                href={card.href}
+                images={card.images}
+                footer={card.footer}
+              />
+            ))}
           </div>
-
-          {categories.length ? (
-            <div className="mb-5 grid gap-4 md:grid-cols-2">
-              {categories.map((category) => (
-                <Link
-                  key={category.categoryId}
-                  href={categoryHref(marketSlug, category)}
-                  className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-5 no-underline transition-all hover:border-emerald-500/50 hover:bg-white"
-                >
-                  <span>
-                    <span className="block text-lg font-bold text-slate-900">
-                      {category.displayName}
-                    </span>
-                    <span className="mt-1 block text-sm leading-relaxed text-slate-600">
-                      {category.definition}
-                    </span>
-                  </span>
-                  <span className="mt-4 font-mono text-xs font-semibold text-slate-700">
-                    {category.services.length} service
-                    {category.services.length === 1 ? '' : 's'} →
-                  </span>
-                </Link>
-              ))}
-            </div>
-          ) : null}
-
-          {services.length ? (
-            <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
-              {services.map((service) => (
-                <li key={service.serviceEntityId}>
-                  <Link href={serviceHref(marketSlug, service)} className={CHIP}>
-                    {service.displayName} →
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            /* Nothing curated yet: the honest fallback, and the one place a keyword is right. */
-            <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
-              {hub.popularServices.map((service) => (
-                <li key={service.slug}>
-                  <Link href={searchHref(service.name)} className={CHIP}>
-                    {service.name} →
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
         </section>
 
         {/* ── problems + outcomes ─────────────────────────────────────────────────────── */}
         {problems.length || outcomes.length ? (
-          <section className="mb-10 grid gap-6 md:grid-cols-2">
-            {problems.length ? (
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-1 text-xl font-bold text-slate-900">Common problems</h2>
-                <p className="mb-4 text-sm leading-relaxed text-slate-600">
-                  Describe the symptom; the platform maps it to the trade that fixes it.
-                </p>
-                <ul className="m-0 grid list-none gap-2 p-0">
-                  {problems.map((problem) => (
-                    <li
-                      key={problem.problemEntityId}
-                      className="flex flex-wrap items-center justify-between gap-3"
-                    >
-                      <Link href={problemHref(marketSlug, problem)} className={LINK_ROW}>
-                        {problem.displayName}
-                      </Link>
-                      <span className="font-mono text-[10px] tracking-wider text-slate-400 uppercase">
-                        {problem.severity}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
+          <section className="mt-16">
+            <SectionHeading
+              title="Common problems and outcomes"
+              description="Start from the symptom or from the result you want — both point at the same trades."
+              link={{ href: `${basePath}/search`, label: 'Search by symptom' }}
+            />
 
-            {outcomes.length ? (
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-1 text-xl font-bold text-slate-900">Outcomes</h2>
-                <p className="mb-4 text-sm leading-relaxed text-slate-600">
-                  What a job is for — written as the result, not as the trade.
-                </p>
-                <ul className="m-0 grid list-none gap-2 p-0">
-                  {outcomes.map((outcome) => (
-                    <li key={outcome.outcomeEntityId}>
-                      <Link href={outcomeHref(marketSlug, outcome)} className={LINK_ROW}>
-                        {outcome.displayName} →
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
+            <div className="grid gap-6 md:grid-cols-2">
+              {problems.length ? (
+                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-1 text-xl font-bold text-slate-900">Common problems</h3>
+                  <p className="mb-4 text-sm leading-relaxed text-slate-600">
+                    Describe the symptom; the platform maps it to the trade that fixes it.
+                  </p>
+                  <ul className="m-0 grid list-none gap-2 p-0">
+                    {problems.map((problem) => (
+                      <li
+                        key={problem.problemEntityId}
+                        className="flex flex-wrap items-center justify-between gap-3"
+                      >
+                        <Link href={problemHref(marketSlug, problem)} className={LINK_ROW}>
+                          {problem.displayName}
+                        </Link>
+                        <span className="font-sans text-[10px] tracking-wider text-slate-400 uppercase">
+                          {problem.severity}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {outcomes.length ? (
+                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-1 text-xl font-bold text-slate-900">Outcomes</h3>
+                  <p className="mb-4 text-sm leading-relaxed text-slate-600">
+                    What a job is for — written as the result, not as the trade.
+                  </p>
+                  <ul className="m-0 grid list-none gap-2 p-0">
+                    {outcomes.map((outcome) => (
+                      <li key={outcome.outcomeEntityId}>
+                        <Link href={outcomeHref(marketSlug, outcome)} className={LINK_ROW}>
+                          {outcome.displayName} →
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
           </section>
         ) : null}
 
         {/* ── guides: static, reviewed content, always available ──────────────────────── */}
-        <section className="mb-10">
-          <h2 className="mb-1 text-2xl font-bold text-slate-900">Guides</h2>
-          <p className="mb-6 text-sm text-slate-600">
-            Checked answers to the questions that come up before a job is posted.
-          </p>
+        <section className="mt-16">
+          <SectionHeading
+            title="Guides"
+            description="Checked answers to the questions that come up before a job is posted."
+            link={{ href: '/help', label: 'More in the help centre' }}
+          />
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {GUIDES.map((guide) => (
               <Link
@@ -340,26 +443,31 @@ export default async function CountryHubPage({ params }: { params: Params }) {
         </section>
 
         {/* ── vetted providers ────────────────────────────────────────────────────────── */}
-        <section>
-          <h2 className="mb-1 text-2xl font-bold text-slate-900">Vetted Regional Providers</h2>
-          <p className="mb-6 text-sm text-slate-600">
-            Providers holding verified status with itemized job history.
-          </p>
+        <section className="mt-16">
+          <SectionHeading
+            title="Vetted Regional Providers"
+            description="Providers holding verified status with itemized job history."
+            link={{ href: `${basePath}/search`, label: 'Browse all providers' }}
+          />
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {providers.map((provider) => (
               <article
                 key={provider.slug}
-                className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-slate-300"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-300"
               >
-                <div>
+                {/* ── headline block: name and status, then the one-line description ────────
+                    The verified pill is the first thing in the row, so it lands in the card's
+                    top-right corner whatever the name does; `shrink-0` stops a long name from
+                    squeezing it. */}
+                <div className="p-5 pb-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <h3 className="text-lg font-bold text-slate-900">{provider.displayName}</h3>
                     <span className="shrink-0 rounded-full border border-emerald-300 bg-emerald-100 px-2.5 py-1 font-sans text-[10px] font-bold text-emerald-800">
                       VERIFIED PROVIDER
                     </span>
                   </div>
-                  <p className="my-3 text-sm leading-relaxed text-slate-600">{provider.headline}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">{provider.headline}</p>
                 </div>
 
                 {/* ── the artwork, full-bleed like the design ───────────────────────────────
@@ -393,7 +501,9 @@ export default async function CountryHubPage({ params }: { params: Params }) {
           </div>
         </section>
 
-        <IndexabilityNotice />
+        <div className="mt-16">
+          <IndexabilityNotice />
+        </div>
       </div>
     </>
   );

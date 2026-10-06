@@ -37,6 +37,13 @@ export type ProviderPreview = {
   slug: string;
   displayName: string;
   headline: string;
+  /**
+   * Card artwork for the market hub, as a public path — e.g.
+   * `/images/providers/bright-plumb-services.jpg`. Put the file in `public/images/providers/` and
+   * set this on the provider in features/discovery/data/mock-locations.ts. Left unset, the card
+   * draws its grey placeholder.
+   */
+  image?: string;
   /** Mean rating out of 5. */
   rating: number;
   completedJobs: number;
@@ -57,6 +64,12 @@ export type CityHub = {
   slug: string;
   name: string;
   intro: string;
+  /**
+   * Card image for the market hub, as a public path — e.g. `/images/markets/abuja.jpg`.
+   * Put the file in `public/images/markets/` and set this on the city in
+   * features/discovery/data/mock-locations.ts. Left unset, the card draws its grey placeholder.
+   */
+  image?: string;
   /** Localities within this city. */
   localities: LocalityHub[];
   popularServices: ServiceLink[];

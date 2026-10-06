@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CardImage } from '@/components/discovery/CardImage';
 import type { ReactNode } from 'react';
 import {
   ArrowRight,
@@ -319,33 +320,19 @@ export function CategoryCard({
   category: TaxonomyCategory;
 }) {
   return (
-    <article className={`${CARD_INTERACTIVE} flex flex-col p-6`}>
-      <span
-        aria-hidden="true"
-        className="flex h-11 w-11 items-center justify-center rounded-xl border border-solid border-primary-subtle bg-primary-surface text-primary"
-      >
-        <CategoryGlyph canonicalKey={category.canonicalKey} className="h-5 w-5" />
-      </span>
+    <article className={`${CARD_INTERACTIVE} flex flex-col overflow-hidden`}>
+      <CardImage artKey={category.canonicalKey} />
 
-      <h3 className="mt-4 text-lg font-bold tracking-tight text-slate-900">{category.displayName}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-slate-600">{category.definition}</p>
+      <div className="flex flex-1 flex-col p-5">
+        <span
+          aria-hidden="true"
+          className="flex h-11 w-11 items-center justify-center rounded-xl border border-solid border-primary-subtle bg-primary-surface text-primary"
+        >
+          <CategoryGlyph canonicalKey={category.canonicalKey} className="h-5 w-5" />
+        </span>
 
-      {category.services.length ? (
-        <div className="mt-4 flex flex-wrap gap-1.5">
-          {category.services.map((service) => (
-            <span
-              key={service.serviceEntityId}
-              className="rounded-full border border-solid border-slate-200 bg-slate-50 px-2.5 py-0.5 text-xs text-slate-600"
-            >
-              {service.displayName}
-            </span>
-          ))}
-        </div>
-      ) : (
-        <p className="mt-4 text-xs leading-relaxed text-slate-500">
-          No services are curated under this category yet.
-        </p>
-      )}
+        <h3 className="mt-4 text-lg font-bold tracking-tight text-slate-900">{category.displayName}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">{category.definition}</p>
 
         {category.services.length ? (
           <div className="mt-4 flex flex-wrap gap-1.5">
@@ -395,28 +382,14 @@ export function ServiceCard({
   showCategory?: boolean;
 }) {
   return (
-    <article className={`${CARD_INTERACTIVE} flex flex-col p-5`}>
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <h3 className="text-base font-bold tracking-tight text-slate-900">{service.displayName}</h3>
-        <AvailabilityChip count={service.providerCount} />
-      </div>
+    <article className={`${CARD_INTERACTIVE} flex flex-col overflow-hidden`}>
+      <CardImage artKey={service.canonicalKey} />
 
-      {service.summary ? (
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">{service.summary}</p>
-      ) : (
-        // Said out loud rather than filled in. A generated description is the one
-        // thing this codebase will not put in front of a customer.
-        <p className="mt-2 text-sm leading-relaxed text-slate-500">
-          No description has been published for this service yet. The entry is a real
-          catalog row; the copy is not written.
-        </p>
-      )}
-
-      {service.aliases.length ? (
-        <div className="mt-3">
-          <AliasChips marketSlug={marketSlug} aliases={service.aliases} cap={4} />
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <h3 className="text-base font-bold tracking-tight text-slate-900">{service.displayName}</h3>
+          <AvailabilityChip count={service.providerCount} />
         </div>
-      ) : null}
 
         {service.summary ? (
           <p className="mt-2 text-sm leading-relaxed text-slate-600">{service.summary}</p>
@@ -434,10 +407,28 @@ export function ServiceCard({
             <AliasChips marketSlug={marketSlug} aliases={service.aliases} cap={4} />
           </div>
         ) : null}
-        <Link href={serviceHref(marketSlug, service)} className={LINK_ARROW}>
-          Open service
-          <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-        </Link>
+
+        <div
+          className={`mt-auto flex flex-wrap items-center gap-3 border-t border-solid border-slate-100 pt-4 ${
+            showCategory ? 'justify-between' : 'justify-end'
+          }`}
+        >
+          {showCategory ? (
+            category ? (
+              <span className="font-sans text-[11px] tracking-wider text-slate-500 uppercase">
+                {category.displayName}
+              </span>
+            ) : (
+              <span className="font-sans text-[11px] tracking-wider text-slate-400 uppercase">
+                Uncategorised
+              </span>
+            )
+          ) : null}
+          <Link href={serviceHref(marketSlug, service)} className={LINK_ARROW}>
+            Open service
+            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </Link>
+        </div>
       </div>
     </article>
   );
@@ -750,7 +741,7 @@ export async function DirectoryBody({
             holds the services that belong together, so you can start from the general and narrow
             down.
           </p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {taxonomy.categories.map((category) => (
               <CategoryCard key={category.categoryId} marketSlug={marketSlug} category={category} />
             ))}
@@ -773,7 +764,7 @@ export async function DirectoryBody({
           priced in {market.currencyCode}, and every request is scoped the same way for every
           provider who quotes on it.
         </p>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {taxonomy.services.map((service) => (
             <ServiceCard
               key={service.serviceEntityId}
@@ -853,7 +844,7 @@ export async function CategoryBody({
               ? 'with no published providers behind them yet.'
               : `with ${providerTotal} published provider${providerTotal === 1 ? '' : 's'} across the market.`}
           </p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
               <ServiceCard
                 key={service.serviceEntityId}

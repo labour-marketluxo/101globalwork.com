@@ -58,6 +58,8 @@ const PROVIDER_POOL: readonly ProviderPreview[] = [
     slug: 'bright-plumb-services',
     displayName: 'Bright Plumb Services',
     headline: 'Emergency leaks, pipework and bathroom fittings',
+    // Card image: e.g. '/images/providers/<slug>.jpg' (file goes in public/images/providers/).
+    image: undefined,
     rating: 4.9,
     completedJobs: 284,
     verified: true,
@@ -66,6 +68,8 @@ const PROVIDER_POOL: readonly ProviderPreview[] = [
     slug: 'crown-electrical-works',
     displayName: 'Crown Electrical Works',
     headline: 'Rewiring, inverters and fault finding',
+    // Card image: e.g. '/images/providers/<slug>.jpg' (file goes in public/images/providers/).
+    image: undefined,
     rating: 4.8,
     completedJobs: 191,
     verified: true,
@@ -74,6 +78,8 @@ const PROVIDER_POOL: readonly ProviderPreview[] = [
     slug: 'harmattan-cooling',
     displayName: 'Harmattan Cooling',
     headline: 'Air conditioning installation, servicing and gas refills',
+    // Card image: e.g. '/images/providers/<slug>.jpg' (file goes in public/images/providers/).
+    image: undefined,
     rating: 4.7,
     completedJobs: 156,
     verified: true,
@@ -82,6 +88,8 @@ const PROVIDER_POOL: readonly ProviderPreview[] = [
     slug: 'gwarinpa-home-care',
     displayName: 'Gwarinpa Home Care',
     headline: 'Deep cleaning for homes and small offices',
+    // Card image: e.g. '/images/providers/<slug>.jpg' (file goes in public/images/providers/).
+    image: undefined,
     rating: 4.6,
     completedJobs: 98,
     verified: false,
@@ -90,6 +98,8 @@ const PROVIDER_POOL: readonly ProviderPreview[] = [
     slug: 'sahel-facilities',
     displayName: 'Sahel Facilities',
     headline: 'Multi-trade maintenance for estates and landlords',
+    // Card image: e.g. '/images/providers/<slug>.jpg' (file goes in public/images/providers/).
+    image: undefined,
     rating: 4.8,
     completedJobs: 342,
     verified: true,
@@ -98,6 +108,8 @@ const PROVIDER_POOL: readonly ProviderPreview[] = [
     slug: 'riverbend-plumbing',
     displayName: 'Riverbend Plumbing',
     headline: 'Water tanks, pumps and drainage',
+    // Card image: e.g. '/images/providers/<slug>.jpg' (file goes in public/images/providers/).
+    image: undefined,
     rating: 4.5,
     completedJobs: 121,
     verified: false,
@@ -106,6 +118,8 @@ const PROVIDER_POOL: readonly ProviderPreview[] = [
     slug: 'zenith-power-systems',
     displayName: 'Zenith Power Systems',
     headline: 'Solar, inverters and backup power',
+    // Card image: e.g. '/images/providers/<slug>.jpg' (file goes in public/images/providers/).
+    image: undefined,
     rating: 4.9,
     completedJobs: 207,
     verified: true,
@@ -143,6 +157,8 @@ function locality(
 const ABUJA: CityHub = {
   slug: 'abuja',
   name: 'Abuja',
+  // Card image: e.g. '/images/markets/abuja.jpg' (file goes in public/images/markets/).
+  image: undefined,
   intro:
     'The capital’s demand is concentrated in serviced estates and mid-rise offices, where response time matters more than headline price.',
   popularServices: servicesFor([]),
@@ -175,6 +191,8 @@ const ABUJA: CityHub = {
 const LAGOS: CityHub = {
   slug: 'lagos',
   name: 'Lagos',
+  // Card image: e.g. '/images/markets/lagos.jpg' (file goes in public/images/markets/).
+  image: undefined,
   intro:
     'Density and traffic shape everything here. Quote accuracy depends on providers being local to the island or mainland job site.',
   popularServices: servicesFor([]),
@@ -207,6 +225,8 @@ const LAGOS: CityHub = {
 const PORT_HARCOURT: CityHub = {
   slug: 'port-harcourt',
   name: 'Port Harcourt',
+  // Card image: e.g. '/images/markets/port-harcourt.jpg' (file goes in public/images/markets/).
+  image: undefined,
   intro:
     'Industrial and residential work overlap, so provider capability is checked more strictly before matching.',
   popularServices: servicesFor([]),
