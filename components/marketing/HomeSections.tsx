@@ -42,7 +42,7 @@ import {
 
 /* ------------------------------------------------------------------- data */
 
-const SERVICE_CATEGORIES: { slug: string; name: string; icon: LucideIcon }[] = [
+const SERVICE_CATEGORIES: { slug: string; name: string; icon: IconComponent }[] = [
   { slug: 'plumbers', name: 'Plumbing', icon: Wrench },
   { slug: 'electricians', name: 'Electrical Systems', icon: Zap },
   { slug: 'air-conditioning', name: 'Air Conditioning & HVAC', icon: Wind },
@@ -69,7 +69,7 @@ const ACTION_CHIPS: { label: string; href: string }[] = [
   { label: 'Help Me Figure It Out', href: '/search' },
 ];
 
-const TRUST_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
+const TRUST_POINTS: { icon: IconComponent; title: string; body: string }[] = [
   {
     icon: ShieldCheck,
     title: 'Verified Credentials',

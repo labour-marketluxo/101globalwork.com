@@ -42,7 +42,7 @@ type BentoCard = {
   title: string;
   description: string;
   href: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   /** Tailwind background utility for this card's surface. */
   surface: string;
   /** Tailwind text utility, contrast-matched to `surface`. */
@@ -173,7 +173,7 @@ export default function ExpandableBentoGrid() {
                     isActive ? 'translate-x-0 opacity-100 md:w-44' : 'translate-x-8 opacity-0 md:w-0'
                   }`}
                 >
-                  <Icon className="h-24 w-24" strokeWidth={1.25} />
+                  <Icon className="h-24 w-24 [&_g]:[stroke-width:1.25]" />
                 </div>
               </Link>
             </li>
