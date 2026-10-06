@@ -108,7 +108,7 @@ export function MembersTable({
                   <PendingButton
                     idle="Save role and scope"
                     pending="Saving…"
-                    className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </form>
@@ -208,7 +208,7 @@ export function MembersTable({
               idle="Create the invitation"
               pending="Creating…"
               icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>
@@ -221,7 +221,7 @@ export function InvitationLinkPanel({ token, link }: { token: string; link: stri
   return (
     <div className="rounded-xl border border-solid border-primary-subtle bg-primary-surface p-3.5 text-xs leading-relaxed text-slate-700">
       <p className="font-semibold text-slate-900">The invitation link — shown once</p>
-      <p className="mt-1 break-all font-mono text-[11px] text-primary">{link}</p>
+      <p className="mt-1 break-all font-sans text-[11px] text-primary">{link}</p>
       <p className="mt-1">
         Nothing stores this token in a readable form and no email is sent. Copy it now; if it is lost, invite the
         address again and the earlier invitation is revoked.
@@ -287,13 +287,13 @@ export function LocationsDirectory({
             <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
               {location.accessNotes ? (
                 <div className="rounded-xl border border-solid border-slate-200 p-3">
-                  <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Getting in</dt>
+                  <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Getting in</dt>
                   <dd className="mt-0.5 text-slate-700">{location.accessNotes}</dd>
                 </div>
               ) : null}
               {location.safetyNotes ? (
                 <div className="rounded-xl border border-solid border-secondary bg-secondary-light p-3">
-                  <dt className="font-mono font-bold tracking-wider text-amber-800 uppercase">Safety notes</dt>
+                  <dt className="font-sans font-bold tracking-wider text-amber-800 uppercase">Safety notes</dt>
                   <dd className="mt-0.5 text-amber-900">{location.safetyNotes}</dd>
                 </div>
               ) : null}
@@ -366,7 +366,7 @@ export function LocationsDirectory({
                   <PendingButton
                     idle="Save branch details"
                     pending="Saving…"
-                    className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </form>
@@ -444,11 +444,11 @@ export function PreferredProvidersDirectory({
                   </p>
                 </div>
                 <span className="flex flex-wrap items-center gap-1.5">
-                  <span className={status.tone === 'teal' ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase' : status.tone === 'amber' ? BADGE_AMBER : BADGE_SLATE}>
+                  <span className={status.tone === 'teal' ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : status.tone === 'amber' ? BADGE_AMBER : BADGE_SLATE}>
                     {status.label}
                   </span>
                   {provider.identityVerified ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
                       Identity verified
                     </span>
                   ) : (
@@ -542,7 +542,7 @@ export function PreferredProvidersDirectory({
             <PendingButton
               idle="Add to the directory"
               pending="Saving…"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>

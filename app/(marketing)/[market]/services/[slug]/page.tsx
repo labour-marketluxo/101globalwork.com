@@ -221,7 +221,7 @@ export default async function TaxonomySegmentPage({
               {category ? (
                 <Link
                   href={categoryHref(found.slug, category)}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-slate-200 uppercase no-underline transition-colors hover:bg-white/20"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-slate-200 uppercase no-underline transition-colors hover:bg-white/20"
                 >
                   <Boxes aria-hidden="true" className="h-3.5 w-3.5" />
                   {category.displayName}
@@ -301,7 +301,7 @@ export default async function TaxonomySegmentPage({
             </MetaChip>
             <Link
               href={`/${found.slug}/search`}
-              className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-slate-200 uppercase no-underline transition-colors hover:bg-white/20"
+              className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-slate-200 uppercase no-underline transition-colors hover:bg-white/20"
             >
               <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
               Search this market

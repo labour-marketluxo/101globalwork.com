@@ -134,11 +134,16 @@
   --color-text-muted: var(--color-neutral-muted);
 
   /* -------------------------------------------------------------- typography
-     Two faces, from the design: Hanken Grotesk for everything structural, and
-     JetBrains Mono for quantitative metadata, IDs, timestamps and tabular
-     figures. Both are applied as next/font variables in app/layout.tsx. */
-  --font-sans: var(--font-hanken-grotesk), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+     Two faces, and deliberately no monospace: Inter carries the display layer
+     (every heading), and Source Sans 3 carries body copy, the UI, and the small
+     labels and figures that used to be set in mono. Both are applied as
+     next/font variables in app/layout.tsx. */
+  --font-sans: var(--font-source-sans-3), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Tailwind's default monospace family is removed outright rather than remapped: the app has no
+     monospace text anywhere, so the `font-mono` utility should not exist to be reached for. */
+  --font-mono: initial;
 
   /* Radii — pinned to Tailwind's OWN scale, which is what the design HTML was
      authored against. The previous block shifted every step up one (md 12px,
@@ -252,6 +257,12 @@
     margin:0;
     min-height:100vh;
   }
+
+  /* Headings take the display face; everything else keeps Source Sans 3. This is the whole of the
+     "Inter + Source Sans 3" pairing — Inter is the display layer, Source Sans 3 the text layer, and
+     nothing in the app is set in a monospace face. A heading that wants the text face can still say
+     `font-sans`, because utilities outrank this layer. */
+  h1,h2,h3,h4,h5,h6{font-family:var(--font-display)}
 
   a,button,input,textarea,select{font:inherit}
 
@@ -564,7 +575,7 @@
   .admin-env-badge[data-tone="production"]{background:#fde8e8;border-color:#f3b8b8;color:#8f1d1d}
   .admin-env-badge[data-tone="preview"]{background:var(--color-secondary-light);border-color:#f0cf8a;color:#8a4b06}
   .admin-env-badge[data-tone="development"],.admin-env-badge[data-tone="unknown"]{background:var(--color-primary-subtle);border-color:var(--color-primary-subtle);color:var(--color-primary-dark)}
-  .admin-env-detail{@apply text-muted;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .admin-env-detail{@apply text-muted;font-size:11px;font-family:var(--font-sans)}
 
   /* Amber when something is outstanding, teal when nothing is: the same two meanings the rest of the
      platform uses, so this strip never needs its own legend. */
@@ -680,7 +691,7 @@
   .admin-reveal{@apply grid;gap:8px;margin-top:12px}
   .admin-reveal code{
     @apply block;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-family:var(--font-sans);
     font-size:12px;
     background:var(--color-canvas-subtle);
     border:1px solid var(--line);
@@ -726,7 +737,7 @@
      else's paraphrase. */
   .admin-json{
     @apply block;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-family:var(--font-sans);
     font-size:11px;
     line-height:1.5;
     background:var(--color-canvas-subtle);

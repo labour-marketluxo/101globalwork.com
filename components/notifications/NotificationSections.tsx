@@ -119,7 +119,7 @@ export function FeedIntro({
           ? 'Everything that needs your attention, newest first. Items disappear from here when the thing they describe is dealt with — they are a view of what is outstanding, not a log.'
           : CATEGORY_COPY[category].description}
       </p>
-      <p className="font-mono text-xs text-slate-500">
+      <p className="font-sans text-xs text-slate-500">
         {unread} unread · {actionRequired} needing action ·{' '}
         <Link href={NOTIFICATION_SETTINGS_PATH} className={LINK_ARROW}>
           Delivery settings
@@ -207,7 +207,7 @@ export function NotificationFeed({
     <div className="grid gap-6">
       {groups.map(group => (
         <section key={group.label} aria-label={group.label}>
-          <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             {group.label}
           </h2>
           <ul className="mt-3 grid gap-3">
@@ -253,20 +253,20 @@ function NotificationRow({
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-sm font-bold tracking-tight text-slate-900">{item.title}</h3>
             {item.unread ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-primary uppercase">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-primary uppercase">
                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-primary" />
                 Unread
               </span>
             ) : (
               <span className={BADGE_SLATE}>Read</span>
             )}
-            <span className={`inline-flex items-center rounded-full px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide uppercase ${severity.className}`}>
+            <span className={`inline-flex items-center rounded-full px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide uppercase ${severity.className}`}>
               {severity.label}
             </span>
           </div>
 
           {item.entityLabel ? (
-            <p className="mt-1 font-mono text-xs text-slate-500">{item.entityLabel}</p>
+            <p className="mt-1 font-sans text-xs text-slate-500">{item.entityLabel}</p>
           ) : null}
 
           {item.summary ? (

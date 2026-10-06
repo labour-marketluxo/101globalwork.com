@@ -53,7 +53,7 @@ export default async function ProviderAvailabilityPage({ searchParams }: { searc
   return (
     <div className="grid gap-6">
       <header>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Availability</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Availability</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           When and where you work
         </h1>
@@ -137,7 +137,7 @@ async function AvailabilityBody({ providerId }: { providerId: string }) {
               </p>
             ) : null}
           </div>
-          <span className={availability.provider.acceptsNewWork ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_AMBER}>
+          <span className={availability.provider.acceptsNewWork ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_AMBER}>
             {availability.provider.acceptsNewWork ? 'Taking work' : paused ? 'Paused' : 'Offline'}
           </span>
         </div>
@@ -175,7 +175,7 @@ async function AvailabilityBody({ providerId }: { providerId: string }) {
                 idle="Resume availability"
                 pending="Resuming…"
                 icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-                className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
               <p className="text-xs leading-relaxed text-slate-500">
                 Pausing stops matching; it never cancels accepted work, and nothing resumes you automatically.
@@ -242,7 +242,7 @@ async function AvailabilityBody({ providerId }: { providerId: string }) {
           <PendingButton
             idle="Save availability rules"
             pending="Saving…"
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
           />
         </div>
       </form>

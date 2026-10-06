@@ -52,7 +52,7 @@ export function DestinationPanel({
           <span
             className={
               DESTINATION_STATUS_COPY[active.verificationStatus]?.tone === 'teal'
-                ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+                ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
                 : DESTINATION_STATUS_COPY[active.verificationStatus]?.tone === 'amber'
                   ? BADGE_AMBER
                   : BADGE_SLATE
@@ -67,14 +67,14 @@ export function DestinationPanel({
         <>
           <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-3">
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Account</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Account</dt>
               <dd className="mt-0.5 text-slate-700">
                 •••• {active.accountLast4 ?? '----'}
                 <span className="mt-0.5 block text-slate-500">{active.accountName ?? 'Name not confirmed'}</span>
               </dd>
             </div>
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Type</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Type</dt>
               <dd className="mt-0.5 text-slate-700">
                 {destinationKindLabel(active.destinationType)}
                 <span className="mt-0.5 block text-slate-500">
@@ -83,7 +83,7 @@ export function DestinationPanel({
               </dd>
             </div>
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Default</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Default</dt>
               <dd className="mt-0.5 text-slate-700">
                 {active.isDefault ? 'Yes — this is where payouts go' : 'No'}
                 {active.updatedAt ? (
@@ -257,7 +257,7 @@ export function AddDestinationForm({
           idle="Verify and save"
           pending="Verifying…"
           icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
       </div>
     </form>
@@ -299,7 +299,7 @@ export function TransferHistory({ transfers }: { transfers: PayoutTransfer[] }) 
                   <span
                     className={
                       copy.tone === 'teal'
-                        ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+                        ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
                         : copy.tone === 'amber'
                           ? BADGE_AMBER
                           : BADGE_SLATE
@@ -309,7 +309,7 @@ export function TransferHistory({ transfers }: { transfers: PayoutTransfer[] }) 
                   </span>
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-slate-600">{copy.note}</p>
-                <p className="mt-1 font-mono text-[11px] tracking-wide text-slate-400 uppercase">
+                <p className="mt-1 font-sans text-[11px] tracking-wide text-slate-400 uppercase">
                   {transfer.providerReference ?? 'No reference yet'}
                   {transfer.updatedAt
                     ? ` · ${new Date(transfer.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`

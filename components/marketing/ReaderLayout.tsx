@@ -45,7 +45,7 @@ export function ReaderLayout({
       <div className="grid gap-10 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] lg:items-start lg:gap-14">
         <aside className="lg:sticky lg:top-28">
           <div className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               {sidebarTitle}
             </h2>
             {meta ? <div className="mt-3 border-b border-solid border-slate-100 pb-3.5">{meta}</div> : null}

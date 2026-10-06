@@ -84,7 +84,7 @@ export default async function ProjectAgreementPage({
           <AgreementAlternatives agreement={agreement} />
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               After you accept
             </h2>
             <ol className="mt-3 space-y-2 text-xs leading-relaxed text-slate-600">

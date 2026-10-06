@@ -68,7 +68,7 @@ export function ProviderProfileSections({
         <dl className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {facts.map((fact) => (
             <div key={fact.label} className={`${CARD} p-4`}>
-              <dt className="font-mono text-[11px] tracking-wider text-slate-500 uppercase">
+              <dt className="font-sans text-[11px] tracking-wider text-slate-500 uppercase">
                 {fact.label}
               </dt>
               <dd className="mt-1 text-base font-bold text-slate-900">{fact.value}</dd>
@@ -100,34 +100,7 @@ export function ProviderProfileSections({
                 >
                   {view.serviceName}
                 </Link>
-              </p>
-            ) : (
-              <p className="mt-2 text-sm text-slate-600">No service is recorded yet.</p>
-            )}
-            <p className="mt-3 text-xs leading-relaxed text-slate-500">
-              The catalog service this provider is eligible for. Eligibility is checked per
-              service and per area, so it is the same scope their quotes are matched against.
-            </p>
-          </div>
-          <div className={`${CARD} p-5`}>
-            <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-              Based in
-            </h3>
-            <p className="mt-2 text-sm font-bold text-slate-900">{place}</p>
-            <p className="mt-3 text-xs leading-relaxed text-slate-500">
-              The locality on record, which is as precise as this platform publishes. Exact
-              addresses are not collected for publication and never appear on a public page.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-              <Link
-                href={`/${market.slug}/search?area=${encodeURIComponent(
-                  (view.locationName ?? '').toLowerCase().replace(/\s+/g, '-'),
-                )}`}
-                className={LINK_ARROW}
-              >
-                Local providers
-                <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-              </Link>
+              </div>
             </div>
           </div>
         </div>

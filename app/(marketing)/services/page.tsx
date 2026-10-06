@@ -69,8 +69,8 @@ export default async function ServicesPage() {
     <Section tone="canvas">
       {/* ── hero: scope + search ──────────────────────────────────────────────────────── */}
       <div className="max-w-3xl">
-        <span className="mb-4 inline-flex w-fit rounded-full bg-emerald-50 px-3 py-1 font-mono text-xs text-emerald-700">
-          [ DIRECTORY &amp; SCOPES ]
+        <span className="mb-4 inline-flex w-fit rounded-full bg-emerald-50 px-3 py-1 font-sans text-xs text-emerald-700">
+          DIRECTORY &amp; SCOPES
         </span>
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-slate-900">
           Find the work you need done
@@ -96,7 +96,7 @@ export default async function ServicesPage() {
           />
           <button
             type="submit"
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#F59E0B] px-4 py-2.5 font-mono text-xs font-bold text-slate-950 transition-all hover:bg-[#D97706] active:scale-95"
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#F59E0B] px-4 py-2.5 font-sans text-xs font-bold text-slate-950 transition-all hover:bg-[#D97706] active:scale-95"
           >
             Find Trade
             <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -114,8 +114,8 @@ export default async function ServicesPage() {
             <div>
               <div className="mb-4 flex items-start justify-between gap-3">
                 <h2 className="text-lg font-bold text-slate-900">{category.title}</h2>
-                <span className="shrink-0 rounded bg-emerald-50 px-2 py-0.5 font-mono text-[10px] text-emerald-700">
-                  [ ACTIVE ]
+                <span className="shrink-0 rounded bg-emerald-50 px-2 py-0.5 font-sans text-[10px] text-emerald-700">
+                  ACTIVE
                 </span>
               </div>
 
@@ -136,7 +136,7 @@ export default async function ServicesPage() {
             <div className="mt-6 border-t border-slate-100 pt-4">
               <Link
                 href={searchHref(category.title)}
-                className="flex items-center gap-1 font-mono text-xs font-semibold text-slate-800 no-underline transition-colors hover:text-amber-600"
+                className="flex items-center gap-1 font-sans text-xs font-semibold text-slate-800 no-underline transition-colors hover:text-amber-600"
               >
                 Browse category
                 <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -149,8 +149,8 @@ export default async function ServicesPage() {
       {/* ── custom scope callout ──────────────────────────────────────────────────────── */}
       <div className="flex flex-col items-center justify-between gap-6 rounded-3xl bg-[#0D282E] p-8 text-white shadow-lg md:flex-row md:p-10">
         <div>
-          <span className="mb-3 inline-flex w-fit rounded-full border border-amber-800/60 bg-amber-950/60 px-3 py-1 font-mono text-xs text-amber-400">
-            [ CAN&rsquo;T FIND YOUR EXACT TRADE? ]
+          <span className="mb-3 inline-flex w-fit rounded-full border border-amber-800/60 bg-amber-950/60 px-3 py-1 font-sans text-xs text-amber-400">
+            CAN&rsquo;T FIND YOUR EXACT TRADE?
           </span>
           <h2 className="mb-2 text-2xl font-bold text-white">Describe your job in your own words</h2>
           <p className="max-w-lg text-sm text-slate-300">
@@ -161,7 +161,7 @@ export default async function ServicesPage() {
 
         <Link
           href="/requests/new"
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#F59E0B] px-6 py-3.5 font-mono text-xs font-bold text-slate-950 no-underline transition-all hover:bg-[#D97706] active:scale-95"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#F59E0B] px-6 py-3.5 font-sans text-xs font-bold text-slate-950 no-underline transition-all hover:bg-[#D97706] active:scale-95"
         >
           Post Custom Request
           <ArrowRight aria-hidden="true" className="h-4 w-4" />

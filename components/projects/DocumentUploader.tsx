@@ -84,7 +84,7 @@ export default function DocumentUploader({
           type="file"
           accept="application/pdf,image/*,.doc,.docx,.xls,.xlsx"
           onChange={event => void onSelect(event.target.files?.[0])}
-          className="block w-full cursor-pointer rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:font-mono file:text-xs file:font-bold file:tracking-wide file:text-white file:uppercase"
+          className="block w-full cursor-pointer rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:font-sans file:text-xs file:font-bold file:tracking-wide file:text-white file:uppercase"
         />
         <p className="mt-1.5 flex items-center gap-1.5 text-xs text-slate-500">
           {status === 'uploading' ? (
@@ -162,7 +162,7 @@ export default function DocumentUploader({
         <button
           type="submit"
           disabled={status !== 'uploaded'}
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Upload aria-hidden="true" className="h-4 w-4" />
           Save this version

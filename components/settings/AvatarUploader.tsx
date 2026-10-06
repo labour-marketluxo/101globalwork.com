@@ -29,7 +29,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
     >
       <ImageUp aria-hidden="true" className="h-4 w-4" />
       {pending ? 'Uploading…' : 'Save photo'}

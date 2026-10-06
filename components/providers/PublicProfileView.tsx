@@ -39,7 +39,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
   return (
     <article className="grid gap-6">
       <header>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Provider profile</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Provider profile</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           {profile.headline ?? profile.service_name ?? 'Service provider'}
         </h1>
@@ -53,7 +53,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
         <span
           className={
             verified
-              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
               : BADGE_SLATE
           }
         >
@@ -61,7 +61,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
           {verified ? 'Identity verified' : 'Identity not verified'}
         </span>
         {credentialCount > 0 ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
             <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
             {credentialCount} verified credential{credentialCount === 1 ? '' : 's'}
           </span>
@@ -73,7 +73,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
 
       <section className="grid gap-3 sm:grid-cols-3" aria-label="Provider service and trust information">
         <div className={`${CARD} p-4`}>
-          <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Service</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Service</p>
           <p className="mt-1 text-sm font-bold text-slate-900">{profile.service_name ?? '—'}</p>
           {profile.years_experience != null ? (
             <p className="mt-1 text-xs text-slate-500">
@@ -82,7 +82,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
           ) : null}
         </div>
         <div className={`${CARD} p-4`}>
-          <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Serves</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Serves</p>
           <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-slate-900">
             <MapPin aria-hidden="true" className="h-3.5 w-3.5 text-primary" />
             {profile.location_name ?? '—'}
@@ -95,7 +95,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
           ) : null}
         </div>
         <div className={`${CARD} p-4`}>
-          <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Languages</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Languages</p>
           <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-slate-900">
             <Languages aria-hidden="true" className="h-3.5 w-3.5 text-primary" />
             {languages.length > 0 ? languages.join(', ') : 'Not stated'}
@@ -113,7 +113,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
             {WEEKDAYS.map(day => (
               <div key={day} className="flex justify-between gap-3 border-b border-dashed border-slate-200 py-1 last:border-0">
                 <dt className="text-slate-500">{WEEKDAY_LABELS[day]}</dt>
-                <dd className="font-mono text-slate-700">
+                <dd className="font-sans text-slate-700">
                   {hours[day] ? `${hours[day]?.open}–${hours[day]?.close}` : 'Closed'}
                 </dd>
               </div>
@@ -135,7 +135,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
               <li key={item.id} className="rounded-xl border border-solid border-slate-200 p-4">
                 <p className="text-sm font-bold tracking-tight text-slate-900">{item.title}</p>
                 {item.service_name ? (
-                  <p className="mt-0.5 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                  <p className="mt-0.5 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                     {item.service_name}
                   </p>
                 ) : null}

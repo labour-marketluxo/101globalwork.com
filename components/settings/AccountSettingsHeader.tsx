@@ -42,19 +42,19 @@ export default function AccountSettingsHeader({
         <div className="flex min-w-0 items-center gap-3">
           <span
             aria-hidden="true"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-subtle font-mono text-sm font-bold tracking-wide text-primary"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-subtle font-sans text-sm font-bold tracking-wide text-primary"
           >
             {shell.initials}
           </span>
           <div className="min-w-0">
-            <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+            <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
               Account
             </p>
             <p className="truncate text-sm font-bold tracking-tight text-slate-900">
               {shell.displayName || 'Your account'}
             </p>
             {shell.email ? (
-              <p className="truncate font-mono text-xs text-slate-500">{shell.email}</p>
+              <p className="truncate font-sans text-xs text-slate-500">{shell.email}</p>
             ) : null}
           </div>
         </div>
@@ -168,6 +168,6 @@ export default function AccountSettingsHeader({
 /** Amber-filled when something is waiting, quiet slate when it is not. Colour is not the only signal: the
  * number itself is in the badge, and the screen-reader sentence spells out both counts. */
 const badgeActive =
-  'inline-flex min-w-5 items-center justify-center rounded-full bg-secondary px-1.5 py-0.5 font-mono text-[11px] font-bold text-white';
+  'inline-flex min-w-5 items-center justify-center rounded-full bg-secondary px-1.5 py-0.5 font-sans text-[11px] font-bold text-white';
 const badgeQuiet =
-  'inline-flex min-w-5 items-center justify-center rounded-full bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] font-bold text-slate-500';
+  'inline-flex min-w-5 items-center justify-center rounded-full bg-slate-100 px-1.5 py-0.5 font-sans text-[11px] font-bold text-slate-500';

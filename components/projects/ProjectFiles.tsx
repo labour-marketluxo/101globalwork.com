@@ -32,7 +32,7 @@ function verificationBadge(item: EvidenceItem) {
   if (item.verification === 'flagged') return <span className={BADGE_AMBER}>Flagged</span>;
   if (item.verification === 'approved') {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
         Approved with the job
       </span>
     );
@@ -91,14 +91,14 @@ export function EvidenceGallery({
           {/* Provenance: where the file came from, in the platform's own terms. */}
           <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Source</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Source</dt>
               <dd className="mt-0.5 text-slate-700">
                 {item.source === 'package' ? 'Completion package' : 'Single submission'}
                 {item.storagePath ? ' · private storage' : ''}
               </dd>
             </div>
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Location</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Location</dt>
               <dd className="mt-0.5 text-slate-700">
                 {item.storagePath ? 'In the private evidence bucket' : item.externalUrl ? 'An external link' : 'No file'}
               </dd>
@@ -223,7 +223,7 @@ export function TimelineSection({ events, assignmentId }: { events: TimelineEven
                 {event.actorRole === 'system' ? 'Automatic' : event.actorRole}
               </span>
             </div>
-            <p className="mt-1 font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+            <p className="mt-1 font-sans text-[11px] tracking-wide text-slate-500 uppercase">
               {event.at
                 ? `${new Date(event.at).toLocaleString('en-GB', {
                     day: 'numeric',
@@ -281,7 +281,7 @@ function versionRow(version: DocumentVersion, assignmentId: string, role: string
         <span
           className={
             signer.tone === 'teal'
-              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
               : signer.tone === 'amber'
                 ? BADGE_AMBER
                 : BADGE_SLATE
@@ -341,7 +341,7 @@ function versionRow(version: DocumentVersion, assignmentId: string, role: string
               idle="Approve"
               pending="Saving…"
               formAction={decideProjectDocumentAction}
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>

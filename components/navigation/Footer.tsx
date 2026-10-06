@@ -67,7 +67,7 @@ export default async function Footer() {
             <div className="mb-4 flex items-center gap-2.5">
               <span
                 aria-hidden="true"
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-solid border-white/15 bg-white/10 font-mono text-[10px] font-bold text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-solid border-white/15 bg-white/10 font-sans text-[10px] font-bold text-white"
               >
                 101
               </span>
@@ -79,7 +79,7 @@ export default async function Footer() {
             </p>
             {/* Not a status claim: the design's green dot + "All systems nominal"
                 implied live telemetry that this app does not publish. */}
-            <div className="flex items-center gap-2 font-mono text-[11px] text-emerald-400">
+            <div className="flex items-center gap-2 font-sans text-[11px] text-emerald-400">
               <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-400" />
               <span>Verified providers &bull; Itemized quotes &bull; Approval-based payment</span>
             </div>
@@ -87,7 +87,7 @@ export default async function Footer() {
 
           {COLUMNS.map((column) => (
             <div key={column.heading}>
-              <h2 className="mb-4 font-mono text-[11px] font-semibold tracking-wider text-white uppercase">
+              <h2 className="mb-4 font-sans text-[11px] font-semibold tracking-wider text-white uppercase">
                 {column.heading}
               </h2>
               <ul className="space-y-2.5">
@@ -103,7 +103,7 @@ export default async function Footer() {
           ))}
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-solid border-white/10 pt-8 font-mono text-[11px] text-slate-500 sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-solid border-white/10 pt-8 font-sans text-[11px] text-slate-500 sm:flex-row">
           <div>&copy; {new Date().getFullYear()} 101GlobalWork. All rights reserved.</div>
           <div>On-demand service coordination</div>
         </div>

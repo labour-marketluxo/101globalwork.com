@@ -16,14 +16,14 @@ import { useEffect } from 'react';
  * <html>/<body> and cannot rely on app/globals.css being applied. Styles are
  * therefore inline, using the same design tokens as the rest of the app.
  *
- * The font stack names the design's Hanken Grotesk (see the --font-sans token in
- * app/globals.css) rather than any other family. It previously asked for Inter,
- * which this project loads nowhere — so on a crash the one screen nobody tests
- * rendered in a face the rest of the app has never used. This stack cannot use
- * the next/font variable either: the @font-face rules ship with globals.css,
- * which is exactly what is missing here, so in practice it resolves to the
- * system sans — the same family and fallbacks as the live app, just not the
- * self-hosted file.
+ * The font stack names the app's own faces (see the --font-sans and
+ * --font-display tokens in app/globals.css) rather than any other family. They
+ * previously asked for Inter, which this project loaded nowhere — so on a crash
+ * the one screen nobody tests rendered in a face the rest of the app had never
+ * used. This stack cannot use the next/font variables either: the @font-face
+ * rules ship with globals.css, which is exactly what is missing here, so in
+ * practice it resolves to the system sans — the same family and fallbacks as the
+ * live app, just not the self-hosted files.
  */
 export default function GlobalError({
   error,
@@ -49,7 +49,7 @@ export default function GlobalError({
           background: '#fbfaf7',
           color: '#1b1f1e',
           fontFamily:
-            '"Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            '"Source Sans 3", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         }}
       >
         <main style={{ maxWidth: '560px' }}>
@@ -71,6 +71,8 @@ export default function GlobalError({
               fontSize: '32px',
               lineHeight: 1.1,
               letterSpacing: '-.03em',
+              fontFamily:
+                '"Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
             }}
           >
             The application failed to start

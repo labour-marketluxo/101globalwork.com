@@ -141,7 +141,7 @@ export function PasswordPanel({ stepUpPending }: { stepUpPending: boolean }) {
         <div className="sm:col-span-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
           >
             Change password
           </button>
@@ -170,7 +170,7 @@ export function FactorsPanel({
           Two-factor authentication
         </h2>
         {verified.length > 0 ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wide text-primary uppercase">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wide text-primary uppercase">
             <ShieldCheck aria-hidden="true" className="h-3 w-3" />
             Active
           </span>
@@ -353,7 +353,7 @@ export function RecoveryPanel({
       <dl className="mt-4 grid gap-2 text-xs">
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-solid border-slate-200 px-3.5 py-3">
           <dt className="text-slate-500">Recovery address</dt>
-          <dd className="flex flex-wrap items-center gap-2 font-mono text-slate-800">
+          <dd className="flex flex-wrap items-center gap-2 font-sans text-slate-800">
             {email ?? 'No address on this account'}
             {email ? (
               emailVerified ? (

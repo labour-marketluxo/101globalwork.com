@@ -53,7 +53,7 @@ export default async function ProviderOpportunitiesPage({ searchParams }: { sear
   return (
     <div className="grid gap-6">
       <header>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Opportunities</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Opportunities</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Work you can quote
         </h1>

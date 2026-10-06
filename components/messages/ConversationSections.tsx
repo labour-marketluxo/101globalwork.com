@@ -63,7 +63,7 @@ export function ConversationSearch({
         </div>
         <button
           type="submit"
-          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
         >
           Search
         </button>
@@ -235,7 +235,7 @@ function ConversationRow({
             <span className={BADGE_SLATE}>{KIND_COPY[thread.kind]}</span>
             <h3 className="truncate text-sm font-bold tracking-tight text-slate-900">{thread.title}</h3>
             {thread.unreadCount > 0 ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2 py-0.5 font-mono text-[11px] font-bold text-white">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2 py-0.5 font-sans text-[11px] font-bold text-white">
                 {thread.unreadCount} unread
                 <span className="sr-only">
                   {thread.unreadCount === 1 ? ' message' : ' messages'} written since you last opened this
@@ -258,7 +258,7 @@ function ConversationRow({
                     <li key={`${participant.name}-${participant.role}`}>
                       <span
                         title={`${participant.name} · ${ROLE_COPY[participant.role]}`}
-                        className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-solid border-white bg-slate-200 font-mono text-[10px] font-bold text-slate-700"
+                        className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-solid border-white bg-slate-200 font-sans text-[10px] font-bold text-slate-700"
                       >
                         <span aria-hidden="true">{participant.initials}</span>
                         <span className="sr-only">
@@ -272,7 +272,7 @@ function ConversationRow({
                   {[...new Map(thread.participants.map(p => [p.role, p])).values()].map(participant => (
                     <li
                       key={participant.role}
-                      className="rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wide text-slate-500 uppercase"
+                      className="rounded-full bg-slate-100 px-2 py-0.5 font-sans text-[10px] font-bold tracking-wide text-slate-500 uppercase"
                     >
                       {ROLE_COPY[participant.role]}
                     </li>
@@ -286,7 +286,7 @@ function ConversationRow({
             <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-600">{excerpt}</p>
           ) : null}
 
-          <p className="mt-2 font-mono text-xs text-slate-500" title={exactLabel ?? undefined}>
+          <p className="mt-2 font-sans text-xs text-slate-500" title={exactLabel ?? undefined}>
             Last activity {relative}
             {exactLabel ? <span className="sr-only"> — {exactLabel}</span> : null}
           </p>

@@ -128,7 +128,7 @@ export function StatusPill({ status }: { status: SupportCaseSummary['status'] })
   return (
     <span
       title={copy.explains}
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider uppercase ${copy.className}`}
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider uppercase ${copy.className}`}
     >
       {copy.label}
     </span>
@@ -250,7 +250,7 @@ export function NewCasePanel({
         <div>
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark"
           >
             <LifeBuoy aria-hidden="true" className="h-4 w-4" />
             Open the case
@@ -293,7 +293,7 @@ export function SupportCaseList({
                     }`}
                   >
                     {value === 'open' ? 'Open cases' : value === 'closed' ? 'Closed' : 'All'}
-                    <span className="font-mono text-[11px]">{count}</span>
+                    <span className="font-sans text-[11px]">{count}</span>
                   </Link>
                 </li>
               );
@@ -332,17 +332,17 @@ export function SupportCaseList({
                 className={`${CARD_INTERACTIVE} block p-4 no-underline`}
               >
                 <span className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                  <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                     {supportCase.reference}
                   </span>
                   <StatusPill status={supportCase.status} />
                   {supportCase.awaitingYou && supportCase.status !== 'closed' ? (
-                    <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 font-mono text-[11px] font-bold text-white">
+                    <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 font-sans text-[11px] font-bold text-white">
                       Waiting on you
                     </span>
                   ) : null}
                   {supportCase.resolutionOverdue ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-red-700 uppercase">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-red-700 uppercase">
                       <Timer aria-hidden="true" className="h-3 w-3" />
                       Past target
                     </span>
@@ -414,7 +414,7 @@ export function CaseFacts({ detail, now }: { detail: SupportCaseDetail; now: Dat
       <dl className="mt-4 grid gap-3 text-xs">
         <div className="flex items-start justify-between gap-3">
           <dt className="text-slate-500">Case reference</dt>
-          <dd className="font-mono font-bold text-slate-900">{detail.reference}</dd>
+          <dd className="font-sans font-bold text-slate-900">{detail.reference}</dd>
         </div>
         <div className="flex items-start justify-between gap-3">
           <dt className="text-slate-500">Type</dt>
@@ -491,7 +491,7 @@ function TargetLine({
       <span className="text-slate-500">{label}</span>
       <span className={`text-right font-semibold ${tone}`} title={when ?? undefined}>
         {stateLabel}
-        {when ? <span className="mt-0.5 block font-mono text-[10px] font-normal text-slate-400">{when}</span> : null}
+        {when ? <span className="mt-0.5 block font-sans text-[10px] font-normal text-slate-400">{when}</span> : null}
       </span>
     </div>
   );
@@ -501,7 +501,7 @@ function TargetLine({
 export function LinkedRecordPanel({ link }: { link: { kind: string; label: string; detail: string; href: string } }) {
   return (
     <section aria-labelledby="linked-heading" className={`${CARD} p-5`}>
-      <h2 id="linked-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 id="linked-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Linked record
       </h2>
       <p className="mt-2 text-sm font-bold tracking-tight text-slate-900">{link.label}</p>
@@ -554,13 +554,13 @@ export function CaseThread({ messages, now }: { messages: SupportMessage[]; now:
                     <p className="flex items-center gap-2 text-xs font-bold tracking-tight text-slate-900">
                       {isRequester ? 'You' : message.authorName}
                       {!isRequester && !isSystem ? (
-                        <span className="rounded-full bg-white/70 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wide text-primary uppercase">
+                        <span className="rounded-full bg-white/70 px-2 py-0.5 font-sans text-[10px] font-bold tracking-wide text-primary uppercase">
                           Support
                         </span>
                       ) : null}
                     </p>
                     {when ? (
-                      <p className="font-mono text-xs text-slate-500">
+                      <p className="font-sans text-xs text-slate-500">
                         <time dateTime={message.createdAt ?? undefined}>{when}</time> ·{' '}
                         {formatRelativeTime(message.createdAt, now)}
                       </p>
@@ -612,7 +612,7 @@ export function AttachmentsPanel({
                   <FileText aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                   <span className="truncate font-semibold text-slate-800">{attachment.fileName}</span>
                 </span>
-                <span className="shrink-0 font-mono text-[10px] text-slate-500">
+                <span className="shrink-0 font-sans text-[10px] text-slate-500">
                   {(attachment.sizeBytes / 1024).toFixed(0)} KB · {formatRelativeTime(attachment.createdAt, now)}
                 </span>
               </a>
@@ -704,7 +704,7 @@ export function ReplyPanel({ detail }: { detail: SupportCaseDetail }) {
         <div>
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
           >
             Submit reply
           </button>

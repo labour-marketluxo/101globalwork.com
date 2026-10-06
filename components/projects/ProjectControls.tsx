@@ -39,7 +39,7 @@ function badge(tone: 'teal' | 'amber' | 'slate', label: string) {
     <span
       className={
         tone === 'teal'
-          ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+          ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
           : tone === 'amber'
             ? BADGE_AMBER
             : BADGE_SLATE
@@ -137,7 +137,7 @@ export function ChangesSection({
               {/* The diff: original against proposed, in the two dimensions a change can move. */}
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-xl border border-solid border-slate-200 p-3 text-xs">
-                  <p className="font-mono font-bold tracking-wider text-slate-500 uppercase">Price</p>
+                  <p className="font-sans font-bold tracking-wider text-slate-500 uppercase">Price</p>
                   <p className="mt-1 text-slate-700">
                     Baseline {change.baselineTotalMinor !== null ? formatMoney(change.baselineTotalMinor, change.baselineCurrencyCode ?? 'NGN') : 'not recorded'}
                     {' → '}
@@ -151,7 +151,7 @@ export function ChangesSection({
                   ) : null}
                 </div>
                 <div className="rounded-xl border border-solid border-slate-200 p-3 text-xs">
-                  <p className="font-mono font-bold tracking-wider text-slate-500 uppercase">Schedule</p>
+                  <p className="font-sans font-bold tracking-wider text-slate-500 uppercase">Schedule</p>
                   <p className="mt-1 text-slate-700">
                     {change.baselineScheduledStart
                       ? new Date(change.baselineScheduledStart).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
@@ -215,7 +215,7 @@ export function ChangesSection({
                             idle="Accept & adjust baseline"
                             pending="Saving…"
                             icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-                            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
                           />
                         </div>
                       </form>
@@ -334,7 +334,7 @@ export function ChangesSection({
               idle="Propose the change"
               pending="Saving…"
               formAction={createChangeRequestAction}
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
             <PendingButton
               idle="Save as a draft"
@@ -387,11 +387,11 @@ export function EscrowCheckpoint({ milestones, assignmentId, evidence }: { miles
 
       <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-3">
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Payout on approval</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Payout on approval</dt>
           <dd className="mt-0.5 text-sm font-semibold text-slate-900">{amount}</dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Escrow</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Escrow</dt>
           <dd className="mt-0.5 text-slate-700">
             {checkpoint.obligationStatus ? checkpoint.obligationStatus.replaceAll('_', ' ') : 'no obligation'}
             {' · payout '}
@@ -399,7 +399,7 @@ export function EscrowCheckpoint({ milestones, assignmentId, evidence }: { miles
           </dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Required approver</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Required approver</dt>
           <dd className="mt-0.5 text-slate-700">
             The {checkpoint.requiredApprover} — the platform refuses anybody else, including the provider who did the work.
           </dd>
@@ -407,7 +407,7 @@ export function EscrowCheckpoint({ milestones, assignmentId, evidence }: { miles
       </dl>
 
       <div className="mt-4 rounded-xl border border-solid border-slate-200 p-3.5">
-        <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Completion criteria</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Completion criteria</p>
         <ul className="mt-2 grid gap-1 text-xs text-slate-700">
           <li>
             {checkpoint.tasksDone}/{checkpoint.tasksTotal} plan tasks complete
@@ -541,7 +541,7 @@ export function CasesSection({
             <PendingButton
               idle="Open the case"
               pending="Opening…"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>
@@ -581,7 +581,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
 
         <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-3">
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Response deadline</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Response deadline</dt>
             <dd className="mt-0.5 text-slate-700">
               {issue.issue.responseDueAt
                 ? new Date(issue.issue.responseDueAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -589,7 +589,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
             </dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Money behind this case</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Money behind this case</dt>
             <dd className="mt-0.5 text-slate-700">
               {issue.money.amountMinor !== null
                 ? `${formatMoney(issue.money.amountMinor, issue.money.currencyCode ?? 'NGN')} · obligation ${issue.money.obligationStatus?.replaceAll('_', ' ') ?? 'unknown'}`
@@ -597,7 +597,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
             </dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Held right now</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Held right now</dt>
             <dd className={`mt-0.5 ${issue.money.heldMinor !== null ? 'font-semibold text-amber-800' : 'text-slate-700'}`}>
               {issue.money.heldMinor !== null
                 ? `${formatMoney(issue.money.heldMinor, issue.money.currencyCode ?? 'NGN')} cannot be requested while the hold is on`
@@ -701,7 +701,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
               <PendingButton
                 idle="Submit response"
                 pending="Saving…"
-                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
           </form>
@@ -740,7 +740,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
               <PendingButton
                 idle="Accept settlement resolution"
                 pending="Saving…"
-                className="inline-flex w-fit items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex w-fit items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
             </form>
           </div>
@@ -786,7 +786,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
             <PendingButton
               idle="Record the decision"
               pending="Saving…"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>

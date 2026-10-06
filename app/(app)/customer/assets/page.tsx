@@ -92,7 +92,7 @@ export default async function CustomerAssetsPage({
 
           {dueCount > 0 ? (
             <section className={`${CARD} p-5`}>
-              <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 <Info aria-hidden="true" className="h-4 w-4 text-slate-400" />
                 Maintenance
               </h2>
@@ -105,7 +105,7 @@ export default async function CustomerAssetsPage({
           ) : null}
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What this page is not
             </h2>
             <ul className="mt-3 space-y-2 text-xs leading-relaxed text-slate-600">

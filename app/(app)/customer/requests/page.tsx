@@ -57,7 +57,7 @@ export default async function CustomerRequestsPage({ searchParams }: { searchPar
         </div>
         <Link
           href="/customer/requests/new"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
         >
           Post a Request <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Link>
@@ -125,7 +125,7 @@ async function RequestsBody({ tab, query, sort }: { tab: RequestTab; query: stri
         </p>
       ) : null}
 
-      <p className="mt-5 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <p className="mt-5 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         {filtered.length} {filtered.length === 1 ? 'request' : 'requests'}
         {tab !== 'all' ? ` · ${requestTabLabel(tab)}` : ''}
         {query ? ` · matching “${query}”` : ''}

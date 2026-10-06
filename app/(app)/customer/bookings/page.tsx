@@ -103,7 +103,7 @@ export default async function CustomerBookingsPage({ searchParams }: { searchPar
           suit you, propose another one — only the provider can move a booking, so yours is a request until they
           accept it.
         </p>
-        <p className="mt-2 flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <p className="mt-2 flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           Times shown in {timeZone}
         </p>
         {assumed ? (
@@ -147,7 +147,7 @@ export default async function CustomerBookingsPage({ searchParams }: { searchPar
                 view={view}
               />
               <section className={`${CARD} p-5`}>
-                <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   In {monthLabel(month.year, month.month)}
                 </h2>
                 {monthBookings.length === 0 ? (

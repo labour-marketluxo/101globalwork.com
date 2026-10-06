@@ -33,7 +33,7 @@ function CredentialStatus({ credential }: { credential: CredentialRecord }) {
   const copy = VERIFICATION_STATUS_COPY[credential.status];
   if (copy.tone === 'teal') {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
         <BadgeCheck aria-hidden="true" className="h-3 w-3" />
         {copy.label}
       </span>
@@ -47,7 +47,7 @@ export function CredentialHeader({ data }: { data: ProviderCredentials }) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Credentials</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Credentials</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Licences, certifications and insurance
         </h1>
@@ -58,7 +58,7 @@ export function CredentialHeader({ data }: { data: ProviderCredentials }) {
       </div>
 
       <div className="flex flex-col items-start gap-2">
-        <span className={data.verifiedCount > 0 ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
+        <span className={data.verifiedCount > 0 ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
           {data.verifiedCount} verified
         </span>
         {data.attentionCount > 0 ? (
@@ -186,15 +186,15 @@ export function CredentialList({
 
           <dl className="mt-3 grid gap-x-6 gap-y-2 text-xs sm:grid-cols-3">
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Issuing body</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Issuing body</dt>
               <dd className="mt-0.5 text-slate-700">{credential.issuingBody}</dd>
             </div>
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Jurisdiction</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Jurisdiction</dt>
               <dd className="mt-0.5 text-slate-700">{credential.jurisdictionCode ?? 'Not stated'}</dd>
             </div>
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Expires</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Expires</dt>
               <dd
                 className={`mt-0.5 ${
                   credential.isExpired || credential.expiresSoon ? 'font-semibold text-amber-800' : 'text-slate-700'
@@ -334,7 +334,7 @@ export function AddCredentialForm({ data, nextPath }: { data: ProviderCredential
           idle="Add credential"
           pending="Saving…"
           icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
         <span className="flex items-center gap-1.5 text-xs text-slate-500">
           <ShieldAlert aria-hidden="true" className="h-3.5 w-3.5 text-slate-400" />

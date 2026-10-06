@@ -100,7 +100,7 @@ function EvidenceItem({ item }: { item: CompletionEvidence }) {
       <div className="flex items-start gap-3">
         <span className="mt-0.5 text-slate-400">{icon}</span>
         <div className="min-w-0 flex-1">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">{item.kind}</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">{item.kind}</p>
           {item.note ? (
             <p className="mt-1 text-sm leading-relaxed whitespace-pre-wrap text-slate-700">{item.note}</p>
           ) : null}
@@ -117,7 +117,7 @@ function EvidenceItem({ item }: { item: CompletionEvidence }) {
           ) : null}
           {item.storageObjectPath ? (
             <p className="mt-2 text-xs text-slate-500">
-              Stored file: <span className="font-mono">{item.storageObjectPath}</span>
+              Stored file: <span className="font-sans">{item.storageObjectPath}</span>
             </p>
           ) : null}
           <p className="mt-2 text-xs text-slate-400">
@@ -153,7 +153,7 @@ export function DeliverableEvidence({
   return (
     <section aria-labelledby="evidence-heading" className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="evidence-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <h2 id="evidence-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           What the provider submitted
         </h2>
         <span className={BADGE_SLATE}>
@@ -232,7 +232,7 @@ export function CompletionDecisionPanel({
   if (approval) {
     return (
       <section className={`${CARD} p-5`}>
-        <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           <BadgeCheck aria-hidden="true" className="h-4 w-4 text-primary" />
           Approved
         </h2>
@@ -284,7 +284,7 @@ export function CompletionDecisionPanel({
 
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Your decision
       </h2>
 
@@ -345,7 +345,7 @@ export function CompletionDecisionPanel({
             </div>
             <button
               type="submit"
-              className="mt-4 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+              className="mt-4 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
             >
               Approve Work &amp; Release Funds <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </button>
@@ -394,7 +394,7 @@ export function CompletionDecisionPanel({
               </p>
               <button
                 type="submit"
-                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
               >
                 Send it back
               </button>
@@ -433,7 +433,7 @@ export function CompletionDecisionPanel({
               </div>
               <button
                 type="submit"
-                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
               >
                 Open a dispute
               </button>
@@ -452,7 +452,7 @@ export function CompletionHistory({ completion }: { completion: ProjectCompletio
 
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         What you have raised on this job
       </h2>
 

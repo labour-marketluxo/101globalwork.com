@@ -107,7 +107,7 @@ export function TodayHero({
     <section className="rounded-2xl border border-solid border-primary/10 bg-primary-surface p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Today</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Today</p>
           <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
             Today&apos;s overview
           </h1>
@@ -120,7 +120,7 @@ export function TodayHero({
         <span
           className={
             status.tone === 'teal'
-              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
               : BADGE_AMBER
           }
         >
@@ -146,7 +146,7 @@ export function TodayHero({
         </div>
 
         <div className="flex flex-col items-start gap-2 sm:items-end">
-          <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Search readiness {readiness.totalScore}/100
           </span>
           <Link href={PROVIDER_PATHS.searchReadiness} className={LINK_ARROW}>
@@ -209,7 +209,7 @@ function JobActions({ job, nextPath }: { job: ProviderDayJob; nextPath: string }
             idle="Start job"
             pending="Starting…"
             icon={<Play aria-hidden="true" className="h-4 w-4" />}
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
           />
         </form>
       ) : null}
@@ -290,7 +290,7 @@ export function ScheduleWidget({ day, now, nextPath }: { day: ProviderDay; now: 
         <div className="grid gap-3">
           {today.length > 0 ? (
             <div>
-              <p className="mb-2 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Today</p>
+              <p className="mb-2 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Today</p>
               <div className="grid gap-3">
                 {today.map(job => (
                   <JobCard key={job.assignmentId} job={job} now={now} nextPath={nextPath} />
@@ -301,7 +301,7 @@ export function ScheduleWidget({ day, now, nextPath }: { day: ProviderDay; now: 
 
           {unscheduled.length > 0 ? (
             <div>
-              <p className="mb-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <p className="mb-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 No time agreed yet
               </p>
               <div className="grid gap-3">
@@ -314,7 +314,7 @@ export function ScheduleWidget({ day, now, nextPath }: { day: ProviderDay; now: 
 
           {later.length > 0 ? (
             <div>
-              <p className="mb-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Coming up</p>
+              <p className="mb-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Coming up</p>
               <div className="grid gap-3">
                 {later.map(job => (
                   <JobCard key={job.assignmentId} job={job} now={now} nextPath={nextPath} />
@@ -485,7 +485,7 @@ export function EarningsWidget({ day }: { day: ProviderDay }) {
           {day.earnings.map(line => (
             <div key={line.currencyCode} className="rounded-xl border border-solid border-slate-200 p-3.5">
               <div className="flex items-baseline justify-between gap-3">
-                <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   Cleared ({line.currencyCode})
                 </span>
                 <span className="text-base font-extrabold tracking-tight text-slate-900">
@@ -510,7 +510,7 @@ export function EarningsWidget({ day }: { day: ProviderDay }) {
           {day.awaitingFunding.map(line => (
             <div key={`unfunded-${line.currencyCode}`} className="rounded-xl border border-dashed border-solid border-slate-300 p-3.5">
               <div className="flex items-baseline justify-between gap-3">
-                <span className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <span className="inline-flex items-center gap-1.5 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   <Banknote aria-hidden="true" className="h-3.5 w-3.5" />
                   Awaiting customer payment
                 </span>

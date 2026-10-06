@@ -380,7 +380,7 @@ export async function LocalPageBody({
         <section aria-labelledby="local-vocabulary">
           <h2
             id="local-vocabulary"
-            className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+            className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
           >
             Also described as
           </h2>

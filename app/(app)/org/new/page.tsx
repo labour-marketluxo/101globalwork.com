@@ -44,7 +44,7 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
   return (
     <div className={PAGE_SHELL}>
       <header>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">New organisation</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">New organisation</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Set up a business entity
         </h1>
@@ -193,7 +193,7 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
           <PendingButton
             idle="Create organisation"
             pending="Creating…"
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-mono text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-sans text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-70"
           />
           <PendingButton
             idle="Save draft"

@@ -147,7 +147,7 @@ export function WorkspaceSectionLinks({ showSetup }: { showSetup: boolean }) {
 
   return (
     <nav aria-label="All provider sections" className="mt-6 border-t border-solid border-slate-200 pt-4 lg:hidden">
-      <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">All sections</p>
+      <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">All sections</p>
       <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
         {items.map(item => {
           const current = isCurrent(pathname, item);

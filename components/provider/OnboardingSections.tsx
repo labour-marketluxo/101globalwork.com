@@ -35,7 +35,7 @@ export function OnboardingSteps({ steps }: { steps: OnboardingStep[] }) {
         <h2 id="setup-progress-heading" className="text-sm font-bold tracking-tight text-slate-900">
           Setup progress
         </h2>
-        <p className="font-mono text-xs text-slate-600">
+        <p className="font-sans text-xs text-slate-600">
           {doneCount}/{steps.length} · {percent}%
         </p>
       </div>
@@ -76,7 +76,7 @@ export function OnboardingSteps({ steps }: { steps: OnboardingStep[] }) {
                 {state?.done ? (
                   <CircleCheck aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 ) : isCurrent ? (
-                  <span className="shrink-0 rounded-full bg-white px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider text-amber-800 uppercase">
+                  <span className="shrink-0 rounded-full bg-white px-2 py-0.5 font-sans text-[10px] font-bold tracking-wider text-amber-800 uppercase">
                     Next
                   </span>
                 ) : (
@@ -87,7 +87,7 @@ export function OnboardingSteps({ steps }: { steps: OnboardingStep[] }) {
               {state?.href ? (
                 <a
                   href={state.href}
-                  className="mt-2 inline-block font-mono text-xs font-semibold text-primary underline underline-offset-2"
+                  className="mt-2 inline-block font-sans text-xs font-semibold text-primary underline underline-offset-2"
                 >
                   {state.cta}
                 </a>
@@ -190,7 +190,7 @@ export function HelpPanel({ providerName }: { providerName: string | null }) {
           rule it refused on.
         </p>
         {providerName ? (
-          <p className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+          <p className="font-sans text-[11px] tracking-wide text-slate-500 uppercase">
             Setup for: {providerName}
           </p>
         ) : null}

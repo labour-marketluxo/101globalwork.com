@@ -149,7 +149,7 @@ export function TaxonomyHero({
 /** Metadata chip for the dark band. Amber = a filter or status the reader applied. */
 export function MetaChip({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-amber-400/30 bg-amber-400/10 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-amber-300 uppercase">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-amber-400/30 bg-amber-400/10 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-amber-300 uppercase">
       {children}
     </span>
   );
@@ -243,7 +243,7 @@ export function TaxonomySearchForm({
 export function AvailabilityChip({ count }: { count: number }) {
   if (count > 0) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-surface px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-surface px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
         {count} provider{count === 1 ? '' : 's'}
       </span>
     );
@@ -276,7 +276,7 @@ export function AliasChips({
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       {label ? (
-        <span className="mr-1 font-mono text-[11px] tracking-wider text-slate-400 uppercase">
+        <span className="mr-1 font-sans text-[11px] tracking-wider text-slate-400 uppercase">
           {label}
         </span>
       ) : null}
@@ -347,14 +347,32 @@ export function CategoryCard({
         </p>
       )}
 
-      <div className="mt-auto flex items-center justify-between gap-3 border-t border-solid border-slate-100 pt-4">
-        <span className="font-mono text-[11px] tracking-wider text-slate-500 uppercase">
-          {category.services.length} service{category.services.length === 1 ? '' : 's'}
-        </span>
-        <Link href={categoryHref(marketSlug, category)} className={LINK_ARROW_LG}>
-          Open category
-          <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-        </Link>
+        {category.services.length ? (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {category.services.map((service) => (
+              <span
+                key={service.serviceEntityId}
+                className="rounded-full border border-solid border-slate-200 bg-slate-50 px-2.5 py-0.5 text-xs text-slate-600"
+              >
+                {service.displayName}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-4 text-xs leading-relaxed text-slate-500">
+            No services are curated under this category yet.
+          </p>
+        )}
+
+        <div className="mt-auto flex items-center justify-between gap-3 border-t border-solid border-slate-100 pt-4">
+          <span className="font-sans text-[11px] tracking-wider text-slate-500 uppercase">
+            {category.services.length} service{category.services.length === 1 ? '' : 's'}
+          </span>
+          <Link href={categoryHref(marketSlug, category)} className={LINK_ARROW_LG}>
+            Open category
+            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </Link>
+        </div>
       </div>
     </article>
   );
@@ -400,21 +418,21 @@ export function ServiceCard({
         </div>
       ) : null}
 
-      <div
-        className={`mt-auto flex flex-wrap items-center gap-3 border-t border-solid border-slate-100 pt-4 ${
-          showCategory ? 'justify-between' : 'justify-end'
-        }`}
-      >
-        {showCategory ? (
-          category ? (
-            <span className="font-mono text-[11px] tracking-wider text-slate-500 uppercase">
-              {category.displayName}
-            </span>
-          ) : (
-            <span className="font-mono text-[11px] tracking-wider text-slate-400 uppercase">
-              Uncategorised
-            </span>
-          )
+        {service.summary ? (
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">{service.summary}</p>
+        ) : (
+          // Said out loud rather than filled in. A generated description is the one
+          // thing this codebase will not put in front of a customer.
+          <p className="mt-2 text-sm leading-relaxed text-slate-500">
+            No description has been published for this service yet. The entry is a real
+            catalog row; the copy is not written.
+          </p>
+        )}
+
+        {service.aliases.length ? (
+          <div className="mt-3">
+            <AliasChips marketSlug={marketSlug} aliases={service.aliases} cap={4} />
+          </div>
         ) : null}
         <Link href={serviceHref(marketSlug, service)} className={LINK_ARROW}>
           Open service
@@ -571,7 +589,7 @@ export function ServiceFacts({
     <dl className="grid gap-3 sm:grid-cols-3">
       {facts.map((fact) => (
         <div key={fact.label} className={`${CARD} p-4`}>
-          <dt className="font-mono text-[11px] tracking-wider text-slate-500 uppercase">
+          <dt className="font-sans text-[11px] tracking-wider text-slate-500 uppercase">
             {fact.label}
           </dt>
           <dd className="mt-1 text-2xl font-bold tracking-tight text-slate-900 tabular-nums">

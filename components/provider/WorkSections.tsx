@@ -59,7 +59,7 @@ export function WorkTabs({
                 }`}
               >
                 {tab.label}
-                <span className={`rounded-full px-2 py-0.5 font-mono text-[11px] ${isCurrent ? 'bg-primary-subtle text-primary' : 'bg-slate-100 text-slate-500'}`}>
+                <span className={`rounded-full px-2 py-0.5 font-sans text-[11px] ${isCurrent ? 'bg-primary-subtle text-primary' : 'bg-slate-100 text-slate-500'}`}>
                   {counts[tab.key]}
                 </span>
               </Link>
@@ -102,7 +102,7 @@ export function WorkFilters({ tab, query, sort }: { tab: WorkTab; query: string;
         idle="Apply"
         pending="Applying…"
         icon={<Search aria-hidden="true" className="h-4 w-4" />}
-        className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
       />
       {query || sort !== 'soonest' ? (
         <Link href={`${PROVIDER_PATHS.work}?tab=${tab}`} className={LINK_ARROW}>
@@ -125,7 +125,7 @@ function CustomerMark({ name }: { name: string | null }) {
     <span className="flex items-center gap-2">
       <span
         aria-hidden="true"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-mono text-[11px] font-bold text-primary"
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-[11px] font-bold text-primary"
       >
         {initials ?? <User className="h-3.5 w-3.5 text-slate-400" />}
       </span>
@@ -163,7 +163,7 @@ export function WorkCard({ row, now }: { row: WorkRow; now: Date }) {
         <span
           className={
             pill.tone === 'teal'
-              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+              ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
               : pill.tone === 'amber'
                 ? BADGE_AMBER
                 : BADGE_SLATE
@@ -200,19 +200,19 @@ export function WorkCard({ row, now }: { row: WorkRow; now: Date }) {
 
       <dl className="mt-3 grid gap-x-6 gap-y-2 text-xs sm:grid-cols-3">
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Checklist</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Checklist</dt>
           <dd className="mt-0.5 text-slate-700">
             {row.stepsTotal === 0 ? 'None written' : `${row.stepsDone} of ${row.stepsTotal} done`}
           </dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Evidence</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Evidence</dt>
           <dd className="mt-0.5 text-slate-700">
             {row.evidenceCount === 0 ? 'Nothing submitted' : `${row.evidenceCount} item${row.evidenceCount === 1 ? '' : 's'}`}
           </dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Last field update</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Last field update</dt>
           <dd className="mt-0.5 text-slate-700">
             {row.fieldState
               ? `${FIELD_STATE_COPY[row.fieldState] ?? row.fieldState}${row.fieldStateAt ? ` · ${new Date(row.fieldStateAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}` : ''}`

@@ -250,7 +250,7 @@ export default async function IntakeLogisticsPage({ searchParams }: { searchPara
               type="submit"
               name="intent"
               value="continue"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
             >
               Continue to review →
             </button>
@@ -258,7 +258,7 @@ export default async function IntakeLogisticsPage({ searchParams }: { searchPara
               type="submit"
               name="intent"
               value="save"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
             >
               Save draft
             </button>
@@ -272,7 +272,7 @@ export default async function IntakeLogisticsPage({ searchParams }: { searchPara
           {lastUsed && (lastUsed.locationId || lastUsed.landmark || lastUsed.accessNotes) ? (
             <div className={CARD}>
               <div className="px-4 py-3">
-                <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   Prefilled from your last request
                 </p>
                 <p className="mt-1.5 text-xs leading-relaxed text-slate-600">

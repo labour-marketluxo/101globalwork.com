@@ -35,7 +35,7 @@ export function ReadinessHeader({ data }: { data: ProviderReadiness }) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
           {data.displayName}
         </p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
@@ -49,7 +49,7 @@ export function ReadinessHeader({ data }: { data: ProviderReadiness }) {
       </div>
 
       <div className="flex flex-col items-start gap-2">
-        <span className={data.isPublic ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_AMBER}>
+        <span className={data.isPublic ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_AMBER}>
           {data.isPublic ? 'Published' : 'Not published'}
         </span>
         <Link href={PROVIDER_PATHS.profile} className={LINK_ARROW}>
@@ -96,7 +96,7 @@ export function ReadinessScore({ data }: { data: ProviderReadiness }) {
           <div key={dimension.key}>
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-xs font-bold tracking-tight text-slate-800">{dimension.label}</dt>
-              <dd className="font-mono text-xs text-slate-600">{dimension.score}</dd>
+              <dd className="font-sans text-xs text-slate-600">{dimension.score}</dd>
             </div>
             <ScoreBar score={dimension.score} tone={dimensionTone(dimension.score)} />
             <p className="mt-1 text-xs leading-relaxed text-slate-500">{dimension.note}</p>
@@ -192,7 +192,7 @@ export function ReadinessFacts({ data }: { data: ProviderReadiness }) {
       <dl className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {data.facts.map(fact => (
           <div key={fact.label} className="rounded-xl border border-solid border-slate-200 p-3">
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">{fact.label}</dt>
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">{fact.label}</dt>
             <dd className="mt-0.5 text-lg font-extrabold tracking-tight text-slate-900">{fact.value}</dd>
           </div>
         ))}

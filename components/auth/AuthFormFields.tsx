@@ -62,7 +62,7 @@ export function PasswordField({
       <div className="mb-1.5 flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+          className="block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
         >
           {label}
         </label>
@@ -150,7 +150,7 @@ function PasswordStrength({ id, value, minLength }: { id: string; value: string;
       </p>
 
       <details className="mt-1.5">
-        <summary className="cursor-pointer font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <summary className="cursor-pointer font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           What actually helps
         </summary>
         <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-slate-600">

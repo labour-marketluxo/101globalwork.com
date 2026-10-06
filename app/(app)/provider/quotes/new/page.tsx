@@ -75,7 +75,7 @@ export default async function ProviderQuoteBuilderPage({ searchParams }: { searc
       </nav>
 
       <header>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Quote builder</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Quote builder</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Price this work
         </h1>
@@ -124,17 +124,17 @@ export default async function ProviderQuoteBuilderPage({ searchParams }: { searc
         <p className="mt-1.5 text-sm leading-relaxed text-slate-700">{header.needText}</p>
         <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-3">
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Service</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Service</dt>
             <dd className="mt-0.5 text-slate-700">{header.serviceName ?? 'Matched service'}</dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Where</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Where</dt>
             <dd className="mt-0.5 text-slate-700">
               {[header.locationName, header.cityName].filter(Boolean).join(', ') || 'Matched area'}
             </dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Currency</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Currency</dt>
             <dd className="mt-0.5 text-slate-700">
               {previous?.currencyCode ?? header.currencyCode ?? 'NGN'} — from the request&apos;s market, not chosen
               here

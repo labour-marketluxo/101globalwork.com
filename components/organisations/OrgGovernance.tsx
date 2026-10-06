@@ -21,7 +21,7 @@ function badge(tone: 'teal' | 'amber' | 'slate', label: string) {
     <span
       className={
         tone === 'teal'
-          ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+          ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
           : tone === 'amber'
             ? BADGE_AMBER
             : BADGE_SLATE
@@ -131,7 +131,7 @@ export function ApprovalsInbox({
                       idle="Approve Request"
                       pending="Saving…"
                       formAction={decideApprovalAction}
-                      className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
                     />
                     {/* ⚠️ /requests/[id], NOT /customer/requests/[id]: the customer page is scoped to the account
                         that commissioned the request, and the whole point of this inbox is that the decider is
@@ -256,7 +256,7 @@ export function CostCentreCards({ budgets, organisationId }: { budgets: BudgetsR
               <h2 className="flex items-center gap-2 text-sm font-bold tracking-tight text-slate-900">
                 <Coins aria-hidden="true" className="h-4 w-4 text-primary" />
                 {centre.name}
-                <span className="font-mono text-[11px] font-normal tracking-wide text-slate-400 uppercase">{centre.code}</span>
+                <span className="font-sans text-[11px] font-normal tracking-wide text-slate-400 uppercase">{centre.code}</span>
               </h2>
               <p className="mt-1 text-xs text-slate-500">
                 {centre.locationName ?? 'Every site'}
@@ -268,19 +268,19 @@ export function CostCentreCards({ budgets, organisationId }: { budgets: BudgetsR
 
           <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Allocated</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Allocated</dt>
               <dd className="mt-0.5 font-semibold text-slate-900">{formatMoney(centre.allocatedMinor, centre.currencyCode)}</dd>
             </div>
             <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Committed (funded work)</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Committed (funded work)</dt>
               <dd className="mt-0.5 font-semibold text-slate-900">{formatMoney(centre.committedMinor, centre.currencyCode)}</dd>
             </div>
             <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Paid out</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Paid out</dt>
               <dd className="mt-0.5 font-semibold text-slate-900">{formatMoney(centre.paidMinor, centre.currencyCode)}</dd>
             </div>
             <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Variance</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Variance</dt>
               <dd className={`mt-0.5 font-semibold ${centre.varianceMinor >= 0 ? 'text-primary' : 'text-amber-800'}`}>
                 {centre.allocatedMinor === 0 && centre.variancePercent === null
                   ? 'No allocation set'
@@ -322,7 +322,7 @@ export function CostCentreCards({ budgets, organisationId }: { budgets: BudgetsR
               <PendingButton
                 idle="Adjust budget limit"
                 pending="Saving…"
-                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
             </form>
           ) : null}

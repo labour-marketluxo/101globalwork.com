@@ -93,7 +93,7 @@ export default async function ProjectTimelinePage({
         <PendingButton
           idle="Apply"
           pending="Applying…"
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
         {query.actor || query.from || query.to || query.overrides ? (
           <Link href={`/projects/${projectId}/timeline`} className={LINK_ARROW}>

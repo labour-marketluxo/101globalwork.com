@@ -57,19 +57,19 @@ export function ReportsDashboard({ reports, currencyCode }: { reports: ReportsRe
         </h2>
         <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className={`${CARD} p-4`}>
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Projects in window</dt>
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Projects in window</dt>
             <dd className="mt-1 text-lg font-extrabold tracking-tight text-slate-900">{reports.completion.projects}</dd>
           </div>
           <div className={`${CARD} p-4`}>
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Completed</dt>
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Completed</dt>
             <dd className="mt-1 text-lg font-extrabold tracking-tight text-primary">{reports.completion.completed}</dd>
           </div>
           <div className={`${CARD} p-4`}>
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Cancelled or disputed</dt>
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Cancelled or disputed</dt>
             <dd className="mt-1 text-lg font-extrabold tracking-tight text-slate-900">{reports.completion.endedBadly}</dd>
           </div>
           <div className={`${CARD} p-4`}>
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Average days to finish</dt>
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Average days to finish</dt>
             <dd className="mt-1 text-lg font-extrabold tracking-tight text-slate-900">
               {reports.completion.completed > 0 ? String(reports.completion.avgDays) : '—'}
             </dd>
@@ -89,19 +89,19 @@ export function ReportsDashboard({ reports, currencyCode }: { reports: ReportsRe
         </p>
         <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-4">
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">On time</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">On time</dt>
             <dd className="mt-0.5 font-semibold text-primary">{reports.sla.onTime}</dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Late</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Late</dt>
             <dd className="mt-0.5 font-semibold text-amber-800">{reports.sla.late}</dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Overdue now</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Overdue now</dt>
             <dd className="mt-0.5 font-semibold text-amber-800">{reports.sla.currentlyOverdue}</dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">No date agreed</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">No date agreed</dt>
             <dd className="mt-0.5 font-semibold text-slate-700">{reports.sla.noDate}</dd>
           </div>
         </dl>
@@ -126,7 +126,7 @@ export function ReportsDashboard({ reports, currencyCode }: { reports: ReportsRe
                 <li key={entry.label}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-semibold text-slate-800">{entry.label}</span>
-                    <span className="font-mono text-slate-600">
+                    <span className="font-sans text-slate-600">
                       {formatMoney(entry.fundedMinor, currencyCode)} funded · {formatMoney(entry.paidMinor, currencyCode)} paid
                     </span>
                   </div>
@@ -154,7 +154,7 @@ export function ReportsDashboard({ reports, currencyCode }: { reports: ReportsRe
                 <li key={entry.label}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-semibold text-slate-800">{entry.label}</span>
-                    <span className="font-mono text-slate-600">
+                    <span className="font-sans text-slate-600">
                       {formatMoney(entry.fundedMinor, currencyCode)} funded · {formatMoney(entry.paidMinor, currencyCode)} paid
                     </span>
                   </div>

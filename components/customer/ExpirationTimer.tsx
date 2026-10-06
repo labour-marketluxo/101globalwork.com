@@ -40,7 +40,7 @@ export function ExpirationTimer({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 font-mono text-sm font-bold ${
+      className={`inline-flex items-center gap-1.5 font-sans text-sm font-bold ${
         expired ? 'text-amber-800' : 'text-primary'
       }`}
     >

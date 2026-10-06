@@ -31,7 +31,7 @@ function StatusBadge({ record }: { record: VerificationRecord | null }) {
   const copy = VERIFICATION_STATUS_COPY[record.status];
   if (copy.tone === 'teal') {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
         <ShieldCheck aria-hidden="true" className="h-3 w-3" />
         {copy.label}
       </span>
@@ -85,18 +85,18 @@ function RequirementCard({
         <dl className="mt-3 grid gap-x-6 gap-y-2 text-xs sm:grid-cols-3">
           {record.jurisdictionCode ? (
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Jurisdiction</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Jurisdiction</dt>
               <dd className="mt-0.5 text-slate-700">{record.jurisdictionCode}</dd>
             </div>
           ) : null}
           {record.referenceLabel ? (
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Reference</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Reference</dt>
               <dd className="mt-0.5 text-slate-700">{record.referenceLabel}</dd>
             </div>
           ) : null}
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">
               {record.status === 'verified' ? 'Verified' : 'Submitted'}
             </dt>
             <dd className="mt-0.5 text-slate-700">
@@ -169,7 +169,7 @@ function RequirementCard({
               idle="Submit for review"
               pending="Submitting…"
               icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>
@@ -221,7 +221,7 @@ function RequirementCard({
               idle="Re-submit for review"
               pending="Submitting…"
               icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>
@@ -234,7 +234,7 @@ export function VerificationHeader({ centre }: { centre: VerificationCentre }) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Verification</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Verification</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Prove who you are
         </h1>

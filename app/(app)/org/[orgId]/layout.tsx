@@ -44,7 +44,7 @@ export default async function OrganisationLayout({
     <div className={PAGE_SHELL}>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-solid border-slate-200 pb-3">
         <div className="min-w-0">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Organisation</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Organisation</p>
           <p className="mt-0.5 truncate text-sm font-bold tracking-tight text-slate-900">
             {organisation.entity.displayName}
             {organisation.entity.marketName ? ' · ' + organisation.entity.marketName : ''}
@@ -53,7 +53,7 @@ export default async function OrganisationLayout({
         <div className="flex flex-wrap items-center gap-3">
           {entities.length > 1 ? (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Entity</span>
+              <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Entity</span>
               {entities.map(entity => (
                 <Link
                   key={entity.id}
@@ -72,7 +72,7 @@ export default async function OrganisationLayout({
           )}
           <Link
             href={`/customer/requests/new?organisation=${orgId}`}
-            className="inline-flex items-center rounded-lg bg-secondary px-4 py-2 font-mono text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center rounded-lg bg-secondary px-4 py-2 font-sans text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-secondary-dark"
           >
             New request
           </Link>

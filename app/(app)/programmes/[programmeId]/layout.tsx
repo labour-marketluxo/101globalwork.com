@@ -67,10 +67,10 @@ export default async function ProgrammeLayout({
       <header className="border-b border-solid border-slate-200 pb-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="flex flex-wrap items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+            <p className="flex flex-wrap items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
               <Building2 aria-hidden="true" className="h-3.5 w-3.5" />
               {PROGRAMME_KIND_COPY[programme.kind] ?? programme.kind}
-              <span className="font-mono text-slate-400">{programme.reference}</span>
+              <span className="font-sans text-slate-400">{programme.reference}</span>
             </p>
             <h1 className="mt-1 truncate text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
               {programme.name}
@@ -78,7 +78,7 @@ export default async function ProgrammeLayout({
             <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
               <span>{programme.regionLabel}</span>
               {programme.startsOn ? (
-                <span className="font-mono">
+                <span className="font-sans">
                   {programme.startsOn}
                   {programme.endsOn ? ` → ${programme.endsOn}` : ''}
                 </span>
@@ -87,7 +87,7 @@ export default async function ProgrammeLayout({
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className={`rounded-full px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider uppercase ${status.className}`}>
+            <span className={`rounded-full px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider uppercase ${status.className}`}>
               {status.label}
             </span>
             <RoleBadge role={context.role} />

@@ -78,7 +78,7 @@ export default function MainNav() {
                 the design tool's own mark. Drop a real logo in this slot. */}
             <span
               aria-hidden="true"
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-solid border-white/15 bg-white/10 font-mono text-[11px] font-bold text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-solid border-white/15 bg-white/10 font-sans text-[11px] font-bold text-white"
             >
               101
             </span>

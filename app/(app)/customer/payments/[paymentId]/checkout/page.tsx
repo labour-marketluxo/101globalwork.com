@@ -113,7 +113,7 @@ export default async function CheckoutPage({
           )}
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What happens after you pay
             </h2>
             <ol className="mt-3 space-y-2 text-xs leading-relaxed text-slate-600">

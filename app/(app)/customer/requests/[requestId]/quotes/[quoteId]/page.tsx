@@ -94,7 +94,7 @@ export default async function QuoteDetailPage({
           <section className={`${CARD} p-5 sm:p-6`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   Quote version {quote.versionLabel}
                 </p>
                 <h1 className="mt-1 text-xl font-bold tracking-tight text-slate-900">{group.providerName}</h1>
@@ -167,7 +167,7 @@ export default async function QuoteDetailPage({
                       <span className="text-slate-500">identity not verified</span>
                     )}
                   </span>
-                  <span className="mt-0.5 block font-mono text-xs text-slate-500">
+                  <span className="mt-0.5 block font-sans text-xs text-slate-500">
                     readiness {group.readinessScore ?? '—'} · trust {group.trustScore ?? '—'}
                   </span>
                 </dd>
@@ -196,7 +196,7 @@ export default async function QuoteDetailPage({
 
           {/* ── The money ──────────────────────────────────────────────────────────────────────────── */}
           <section aria-labelledby="breakdown-heading" className={`${CARD} p-5`}>
-            <h2 id="breakdown-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 id="breakdown-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Cost breakdown
             </h2>
 
@@ -270,7 +270,7 @@ export default async function QuoteDetailPage({
 
           {/* ── The terms ──────────────────────────────────────────────────────────────────────────── */}
           <section aria-labelledby="terms-heading" className={`${CARD} p-5`}>
-            <h2 id="terms-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 id="terms-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Terms this version carries
             </h2>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
@@ -282,7 +282,7 @@ export default async function QuoteDetailPage({
           </section>
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What the provider wrote about this price
             </h2>
             <p className="mt-2 text-sm leading-relaxed whitespace-pre-wrap text-slate-700">
@@ -313,7 +313,7 @@ export default async function QuoteDetailPage({
 
         <aside className="space-y-4">
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Decide on this quote
             </h2>
 
@@ -331,7 +331,7 @@ export default async function QuoteDetailPage({
                 <input type="hidden" name="request_id" value={requestId} />
                 <button
                   type="submit"
-                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
                 >
                   Accept Quote &amp; Proceed <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </button>
@@ -364,7 +364,7 @@ export default async function QuoteDetailPage({
                 </div>
                 <button
                   type="submit"
-                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
                 >
                   Ask the provider
                 </button>
@@ -396,7 +396,7 @@ export default async function QuoteDetailPage({
                 </div>
                 <button
                   type="submit"
-                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
                 >
                   Decline
                 </button>
@@ -405,13 +405,13 @@ export default async function QuoteDetailPage({
           </section>
 
           <section className={`${CARD} p-5`}>
-            <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               <FileText aria-hidden="true" className="h-4 w-4 text-slate-400" />
               Keep a copy
             </h2>
             <a
               href={`/customer/requests/${requestId}/quotes/${quoteId}/download`}
-              className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+              className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
             >
               <Download aria-hidden="true" className="h-3.5 w-3.5" />
               Download PDF — {quote.versionLabel}

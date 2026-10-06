@@ -105,7 +105,7 @@ export default async function RecurringWorkPage({ searchParams }: { searchParams
                   <section key={group.key} aria-labelledby={`group-${group.key}`} className="grid gap-3">
                     <h2 id={`group-${group.key}`} className="text-lg font-bold tracking-tight text-slate-900">
                       {group.heading}
-                      <span className="ml-2 font-mono text-xs font-normal text-slate-500">
+                      <span className="ml-2 font-sans text-xs font-normal text-slate-500">
                         {group.plans.length}
                       </span>
                     </h2>

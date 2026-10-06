@@ -106,7 +106,7 @@ export default async function GuidePage({ params }: { params: Params }) {
         }))}
         sidebarExtra={
           <div>
-            <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Related
             </h3>
             <ul className="mt-2 grid gap-1.5">
@@ -121,7 +121,7 @@ export default async function GuidePage({ params }: { params: Params }) {
             </ul>
             {otherGuides.length ? (
               <>
-                <h3 className="mt-4 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <h3 className="mt-4 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   Other guides
                 </h3>
                 <ul className="mt-2 grid gap-1.5">
@@ -144,16 +144,16 @@ export default async function GuidePage({ params }: { params: Params }) {
             checked — the claim that can actually be supported — and links to how the
             platform describes its own content. */}
         <div className={`${CARD} flex flex-wrap items-center gap-x-3 gap-y-2 p-4`}>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-surface px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-surface px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
             <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
             101GlobalWork
           </span>
-          <span className="font-mono text-[11px] tracking-wider text-slate-500 uppercase">
+          <span className="font-sans text-[11px] tracking-wider text-slate-500 uppercase">
             Reviewed {reviewed} · {guide.readMinutes} min read
           </span>
           <Link
             href="/how-it-works"
-            className="ml-auto font-mono text-[11px] font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary-dark"
+            className="ml-auto font-sans text-[11px] font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary-dark"
           >
             How this is maintained
           </Link>

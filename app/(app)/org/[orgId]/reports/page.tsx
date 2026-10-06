@@ -118,7 +118,7 @@ export default async function OrganisationReportsPage({
         <PendingButton
           idle="Run analytics report"
           pending="Running…"
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
         {hasFilters ? (
           <Link href={`/org/${orgId}/reports`} className={LINK_ARROW}>Clear</Link>

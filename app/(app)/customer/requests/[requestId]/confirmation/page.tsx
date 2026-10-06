@@ -77,10 +77,10 @@ export default async function RequestConfirmationPage({
         </p>
 
         <div className="mt-6 rounded-xl border border-solid border-primary-subtle bg-primary-surface px-4 py-4">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
             Your request reference
           </p>
-          <p className="mt-1 font-mono text-2xl font-bold tracking-wider text-primary-deep">
+          <p className="mt-1 font-sans text-2xl font-bold tracking-wider text-primary-deep">
             {requestReference(confirmation.id)}
           </p>
           <p className="mt-1.5 text-xs text-slate-600">
@@ -91,11 +91,11 @@ export default async function RequestConfirmationPage({
 
         <dl className="mt-6 grid gap-4 text-left sm:grid-cols-2">
           <div>
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What is happening
             </dt>
             <dd className="mt-1">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary-light px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-amber-800 uppercase">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary-light px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-amber-800 uppercase">
                 {summary.label}
               </span>
               <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{summary.detail}</p>
@@ -103,7 +103,7 @@ export default async function RequestConfirmationPage({
           </div>
 
           <div>
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Work described
             </dt>
             <dd className="mt-1 text-sm leading-relaxed text-slate-800">
@@ -113,7 +113,7 @@ export default async function RequestConfirmationPage({
           </div>
 
           <div className="sm:col-span-2">
-            <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Submitted
             </dt>
             <dd className="mt-1 text-sm text-slate-700">
@@ -136,13 +136,13 @@ export default async function RequestConfirmationPage({
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3 border-t border-solid border-slate-200 pt-6">
           <Link
             href={`/requests/${confirmation.id}`}
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
           >
             View request details →
           </Link>
           <Link
             href={CUSTOMER_PATHS.dashboard}
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
           >
             Return to dashboard
           </Link>
@@ -151,7 +151,7 @@ export default async function RequestConfirmationPage({
 
       {/* ── The honest part ─────────────────────────────────────────────────────────────────── */}
       <div className="mt-5 rounded-xl border border-solid border-amber-300 bg-secondary-light px-5 py-4">
-        <p className="font-mono text-[11px] font-bold tracking-wider text-amber-800 uppercase">
+        <p className="font-sans text-[11px] font-bold tracking-wider text-amber-800 uppercase">
           How you will hear about this
         </p>
         <p className="mt-2 text-sm leading-relaxed text-amber-900">

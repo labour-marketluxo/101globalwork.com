@@ -49,7 +49,7 @@ export default function AuthSplitLayout({ children }: { children: React.ReactNod
           <Link href="/" className="flex items-center gap-2.5 no-underline">
             <span
               aria-hidden="true"
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-solid border-primary bg-primary font-mono text-[11px] font-bold text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-solid border-primary bg-primary font-sans text-[11px] font-bold text-white"
             >
               101
             </span>
@@ -77,14 +77,14 @@ export default function AuthSplitLayout({ children }: { children: React.ReactNod
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0D282E] via-[#0D282E]/40 to-transparent" />
 
         <div className="relative z-20 mt-auto w-full rounded-2xl border border-emerald-500/20 bg-white/10 p-6 shadow-xl backdrop-blur-md xl:p-8">
-          <p className="mb-3 w-fit rounded-full border border-emerald-800/60 bg-emerald-950/80 px-3 py-1 font-mono text-xs text-emerald-400">
-            [ MILESTONES ON APPROVAL ]
+          <p className="mb-3 w-fit rounded-full border border-emerald-800/60 bg-emerald-950/80 px-3 py-1 font-sans text-xs text-emerald-400">
+            MILESTONES ON APPROVAL
           </p>
           <p className="mb-3 text-base font-medium leading-relaxed text-slate-100">
             &ldquo;Itemized quotes, scope-first matching, and payment held by the provider until you
             approve the work — all in one workspace.&rdquo;
           </p>
-          <p className="font-mono text-xs text-amber-400">101GlobalWork Platform</p>
+          <p className="font-sans text-xs text-amber-400">101GlobalWork Platform</p>
         </div>
       </div>
     </div>

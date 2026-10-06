@@ -49,7 +49,7 @@ export function ProfileEditorHeader({
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Profile</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Profile</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           {editor.headline ?? editor.displayName}
         </h1>
@@ -61,7 +61,7 @@ export function ProfileEditorHeader({
       </div>
 
       <div className="flex flex-col items-start gap-2">
-        <span className={editor.isPublic ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_AMBER}>
+        <span className={editor.isPublic ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_AMBER}>
           {editor.isPublic ? 'Published' : 'Not published'}
         </span>
         <Link href={PROVIDER_PATHS.profilePreview} className={LINK_ARROW}>
@@ -93,7 +93,7 @@ export function FieldClassificationPanel() {
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-solid border-primary-subtle bg-primary-surface p-4">
-          <p className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+          <p className="inline-flex items-center gap-1.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
             <Eye aria-hidden="true" className="h-3.5 w-3.5" />
             Public
           </p>
@@ -108,7 +108,7 @@ export function FieldClassificationPanel() {
         </div>
 
         <div className="rounded-xl border border-solid border-slate-200 bg-slate-50 p-4">
-          <p className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+          <p className="inline-flex items-center gap-1.5 font-sans text-[11px] font-bold tracking-wider text-slate-600 uppercase">
             <EyeOff aria-hidden="true" className="h-3.5 w-3.5" />
             Private
           </p>
@@ -279,7 +279,7 @@ export function ProfileForm({ editor, nextPath }: { editor: ProviderProfileEdito
         <PendingButton
           idle="Save profile"
           pending="Saving…"
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
       </div>
     </form>
@@ -478,7 +478,7 @@ export function PortfolioPanel({ editor, nextPath }: { editor: ProviderProfileEd
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={item.isPublic ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
+                  <span className={item.isPublic ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
                     {item.isPublic ? 'Public' : 'Private'}
                   </span>
                   <form action={removePortfolioItemAction}>
@@ -616,7 +616,7 @@ export function PublishPanel({
         <PendingButton
           idle="Publish my profile"
           pending="Publishing…"
-          className={`inline-flex items-center gap-2 rounded-lg border-0 px-5 py-2.5 font-mono text-xs font-bold tracking-wide uppercase shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+          className={`inline-flex items-center gap-2 rounded-lg border-0 px-5 py-2.5 font-sans text-xs font-bold tracking-wide uppercase shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
             remaining.length === 0
               ? 'bg-secondary text-white hover:bg-secondary-dark'
               : 'bg-slate-300 text-slate-600'

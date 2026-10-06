@@ -51,7 +51,7 @@ export default async function CustomerPaymentsPage({
       </header>
 
       <section className="mb-6 rounded-xl border border-solid border-primary-subtle bg-primary-surface px-4 py-3">
-        <h2 className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+        <h2 className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
           Reconciled ledger records are financial truth
         </h2>
         <p className="mt-1.5 text-xs leading-relaxed text-primary-deep">

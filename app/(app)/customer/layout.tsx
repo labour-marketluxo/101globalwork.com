@@ -66,7 +66,7 @@ export default async function CustomerLayout({ children }: { children: React.Rea
 
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-2 sm:flex">
-            <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">View</span>
+            <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">View</span>
             <Link href={CUSTOMER_PATHS.dashboard} aria-current="page" className="rounded-full bg-primary-subtle px-3 py-1 text-xs font-semibold text-primary no-underline">
               Customer
             </Link>
@@ -78,7 +78,7 @@ export default async function CustomerLayout({ children }: { children: React.Rea
           <span
             aria-hidden="true"
             title={displayName ?? undefined}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-mono text-xs font-bold text-primary"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
           >
             {initials}
           </span>

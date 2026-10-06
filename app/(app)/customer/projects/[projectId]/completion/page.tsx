@@ -111,7 +111,7 @@ export default async function ProjectCompletionPage({
           <CompletionDecisionPanel completion={completion} criteria={criteria} />
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What was agreed
             </h2>
             <ul className="mt-3 space-y-2 text-xs leading-relaxed text-slate-600">

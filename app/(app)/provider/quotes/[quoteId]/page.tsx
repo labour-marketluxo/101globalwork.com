@@ -113,7 +113,7 @@ export default async function ProviderQuoteDetailPage({
       ) : null}
 
       <header>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
           Quote {quote.version} · {request.needText}
         </p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">

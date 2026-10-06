@@ -82,7 +82,7 @@ export default async function CustomerPaymentPage({
           <section className={`${CARD} p-5 sm:p-6`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   Payment record
                 </p>
                 <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
@@ -97,7 +97,7 @@ export default async function CustomerPaymentPage({
               </div>
               <div className="flex flex-col items-end gap-2">
                 <ReconciledBadge state={row.reconciledState} />
-                <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   {row.obligationStatus.replace(/_/g, ' ')}
                 </span>
               </div>
@@ -110,7 +110,7 @@ export default async function CustomerPaymentPage({
             <dl className="mt-5 grid gap-4 border-t border-solid border-slate-200 pt-5 sm:grid-cols-2">
               <div>
                 <dt className={LABEL}>Payment reference</dt>
-                <dd className="font-mono text-sm break-all text-slate-800">
+                <dd className="font-sans text-sm break-all text-slate-800">
                   {row.paymentReference ?? 'No payment has been started'}
                 </dd>
               </div>
@@ -207,7 +207,7 @@ export default async function CustomerPaymentPage({
         <aside className="space-y-4">
           {isPayable(row) ? (
             <section className={`${CARD} p-5`}>
-              <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Still to pay
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">
@@ -216,7 +216,7 @@ export default async function CustomerPaymentPage({
               </p>
               <Link
                 href={`/customer/payments/${row.paymentId}/checkout`}
-                className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+                className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
               >
                 Pay {formatMoney(row.amountMinor, row.currencyCode)} Safely
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -225,13 +225,13 @@ export default async function CustomerPaymentPage({
           ) : null}
 
           <section className={`${CARD} p-5`}>
-            <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               <Download aria-hidden="true" className="h-4 w-4 text-slate-400" />
               Keep a copy
             </h2>
             <a
               href={`/customer/payments/${row.paymentId}/receipt`}
-              className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+              className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
             >
               <Download aria-hidden="true" className="h-3.5 w-3.5" />
               Download receipt PDF
@@ -243,7 +243,7 @@ export default async function CustomerPaymentPage({
           </section>
 
           <section className={`${CARD} p-5`}>
-            <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               <ShieldCheck aria-hidden="true" className="h-4 w-4 text-slate-400" />
               How this money is held
             </h2>

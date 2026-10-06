@@ -40,7 +40,7 @@ import { ActionLink, Section, SectionHeader } from '@/components/marketing/PageS
  *      "$5,000,000 MINIMUM" / "DAILY AUTOMATED AUDITS" / "98.4% TOP TIER" → the checks that actually exist.
  *      Nothing in this repository holds a bond figure, an audit cadence or a reliability score, and the trust
  *      page states the opposite of the second one: a check confirms what a provider submitted at a point in
- *      time and is not a warranty. The structured list keeps its shape — three grey rows with monospace values —
+ *      time and is not a warranty. The structured list keeps its shape — three grey rows with metadata values —
  *      and carries identity, licence and insurance instead.
  *
  * 2. THE CURRENCY IS NGN. The brief's mock quote was in dollars ($450 + $120 = $570). The platform's seeded
@@ -65,11 +65,11 @@ import { ActionLink, Section, SectionHeader } from '@/components/marketing/PageS
  * repository has removed that kind of proof once already.
  */
 
-/** `[ 01 / STEP ]` — monospace, because it is metadata rather than prose. */
+/** `01 / STEP` — a small uppercase marker, because it is metadata rather than prose. */
 function StepBadge({ step, tone = 'light' }: { step: string; tone?: 'light' | 'dark' }) {
   return (
     <span
-      className={`mb-6 inline-flex w-fit items-center rounded-full px-3 py-1 font-mono text-xs font-bold tracking-wider uppercase ${
+      className={`mb-6 inline-flex w-fit items-center rounded-full px-3 py-1 font-sans text-xs font-bold tracking-wider uppercase ${
         tone === 'dark'
           ? 'border border-emerald-800/50 bg-emerald-950/80 text-emerald-400'
           : 'bg-emerald-50 text-emerald-700'
@@ -125,14 +125,14 @@ export function HowItWorksPreview() {
                 80px narrower than the box, which is what "fix the width" was looking at. `w-full` cannot beat a
                 UA margin: the margin comes off the width the block is offered, before `width:100%` is resolved. */}
             <figure className="m-0 mt-6 w-full rounded-xl border border-emerald-900/40 bg-primary-dark p-5 text-white shadow-inner">
-              <figcaption className="mb-3 block font-mono text-xs font-bold tracking-wide text-emerald-400 uppercase">
-                [ example request ]
+              <figcaption className="mb-3 block font-sans text-xs font-bold tracking-wide text-emerald-400 uppercase">
+                example request
               </figcaption>
               <blockquote className="m-0 font-sans text-sm leading-relaxed text-slate-200">
                 &ldquo;The kitchen sink has been draining slowly for about a week, and now the base unit underneath
                 is damp. Two-bedroom flat on the second floor, no lift.&rdquo;
               </blockquote>
-              <p className="mt-3 border-t border-emerald-900/60 pt-3 font-mono text-[10px] tracking-wider text-emerald-500/80 uppercase">
+              <p className="mt-3 border-t border-emerald-900/60 pt-3 font-sans text-[10px] tracking-wider text-emerald-500/80 uppercase">
                 example only · what providers quote against
               </p>
             </figure>
@@ -142,7 +142,7 @@ export function HowItWorksPreview() {
               and this says the one thing the step is really about: the description, not the price, is what
               everything downstream is matched against. */}
           <div className="border-t border-slate-100 pt-6">
-            <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-secondary" />
               scope-first matching engine
             </span>
@@ -167,7 +167,7 @@ export function HowItWorksPreview() {
               Payment is held and released against your approval, with a window to raise a problem first.
             </p>
 
-            <div className="flex items-center gap-2 rounded-xl border border-emerald-800/40 bg-emerald-950/60 p-3 font-mono text-xs text-emerald-400">
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-800/40 bg-emerald-950/60 p-3 font-sans text-xs text-emerald-400">
               <CircleCheck aria-hidden="true" className="h-4 w-4 shrink-0" />
               <span className="font-bold tracking-wider uppercase">[ held by the payment provider ]</span>
             </div>
@@ -189,7 +189,7 @@ export function HowItWorksPreview() {
       <div className="mt-8 flex justify-start">
         <Link
           href="/how-it-works"
-          className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-slate-800 underline decoration-slate-400 underline-offset-4 transition-all duration-150 ease-in-out hover:text-slate-950 hover:decoration-slate-900 active:translate-x-1 active:scale-[0.98]"
+          className="inline-flex items-center gap-2 font-sans text-xs font-semibold text-slate-800 underline decoration-slate-400 underline-offset-4 transition-all duration-150 ease-in-out hover:text-slate-950 hover:decoration-slate-900 active:translate-x-1 active:scale-[0.98]"
         >
           Learn more about how it works
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -256,7 +256,7 @@ export function TrustPreview() {
             </div>
 
             <div className="mt-6 border-t border-slate-700/60 pt-6">
-              <p className="mb-2 font-mono text-xs font-bold tracking-wider text-amber-400 uppercase">
+              <p className="mb-2 font-sans text-xs font-bold tracking-wider text-amber-400 uppercase">
                 Held by the payment provider — not by 101GlobalWork
               </p>
               <p className="text-xs leading-relaxed text-slate-400">
@@ -296,7 +296,7 @@ export function TrustPreview() {
                   >
                     <span className="text-xs font-semibold text-slate-700">{row.label}</span>
                     <span
-                      className={`font-mono text-[11px] font-bold tracking-wide uppercase ${
+                      className={`font-sans text-[11px] font-bold tracking-wide uppercase ${
                         row.badge
                           ? 'rounded-md bg-emerald-50 px-2 py-0.5 text-emerald-600'
                           : 'text-slate-800'
@@ -384,9 +384,9 @@ export function PricingPreview() {
           {/* The number and the badge share one baseline at the foot of the card. `mt-auto` does the pushing and
               `justify-between` on the card would too — both are here because either one alone decides the layout. */}
           <div className="relative mt-auto flex w-full items-center justify-between gap-4 border-t border-slate-800/80 pt-8">
-            <span className="font-mono text-3xl font-extrabold tracking-tight text-white">₦0</span>
-            <span className="rounded-lg border border-amber-800/50 bg-amber-950/50 px-3 py-1.5 font-mono text-sm font-bold text-amber-400">
-              [ 100% FREE ]
+            <span className="font-sans text-3xl font-extrabold tracking-tight text-white">₦0</span>
+            <span className="rounded-lg border border-amber-800/50 bg-amber-950/50 px-3 py-1.5 font-sans text-sm font-bold text-amber-400">
+              100% FREE
             </span>
           </div>
         </article>
@@ -405,7 +405,7 @@ export function PricingPreview() {
               title — but removing it entirely would have left four made-up amounts reading as the platform's
               own prices, in amber, next to a total. The disclosure moved inside the block instead: quieter, at
               10px in slate-500, and inside the same container as the numbers it qualifies. */}
-          <div className="rounded-xl border border-slate-800 bg-primary-dark p-4 font-mono text-xs text-white">
+          <div className="rounded-xl border border-slate-800 bg-primary-dark p-4 font-sans text-xs text-white">
             <div className="flex items-center justify-between gap-3">
               <span className="text-slate-400">Base labour</span>
               <span className="text-slate-300">₦450,000</span>
@@ -432,7 +432,7 @@ export function PricingPreview() {
             No fee schedule is in force today, so no fee figure is quoted anywhere on this site. There is a page
             that says so in full.
           </p>
-          <p className="w-fit rounded-lg border border-emerald-200/60 bg-emerald-50 px-3 py-2 font-mono text-xs text-emerald-700">
+          <p className="w-fit rounded-lg border border-emerald-200/60 bg-emerald-50 px-3 py-2 font-sans text-xs text-emerald-700">
             STATUS: PUBLIC &amp; VERIFIABLE — NO SCHEDULE IN FORCE
           </p>
         </article>
@@ -444,7 +444,7 @@ export function PricingPreview() {
             Tax follows the provider’s jurisdiction and FX is handled by the payment provider, so both are stated
             as caveats instead of being buried in a total.
           </p>
-          <p className="w-fit rounded-lg bg-[#0D282E] px-3 py-2 font-mono text-xs text-slate-300">
+          <p className="w-fit rounded-lg bg-[#0D282E] px-3 py-2 font-sans text-xs text-slate-300">
             jurisdiction::provider_local
           </p>
         </article>
@@ -456,7 +456,7 @@ export function PricingPreview() {
       <div className="mt-6 flex justify-start">
         <Link
           href="/pricing"
-          className="group inline-flex items-center gap-2 font-mono text-xs font-semibold text-slate-800 underline underline-offset-4 decoration-slate-400 transition-colors duration-200 hover:-translate-y-0.5 hover:text-slate-950 hover:decoration-slate-900"
+          className="group inline-flex items-center gap-2 font-sans text-xs font-semibold text-slate-800 underline underline-offset-4 decoration-slate-400 transition-colors duration-200 hover:-translate-y-0.5 hover:text-slate-950 hover:decoration-slate-900"
         >
           See pricing &amp; fees
           <ArrowRight

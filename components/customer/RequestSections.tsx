@@ -34,7 +34,7 @@ import {
 const TONE_BADGE: Record<string, string> = {
   amber: BADGE_AMBER,
   slate: BADGE_SLATE,
-  teal: 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase',
+  teal: 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase',
 };
 
 export function StatusPill({ pill }: { pill: { label: string; tone: string } }) {
@@ -79,7 +79,7 @@ export function RequestTabs({
           >
             {requestTabLabel(tab)}
             <span
-              className={`font-mono text-[11px] font-bold ${current ? 'text-amber-200' : 'text-slate-400'}`}
+              className={`font-sans text-[11px] font-bold ${current ? 'text-amber-200' : 'text-slate-400'}`}
             >
               {counts[tab]}
             </span>
@@ -135,7 +135,7 @@ export function RequestListControls({
 
       <button
         type="submit"
-        className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+        className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
       >
         Apply
       </button>
@@ -215,7 +215,7 @@ export function RequestListEmpty({ tab, query }: { tab: RequestTab; query: strin
       </p>
       <Link
         href="/customer/requests/new"
-        className="mt-5 inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+        className="mt-5 inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
       >
         Post a Request <ArrowRight aria-hidden="true" className="h-4 w-4" />
       </Link>
@@ -330,7 +330,7 @@ export function MatchesGrid({
   return (
     <section aria-labelledby="matches-heading">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 id="matches-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <h2 id="matches-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           Providers matched to this request
         </h2>
         <span className={BADGE_SLATE}>
@@ -385,11 +385,11 @@ export function MatchesGrid({
                 </div>
                 <div className="flex items-center gap-1">
                   <dt>Readiness</dt>
-                  <dd className="font-mono font-semibold text-slate-700">{match.readinessScore ?? '—'}</dd>
+                  <dd className="font-sans font-semibold text-slate-700">{match.readinessScore ?? '—'}</dd>
                 </div>
                 <div className="flex items-center gap-1">
                   <dt>Trust</dt>
-                  <dd className="font-mono font-semibold text-slate-700">{match.trustScore ?? '—'}</dd>
+                  <dd className="font-sans font-semibold text-slate-700">{match.trustScore ?? '—'}</dd>
                 </div>
               </dl>
 
@@ -451,7 +451,7 @@ export function EditRequestPanel({
 
   return (
     <section aria-labelledby="edit-heading" className={`${CARD} p-4`}>
-      <h2 id="edit-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 id="edit-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Edit this request
       </h2>
 
@@ -567,7 +567,7 @@ export function EditRequestPanel({
 
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
             >
               <Save aria-hidden="true" className="h-3.5 w-3.5" />
               Save changes
@@ -583,7 +583,7 @@ export function EditRequestPanel({
 export function CancelRequestPanel({ request, cancellable }: { request: RequestDetail; cancellable: boolean }) {
   return (
     <section aria-labelledby="cancel-heading" className={`${CARD} p-4`}>
-      <h2 id="cancel-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 id="cancel-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Cancel this request
       </h2>
 
@@ -624,7 +624,7 @@ export function CancelRequestPanel({ request, cancellable }: { request: RequestD
             </div>
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
             >
               <CircleSlash aria-hidden="true" className="h-3.5 w-3.5" />
               Cancel the request
@@ -659,7 +659,7 @@ export function RequestSummaryCard({ request }: { request: RequestDetail }) {
         </div>
         <div>
           <dt className={LABEL}>Reference</dt>
-          <dd className="font-mono text-sm font-semibold text-slate-800">
+          <dd className="font-sans text-sm font-semibold text-slate-800">
             REQ-{request.id.replace(/-/g, '').slice(0, 8).toUpperCase()}
           </dd>
         </div>
@@ -667,7 +667,7 @@ export function RequestSummaryCard({ request }: { request: RequestDetail }) {
 
       {Object.keys(request.scope).length > 0 ? (
         <details className="mt-4">
-          <summary className="cursor-pointer font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <summary className="cursor-pointer font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             What you told us when you submitted
           </summary>
           <dl className="mt-2 space-y-2 text-xs text-slate-600">

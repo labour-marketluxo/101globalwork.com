@@ -25,7 +25,7 @@ export default function AuthTopBar() {
               two bars mark the brand the same way. Drop a real logo in both at once. */}
           <span
             aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-solid border-primary bg-primary font-mono text-[11px] font-bold text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-solid border-primary bg-primary font-sans text-[11px] font-bold text-white"
           >
             101
           </span>

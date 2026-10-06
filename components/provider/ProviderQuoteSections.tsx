@@ -322,7 +322,7 @@ export function QuoteBuilderForm({
             idle="Submit quotation"
             pending="Submitting…"
             icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-mono text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-sans text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
           />
           <PendingButton
             idle="Save draft"
@@ -382,7 +382,7 @@ export function QuoteStatusPanel({
 }) {
   const badge =
     status.tone === 'teal' ? (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
         <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
         {status.label}
       </span>
@@ -443,30 +443,30 @@ export function QuoteBreakdownPanel({ quote }: { quote: ProviderQuote }) {
           {quote.lineItems.map(item => (
             <div key={`${item.label}:${item.amountMinor}`} className="flex items-baseline justify-between gap-3 border-b border-dashed border-slate-200 pb-1.5 text-sm">
               <dt className="text-slate-700">{item.label}</dt>
-              <dd className="font-mono text-slate-800">{formatMoney(item.amountMinor, quote.currencyCode)}</dd>
+              <dd className="font-sans text-slate-800">{formatMoney(item.amountMinor, quote.currencyCode)}</dd>
             </div>
           ))}
           <div className="flex items-baseline justify-between gap-3 border-b border-dashed border-slate-200 pb-1.5 text-sm">
             <dt className="text-slate-700">Taxes and fees</dt>
-            <dd className="font-mono text-slate-800">{formatMoney(quote.taxesMinor, quote.currencyCode)}</dd>
+            <dd className="font-sans text-slate-800">{formatMoney(quote.taxesMinor, quote.currencyCode)}</dd>
           </div>
           <div className="flex items-baseline justify-between gap-3 pt-1 text-sm font-bold">
             <dt className="text-slate-900">Total</dt>
-            <dd className="font-mono text-slate-900">{formatMoney(quote.totalMinor, quote.currencyCode)}</dd>
+            <dd className="font-sans text-slate-900">{formatMoney(quote.totalMinor, quote.currencyCode)}</dd>
           </div>
         </dl>
       )}
 
       {quote.addons.length > 0 ? (
         <div className="mt-4 rounded-xl border border-solid border-slate-200 p-3.5">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Optional add-ons — not in the total
           </p>
           <ul className="mt-2 grid gap-1 text-xs text-slate-600">
             {quote.addons.map(addon => (
               <li key={`${addon.label}:${addon.amountMinor}`} className="flex justify-between gap-3">
                 <span>{addon.label}</span>
-                <span className="font-mono">{formatMoney(addon.amountMinor, quote.currencyCode)}</span>
+                <span className="font-sans">{formatMoney(addon.amountMinor, quote.currencyCode)}</span>
               </li>
             ))}
           </ul>
@@ -475,7 +475,7 @@ export function QuoteBreakdownPanel({ quote }: { quote: ProviderQuote }) {
 
       <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-2">
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Materials</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Materials</dt>
           <dd className="mt-0.5 text-slate-700">
             {quote.materialsIncluded === true
               ? 'Included in the price'
@@ -486,18 +486,18 @@ export function QuoteBreakdownPanel({ quote }: { quote: ProviderQuote }) {
           </dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Not covered</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Not covered</dt>
           <dd className="mt-0.5 text-slate-700">{quote.exclusions ?? 'Nothing stated as excluded'}</dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Timeline</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Timeline</dt>
           <dd className="mt-0.5 text-slate-700">
             {quote.timelineDays ? `${quote.timelineDays} working day${quote.timelineDays === 1 ? '' : 's'}` : 'Not stated'}
             {quote.timelineNote ? ` — ${quote.timelineNote}` : ''}
           </dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Warranty</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Warranty</dt>
           <dd className="mt-0.5 text-slate-700">{quote.warrantyTerms ?? 'None stated'}</dd>
         </div>
       </dl>
@@ -599,7 +599,7 @@ export function QuoteVersionDiffPanel({ diff }: { diff: QuoteDiff }) {
             <table className="mt-3 w-full text-xs">
               <caption className="sr-only">Line items that differ between the two versions</caption>
               <thead>
-                <tr className="text-left font-mono text-[11px] tracking-wider text-slate-500 uppercase">
+                <tr className="text-left font-sans text-[11px] tracking-wider text-slate-500 uppercase">
                   <th scope="col" className="pb-1">
                     Line
                   </th>
@@ -617,10 +617,10 @@ export function QuoteVersionDiffPanel({ diff }: { diff: QuoteDiff }) {
                     <th scope="row" className="py-1.5 text-left font-normal text-slate-700">
                       {line.label}
                     </th>
-                    <td className="py-1.5 font-mono text-slate-600">
+                    <td className="py-1.5 font-sans text-slate-600">
                       {line.previousMinor === null ? 'not quoted' : formatMoney(line.previousMinor, diff.previousCurrency)}
                     </td>
-                    <td className="py-1.5 font-mono text-slate-800">
+                    <td className="py-1.5 font-sans text-slate-800">
                       {line.nextMinor === null ? 'removed' : formatMoney(line.nextMinor, diff.nextCurrency)}
                     </td>
                   </tr>
@@ -633,7 +633,7 @@ export function QuoteVersionDiffPanel({ diff }: { diff: QuoteDiff }) {
             <dl className="mt-4 grid gap-3">
               {diff.fields.map(field => (
                 <div key={field.key} className="rounded-xl border border-solid border-slate-200 p-3.5">
-                  <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">{field.label}</dt>
+                  <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">{field.label}</dt>
                   <dd className="mt-1 grid gap-1 text-xs text-slate-600 sm:grid-cols-2">
                     <span>
                       <span className="font-semibold text-slate-700">{diff.previousVersion}: </span>
@@ -695,7 +695,7 @@ export function QuoteCustomerPanel({
         ) : (
           changes.map(change => (
             <article key={change.id} className="rounded-xl border border-solid border-slate-200 p-3.5">
-              <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Customer · {change.kind.replaceAll('_', ' ')} · {change.status}
               </p>
               <p className="mt-1 text-sm leading-relaxed whitespace-pre-line text-slate-700">{change.message}</p>
@@ -708,7 +708,7 @@ export function QuoteCustomerPanel({
 
         {messages.map(message => (
           <article key={message.id} className="rounded-xl border border-solid border-primary-subtle bg-primary-surface p-3.5">
-            <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">You</p>
+            <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">You</p>
             <p className="mt-1 text-sm leading-relaxed whitespace-pre-line text-slate-700">{message.message}</p>
             <p className="mt-1 text-xs text-slate-400">
               {message.createdAt ? new Date(message.createdAt).toLocaleString('en-GB') : 'Date not recorded'}
@@ -767,7 +767,7 @@ export function QuoteActionsPanel({ quote, nextPath }: { quote: ProviderQuote; n
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <Link
           href={`${PROVIDER_PATHS.quotesNew}?request=${quote.requestId}&from=${quote.id}`}
-          className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
+          className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
         >
           Submit revised quote
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -852,28 +852,28 @@ export function QuoteAgreementPanel({
       </h2>
       <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-2">
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Version accepted</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Version accepted</dt>
           <dd className="mt-0.5 text-slate-700">{agreement.quoteVersion}</dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Total</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Total</dt>
           <dd className="mt-0.5 text-slate-700">{formatMoney(agreement.totalMinor, agreement.currencyCode)}</dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Accepted</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Accepted</dt>
           <dd className="mt-0.5 text-slate-700">
             {agreement.acceptedAt ? new Date(agreement.acceptedAt).toLocaleString('en-GB') : 'Date not recorded'}
           </dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">How they verified</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">How they verified</dt>
           <dd className="mt-0.5 text-slate-700">
             {agreement.authMethod} {agreement.verifiedAt ? `· ${new Date(agreement.verifiedAt).toLocaleString('en-GB')}` : ''}
           </dd>
         </div>
         <div className="sm:col-span-2">
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Fingerprint</dt>
-          <dd className="mt-0.5 font-mono break-all text-slate-600">
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Fingerprint</dt>
+          <dd className="mt-0.5 font-sans break-all text-slate-600">
             {agreement.agreementHash.slice(0, 32)}… ({agreement.consentVersion})
           </dd>
         </div>

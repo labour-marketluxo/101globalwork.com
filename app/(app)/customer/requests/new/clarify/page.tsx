@@ -134,7 +134,7 @@ export default async function IntakeClarifyPage({ searchParams }: { searchParams
               type="submit"
               name="intent"
               value="continue"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
             >
               Continue to logistics →
             </button>
@@ -142,7 +142,7 @@ export default async function IntakeClarifyPage({ searchParams }: { searchParams
               type="submit"
               name="intent"
               value="save"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
             >
               Save draft
             </button>
@@ -158,7 +158,7 @@ export default async function IntakeClarifyPage({ searchParams }: { searchParams
         <aside className="space-y-3">
           <div className={CARD}>
             <div className="border-b border-solid border-slate-200 px-4 py-3">
-              <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 What you have so far
               </p>
             </div>
@@ -167,7 +167,7 @@ export default async function IntakeClarifyPage({ searchParams }: { searchParams
                 {draft.needText.trim() || 'No description yet.'}
               </p>
               {chosenService ? (
-                <p className="mt-2 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+                <p className="mt-2 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
                   {chosenService}
                 </p>
               ) : null}
@@ -176,7 +176,7 @@ export default async function IntakeClarifyPage({ searchParams }: { searchParams
 
           <div className={CARD}>
             <div className="px-4 py-3">
-              <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Why these questions
               </p>
               <p className="mt-1.5 text-xs leading-relaxed text-slate-600">

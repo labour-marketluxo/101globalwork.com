@@ -146,7 +146,7 @@ export function IdentityPanel({ identity }: { identity: IdentityRead }) {
         <div className="sm:col-span-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
           >
             Save identity
           </button>
@@ -186,7 +186,7 @@ export function AvatarPanel({
         ) : (
           <span
             aria-hidden="true"
-            className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-subtle font-mono text-lg font-bold text-primary"
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-subtle font-sans text-lg font-bold text-primary"
           >
             {initials}
           </span>
@@ -239,10 +239,10 @@ export function SignInContactPanel({ identity }: { identity: IdentityRead }) {
             Email
           </dt>
           <dd className="flex flex-wrap items-center gap-2 text-sm text-slate-900">
-            <span className="font-mono">{email ?? 'None on this account'}</span>
+            <span className="font-sans">{email ?? 'None on this account'}</span>
             {email ? (
               emailVerified ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-primary uppercase">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-primary uppercase">
                   <BadgeCheck aria-hidden="true" className="h-3 w-3" />
                   Verified
                 </span>
@@ -261,9 +261,9 @@ export function SignInContactPanel({ identity }: { identity: IdentityRead }) {
           <dd className="flex flex-wrap items-center gap-2 text-sm text-slate-900">
             {phone ? (
               <>
-                <span className="font-mono">{phone}</span>
+                <span className="font-sans">{phone}</span>
                 {phoneVerified ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-primary uppercase">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-primary uppercase">
                     <BadgeCheck aria-hidden="true" className="h-3 w-3" />
                     Verified
                   </span>
@@ -390,7 +390,7 @@ export function ContactMethodsPanel({ identity, now }: { identity: IdentityRead;
         <div>
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-primary-dark"
           >
             Send a code
           </button>
@@ -412,9 +412,9 @@ function ContactRow({ contact, now }: { contact: ContactMethod; now: Date }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-900">
-            <span className="font-mono break-all">{contact.value}</span>
+            <span className="font-sans break-all">{contact.value}</span>
             {contact.verified ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-primary uppercase">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-primary uppercase">
                 <BadgeCheck aria-hidden="true" className="h-3 w-3" />
                 Verified
               </span>
@@ -477,7 +477,7 @@ function ContactRow({ contact, now }: { contact: ContactMethod; now: Date }) {
                   pattern="[0-9]{6}"
                   maxLength={6}
                   required
-                  className={`${FIELD} w-32 font-mono tracking-[0.3em]`}
+                  className={`${FIELD} w-32 font-sans tracking-[0.3em]`}
                 />
               </div>
               <button
@@ -534,7 +534,7 @@ export function WorkspacesPanel({ identity }: { identity: IdentityRead }) {
               className="flex h-full flex-col justify-between gap-3 rounded-lg border border-solid border-slate-200 bg-white p-4 no-underline transition-shadow hover:shadow-md"
             >
               <div>
-                <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   {workspace.kind === 'personal'
                     ? 'Personal'
                     : workspace.kind === 'provider'

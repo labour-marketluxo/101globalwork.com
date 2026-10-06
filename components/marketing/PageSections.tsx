@@ -68,18 +68,18 @@ const EYEBROW_TONE: Record<'light' | 'dark', Record<Accent, string>> = {
 
 const CTA_TONE: Record<ActionVariant, string> = {
   primary:
-    'gap-2 justify-center rounded-lg bg-primary px-5 py-2.5 font-mono text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark',
+    'gap-2 justify-center rounded-lg bg-primary px-5 py-2.5 font-sans text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark',
   amber:
-    'gap-2 w-full justify-center rounded-xl bg-secondary px-8 py-4 font-mono text-base font-bold text-white shadow-xl shadow-amber-950/30 transition-all hover:bg-secondary-dark sm:w-auto',
+    'gap-2 w-full justify-center rounded-xl bg-secondary px-8 py-4 font-sans text-base font-bold text-white shadow-xl shadow-amber-950/30 transition-all hover:bg-secondary-dark sm:w-auto',
   ghost:
-    'gap-2 w-full justify-center rounded-xl border border-white/20 bg-white/10 px-8 py-4 font-mono text-base font-semibold text-white transition-all hover:bg-white/20 sm:w-auto',
+    'gap-2 w-full justify-center rounded-xl border border-white/20 bg-white/10 px-8 py-4 font-sans text-base font-semibold text-white transition-all hover:bg-white/20 sm:w-auto',
   light:
-    'gap-2 w-full justify-center rounded-xl border border-slate-300 bg-white px-8 py-4 font-mono text-base font-semibold text-slate-900 transition-colors hover:border-slate-400 sm:w-auto',
+    'gap-2 w-full justify-center rounded-xl border border-slate-300 bg-white px-8 py-4 font-sans text-base font-semibold text-slate-900 transition-colors hover:border-slate-400 sm:w-auto',
   // The two inline variants own their own gap so the arrow can travel on hover —
   // a base `gap-2` would have won the cascade and made `hover:gap-*` a no-op.
-  link: 'gap-1.5 font-mono text-xs font-semibold text-primary transition-all hover:gap-2.5',
+  link: 'gap-1.5 font-sans text-xs font-semibold text-primary transition-all hover:gap-2.5',
   // For the deep-teal surfaces: `text-primary` there is the background colour.
-  'link-dark': 'gap-1.5 font-mono text-xs font-semibold text-amber-300 transition-all hover:gap-2.5',
+  'link-dark': 'gap-1.5 font-sans text-xs font-semibold text-amber-300 transition-all hover:gap-2.5',
 };
 
 /* ---------------------------------------------------------------- structure */
@@ -127,7 +127,7 @@ export function SectionHeader({
     <div className={align === 'center' ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
       {eyebrow ? (
         <span
-          className={`inline-block rounded-full border px-3 py-1 font-mono text-xs font-bold tracking-wider uppercase ${EYEBROW_TONE[tone][accent]}`}
+          className={`inline-block rounded-full border px-3 py-1 font-sans text-xs font-bold tracking-wider uppercase ${EYEBROW_TONE[tone][accent]}`}
         >
           {eyebrow}
         </span>
@@ -233,7 +233,7 @@ export function JourneyStepList({
         <li key={`${step.number}-${step.title}`} className="flex gap-4 sm:gap-5">
           <span
             aria-hidden="true"
-            className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-mono text-sm font-bold ${
+            className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-sans text-sm font-bold ${
               tone === 'dark' ? 'bg-white/10 text-amber-300' : 'bg-primary text-white'
             }`}
           >
@@ -277,7 +277,7 @@ export function JourneyStepList({
 /** Label/value rows — the platform's own facts, in the mono face it reserves. */
 export function FactList({ items }: { items: { label: string; value: string }[] }) {
   return (
-    <dl className="grid gap-2.5 font-mono text-xs">
+    <dl className="grid gap-2.5 font-sans text-xs">
       {items.map((item) => (
         <div
           key={item.label}
@@ -433,7 +433,7 @@ export function PageHero({
       <div className="pointer-events-none absolute top-1/2 left-1/2 h-[320px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/15 blur-[140px]" />
 
       <div className="relative z-10 mx-auto max-w-[1000px] px-4 text-center sm:px-6 lg:px-8">
-        <span className="inline-block rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-mono text-xs font-semibold tracking-wider text-amber-300 uppercase">
+        <span className="inline-block rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-sans text-xs font-semibold tracking-wider text-amber-300 uppercase">
           {eyebrow}
         </span>
 
@@ -448,7 +448,7 @@ export function PageHero({
         <div className="mt-9">{actions}</div>
 
         {note ? (
-          <p className="mt-6 font-mono text-xs text-slate-400">{note}</p>
+          <p className="mt-6 font-sans text-xs text-slate-400">{note}</p>
         ) : null}
       </div>
     </section>
@@ -485,7 +485,7 @@ export function CtaBand({
       <div className="pointer-events-none absolute top-1/2 left-1/2 h-[350px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/15 blur-[140px]" />
 
       <div className="relative z-10 mx-auto max-w-[1000px] px-4 text-center sm:px-6 lg:px-8">
-        <span className="mb-6 inline-block rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-mono text-xs font-semibold tracking-wider text-amber-300 uppercase">
+        <span className="mb-6 inline-block rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-sans text-xs font-semibold tracking-wider text-amber-300 uppercase">
           {eyebrow}
         </span>
 
@@ -500,7 +500,7 @@ export function CtaBand({
         {actions}
 
         {note ? (
-          <p className="mx-auto mt-6 max-w-2xl font-mono text-xs leading-relaxed text-slate-400">
+          <p className="mx-auto mt-6 max-w-2xl font-sans text-xs leading-relaxed text-slate-400">
             {note}
           </p>
         ) : null}

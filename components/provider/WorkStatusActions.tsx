@@ -262,7 +262,7 @@ export function WorkStatusActions({
             <input type="hidden" name="next" value={nextPath} />
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
             >
               <Play aria-hidden="true" className="h-4 w-4" />
               Start work
@@ -283,7 +283,7 @@ export function WorkStatusActions({
         {requestState === 'in_progress' ? (
           <a
             href={`${nextPath}/evidence`}
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
           >
             Capture evidence
           </a>
@@ -370,7 +370,7 @@ export function BlockerControls({
         <div>
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
           >
             Resume this job
           </button>
@@ -401,7 +401,7 @@ export function BlockerControls({
       <input type="hidden" name="assignment_id" value={assignmentId} />
       <input type="hidden" name="next" value={nextPath} />
       <div>
-        <label htmlFor="reason_code" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <label htmlFor="reason_code" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           Pause / blocked — why
         </label>
         <select
@@ -424,7 +424,7 @@ export function BlockerControls({
         </select>
       </div>
       <div>
-        <label htmlFor="blocker_note" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <label htmlFor="blocker_note" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           Anything to add (optional)
         </label>
         <input

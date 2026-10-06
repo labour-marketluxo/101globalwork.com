@@ -43,7 +43,7 @@ export default function QuoteMessages({
           <li key={message.id} className="rounded-xl border border-solid border-slate-200 p-3.5">
             <p className="text-xs font-semibold text-slate-800">{providerName}</p>
             <p className="mt-1 text-sm leading-relaxed whitespace-pre-line text-slate-700">{message.message}</p>
-            <p className="mt-1.5 font-mono text-[11px] tracking-wide text-slate-400 uppercase">
+            <p className="mt-1.5 font-sans text-[11px] tracking-wide text-slate-400 uppercase">
               {message.createdAt
                 ? new Date(message.createdAt).toLocaleString('en-GB', {
                     day: 'numeric',

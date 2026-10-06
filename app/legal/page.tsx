@@ -76,12 +76,12 @@ export default function LegalIndexPage() {
                     </span>
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-slate-600">{policy.summary}</p>
-                  <span className="mt-4 font-mono text-[11px] tracking-wider text-slate-500 uppercase">
+                  <span className="mt-4 font-sans text-[11px] tracking-wider text-slate-500 uppercase">
                     {policy.published && policy.lastUpdated
                       ? `Last updated ${policy.lastUpdated}`
                       : `${policy.sections.length} sections planned`}
                   </span>
-                  <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-primary">
+                  <span className="mt-3 inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-primary">
                     Read
                     <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                   </span>

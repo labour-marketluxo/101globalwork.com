@@ -93,7 +93,7 @@ export default async function CustomerAssetPage({
             <dl className="mt-5 grid gap-4 border-t border-solid border-slate-200 pt-5 sm:grid-cols-2">
               <div>
                 <dt className={LABEL}>Serial number</dt>
-                <dd className="font-mono text-sm break-all text-slate-800">
+                <dd className="font-sans text-sm break-all text-slate-800">
                   {detail.serialNumber ?? 'Not recorded'}
                 </dd>
               </div>
@@ -203,7 +203,7 @@ export default async function CustomerAssetPage({
           <AssetDetailsForm detail={detail} locations={locations} />
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               About this record
             </h2>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">

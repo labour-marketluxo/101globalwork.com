@@ -268,7 +268,7 @@ function RecoveryUpdatedView({ destination }: { destination: string }) {
     >
       <Link
         href={destination || '/'}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-secondary px-5 py-3 font-mono text-sm font-bold tracking-wide text-primary-deep uppercase shadow-sm no-underline transition-colors hover:bg-amber-500"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-secondary px-5 py-3 font-sans text-sm font-bold tracking-wide text-primary-deep uppercase shadow-sm no-underline transition-colors hover:bg-amber-500"
       >
         <CheckCircle2 aria-hidden="true" className="h-4 w-4" />
         Continue

@@ -235,7 +235,7 @@ function FilterForm({
           actionable without a second focal point. */}
       <button
         type="submit"
-        className="inline-flex w-full items-center justify-center gap-2 justify-self-stretch rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+        className="inline-flex w-full items-center justify-center gap-2 justify-self-stretch rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
       >
         Apply filters
       </button>
@@ -243,7 +243,7 @@ function FilterForm({
       {activeFilterCount(state) > 0 ? (
         <Link
           href={`/${marketSlug}/search`}
-          className="justify-self-start rounded-lg px-2 py-1 font-mono text-xs font-semibold text-slate-500 no-underline transition-colors hover:bg-amber-50 hover:text-amber-700"
+          className="justify-self-start rounded-lg px-2 py-1 font-sans text-xs font-semibold text-slate-500 no-underline transition-colors hover:bg-amber-50 hover:text-amber-700"
         >
           Clear filters
         </Link>
@@ -396,7 +396,7 @@ export function ProviderResultCard({
         <div className="flex shrink-0 flex-col items-end gap-1.5">
           {sample ? <span className={BADGE_AMBER}>Sample</span> : null}
           {provider.verified ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wide text-primary uppercase">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wide text-primary uppercase">
               <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
               Identity checked
             </span>
@@ -414,7 +414,7 @@ export function ProviderResultCard({
       <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-2 rounded-lg border border-solid border-slate-100 bg-slate-50/80 px-3.5 py-2.5">
         {provider.yearsExperience !== null ? (
           <div className="flex items-baseline gap-1.5">
-            <dt className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+            <dt className="font-sans text-[11px] tracking-wide text-slate-500 uppercase">
               Experience
             </dt>
             <dd className="text-sm font-bold text-slate-900">
@@ -423,7 +423,7 @@ export function ProviderResultCard({
           </div>
         ) : null}
         <div className="flex items-baseline gap-1.5">
-          <dt className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+          <dt className="font-sans text-[11px] tracking-wide text-slate-500 uppercase">
             Availability
           </dt>
           <dd className="text-sm font-bold text-slate-900">
@@ -431,7 +431,7 @@ export function ProviderResultCard({
           </dd>
         </div>
         <div className="flex items-baseline gap-1.5">
-          <dt className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+          <dt className="font-sans text-[11px] tracking-wide text-slate-500 uppercase">
             Platform readiness
           </dt>
           <dd className="text-sm font-bold text-slate-900 tabular-nums">
@@ -450,7 +450,7 @@ export function ProviderResultCard({
       ) : null}
 
       {provider.slug ? (
-        <p className="mt-3 font-mono text-[11px] text-slate-400">
+        <p className="mt-3 font-sans text-[11px] text-slate-400">
           Provider reference: <code>{provider.slug}</code>
         </p>
       ) : null}
@@ -517,13 +517,13 @@ export function MarketEmptyState({
       <div className="mt-2 flex flex-wrap items-center gap-4">
         <Link
           href="/requests/new"
-          className="no-underline flex items-center gap-2 rounded-xl bg-[#F59E0B] px-6 py-3.5 font-mono text-xs font-bold text-slate-950 shadow-sm transition-all hover:bg-[#D97706] active:scale-95"
+          className="no-underline flex items-center gap-2 rounded-xl bg-[#F59E0B] px-6 py-3.5 font-sans text-xs font-bold text-slate-950 shadow-sm transition-all hover:bg-[#D97706] active:scale-95"
         >
           [ Post an open request → ]
         </Link>
         <Link
           href="/how-it-works"
-          className="font-mono text-xs font-semibold text-slate-600 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-slate-900"
+          className="font-sans text-xs font-semibold text-slate-600 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-slate-900"
         >
           See how matching works →
         </Link>
@@ -579,7 +579,7 @@ export function NoticePanel({
           {icon}
         </span>
       ) : null}
-      <div className="min-w-0 text-sm leading-relaxed text-slate-700 [&_a]:font-semibold [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_a]:transition-colors [&_a]:hover:text-primary-dark [&_code]:rounded-sm [&_code]:border [&_code]:border-solid [&_code]:border-amber-200 [&_code]:bg-white/70 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[11px] [&_code]:text-amber-800 [&_strong]:font-bold [&_strong]:text-slate-900">
+      <div className="min-w-0 text-sm leading-relaxed text-slate-700 [&_a]:font-semibold [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_a]:transition-colors [&_a]:hover:text-primary-dark [&_code]:rounded-sm [&_code]:border [&_code]:border-solid [&_code]:border-amber-200 [&_code]:bg-white/70 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-sans [&_code]:text-[11px] [&_code]:text-amber-800 [&_strong]:font-bold [&_strong]:text-slate-900">
         {title ? <strong>{title}</strong> : null} {children}
       </div>
     </div>

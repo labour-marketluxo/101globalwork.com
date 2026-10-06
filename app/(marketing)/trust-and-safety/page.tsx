@@ -250,13 +250,13 @@ export default function TrustAndSafetyPage() {
             </p>
             <ul className="grid gap-2.5 rounded-xl border border-white/10 bg-primary-dark/60 p-4">
               {PAYMENT_MECHANICS.map((point) => (
-                <li key={point} className="flex gap-2 font-mono text-xs text-slate-200">
+                <li key={point} className="flex gap-2 font-sans text-xs text-slate-200">
                   <Check aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                   <span>{point}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-6 flex items-center gap-2 font-mono text-xs text-amber-300">
+            <p className="mt-6 flex items-center gap-2 font-sans text-xs text-amber-300">
               <BadgeCheck aria-hidden="true" className="h-[15px] w-[15px]" />
               Payments handled by our payment provider
             </p>
@@ -336,7 +336,7 @@ export default function TrustAndSafetyPage() {
               <p className="mb-5 text-sm leading-relaxed text-slate-600">{path.body}</p>
               <ul className="mt-auto grid gap-2 border-t border-slate-100 pt-4">
                 {path.steps.map((step) => (
-                  <li key={step} className="flex gap-2 font-mono text-[11px] text-slate-500">
+                  <li key={step} className="flex gap-2 font-sans text-[11px] text-slate-500">
                     <Check aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                     <span>{step}</span>
                   </li>

@@ -184,7 +184,7 @@ export default async function InvitationPage({
         {/* What the invitation is for */}
         <dl className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-lg border border-solid border-slate-200 bg-slate-50 p-4">
-            <dt className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               <UserCog aria-hidden="true" className="h-3.5 w-3.5" />
               Role
             </dt>
@@ -193,7 +193,7 @@ export default async function InvitationPage({
             </dd>
           </div>
           <div className="rounded-lg border border-solid border-slate-200 bg-slate-50 p-4">
-            <dt className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               <MailCheck aria-hidden="true" className="h-3.5 w-3.5" />
               Invited address
             </dt>
@@ -202,7 +202,7 @@ export default async function InvitationPage({
             </dd>
           </div>
           <div className="rounded-lg border border-solid border-slate-200 bg-slate-50 p-4 sm:col-span-2">
-            <dt className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               <CalendarClock aria-hidden="true" className="h-3.5 w-3.5" />
               Expires
             </dt>
@@ -221,7 +221,7 @@ export default async function InvitationPage({
         <section aria-labelledby="invitation-powers">
           <h2
             id="invitation-powers"
-            className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+            className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
           >
             <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" />
             What accepting gives you

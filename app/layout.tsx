@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
-import { Hanken_Grotesk, JetBrains_Mono } from 'next/font/google';
+import { Inter, Source_Sans_3 } from 'next/font/google';
 import './globals.css';
 import './entry-points.css';
 
 /**
- * Typography — the design specifies two faces:
+ * Typography — two faces, and deliberately NO monospace:
  *
- *   Hanken Grotesk   everything structural: display, headline, title, body
- *   JetBrains Mono   quantitative metadata only — metrics, IDs, timestamps
+ *   Inter          the display layer — every h1–h6
+ *   Source Sans 3  everything else: body copy, UI, buttons, and the small
+ *                  labels and figures that used to be set in mono
  *
  * Both load through next/font so Next self-hosts them: the @font-face rules are
  * inlined and the files fingerprinted. Do NOT also add Google Fonts <link> tags
@@ -15,21 +16,21 @@ import './entry-points.css';
  * undoes the self-hosting.
  *
  * `.variable` is used rather than `.className` because next/font generates a
- * HASHED family name (e.g. "__Hanken_Grotesk_abc123"). A literal
- * `--font-sans: "Hanken Grotesk"` could never match that, so `font-sans` would
- * silently fall back to system-ui. The variables are consumed by --font-sans
- * and --font-mono in app/globals.css.
+ * HASHED family name (e.g. "__Inter_abc123"). A literal
+ * `--font-display: "Inter"` could never match that, so `font-display` would
+ * silently fall back to a system face. The variables are consumed by --font-sans
+ * and --font-display in app/globals.css.
  */
-const hankenGrotesk = Hanken_Grotesk({
+const sourceSans = Source_Sans_3({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-hanken-grotesk',
+  variable: '--font-source-sans-3',
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-jetbrains-mono',
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
@@ -67,7 +68,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   // column` from globals.css, so whichever layout renders here must still put <main> directly
   // under <body> — that is what pins the footer to the bottom of a short page.
   return (
-    <html lang="en" className={`${hankenGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${sourceSans.variable} ${inter.variable}`}>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

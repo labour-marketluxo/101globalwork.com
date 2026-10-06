@@ -66,7 +66,7 @@ export default async function OrganisationProjectsPage({
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href={`/customer/requests/new?organisation=${orgId}`}
-            className="inline-flex items-center rounded-lg bg-secondary px-4 py-2 font-mono text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center rounded-lg bg-secondary px-4 py-2 font-sans text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-secondary-dark"
           >
             Create new project
           </Link>
@@ -138,7 +138,7 @@ export default async function OrganisationProjectsPage({
         <PendingButton
           idle="Apply"
           pending="Applying…"
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
         {query.q || query.site || query.state || query.owner || query.sla ? (
           <Link href={`/org/${orgId}/projects`} className={LINK_ARROW}>Clear</Link>

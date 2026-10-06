@@ -112,7 +112,7 @@ export default async function ProviderProfilePreviewPage() {
 
       {projection ? (
         <section aria-label="Public profile preview">
-          <p className="mb-3 inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <p className="mb-3 inline-flex items-center gap-1.5 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             <Eye aria-hidden="true" className="h-3.5 w-3.5" />
             Exactly what a customer sees at /providers/{projection.slug}
           </p>
@@ -131,7 +131,7 @@ function PreviewHeader() {
   return (
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Profile</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Profile</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Preview
         </h1>
@@ -169,7 +169,7 @@ function DraftSummary({ editor }: { editor: Awaited<ReturnType<typeof getProvide
       className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 shadow-sm"
       aria-label="Draft preview"
     >
-      <p className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <p className="inline-flex items-center gap-1.5 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         <CircleAlert aria-hidden="true" className="h-3.5 w-3.5" />
         Draft — not visible to anybody
       </p>
@@ -183,19 +183,19 @@ function DraftSummary({ editor }: { editor: Awaited<ReturnType<typeof getProvide
 
       <dl className="mt-4 grid gap-3 sm:grid-cols-3">
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Services</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Services</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {editor.services.length > 0 ? editor.services.map(service => service.name).join(', ') : 'None selected'}
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Areas</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Areas</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {editor.areas.length > 0 ? editor.areas.map(area => area.name).join(', ') : 'None selected'}
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Languages</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Languages</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {editor.languages.length > 0 ? editor.languages.join(', ') : 'Not stated'}
           </dd>

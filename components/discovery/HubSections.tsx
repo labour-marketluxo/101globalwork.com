@@ -79,7 +79,7 @@ export function HubHero({
 
         <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 shadow-none">
           <MapPin aria-hidden="true" className="h-3.5 w-3.5 text-amber-400" />
-          <span className="font-mono text-[11px] font-bold tracking-wider text-amber-400 uppercase">
+          <span className="font-sans text-[11px] font-bold tracking-wider text-amber-400 uppercase">
             {badge}
           </span>
         </span>
@@ -105,7 +105,7 @@ export function HubHero({
           />
           <button
             type="submit"
-            className="rounded-xl border-0 bg-[#F59E0B] px-5 py-3 font-mono text-xs font-bold whitespace-nowrap text-slate-950 shadow-sm transition-all hover:bg-[#D97706] active:scale-95"
+            className="rounded-xl border-0 bg-[#F59E0B] px-5 py-3 font-sans text-xs font-bold whitespace-nowrap text-slate-950 shadow-sm transition-all hover:bg-[#D97706] active:scale-95"
           >
             Find Help →
           </button>

@@ -103,7 +103,7 @@ export default async function SupportCasePage({
       <p className="mt-6">
         <Link
           href={SUPPORT_PATH}
-          className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-primary no-underline hover:text-primary-dark"
+          className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-primary no-underline hover:text-primary-dark"
         >
           <ArrowLeft aria-hidden="true" className="h-3.5 w-3.5" />
           All cases
@@ -112,12 +112,12 @@ export default async function SupportCasePage({
 
       <header className="mt-3 border-b border-solid border-slate-200 pb-4">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             {detail.reference}
           </span>
           <StatusPill status={detail.status} />
           {detail.slaState === 'first_response_overdue' || detail.slaState === 'resolution_overdue' ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-red-700 uppercase">
+            <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-red-700 uppercase">
               <Timer aria-hidden="true" className="h-3 w-3" />
               Past target
             </span>

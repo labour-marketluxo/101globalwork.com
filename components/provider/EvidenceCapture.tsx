@@ -301,7 +301,7 @@ export default function EvidenceCapture({
               signal halfway through a package does not undo the ones that already landed.
             </p>
           </div>
-          <p className={`inline-flex items-center gap-1.5 font-mono text-[11px] tracking-wide uppercase ${online ? 'text-slate-500' : 'text-amber-800'}`}>
+          <p className={`inline-flex items-center gap-1.5 font-sans text-[11px] tracking-wide uppercase ${online ? 'text-slate-500' : 'text-amber-800'}`}>
             {online ? <CloudOff aria-hidden="true" className="h-3.5 w-3.5 opacity-0" /> : <CloudOff aria-hidden="true" className="h-3.5 w-3.5" />}
             {online ? 'Online' : 'Offline'}
           </p>
@@ -315,7 +315,7 @@ export default function EvidenceCapture({
           capture="environment"
           multiple
           onChange={event => onSelect(event.target.files)}
-          className="block w-full cursor-pointer rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:font-mono file:text-xs file:font-bold file:tracking-wide file:text-white file:uppercase"
+          className="block w-full cursor-pointer rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:font-sans file:text-xs file:font-bold file:tracking-wide file:text-white file:uppercase"
         />
         <p className="text-xs leading-relaxed text-slate-500">
           Up to {MAX_FILES} files per package, 10MB each, images, MP4 video or PDF. Photographs taken straight
@@ -357,7 +357,7 @@ export default function EvidenceCapture({
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={item.previewUrl} alt="" className="h-12 w-12 object-cover" />
                   ) : item.type === 'application/pdf' ? (
-                    <span className="font-mono text-[10px] font-bold">PDF</span>
+                    <span className="font-sans text-[10px] font-bold">PDF</span>
                   ) : (
                     <Camera aria-hidden="true" className="h-4 w-4" />
                   )}
@@ -408,7 +408,7 @@ export default function EvidenceCapture({
             {saved.map(file => (
               <li key={file.path} className="flex items-center justify-between gap-3">
                 <span className="truncate">{file.name}</span>
-                <span className="font-mono text-slate-400">{(file.size / 1024).toFixed(0)} KB</span>
+                <span className="font-sans text-slate-400">{(file.size / 1024).toFixed(0)} KB</span>
               </li>
             ))}
           </ul>
@@ -448,7 +448,7 @@ export default function EvidenceCapture({
 
         {steps.length > 0 ? (
           <div>
-            <label htmlFor="package_step" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <label htmlFor="package_step" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Which checklist step does this package answer?
             </label>
             <select
@@ -473,7 +473,7 @@ export default function EvidenceCapture({
         ) : null}
 
         <div>
-          <label htmlFor="evidence_note" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <label htmlFor="evidence_note" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             What was completed
           </label>
           <textarea
@@ -507,7 +507,7 @@ export default function EvidenceCapture({
             type="submit"
             disabled={!canSubmit}
             aria-busy={false}
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-mono text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-sans text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <Upload aria-hidden="true" className="h-4 w-4" />
             Submit evidence package

@@ -84,14 +84,14 @@ export function PreferenceMatrix({ preferences }: { preferences: PreferencesRead
         </caption>
         <thead>
           <tr className="border-b border-solid border-slate-200">
-            <th scope="col" className="px-4 py-3 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <th scope="col" className="px-4 py-3 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Event
             </th>
             {CHANNELS.map(channel => (
               <th
                 key={channel}
                 scope="col"
-                className="w-28 px-3 py-3 text-center font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+                className="w-28 px-3 py-3 text-center font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
               >
                 {CHANNEL_COPY[channel].short}
                 <span className="mt-1 block font-sans text-[10px] font-semibold tracking-normal normal-case">
@@ -130,7 +130,7 @@ export function PreferenceMatrix({ preferences }: { preferences: PreferencesRead
                     <span className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-900">
                       {event.label}
                       {event.locked ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wide text-slate-600 uppercase">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 font-sans text-[10px] font-bold tracking-wide text-slate-600 uppercase">
                           <Lock aria-hidden="true" className="h-3 w-3" />
                           Mandatory
                         </span>
@@ -184,7 +184,7 @@ function ChannelCell({
   if (state.locked) {
     return (
       <span
-        className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-slate-500 uppercase"
+        className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 font-sans text-[11px] font-bold tracking-wide text-slate-500 uppercase"
         title={`${event.label} on ${CHANNEL_COPY[channel].label} cannot be switched off.`}
       >
         <Lock aria-hidden="true" className="h-3 w-3" />
@@ -208,7 +208,7 @@ function ChannelCell({
         role="switch"
         aria-checked={state.enabled}
         aria-label={`${event.label} by ${CHANNEL_COPY[channel].label}`}
-        className={`inline-flex items-center gap-2 rounded-full border border-solid px-3 py-1 font-mono text-[11px] font-bold tracking-wide uppercase transition-colors ${
+        className={`inline-flex items-center gap-2 rounded-full border border-solid px-3 py-1 font-sans text-[11px] font-bold tracking-wide uppercase transition-colors ${
           state.enabled
             ? 'border-primary bg-primary-subtle text-primary hover:bg-primary hover:text-white'
             : 'border-slate-300 bg-white text-slate-500 hover:border-slate-400 hover:text-slate-800'

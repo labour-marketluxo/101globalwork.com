@@ -50,7 +50,7 @@ function responseBadge(opportunity: ProviderOpportunity) {
       <span
         className={
           opportunity.quoteStatus === 'accepted'
-            ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+            ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
             : BADGE_SLATE
         }
       >
@@ -125,7 +125,7 @@ export function OpportunityFilters({
         <PendingButton
           idle="Apply filters"
           pending="Applying…"
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
       </div>
 
@@ -177,7 +177,7 @@ function CardActions({
         {opportunity.quoteId ? (
           <Link
             href={`${PROVIDER_PATHS.quotes}/${opportunity.quoteId}`}
-            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-3.5 py-2 font-mono text-xs font-bold tracking-wide text-white no-underline transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-3.5 py-2 font-sans text-xs font-bold tracking-wide text-white no-underline transition-colors hover:bg-secondary-dark"
           >
             Open your quote
             <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -185,7 +185,7 @@ function CardActions({
         ) : (
           <Link
             href={`${PROVIDER_PATHS.quotesNew}?request=${opportunity.requestId}`}
-            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-3.5 py-2 font-mono text-xs font-bold tracking-wide text-white no-underline transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-3.5 py-2 font-sans text-xs font-bold tracking-wide text-white no-underline transition-colors hover:bg-secondary-dark"
           >
             Create quote
             <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -405,7 +405,7 @@ export function OpportunityDetailHeader({ detail }: { detail: OpportunityDetail 
     <header className="grid gap-3">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Opportunity</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Opportunity</p>
           <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
             {detail.request.needText}
           </h1>
@@ -470,7 +470,7 @@ export function OpportunityScopePanel({ detail }: { detail: OpportunityDetail })
         <dl className="mt-3 grid gap-3">
           {answers.map(([key, value]) => (
             <div key={key} className="rounded-xl border border-solid border-slate-200 p-3.5">
-              <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 {key.replaceAll('_', ' ')}
               </dt>
               <dd className="mt-1 text-sm leading-relaxed text-slate-700">{value}</dd>
@@ -488,17 +488,17 @@ export function OpportunityScopePanel({ detail }: { detail: OpportunityDetail })
 
       <dl className="mt-4 grid gap-3 sm:grid-cols-3">
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">When they want it</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">When they want it</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {[detail.scope.preferredDate, detail.scope.preferredWindow].filter(Boolean).join(' · ') || 'Not stated'}
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Area as described</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Area as described</dt>
           <dd className="mt-0.5 text-sm text-slate-700">{detail.scope.areaText ?? 'Not stated'}</dd>
         </div>
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Hazardous</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Hazardous</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {detail.scope.hazardous ? 'Flagged by the customer' : 'Not flagged'}
           </dd>
@@ -539,19 +539,19 @@ export function OpportunityDeadlinePanel({ detail, now }: { detail: OpportunityD
       </p>
       <dl className="mt-3 grid gap-3 sm:grid-cols-3">
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Posted</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Posted</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {posted ? posted.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : 'Date not recorded'}
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Age</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Age</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {days === null ? 'Unknown' : days === 0 ? 'Today' : days === 1 ? '1 day' : `${days} days`}
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Urgency</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Urgency</dt>
           <dd className="mt-0.5 text-sm text-slate-700">
             {(URGENCY_COPY[detail.request.urgency] ?? URGENCY_COPY.normal).label}
           </dd>
@@ -617,7 +617,7 @@ export function OpportunityDetailActions({
 
           <Link
             href={`${PROVIDER_PATHS.quotesNew}?request=${detail.request.id}`}
-            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
           >
             Create quote
             <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />

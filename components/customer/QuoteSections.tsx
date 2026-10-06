@@ -125,7 +125,7 @@ export function QuoteTermsList({
           key={attribute.key}
           className={dense ? 'py-1.5' : 'border-t border-solid border-slate-100 pt-3 first:border-0 first:pt-0'}
         >
-          <dt className={`font-mono text-[11px] font-bold tracking-wider uppercase ${dense ? 'text-slate-500' : 'text-slate-500'}`}>
+          <dt className={`font-sans text-[11px] font-bold tracking-wider uppercase ${dense ? 'text-slate-500' : 'text-slate-500'}`}>
             {attribute.label}
           </dt>
           <dd className={`mt-0.5 text-sm ${attribute.stated ? 'text-slate-800' : 'text-slate-400'}`}>
@@ -176,7 +176,7 @@ function AskPanel({ group, requestId }: { group: ProviderQuoteGroup; requestId: 
         </p>
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
         >
           Send to the provider
         </button>
@@ -238,7 +238,7 @@ export function MessageProviderPanel({
         </p>
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
         >
           Send to the provider
         </button>
@@ -274,7 +274,7 @@ function DeclinePanel({ group, requestId }: { group: ProviderQuoteGroup; request
         </p>
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
         >
           Decline
         </button>
@@ -308,7 +308,7 @@ function QuoteDecisionActions({
     <div className="space-y-2">
       <Link
         href={`/customer/requests/${requestId}/quotes/${quote.quoteId}`}
-        className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+        className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
       >
         <FileText aria-hidden="true" className="h-3.5 w-3.5" />
         View full quote {quote.versionLabel}
@@ -327,7 +327,7 @@ function QuoteDecisionActions({
           <input type="hidden" name="request_id" value={requestId} />
           <button
             type="submit"
-            className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+            className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
           >
             Accept {formatMoney(quote.totalMinor, quote.currencyCode)} <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </button>
@@ -350,7 +350,7 @@ function ProviderHeading({ group }: { group: ProviderQuoteGroup }) {
     <>
       <p className="truncate text-sm font-bold text-slate-900">{group.providerName}</p>
       {group.providerHeadline ? <p className="mt-0.5 text-xs text-slate-500">{group.providerHeadline}</p> : null}
-      <p className="mt-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <p className="mt-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         version {quote.versionLabel}
         {group.history.length > 0
           ? ` · ${group.history.length} earlier version${group.history.length === 1 ? '' : 's'}`
@@ -365,7 +365,7 @@ function ProviderHeading({ group }: { group: ProviderQuoteGroup }) {
           <span className="text-slate-500">identity not verified</span>
         )}
         <span aria-hidden="true" className="text-slate-300">·</span>
-        <span className="font-mono text-slate-600">
+        <span className="font-sans text-slate-600">
           readiness {group.readinessScore ?? '—'} / trust {group.trustScore ?? '—'}
         </span>
       </p>
@@ -413,7 +413,7 @@ export function ComparisonMatrix({
             <tr>
               <th
                 scope="col"
-                className="sticky left-0 z-10 w-40 min-w-40 border-b border-solid border-slate-200 bg-white px-4 py-4 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+                className="sticky left-0 z-10 w-40 min-w-40 border-b border-solid border-slate-200 bg-white px-4 py-4 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
               >
                 Compared
               </th>
@@ -439,7 +439,7 @@ export function ComparisonMatrix({
               <tr key={row.key} className="align-top">
                 <th
                   scope="row"
-                  className="sticky left-0 z-10 border-b border-solid border-slate-100 bg-white px-4 py-3 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+                  className="sticky left-0 z-10 border-b border-solid border-slate-100 bg-white px-4 py-3 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
                 >
                   {row.label}
                 </th>
@@ -466,7 +466,7 @@ export function ComparisonMatrix({
             <tr className="align-top">
               <th
                 scope="row"
-                className="sticky left-0 z-10 bg-white px-4 py-4 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+                className="sticky left-0 z-10 bg-white px-4 py-4 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
               >
                 Decide
               </th>
@@ -574,7 +574,7 @@ export function VersionHistory({
 }) {
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Version change history
       </h2>
       <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
@@ -594,7 +594,7 @@ export function VersionHistory({
               }`}
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-mono text-xs font-bold tracking-wider text-primary uppercase">
+                <span className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
                   {version.versionLabel}
                   {current ? ' · current' : ''}
                 </span>
@@ -603,7 +603,7 @@ export function VersionHistory({
                     {formatMoney(version.totalMinor, version.currencyCode)}
                   </span>
                   {version.lockedAt ? (
-                    <span className="inline-flex items-center gap-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+                    <span className="inline-flex items-center gap-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
                       <Lock aria-hidden="true" className="h-3 w-3" /> locked
                     </span>
                   ) : null}
@@ -642,7 +642,7 @@ export function ChangeRequestList({
   if (changes.length === 0) {
     return (
       <section className={`${CARD} p-5`}>
-        <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           What you have asked this provider
         </h2>
         <p className="mt-2 text-xs text-slate-500">
@@ -661,7 +661,7 @@ export function ChangeRequestList({
 
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         What you have asked this provider
       </h2>
       <ol className="mt-3 space-y-3">
@@ -669,7 +669,7 @@ export function ChangeRequestList({
           <li key={change.id} className="rounded-xl border border-solid border-slate-200 px-4 py-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-xs font-bold text-slate-800">{KIND_LABEL[change.kind]}</span>
-              <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 {change.status === 'open' ? 'awaiting the provider' : 'withdrawn'}
               </span>
             </div>
@@ -703,7 +703,7 @@ export function ChangeRequestList({
 export function LockedBanner({ quote }: { quote: QuoteRow }) {
   return (
     <div className="rounded-xl border border-solid border-primary-subtle bg-primary-surface px-4 py-3">
-      <p className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+      <p className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
         <Lock aria-hidden="true" className="h-4 w-4" />
         Version {quote.versionLabel} is locked
       </p>

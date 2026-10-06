@@ -218,7 +218,7 @@ export function QuotePricingFields({
         </div>
         <div className="rounded-xl border border-solid border-slate-200 bg-slate-50 px-4 py-3">
           <p className={LABEL}>This quote&apos;s total</p>
-          <p className="font-mono text-lg font-bold text-primary">{money(minorTotal + minorTaxes)}</p>
+          <p className="font-sans text-lg font-bold text-primary">{money(minorTotal + minorTaxes)}</p>
           <p className="mt-1 text-xs text-slate-500">
             {money(minorTotal)} of work plus {money(minorTaxes)} in taxes and fees. The server recalculates this
             from the rows above when you submit.

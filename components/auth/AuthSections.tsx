@@ -35,7 +35,7 @@ import { signInWithGoogleAction } from '@/features/auth/actions';
 
 /** Full-width primary action. `disabled:` covers the pending state the submit button renders. */
 export const AUTH_CTA =
-  'inline-flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-secondary px-5 py-3 font-mono text-sm font-bold tracking-wide text-primary-deep uppercase shadow-sm transition-colors hover:bg-amber-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600 disabled:cursor-not-allowed disabled:opacity-70';
+  'inline-flex w-full items-center justify-center gap-2 rounded-lg border-0 bg-secondary px-5 py-3 font-sans text-sm font-bold tracking-wide text-primary-deep uppercase shadow-sm transition-colors hover:bg-amber-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600 disabled:cursor-not-allowed disabled:opacity-70';
 
 /** Full-width secondary action (the social provider button). */
 export const AUTH_CTA_SECONDARY =
@@ -136,7 +136,7 @@ export function AuthShell({
           in-card shape so the card opens with its own badge and title. */}
       {insideCard ? null : (
         <>
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
             {eyebrow}
           </p>
           <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
@@ -238,7 +238,7 @@ export function AuthDivider({ label = 'or' }: { label?: string }) {
   return (
     <div className="my-5 flex items-center gap-3" aria-hidden="true">
       <span className="h-px flex-1 bg-slate-200" />
-      <span className="font-mono text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+      <span className="font-sans text-[11px] font-bold tracking-wider text-slate-400 uppercase">
         {label}
       </span>
       <span className="h-px flex-1 bg-slate-200" />

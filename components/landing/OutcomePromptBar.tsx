@@ -169,7 +169,7 @@ export default function OutcomePromptBar({ action }: { action: string }) {
       {/* Mode strip */}
       <div className="mb-3 flex items-center justify-between gap-2 border-b border-slate-100 pb-3">
         <div className="flex items-center gap-1.5 rounded-lg bg-slate-100 p-1">
-          <span className="flex items-center gap-1.5 rounded-md bg-white px-3 py-1 font-mono text-[12px] font-semibold text-primary shadow-xs">
+          <span className="flex items-center gap-1.5 rounded-md bg-white px-3 py-1 font-sans text-[12px] font-semibold text-primary shadow-xs">
             <PencilLine aria-hidden="true" className="h-[15px] w-[15px]" />
             Describe it
           </span>
@@ -178,7 +178,7 @@ export default function OutcomePromptBar({ action }: { action: string }) {
               type="button"
               onClick={listening ? stopListening : startListening}
               aria-pressed={listening}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1 font-mono text-[12px] transition-colors ${
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1 font-sans text-[12px] transition-colors ${
                 listening
                   ? 'bg-white text-amber-800 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -194,7 +194,7 @@ export default function OutcomePromptBar({ action }: { action: string }) {
           ) : null}
         </div>
 
-        <div className="hidden items-center gap-1 font-mono text-[11px] text-slate-400 sm:flex">
+        <div className="hidden items-center gap-1 font-sans text-[11px] text-slate-400 sm:flex">
           <Zap aria-hidden="true" className="h-[13px] w-[13px] text-secondary" />
           <span>Free to post</span>
         </div>
@@ -217,7 +217,7 @@ export default function OutcomePromptBar({ action }: { action: string }) {
         {listening ? (
           <div className="mt-2 flex w-fit items-center gap-2 rounded-lg border border-amber-200 bg-secondary-light px-3 py-1.5">
             <Mic aria-hidden="true" className="h-4 w-4 animate-pulse text-secondary" />
-            <span className="font-mono text-[12px] font-semibold text-amber-800">
+            <span className="font-sans text-[12px] font-semibold text-amber-800">
               Listening — describe the work out loud
             </span>
           </div>
@@ -228,14 +228,14 @@ export default function OutcomePromptBar({ action }: { action: string }) {
         {voiceError ? (
           <div className="mt-2 flex w-fit items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 px-3 py-1.5">
             <TriangleAlert aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" />
-            <span className="font-mono text-[12px] font-semibold text-rose-800">{voiceError}</span>
+            <span className="font-sans text-[12px] font-semibold text-rose-800">{voiceError}</span>
           </div>
         ) : null}
       </div>
 
       {/* Submit bar */}
       <div className="mt-2 flex flex-col justify-between gap-3 pt-3.5 sm:flex-row sm:items-center">
-        <span className="flex items-center gap-1 font-mono text-[12px] text-slate-500">
+        <span className="flex items-center gap-1 font-sans text-[12px] text-slate-500">
           <Zap aria-hidden="true" className="h-[15px] w-[15px] text-primary" />
           No obligation to hire. Quotes are itemized.
         </span>

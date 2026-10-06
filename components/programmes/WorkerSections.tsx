@@ -49,7 +49,7 @@ export function WorkerRegistryBody({
           <h2 id="registry-heading" className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-900">
             <Users aria-hidden="true" className="h-5 w-5 text-primary" />
             The pool
-            <span className="font-mono text-xs font-normal text-slate-500">{read.workers.length}</span>
+            <span className="font-sans text-xs font-normal text-slate-500">{read.workers.length}</span>
           </h2>
           <p className="mt-1 max-w-3xl text-xs leading-relaxed text-slate-500">{read.consentNote}</p>
         </div>
@@ -96,8 +96,8 @@ function WorkerCard({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-sm font-bold tracking-tight text-slate-900">{worker.pseudonym}</span>
-            <span className={`rounded-full px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider uppercase ${state.className}`}>
+            <span className="font-sans text-sm font-bold tracking-tight text-slate-900">{worker.pseudonym}</span>
+            <span className={`rounded-full px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider uppercase ${state.className}`}>
               {state.label}
             </span>
             <span className={BADGE_SLATE}>{worker.regionLabel}</span>
@@ -114,7 +114,7 @@ function WorkerCard({
           <div className="rounded-lg bg-primary-subtle px-3 py-2 text-right">
             <p className="text-sm font-bold tracking-tight text-primary">{worker.identity.name}</p>
             {worker.identity.email ? (
-              <p className="font-mono text-[11px] text-slate-600">{worker.identity.email}</p>
+              <p className="font-sans text-[11px] text-slate-600">{worker.identity.email}</p>
             ) : null}
             <p className="mt-0.5 text-[10px] font-semibold tracking-wide text-primary uppercase">
               {worker.identity.basis === 'programme_consent' ? 'Programme consent' : 'Project consent'}
@@ -143,7 +143,7 @@ function WorkerCard({
 
       <div className="mt-4 grid gap-4 border-t border-solid border-slate-200 pt-4 lg:grid-cols-2">
         <div>
-          <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Credentials</h3>
+          <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Credentials</h3>
           {worker.credentials.length === 0 ? (
             <p className="mt-2 text-xs text-slate-500">Nothing recorded.</p>
           ) : (
@@ -155,13 +155,13 @@ function WorkerCard({
                     <span className="text-slate-700">
                       {CREDENTIAL_KIND_COPY[credential.kind] ?? credential.kind}
                       {credential.reference ? (
-                        <span className="ml-2 font-mono text-[11px] text-slate-500">{credential.reference}</span>
+                        <span className="ml-2 font-sans text-[11px] text-slate-500">{credential.reference}</span>
                       ) : null}
                       {credential.expiresOn ? (
                         <span className="ml-2 text-[11px] text-slate-500">expires {credential.expiresOn}</span>
                       ) : null}
                     </span>
-                    <span className={`rounded-full px-2 py-0.5 font-mono text-[10px] font-bold tracking-wide uppercase ${decision.className}`}>
+                    <span className={`rounded-full px-2 py-0.5 font-sans text-[10px] font-bold tracking-wide uppercase ${decision.className}`}>
                       {decision.label}
                     </span>
                   </li>
@@ -246,7 +246,7 @@ function WorkerCard({
         </div>
 
         <div>
-          <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Projects and consent
           </h3>
 
@@ -498,7 +498,7 @@ function EnrolWorkerPanel({
         <div className="sm:col-span-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark"
+            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark"
           >
             Enrol under a pseudonym
           </button>
@@ -535,7 +535,7 @@ function LinkedProjectsPanel({ read, programmeId }: { read: ProgrammeWorkersRead
             <li key={project.assignmentId} className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2 text-xs">
               <span className="text-slate-800">
                 {project.label}
-                <span className="ml-2 font-mono text-[11px] text-slate-500">{project.status}</span>
+                <span className="ml-2 font-sans text-[11px] text-slate-500">{project.status}</span>
               </span>
               <span className="flex items-center gap-3">
                 <Link href={`/projects/${project.assignmentId}`} className={LINK_ARROW}>

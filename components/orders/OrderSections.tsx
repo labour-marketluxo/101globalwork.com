@@ -104,13 +104,13 @@ export function GoodsHeldPanel({
 
   return (
     <section aria-labelledby="held-heading" className={`${CARD} p-5`}>
-      <h2 id="held-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 id="held-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Held for goods on this project
       </h2>
       <ul className="mt-2 grid gap-2">
         {goodsHeld.map((balance) => (
           <li key={balance.currencyCode} className="flex items-baseline justify-between gap-3">
-            <span className="font-mono text-lg font-bold tracking-tight text-slate-900">
+            <span className="font-sans text-lg font-bold tracking-tight text-slate-900">
               {formatMinor(balance.heldMinor, balance.currencyCode)}
             </span>
             <span className="text-xs text-slate-500">
@@ -180,7 +180,7 @@ export function CatalogPanel({
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-slate-900">{product.name}</p>
                       <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{product.description}</p>
-                      <p className="mt-1 font-mono text-xs text-slate-600">
+                      <p className="mt-1 font-sans text-xs text-slate-600">
                         {formatMinor(product.unitPriceMinor, product.currencyCode)} per{' '}
                         {UNIT_COPY[product.unit] ?? product.unit}
                         <span className="text-slate-400"> · {product.sku}</span>
@@ -247,7 +247,7 @@ export function CatalogPanel({
           <button
             type="submit"
             disabled={!canPlace}
-            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
             Place goods order
           </button>
@@ -292,18 +292,18 @@ export function OrderCard({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               {order.reference}
             </span>
             <span
               title={status.explains}
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider uppercase ${status.className}`}
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider uppercase ${status.className}`}
             >
               {status.label}
             </span>
             <span className={BADGE_SLATE}>Placed by {order.placedByMe ? 'you' : order.placedByName}</span>
             {!order.ledger.balanced ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-red-700 uppercase">
+              <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-red-700 uppercase">
                 <CircleAlert aria-hidden="true" className="h-3 w-3" />
                 Ledger imbalance
               </span>
@@ -312,7 +312,7 @@ export function OrderCard({
           <p className="mt-1.5 text-xs leading-relaxed text-slate-600">{order.nextStep}</p>
         </div>
         <p className="text-right">
-          <span className="block font-mono text-lg font-bold tracking-tight text-slate-900">
+          <span className="block font-sans text-lg font-bold tracking-tight text-slate-900">
             {formatMinor(order.totalMinor, order.currencyCode)}
           </span>
           <span className="text-[11px] text-slate-500">
@@ -326,16 +326,16 @@ export function OrderCard({
           <caption className="sr-only">Items on order {order.reference}</caption>
           <thead>
             <tr className="border-b border-solid border-slate-200">
-              <th scope="col" className="py-2 font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+              <th scope="col" className="py-2 font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                 Item
               </th>
-              <th scope="col" className="py-2 text-right font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+              <th scope="col" className="py-2 text-right font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                 Unit
               </th>
-              <th scope="col" className="py-2 text-right font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+              <th scope="col" className="py-2 text-right font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                 Qty
               </th>
-              <th scope="col" className="py-2 text-right font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+              <th scope="col" className="py-2 text-right font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                 Line
               </th>
             </tr>
@@ -345,13 +345,13 @@ export function OrderCard({
               <tr key={item.id} className="border-b border-solid border-slate-100">
                 <th scope="row" className="py-2 pr-3 text-left font-normal text-slate-800">
                   {item.name}
-                  <span className="ml-2 font-mono text-[10px] text-slate-400">{item.sku}</span>
+                  <span className="ml-2 font-sans text-[10px] text-slate-400">{item.sku}</span>
                 </th>
                 <td className="py-2 text-right text-slate-600">
                   {formatMinor(item.unitPriceMinor, order.currencyCode)} / {UNIT_COPY[item.unit] ?? item.unit}
                 </td>
                 <td className="py-2 text-right text-slate-800">{item.quantity}</td>
-                <td className="py-2 text-right font-mono text-slate-800">
+                <td className="py-2 text-right font-sans text-slate-800">
                   {formatMinor(item.lineTotalMinor, order.currencyCode)}
                 </td>
               </tr>
@@ -362,16 +362,16 @@ export function OrderCard({
 
       <dl className="mt-4 grid gap-x-6 gap-y-3 text-xs sm:grid-cols-3">
         <div>
-          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">Delivering to</dt>
+          <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">Delivering to</dt>
           <dd className="mt-0.5 text-slate-700">{order.deliveryAddress}</dd>
           {order.deliveryNote ? <dd className="text-[11px] text-slate-500">{order.deliveryNote}</dd> : null}
         </div>
         <div>
-          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">Placed</dt>
+          <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">Placed</dt>
           <dd className="mt-0.5 text-slate-700">{formatRelativeTime(order.createdAt, now)}</dd>
         </div>
         <div>
-          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+          <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
             Commerce ledger
           </dt>
           <dd className="mt-0.5 text-slate-700">
@@ -380,7 +380,7 @@ export function OrderCard({
               : 'Nothing held for these goods'}
           </dd>
           {order.ledger.posted.length > 0 ? (
-            <dd className="mt-0.5 font-mono text-[10px] text-slate-500">
+            <dd className="mt-0.5 font-sans text-[10px] text-slate-500">
               {order.ledger.posted
                 .map((entry) => entry.type.replace('commerce_order_', '').replace('commerce_', ''))
                 .join(', ')}
@@ -395,7 +395,7 @@ export function OrderCard({
 
       {order.shipments.length > 0 ? (
         <div className="mt-4 border-t border-solid border-slate-200 pt-4">
-          <h3 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h3 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             <Truck aria-hidden="true" className="h-3.5 w-3.5" />
             Delivery
           </h3>
@@ -410,7 +410,7 @@ export function OrderCard({
                   <span className="text-slate-700">
                     {shipment.carrier ?? 'Carrier not recorded'}
                     {shipment.trackingReference ? (
-                      <span className="ml-2 font-mono text-[11px] text-slate-500">{shipment.trackingReference}</span>
+                      <span className="ml-2 font-sans text-[11px] text-slate-500">{shipment.trackingReference}</span>
                     ) : null}
                   </span>
                   <span className="flex items-center gap-2">
@@ -418,7 +418,7 @@ export function OrderCard({
                     <span className="text-[11px] text-slate-500">
                       {formatDay(shipment.deliveredAt ?? shipment.dispatchedAt ?? shipment.recordedAt) ?? ''}
                     </span>
-                    <span className={`rounded-full px-2 py-0.5 font-mono text-[10px] font-bold tracking-wide uppercase ${state.className}`}>
+                    <span className={`rounded-full px-2 py-0.5 font-sans text-[10px] font-bold tracking-wide uppercase ${state.className}`}>
                       {state.label}
                     </span>
                   </span>

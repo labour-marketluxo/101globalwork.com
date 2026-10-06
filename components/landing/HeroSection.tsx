@@ -114,7 +114,7 @@ export default async function HeroSection() {
             fold. At `py-6` the hero stays exact down to a 812px viewport, and
             below that it is the CONTENT that has to shrink, not this number. */}
         <div className="relative z-10 mx-auto w-full max-w-[1100px] px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-mono text-xs text-emerald-300 shadow-sm backdrop-blur-sm">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-sans text-xs text-emerald-300 shadow-sm backdrop-blur-sm">
             <Sparkles aria-hidden="true" className="h-[15px] w-[15px] text-secondary" />
             <span className="font-semibold tracking-wide uppercase">
               On-demand service coordination
@@ -136,7 +136,7 @@ export default async function HeroSection() {
           <OutcomePromptBar action={`/${marketSlug}/search`} />
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300">
-            <span className="mr-1 font-mono text-[11px] tracking-wider text-slate-400 uppercase">
+            <span className="mr-1 font-sans text-[11px] tracking-wider text-slate-400 uppercase">
               Common jobs:
             </span>
             {PRESETS.map((preset) => (
@@ -162,7 +162,7 @@ export default async function HeroSection() {
           out over #FAFAFA and the backdrop blur would have nothing to blur.
           Solid `bg-primary-deep` is that same band, unattenuated. */}
       <div className="border-t border-white/10 bg-primary-deep px-4 py-3.5">
-        <div className="mx-auto flex max-w-[1536px] flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-[12px] text-slate-300 sm:justify-between">
+        <div className="mx-auto flex max-w-[1536px] flex-wrap items-center justify-center gap-x-6 gap-y-2 font-sans text-[12px] text-slate-300 sm:justify-between">
           <div className="flex items-center gap-2">
             <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-400" />
             <span className="font-semibold text-white">Verified providers only</span>

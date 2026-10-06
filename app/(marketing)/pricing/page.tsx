@@ -122,7 +122,7 @@ function FormattedMoney({ value }: { value: Money }) {
     maximumFractionDigits: 2,
   }).format(value.amountMinor / 100);
 
-  return <span className="font-mono text-sm font-bold text-slate-900">{formatted}</span>;
+  return <span className="font-sans text-sm font-bold text-slate-900">{formatted}</span>;
 }
 
 function rateSummary(rate: FeeRate | null): string[] {
@@ -274,7 +274,7 @@ export default function PricingPage() {
               {QUOTE_COST_LINES.map((line) => (
                 <li
                   key={line}
-                  className="rounded-sm border border-slate-200 bg-canvas px-2.5 py-1 font-mono text-[11px] text-slate-700"
+                  className="rounded-sm border border-slate-200 bg-canvas px-2.5 py-1 font-sans text-[11px] text-slate-700"
                 >
                   {line}
                 </li>
@@ -292,7 +292,7 @@ export default function PricingPage() {
               {QUOTE_TERMS.map((term) => (
                 <li
                   key={term}
-                  className="rounded-sm border border-slate-200 bg-canvas px-2.5 py-1 font-mono text-[11px] text-slate-700"
+                  className="rounded-sm border border-slate-200 bg-canvas px-2.5 py-1 font-sans text-[11px] text-slate-700"
                 >
                   {term}
                 </li>
@@ -342,7 +342,7 @@ export default function PricingPage() {
           <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white">
             <table className="w-full text-left text-sm">
               <caption className="sr-only">Worked examples of platform fees on a quote</caption>
-              <thead className="bg-canvas font-mono text-[11px] tracking-wider text-slate-500 uppercase">
+              <thead className="bg-canvas font-sans text-[11px] tracking-wider text-slate-500 uppercase">
                 <tr>
                   <th scope="col" className="px-5 py-3">
                     Example

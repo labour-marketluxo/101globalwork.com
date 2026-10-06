@@ -35,11 +35,11 @@ export const FIELD =
 
 /** Mono uppercase field legend — the metadata voice used across the landing sections. */
 export const LABEL =
-  'mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase';
+  'mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase';
 
 /** Navbar CTA geometry, verbatim from AuthNav — the one filled amber control. */
 export const CTA_AMBER =
-  'inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95';
+  'inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95';
 
 /**
  * Deep teal filled button (PageSections' `primary` variant). Used where amber
@@ -47,7 +47,7 @@ export const CTA_AMBER =
  * service page's secondary "view providers" action.
  */
 export const CTA_PRIMARY =
-  'inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-primary-dark';
+  'inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-primary-dark';
 
 /**
  * Trailing-arrow text link. `gap` is owned by each variant rather than by a
@@ -56,11 +56,11 @@ export const CTA_PRIMARY =
  * `linkArrowSize` is the matching icon size; pass it to the ArrowRight.
  */
 export const LINK_ARROW =
-  'inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-primary no-underline transition-all hover:gap-2.5 hover:text-primary-dark';
+  'inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-primary no-underline transition-all hover:gap-2.5 hover:text-primary-dark';
 
 /** The same link inverted for the deep-teal bands. Amber on dark is amber-300. */
 export const LINK_ARROW_DARK =
-  'inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-amber-300 no-underline transition-all hover:gap-2.5 hover:text-amber-200';
+  'inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-amber-300 no-underline transition-all hover:gap-2.5 hover:text-amber-200';
 
 /** Card surface. `CARD_INTERACTIVE` adds the hover the brief asks for. */
 export const CARD = 'rounded-xl border border-solid border-slate-200/80 bg-white shadow-sm';
@@ -68,19 +68,19 @@ export const CARD_INTERACTIVE = `${CARD} transition-shadow hover:shadow-md`;
 
 /** Amber status badge on a light surface. Amber TEXT on white must be amber-800. */
 export const BADGE_AMBER =
-  'inline-flex items-center gap-1.5 rounded-full bg-secondary-light px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-amber-800 uppercase';
+  'inline-flex items-center gap-1.5 rounded-full bg-secondary-light px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-amber-800 uppercase';
 
 /** Neutral status badge on a light surface. */
 export const BADGE_SLATE =
-  'inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase';
+  'inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase';
 
 /** Trailing-arrow link, but sized for a full card footer rather than a caption. */
 export const LINK_ARROW_LG =
-  'inline-flex items-center gap-2 font-mono text-xs font-semibold text-primary no-underline transition-all hover:gap-3 hover:text-primary-dark';
+  'inline-flex items-center gap-2 font-sans text-xs font-semibold text-primary no-underline transition-all hover:gap-3 hover:text-primary-dark';
 
 /** Pill on a deep-teal band (market badge, applied-filter chip, eyebrow). */
 export const PILL_DARK =
-  'inline-flex items-center gap-2 rounded-full border border-solid border-white/15 bg-white/10 px-2.5 py-1 font-mono text-xs font-bold tracking-wider text-amber-300 uppercase';
+  'inline-flex items-center gap-2 rounded-full border border-solid border-white/15 bg-white/10 px-2.5 py-1 font-sans text-xs font-bold tracking-wider text-amber-300 uppercase';
 
 /** The blurred amber glow the landing hero and the CTA bands share. */
 export const HERO_GLOW =

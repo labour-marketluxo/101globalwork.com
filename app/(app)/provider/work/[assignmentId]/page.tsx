@@ -179,7 +179,7 @@ export default async function ProviderAssignmentPage({
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="scheduled_start" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <label htmlFor="scheduled_start" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Start
               </label>
               <input
@@ -191,7 +191,7 @@ export default async function ProviderAssignmentPage({
               />
             </div>
             <div>
-              <label htmlFor="scheduled_end" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <label htmlFor="scheduled_end" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Expected finish (optional)
               </label>
               <input
@@ -202,7 +202,7 @@ export default async function ProviderAssignmentPage({
               />
             </div>
             <div>
-              <label htmlFor="timezone" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <label htmlFor="timezone" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Timezone
               </label>
               <input
@@ -214,7 +214,7 @@ export default async function ProviderAssignmentPage({
               />
             </div>
             <div>
-              <label htmlFor="schedule_note" className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <label htmlFor="schedule_note" className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Note for the customer (optional)
               </label>
               <input
@@ -242,7 +242,7 @@ export default async function ProviderAssignmentPage({
             <PendingButton
               idle="Save this time"
               pending="Saving…"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>

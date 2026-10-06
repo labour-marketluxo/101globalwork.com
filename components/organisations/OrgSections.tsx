@@ -17,7 +17,7 @@ import { assignProjectOwnerAction } from '@/features/organisations/actions';
 
 function tone(t: 'teal' | 'amber' | 'slate') {
   return t === 'teal'
-    ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+    ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
     : t === 'amber'
       ? BADGE_AMBER
       : BADGE_SLATE;
@@ -32,19 +32,19 @@ export function PortfolioStatusWidget({ organisation }: { organisation: Organisa
       </h2>
       <dl className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Projects</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Projects</dt>
           <dd className="mt-1 text-lg font-extrabold tracking-tight text-slate-900">{totals.projects}</dd>
         </div>
         <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Active</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Active</dt>
           <dd className="mt-1 text-lg font-extrabold tracking-tight text-primary">{totals.active}</dd>
         </div>
         <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Completed</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Completed</dt>
           <dd className="mt-1 text-lg font-extrabold tracking-tight text-slate-900">{totals.completed}</dd>
         </div>
         <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-          <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Funded, unfinished</dt>
+          <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Funded, unfinished</dt>
           <dd className="mt-1 text-lg font-extrabold tracking-tight text-slate-900">
             {formatMoney(totals.committedFundedMinor, organisation.entity.currencyCode ?? 'NGN')}
           </dd>
@@ -169,21 +169,21 @@ export function BudgetWidgets({ organisation }: { organisation: Organisation }) 
               <h3 className="text-sm font-bold tracking-tight text-slate-900">
                 {budget.locationName ?? 'Whole organisation'}
               </h3>
-              <span className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+              <span className="font-sans text-[11px] tracking-wide text-slate-500 uppercase">
                 {budget.periodStart} to {budget.periodEnd}
               </span>
             </div>
             <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-3">
               <div>
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Committed</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Committed</dt>
                 <dd className="mt-0.5 font-semibold text-slate-800">{formatMoney(budget.committedMinor, budget.currencyCode)}</dd>
               </div>
               <div>
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Funded work</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Funded work</dt>
                 <dd className="mt-0.5 font-semibold text-slate-800">{formatMoney(budget.actualMinor, budget.currencyCode)}</dd>
               </div>
               <div>
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Remaining</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Remaining</dt>
                 <dd className="mt-0.5 font-semibold text-primary">{formatMoney(remaining, budget.currencyCode)}</dd>
               </div>
             </dl>
@@ -276,7 +276,7 @@ export function PortfolioTable({
             </div>
             <dl className="mt-3 grid gap-x-6 gap-y-2 text-xs sm:grid-cols-4">
               <div>
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Budget</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Budget</dt>
                 <dd className="mt-0.5 text-slate-700">
                   {project.budgetCommittedMinor !== null
                     ? formatMoney(project.budgetCommittedMinor, project.currencyCode ?? 'NGN')
@@ -284,7 +284,7 @@ export function PortfolioTable({
                 </dd>
               </div>
               <div>
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Committed work</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Committed work</dt>
                 <dd className="mt-0.5 text-slate-700">
                   {project.amountMinor !== null
                     ? formatMoney(project.amountMinor, project.currencyCode ?? 'NGN') + ' · ' + (project.obligationStatus ?? 'no obligation').replaceAll('_', ' ')
@@ -292,7 +292,7 @@ export function PortfolioTable({
                 </dd>
               </div>
               <div>
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Due</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Due</dt>
                 <dd className="mt-0.5 text-slate-700">
                   {project.scheduledEnd
                     ? new Date(project.scheduledEnd).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -300,7 +300,7 @@ export function PortfolioTable({
                 </dd>
               </div>
               <div>
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Next action</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Next action</dt>
                 <dd className="mt-0.5 text-slate-700">{NEXT_ACTION_COPY[project.nextAction] ?? project.nextAction}</dd>
               </div>
             </dl>

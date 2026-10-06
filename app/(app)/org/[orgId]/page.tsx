@@ -63,7 +63,7 @@ export default async function OrganisationOverviewPage({
             {organisation.entity.status !== 'active' ? ' · entity status: ' + organisation.entity.status : ''}
           </p>
         </div>
-        <span className="inline-flex items-center rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+        <span className="inline-flex items-center rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
           {organisation.entity.subscriptionPlan} plan
         </span>
       </header>
@@ -243,7 +243,7 @@ export default async function OrganisationOverviewPage({
             <PendingButton
               idle="Save the budget"
               pending="Saving…"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>

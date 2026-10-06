@@ -76,7 +76,7 @@ const GHOST =
  * hover state can be checked (see the note in NavLinks.tsx).
  */
 const CTA =
-  'inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-4 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95 sm:px-5';
+  'inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-4 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95 sm:px-5';
 
 /**
  * The signed-out pair. Extracted so the mock branch below and the real no-session branch cannot

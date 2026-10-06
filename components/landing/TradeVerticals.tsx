@@ -72,7 +72,7 @@ export default async function TradeVerticals() {
         {/* Section header */}
         <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 font-mono text-xs font-semibold tracking-wider text-amber-300 uppercase">
+            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 font-sans text-xs font-semibold tracking-wider text-amber-300 uppercase">
               Verified service categories
             </span>
             <h2 className="mt-3 mb-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -83,7 +83,7 @@ export default async function TradeVerticals() {
               requires, and the details you need to decide.
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-primary-dark px-4 py-2.5 font-mono text-xs text-slate-300">
+          <div className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-primary-dark px-4 py-2.5 font-sans text-xs text-slate-300">
             <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-400" />
             <span>Reviewed before a quote can be sent</span>
           </div>
@@ -113,7 +113,7 @@ export default async function TradeVerticals() {
                     {vertical.title}
                   </h3>
                   <p className="mb-4 text-xs leading-relaxed text-slate-300">{vertical.blurb}</p>
-                  <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                  <div className="flex flex-wrap gap-1.5 font-sans text-[10px]">
                     {vertical.tags.map((tag) => (
                       <span key={tag} className="rounded-sm bg-white/10 px-2 py-0.5 text-slate-200">
                         {tag}
@@ -126,7 +126,7 @@ export default async function TradeVerticals() {
               <div className="p-5 pt-0">
                 <Link
                   href={`/${marketSlug}/search?q=${encodeURIComponent(vertical.slug)}`}
-                  className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-amber-300 no-underline transition-all hover:text-amber-200 group-hover:gap-2"
+                  className="inline-flex items-center gap-1 font-sans text-xs font-semibold text-amber-300 no-underline transition-all hover:text-amber-200 group-hover:gap-2"
                 >
                   See providers
                   <ArrowRight aria-hidden="true" className="h-[15px] w-[15px]" />

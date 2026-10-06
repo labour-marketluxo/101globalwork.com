@@ -165,7 +165,7 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
     <div className="grid gap-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Setup</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Setup</p>
           <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
             Build your work profile
           </h1>
@@ -308,7 +308,7 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
             <PendingButton
               idle="Create provider profile"
               pending="Creating…"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>
@@ -322,15 +322,15 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
             </h2>
             <dl className="mt-3 grid gap-3 sm:grid-cols-3">
               <div>
-                <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Visibility</dt>
+                <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Visibility</dt>
                 <dd className="mt-0.5 text-sm font-bold text-slate-900">{profileRow?.is_public ? 'Published' : 'Not published'}</dd>
               </div>
               <div>
-                <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Readiness</dt>
+                <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Readiness</dt>
                 <dd className="mt-0.5 text-sm font-bold text-slate-900">{readinessScore}/100</dd>
               </div>
               <div>
-                <dt className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Checklist</dt>
+                <dt className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Checklist</dt>
                 <dd className="mt-0.5 text-sm font-bold text-slate-900">
                   {steps.slice(0, 3).filter(step => step.done).length}/3 required
                 </dd>
@@ -356,7 +356,7 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
                   <PendingButton
                     idle={canPublish ? 'Publish and go live' : 'Publish (requirements open)'}
                     pending="Publishing…"
-                    className={`inline-flex items-center gap-2 rounded-lg border-0 px-5 py-2.5 font-mono text-xs font-bold tracking-wide uppercase shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-70 ${
+                    className={`inline-flex items-center gap-2 rounded-lg border-0 px-5 py-2.5 font-sans text-xs font-bold tracking-wide uppercase shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-70 ${
                       canPublish ? 'bg-secondary text-white hover:bg-secondary-dark' : 'bg-slate-300 text-slate-600'
                     }`}
                   />
@@ -420,7 +420,7 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
               <PendingButton
                 idle="Save business info"
                 pending="Saving…"
-                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
           </form>
@@ -533,7 +533,7 @@ export default async function ProviderOnboardingPage({ searchParams }: { searchP
                 <PendingButton
                   idle="Submit identity for review"
                   pending="Submitting…"
-                  className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
                 />
               </div>
             </form>

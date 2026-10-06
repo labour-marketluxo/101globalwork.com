@@ -28,7 +28,7 @@ export function EarningsHeader({ earnings }: { earnings: EarningsRead }) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Earnings</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Earnings</p>
         <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Your books
         </h1>
@@ -41,7 +41,7 @@ export function EarningsHeader({ earnings }: { earnings: EarningsRead }) {
       <span
         className={
           earnings.provider.payoutVerified
-            ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+            ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
             : BADGE_AMBER
         }
       >
@@ -55,7 +55,7 @@ function Figure({ label, value, note, tone = 'slate' }: { label: string; value: 
   const colour = tone === 'teal' ? 'text-primary' : tone === 'amber' ? 'text-amber-800' : 'text-slate-900';
   return (
     <div className="rounded-xl border border-solid border-slate-200 p-3.5">
-      <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">{label}</p>
+      <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">{label}</p>
       <p className={`mt-1 text-lg font-extrabold tracking-tight ${colour}`}>{value}</p>
       {note ? <p className="mt-1 text-xs leading-relaxed text-slate-500">{note}</p> : null}
     </div>
@@ -73,7 +73,7 @@ export function EarningsCards({ books }: { books: CurrencyBooks }) {
           <Landmark aria-hidden="true" className="h-4 w-4 text-primary" />
           {books.currencyCode}
         </h2>
-        <p className="font-mono text-[11px] tracking-wide text-slate-500 uppercase">
+        <p className="font-sans text-[11px] tracking-wide text-slate-500 uppercase">
           Ledger balance {formatMoney(owed, books.currencyCode)}
         </p>
       </div>
@@ -219,7 +219,7 @@ export function PayoutRequestPanels({ earnings }: { earnings: EarningsRead }) {
                   <span>
                     {requestReference(item.requestId)} · {item.needText}
                   </span>
-                  <span className="font-mono">{formatMoney(item.payoutAmountMinor ?? item.netPayableMinor, currencyCode)}</span>
+                  <span className="font-sans">{formatMoney(item.payoutAmountMinor ?? item.netPayableMinor, currencyCode)}</span>
                 </li>
               ))}
             </ul>
@@ -233,7 +233,7 @@ export function PayoutRequestPanels({ earnings }: { earnings: EarningsRead }) {
                 idle={`Request ${list.length === 1 ? 'this payout' : 'these payouts'}`}
                 pending="Requesting…"
                 icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-                className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
             </form>
           </section>
@@ -267,7 +267,7 @@ export function EarningsTable({ items }: { items: EarningItem[] }) {
           Every obligation for this provider, with what the customer paid, what was deducted and what is owed.
         </caption>
         <thead>
-          <tr className="font-mono text-[11px] tracking-wider text-slate-500 uppercase">
+          <tr className="font-sans text-[11px] tracking-wider text-slate-500 uppercase">
             <th scope="col" className="pb-2">Job</th>
             <th scope="col" className="pb-2">Completed</th>
             <th scope="col" className="pb-2 text-right">Gross paid</th>
@@ -289,16 +289,16 @@ export function EarningsTable({ items }: { items: EarningItem[] }) {
                   ? new Date(item.completedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
                   : 'Not complete yet'}
               </td>
-              <td className="py-2.5 pr-3 text-right font-mono text-slate-800">
+              <td className="py-2.5 pr-3 text-right font-sans text-slate-800">
                 {formatMoney(item.grossMinor, item.currencyCode)}
               </td>
               <td className="py-2.5 pr-3 text-right text-xs text-slate-500">
                 {PLATFORM_FEE_STATUS.startsWith('No fee schedule') ? 'None charged' : formatMoney(0, item.currencyCode)}
               </td>
-              <td className="py-2.5 pr-3 text-right font-mono text-xs text-slate-600">
+              <td className="py-2.5 pr-3 text-right font-sans text-xs text-slate-600">
                 {item.refundedMinor > 0 ? `−${formatMoney(item.refundedMinor, item.currencyCode)}` : '—'}
               </td>
-              <td className="py-2.5 pr-3 text-right font-mono font-semibold text-slate-900">
+              <td className="py-2.5 pr-3 text-right font-sans font-semibold text-slate-900">
                 {formatMoney(item.netPayableMinor, item.currencyCode)}
               </td>
               <td className="py-2.5 text-xs">

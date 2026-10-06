@@ -80,7 +80,7 @@ export default async function PolicyPage({ params }: { params: Params }) {
         sidebarTitle="Policies"
         activeHref={`/legal/${policy.slug}`}
         meta={
-          <dl className="grid gap-1.5 font-mono text-[11px]">
+          <dl className="grid gap-1.5 font-sans text-[11px]">
             <div className="flex justify-between gap-3">
               <dt className="text-slate-500">Version</dt>
               <dd className="text-right font-bold text-slate-900">{policy.version ?? '—'}</dd>
@@ -129,7 +129,7 @@ export default async function PolicyPage({ params }: { params: Params }) {
         {!policy.published ? <NotInForceNotice /> : null}
 
         <div className="scroll-mt-24">
-          <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             What this document will cover
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">

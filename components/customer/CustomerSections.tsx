@@ -35,7 +35,7 @@ function StatusPill({ pill }: { pill: ActiveRequest['pill'] }) {
         ? 'bg-primary-subtle text-primary'
         : 'bg-slate-100 text-slate-600';
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider uppercase ${cls}`}>
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider uppercase ${cls}`}>
       {pill.label}
     </span>
   );
@@ -84,7 +84,7 @@ function SectionCard({
 export function CustomerHero({ firstName }: { firstName: string | null }) {
   return (
     <section className="rounded-2xl border border-solid border-primary/10 bg-primary-surface p-6 sm:p-8">
-      <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+      <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
         {firstName ? `Welcome back, ${firstName}` : 'Welcome back'}
       </p>
       <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
@@ -128,7 +128,7 @@ export function NewCustomerBanner() {
         scoping questions, say where and when, then submit. Providers who pass verification can then
         quote it, and you compare itemized quotes before anything is agreed.
       </p>
-      <Link href={CUSTOMER_PATHS.newRequest} className="mt-4 inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-sm font-bold tracking-wide text-primary-deep uppercase no-underline shadow-sm transition-colors hover:bg-amber-500">
+      <Link href={CUSTOMER_PATHS.newRequest} className="mt-4 inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-sm font-bold tracking-wide text-primary-deep uppercase no-underline shadow-sm transition-colors hover:bg-amber-500">
         Create your first request
         <ArrowRight aria-hidden="true" className="h-4 w-4" />
       </Link>
@@ -178,7 +178,7 @@ export function ActionRequiredBanner({
       {paymentsDue.length > 0 ? (
         <Link
           href={`/customer/payments/${paymentsDue[0].obligationId}/checkout`}
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-secondary px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-primary-deep uppercase no-underline transition-colors hover:bg-amber-500"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-secondary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary-deep uppercase no-underline transition-colors hover:bg-amber-500"
         >
           Pay Due Amount
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -211,7 +211,7 @@ export function ActiveRequestsCard({ requests }: { requests: ActiveRequest[] }) 
                 </Link>
                 <StatusPill pill={request.pill} />
               </div>
-              <p className="mt-1 font-mono text-[11px] text-slate-500">
+              <p className="mt-1 font-sans text-[11px] text-slate-500">
                 {requestReference(request.id)}
                 {request.serviceName ? ` · ${request.serviceName}` : ''}
                 {request.locationName ? ` · ${request.locationName}` : ''}
@@ -257,7 +257,7 @@ export function QuotesCard({ quotes }: { quotes: QuoteAwaitingReview[] }) {
                   {quote.requestLabel}
                 </Link>
                 {quote.totalMinor !== null ? (
-                  <span className="font-mono text-sm font-bold text-slate-900">
+                  <span className="font-sans text-sm font-bold text-slate-900">
                     {formatMoney(quote.totalMinor, quote.currencyCode)}
                   </span>
                 ) : (
@@ -270,7 +270,7 @@ export function QuotesCard({ quotes }: { quotes: QuoteAwaitingReview[] }) {
                 </p>
               ) : null}
               {quote.validUntil ? (
-                <p className="mt-1 font-mono text-[11px] text-slate-500">
+                <p className="mt-1 font-sans text-[11px] text-slate-500">
                   Valid until {new Date(quote.validUntil).toLocaleDateString('en-GB', { dateStyle: 'medium' })}
                 </p>
               ) : null}
@@ -304,7 +304,7 @@ export function ScheduledCard({ scheduled }: { scheduled: ScheduledWork[] }) {
               >
                 {item.requestLabel}
               </Link>
-              <p className="mt-1 font-mono text-[11px] text-slate-500">
+              <p className="mt-1 font-sans text-[11px] text-slate-500">
                 {item.scheduledStart
                   ? new Date(item.scheduledStart).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })
                   : 'Time not agreed yet'}
@@ -344,11 +344,11 @@ export function PaymentsCard({ payments }: { payments: PaymentDue[] }) {
                 >
                   {payment.requestLabel}
                 </Link>
-                <span className="font-mono text-sm font-bold text-slate-900">
+                <span className="font-sans text-sm font-bold text-slate-900">
                   {formatMoney(payment.amountMinor, payment.currencyCode)}
                 </span>
               </div>
-              <p className="mt-1 font-mono text-[11px] text-slate-500">
+              <p className="mt-1 font-sans text-[11px] text-slate-500">
                 {payment.status === 'funding' ? 'Payment started, not confirmed' : 'Awaiting payment'}
               </p>
             </li>

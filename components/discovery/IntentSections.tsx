@@ -219,7 +219,7 @@ function RelatedList({
 
   return (
     <section aria-label={heading}>
-      <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         {heading}
       </h2>
       <ul className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -412,7 +412,7 @@ export function ProblemPageView({
               {problem.services.length} service{problem.services.length === 1 ? '' : 's'} linked
             </MetaChip>
             {place ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-slate-200 uppercase">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-slate-200 uppercase">
                 <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
                 {place}
               </span>
@@ -480,7 +480,7 @@ export function OutcomePageView({
               <MetaChip>{outcome.planningSteps.length}-step process</MetaChip>
             ) : null}
             {place ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-slate-200 uppercase">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-slate-200 uppercase">
                 <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
                 {place}
               </span>
@@ -547,7 +547,7 @@ export function ProblemBody({
 
         {problem.guidance.length ? (
           <div className="mt-5 max-w-3xl">
-            <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What to note before you ask for a quote
             </h3>
             <div className="mt-3">
@@ -726,7 +726,7 @@ export function OutcomeBody({
         {/* "Required trades" is answered from the catalog rather than from a plan:
             the platform can only name trades it actually has services for. */}
         <div className="mt-5 max-w-3xl rounded-xl border border-solid border-slate-200/80 bg-slate-50 p-5">
-          <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Trades involved
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">

@@ -61,7 +61,7 @@ export function HelpSearchForm({ query, compact = false }: { query?: string; com
     <form method="get" action="/help" role="search" className="w-full">
       <label
         htmlFor="help-search"
-        className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-white/80 uppercase"
+        className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-white/80 uppercase"
       >
         Search knowledge base
       </label>
@@ -83,7 +83,7 @@ export function HelpSearchForm({ query, compact = false }: { query?: string; com
         </div>
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-mono text-sm font-bold text-white transition-colors hover:bg-secondary-dark"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white transition-colors hover:bg-secondary-dark"
         >
           Search
         </button>
@@ -153,7 +153,7 @@ export function StatusStrip({ status }: { status: SystemStatus }) {
           </div>
         </div>
         {checked ? (
-          <p className="font-mono text-xs text-slate-500">
+          <p className="font-sans text-xs text-slate-500">
             Checked <time dateTime={status.checkedAt ?? undefined}>{checked}</time>
           </p>
         ) : null}
@@ -175,7 +175,7 @@ export function StatusStrip({ status }: { status: SystemStatus }) {
                     copy.tone === 'ok' ? 'bg-primary' : copy.tone === 'warn' ? 'bg-secondary' : 'bg-red-600'
                   }`}
                 />
-                <span className="font-mono text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+                <span className="font-sans text-[11px] font-bold tracking-wider text-slate-600 uppercase">
                   {copy.label}
                 </span>
               </span>
@@ -186,7 +186,7 @@ export function StatusStrip({ status }: { status: SystemStatus }) {
 
       {status.incidents.length > 0 ? (
         <div className="mt-5 border-t border-solid border-slate-200 pt-4">
-          <h3 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h3 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Open incidents
           </h3>
           <ul className="mt-3 grid gap-3">
@@ -227,7 +227,7 @@ export function StatusStrip({ status }: { status: SystemStatus }) {
 }
 
 const BADGE_MAJOR =
-  'inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-red-700 uppercase';
+  'inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-red-700 uppercase';
 
 export function HelpCategoryGrid({
   categories,
@@ -246,7 +246,7 @@ export function HelpCategoryGrid({
             className={`${CARD_INTERACTIVE} flex h-full flex-col justify-between gap-3 p-4 no-underline`}
           >
             <div>
-              <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 {category.forLine}
               </p>
               <p className="mt-1 text-sm font-bold tracking-tight text-slate-900">{category.title}</p>
@@ -291,7 +291,7 @@ export function HelpArticleList({
           <Link href={article.href} className={`${CARD} block p-4 no-underline transition-shadow hover:shadow-md`}>
             <span className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-bold tracking-tight text-slate-900">{article.title}</span>
-              <span className="flex items-center gap-1 font-mono text-[11px] text-slate-500">
+              <span className="flex items-center gap-1 font-sans text-[11px] text-slate-500">
                 <Clock aria-hidden="true" className="h-3 w-3" />
                 {article.readMinutes} min
               </span>
@@ -343,7 +343,7 @@ export function HelpSearchResults({ query, hits }: { query: string; hits: HelpSe
             href={hit.anchor ? `${hit.article.href}#${hit.anchor}` : hit.article.href}
             className={`${CARD} block p-4 no-underline transition-shadow hover:shadow-md`}
           >
-            <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               {hit.article.categoryTitle}
             </span>
             <span className="mt-1 block text-sm font-bold tracking-tight text-slate-900">{hit.article.title}</span>
@@ -458,7 +458,7 @@ export function ArticleFooter({ article }: { article: PublicHelpArticle }) {
       <div className="grid max-w-3xl gap-6">
         {article.related.length > 0 ? (
           <section aria-labelledby="related-heading">
-            <h2 id="related-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 id="related-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Where this connects
             </h2>
             <ul className="mt-3 grid gap-2">

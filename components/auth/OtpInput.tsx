@@ -110,7 +110,7 @@ export function OtpInput({
   return (
     <div>
       <span
-        className="mb-1.5 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+        className="mb-1.5 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
         aria-hidden="true"
       >
         {label}

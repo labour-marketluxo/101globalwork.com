@@ -49,7 +49,7 @@ import {
  */
 
 const TEAL =
-  'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase';
+  'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase';
 
 export function AssetNotice({
   failed,
@@ -281,7 +281,7 @@ export function AddAssetForm({
 
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
         >
           <Plus aria-hidden="true" className="h-3.5 w-3.5" />
           Register this asset
@@ -402,7 +402,7 @@ export function AssetTimeline({ detail }: { detail: AssetDetailRow }) {
   if (detail.events.length === 0) {
     return (
       <section className={`${CARD} p-5`}>
-        <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           <History aria-hidden="true" className="h-4 w-4 text-slate-400" />
           History
         </h2>
@@ -416,7 +416,7 @@ export function AssetTimeline({ detail }: { detail: AssetDetailRow }) {
 
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         <History aria-hidden="true" className="h-4 w-4 text-slate-400" />
         History
       </h2>
@@ -441,7 +441,7 @@ export function AssetTimeline({ detail }: { detail: AssetDetailRow }) {
                 <span className="text-sm font-semibold text-slate-900">
                   {ASSET_EVENT_KIND_LABEL[event.kind] ?? event.kind}
                 </span>
-                <span className="font-mono text-[11px] text-slate-500">{formatDate(event.occurredOn)}</span>
+                <span className="font-sans text-[11px] text-slate-500">{formatDate(event.occurredOn)}</span>
               </p>
               <p className="mt-0.5 text-sm leading-relaxed whitespace-pre-wrap text-slate-700">{event.summary}</p>
               <p className="mt-0.5 text-xs text-slate-500">
@@ -479,7 +479,7 @@ export function AssetDetailsForm({
 }) {
   return (
     <details className={`${CARD} p-5`}>
-      <summary className="cursor-pointer font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <summary className="cursor-pointer font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Edit the details
       </summary>
       <form action={updateAssetAction} className="mt-4 space-y-4">
@@ -598,7 +598,7 @@ export function AssetDetailsForm({
 
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
         >
           Save the details
         </button>
@@ -680,7 +680,7 @@ export function LogServiceEventForm({ detail }: { detail: AssetDetailRow }) {
 
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
         >
           <Plus aria-hidden="true" className="h-3.5 w-3.5" />
           Add to history
@@ -695,7 +695,7 @@ export function WarrantyClaimPanel({ detail }: { detail: AssetDetailRow }) {
 
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         <ShieldCheck aria-hidden="true" className="h-4 w-4 text-slate-400" />
         Warranty claims
       </h2>
@@ -796,7 +796,7 @@ export function WarrantyClaimPanel({ detail }: { detail: AssetDetailRow }) {
             </fieldset>
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
             >
               <FileText aria-hidden="true" className="h-3.5 w-3.5" />
               Record the claim
@@ -821,7 +821,7 @@ export function AftercareActions({ detail }: { detail: AssetDetailRow }) {
 
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">Aftercare</h2>
+      <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">Aftercare</h2>
 
       {due ? (
         <p className="mt-2 rounded-lg border border-solid border-amber-300 bg-secondary-light px-3 py-2 text-xs font-semibold text-amber-900">
@@ -833,20 +833,20 @@ export function AftercareActions({ detail }: { detail: AssetDetailRow }) {
       <div className="mt-3 space-y-3">
         <Link
           href="/customer/requests/new"
-          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
         >
           <Wrench aria-hidden="true" className="h-4 w-4" />
           {due ? 'Schedule maintenance' : 'Request maintenance'}
         </Link>
         <Link
           href="/customer/requests/new"
-          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
         >
           Hire {detail.installedByName ?? 'the original provider'} again
         </Link>
         <a
           href={`/customer/assets/${detail.assetId}/documents`}
-          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
         >
           <Download aria-hidden="true" className="h-3.5 w-3.5" />
           Download documents

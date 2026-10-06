@@ -108,7 +108,7 @@ export default async function OrganisationBudgetsPage({
             <table className="w-full min-w-max border-collapse text-left text-xs">
               <caption className="sr-only">Budget periods for this organisation</caption>
               <thead>
-                <tr className="border-b border-solid border-slate-200 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <tr className="border-b border-solid border-slate-200 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   <th scope="col" className="py-2 pr-4">Site</th>
                   <th scope="col" className="py-2 pr-4">Period</th>
                   <th scope="col" className="py-2 pr-4">Committed</th>
@@ -170,7 +170,7 @@ export default async function OrganisationBudgetsPage({
             <table className="w-full min-w-max border-collapse text-left text-xs">
               <caption className="sr-only">Reconciled obligations and payouts for the selected cost centres</caption>
               <thead>
-                <tr className="border-b border-solid border-slate-200 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <tr className="border-b border-solid border-slate-200 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   <th scope="col" className="py-2 pr-4">Reference</th>
                   <th scope="col" className="py-2 pr-4">Project</th>
                   <th scope="col" className="py-2 pr-4">Cost centre</th>
@@ -183,7 +183,7 @@ export default async function OrganisationBudgetsPage({
               <tbody>
                 {ledger.map(entry => (
                   <tr key={`${entry.requestId}-${entry.costCentre ?? 'none'}`} className="border-b border-solid border-slate-100 last:border-0">
-                    <td className="py-2.5 pr-4 font-mono text-slate-500">{entry.reference}</td>
+                    <td className="py-2.5 pr-4 font-sans text-slate-500">{entry.reference}</td>
                     <td className="py-2.5 pr-4 text-slate-800">{entry.title}</td>
                     <td className="py-2.5 pr-4 text-slate-500">{entry.costCentre ?? 'Unlinked'}</td>
                     <td className="py-2.5 pr-4 text-slate-500">{entry.state.replaceAll('_', ' ')}</td>
@@ -247,7 +247,7 @@ export default async function OrganisationBudgetsPage({
               <PendingButton
                 idle="Create cost centre"
                 pending="Saving…"
-                className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
           </form>
@@ -293,7 +293,7 @@ export default async function OrganisationBudgetsPage({
                   <PendingButton
                     idle="Link project"
                     pending="Saving…"
-                    className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </>

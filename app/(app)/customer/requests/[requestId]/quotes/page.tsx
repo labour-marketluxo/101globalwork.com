@@ -103,7 +103,7 @@ export default async function QuoteComparisonPage({
 
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
             <section className={`${CARD} p-5`}>
-              <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 <Info aria-hidden="true" className="h-4 w-4 text-slate-400" />
                 What these terms are, and what the platform does with them
               </h2>
@@ -134,7 +134,7 @@ export default async function QuoteComparisonPage({
             </section>
 
             <section className={`${CARD} p-5`}>
-              <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 <Info aria-hidden="true" className="h-4 w-4 text-slate-400" />
                 How this comparison is ordered and what it leaves out
               </h2>

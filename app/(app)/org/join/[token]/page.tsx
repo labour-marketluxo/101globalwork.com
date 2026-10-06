@@ -38,7 +38,7 @@ export default async function OrganisationJoinPage({
   return (
     <div className={PAGE_SHELL}>
       <div className={`${CARD} mx-auto max-w-xl p-6`}>
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Organisation invitation</p>
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Organisation invitation</p>
         <h1 className="mt-2 text-xl font-bold tracking-tight text-slate-900">Join this organisation</h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           Accepting adds you as a member with the role and the site scope the invitation carries. Your signed-in address
@@ -61,7 +61,7 @@ export default async function OrganisationJoinPage({
           <PendingButton
             idle="Accept and join"
             pending="Joining…"
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-mono text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-6 py-3 font-sans text-sm font-bold tracking-wide text-white shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-70"
           />
         </form>
       </div>

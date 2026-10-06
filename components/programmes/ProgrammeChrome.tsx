@@ -86,7 +86,7 @@ export function RoleBadge({ role }: { role: string | null }) {
   return (
     <span
       title={copy.explains}
-      className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-slate-600 uppercase"
+      className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-slate-600 uppercase"
     >
       <ShieldCheck aria-hidden="true" className="h-3 w-3" />
       {copy.label}
@@ -108,7 +108,7 @@ export function CellValue({ cell, suffix }: { cell: PrivacyCell; suffix?: string
     return (
       <span
         title={cellReasonText(cell)}
-        className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-slate-500 uppercase"
+        className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-slate-500 uppercase"
       >
         <Lock aria-hidden="true" className="h-3 w-3" />
         Withheld
@@ -119,7 +119,7 @@ export function CellValue({ cell, suffix }: { cell: PrivacyCell; suffix?: string
   return (
     <span
       title={`Noised count. ${cell.epsilon ? `Laplace mechanism, epsilon ${cell.epsilon}.` : ''} This number is deliberately approximate.`}
-      className="font-mono text-sm font-bold tracking-tight text-slate-900"
+      className="font-sans text-sm font-bold tracking-tight text-slate-900"
     >
       ~{cell.value}
       {suffix ? <span className="ml-0.5 text-xs font-normal text-slate-500">{suffix}</span> : null}
@@ -133,7 +133,7 @@ export function RateValue({ rate }: { rate: PrivacyRate }) {
     return (
       <span
         title={cellReasonText({ ...reason, reason: 'component_below_threshold' })}
-        className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide text-slate-500 uppercase"
+        className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide text-slate-500 uppercase"
       >
         <Lock aria-hidden="true" className="h-3 w-3" />
         Withheld
@@ -144,7 +144,7 @@ export function RateValue({ rate }: { rate: PrivacyRate }) {
   return (
     <span
       title={`Computed from two noised counts: ${rate.numerator.value} of ${rate.denominator.value}. The percentage is approximate.`}
-      className="font-mono text-sm font-bold tracking-tight text-slate-900"
+      className="font-sans text-sm font-bold tracking-tight text-slate-900"
     >
       ~{rate.percent}%
     </span>
@@ -169,24 +169,24 @@ export function PrivacyPanel({ privacy }: { privacy: PrivacySummary }) {
 
       <dl className="mt-3 grid gap-x-6 gap-y-3 text-xs sm:grid-cols-4">
         <div>
-          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+          <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
             Minimum group
           </dt>
-          <dd className="mt-0.5 font-mono text-sm font-bold text-slate-900">{privacy.minGroupSize}</dd>
+          <dd className="mt-0.5 font-sans text-sm font-bold text-slate-900">{privacy.minGroupSize}</dd>
         </div>
         <div>
-          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">Epsilon</dt>
-          <dd className="mt-0.5 font-mono text-sm font-bold text-slate-900">{privacy.epsilon}</dd>
+          <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">Epsilon</dt>
+          <dd className="mt-0.5 font-sans text-sm font-bold text-slate-900">{privacy.epsilon}</dd>
         </div>
         <div>
-          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+          <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
             Figures published
           </dt>
-          <dd className="mt-0.5 font-mono text-sm font-bold text-slate-900">{privacy.cellsPublished}</dd>
+          <dd className="mt-0.5 font-sans text-sm font-bold text-slate-900">{privacy.cellsPublished}</dd>
         </div>
         <div>
-          <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">Withheld</dt>
-          <dd className="mt-0.5 font-mono text-sm font-bold text-slate-900">{privacy.cellsWithheld}</dd>
+          <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">Withheld</dt>
+          <dd className="mt-0.5 font-sans text-sm font-bold text-slate-900">{privacy.cellsWithheld}</dd>
         </div>
       </dl>
 

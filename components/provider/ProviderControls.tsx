@@ -85,12 +85,12 @@ export function AvailabilityToggle({
 }) {
   const hero = variant === 'hero';
   const className = hero
-    ? `inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 font-mono text-sm font-bold tracking-wide uppercase shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70 ${
+    ? `inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 font-sans text-sm font-bold tracking-wide uppercase shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70 ${
         acceptsNewWork
           ? 'border border-solid border-primary-subtle bg-primary-subtle text-primary hover:bg-white'
           : 'border-0 bg-secondary text-white hover:bg-secondary-dark'
       }`
-    : `inline-flex items-center gap-2 rounded-lg px-3.5 py-2 font-mono text-xs font-bold tracking-wide uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70 ${
+    : `inline-flex items-center gap-2 rounded-lg px-3.5 py-2 font-sans text-xs font-bold tracking-wide uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70 ${
         acceptsNewWork
           ? 'border border-solid border-primary-subtle bg-primary-subtle text-primary hover:bg-white'
           : 'border-0 bg-secondary text-white hover:bg-secondary-dark'

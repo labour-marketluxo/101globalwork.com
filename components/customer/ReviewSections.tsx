@@ -96,7 +96,7 @@ export function ReviewForm({
 }) {
   return (
     <section className={`${CARD} p-5 sm:p-6`}>
-      <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Your review of {providerName}
       </h2>
       <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
@@ -153,7 +153,7 @@ export function ReviewForm({
 
         <button
           type="submit"
-          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-primary px-5 py-3 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
+          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-primary px-5 py-3 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark"
         >
           <Star aria-hidden="true" className="h-4 w-4" />
           Post this review
@@ -170,7 +170,7 @@ export function ReviewSummary({ review }: { review: ProviderReview }) {
     <section className={`${CARD} p-5 sm:p-6`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             <BadgeCheck aria-hidden="true" className="h-4 w-4 text-primary" />
             Your review
           </h2>
@@ -183,7 +183,7 @@ export function ReviewSummary({ review }: { review: ProviderReview }) {
             })}
           </p>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-sm font-bold text-primary">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-sm font-bold text-primary">
           <Star aria-hidden="true" className="h-3.5 w-3.5" />
           {average.toFixed(1)} / 5
         </span>
@@ -260,7 +260,7 @@ export function ReviewNotAvailable({
 
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         <Lock aria-hidden="true" className="h-4 w-4 text-slate-400" />
         No review to write yet
       </h2>
@@ -281,7 +281,7 @@ export function ReviewNotAvailable({
 export function ReviewAudienceNote() {
   return (
     <section className={`${CARD} p-5`}>
-      <h2 className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <h2 className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         <Info aria-hidden="true" className="h-4 w-4 text-slate-400" />
         Who reads this
       </h2>

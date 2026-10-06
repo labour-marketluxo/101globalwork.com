@@ -98,7 +98,7 @@ export default async function HelpArticlePage({ params }: { params: Params }) {
         sidebarTitle={category.title}
         activeHref={article.href}
         meta={
-          <dl className="grid gap-1.5 font-mono text-[11px]">
+          <dl className="grid gap-1.5 font-sans text-[11px]">
             <div className="flex justify-between gap-3">
               <dt className="text-slate-500">Read</dt>
               <dd className="font-bold text-slate-900">{article.readMinutes} min</dd>

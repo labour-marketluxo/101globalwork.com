@@ -26,7 +26,7 @@ export function ProgrammeInsightsBody({ read }: { read: ProgrammeInsightsRead })
         </h2>
         <dl className="grid gap-3 sm:grid-cols-2">
           <div className={`${CARD} p-5`}>
-            <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+            <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
               Completion
             </dt>
             <dd className="mt-1">
@@ -37,7 +37,7 @@ export function ProgrammeInsightsBody({ read }: { read: ProgrammeInsightsRead })
             </dd>
           </div>
           <div className={`${CARD} p-5`}>
-            <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">Placement</dt>
+            <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">Placement</dt>
             <dd className="mt-1">
               <RateValue rate={read.outcomes.placement} />
             </dd>
@@ -84,7 +84,7 @@ export function ProgrammeInsightsBody({ read }: { read: ProgrammeInsightsRead })
 
         <div className="grid gap-3 lg:grid-cols-2">
           <div className={`${CARD} p-5`}>
-            <h3 className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+            <h3 className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
               Supply — pool by region
             </h3>
             {read.regions.length === 0 ? (
@@ -102,7 +102,7 @@ export function ProgrammeInsightsBody({ read }: { read: ProgrammeInsightsRead })
           </div>
 
           <div className={`${CARD} p-5`}>
-            <h3 className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+            <h3 className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
               Demand — open requests
             </h3>
             <div className="mt-2">
@@ -130,16 +130,16 @@ export function ProgrammeInsightsBody({ read }: { read: ProgrammeInsightsRead })
               <caption className="sr-only">Workers holding each credential kind, by decision state.</caption>
               <thead>
                 <tr className="border-b border-solid border-slate-200">
-                  <th scope="col" className="px-4 py-3 font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                  <th scope="col" className="px-4 py-3 font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                     Kind
                   </th>
-                  <th scope="col" className="px-4 py-3 text-right font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                  <th scope="col" className="px-4 py-3 text-right font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                     Verified
                   </th>
-                  <th scope="col" className="px-4 py-3 text-right font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                  <th scope="col" className="px-4 py-3 text-right font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                     Pending
                   </th>
-                  <th scope="col" className="px-4 py-3 text-right font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                  <th scope="col" className="px-4 py-3 text-right font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                     Rejected
                   </th>
                 </tr>

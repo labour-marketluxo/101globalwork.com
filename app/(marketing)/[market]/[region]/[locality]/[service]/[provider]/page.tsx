@@ -219,7 +219,7 @@ export default async function ContextualProviderProfilePage({
             ) : (
               <span className={BADGE_SLATE}>Verification pending</span>
             )}
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-slate-200 uppercase">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-solid border-white/15 bg-white/10 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-slate-200 uppercase">
               <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
               {place}
             </span>

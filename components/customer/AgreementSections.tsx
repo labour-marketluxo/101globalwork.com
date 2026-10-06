@@ -33,7 +33,7 @@ export function AgreementTerms({ sections }: { sections: AgreementSection[] }) {
       <div className="mt-5 space-y-6">
         {sections.map(section => (
           <div key={section.title}>
-            <h3 className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+            <h3 className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
               {section.title}
             </h3>
             <ul className="mt-2 space-y-2">
@@ -64,14 +64,14 @@ export function AgreementAlternatives({ agreement }: { agreement: ProjectAgreeme
     <section aria-labelledby="alternatives-heading" className={`${CARD} p-5`}>
       <h2
         id="alternatives-heading"
-        className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+        className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase"
       >
         Not ready to accept?
       </h2>
 
       <a
         href={`/customer/projects/${agreement.assignmentId}/agreement/download`}
-        className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+        className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
       >
         <Download aria-hidden="true" className="h-3.5 w-3.5" />
         Download Draft Agreement
@@ -111,7 +111,7 @@ export function AgreementAlternatives({ agreement }: { agreement: ProjectAgreeme
           </p>
           <button
             type="submit"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
           >
             Send the question
           </button>
@@ -150,7 +150,7 @@ export function AgreementAlternatives({ agreement }: { agreement: ProjectAgreeme
           </p>
           <button
             type="submit"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
           >
             <CircleSlash aria-hidden="true" className="h-3.5 w-3.5" />
             Decline and cancel the request
@@ -199,7 +199,7 @@ export function AcceptancePanel({
       <DecisionNotice failed={failed} verify={verify} signed={signed} decided={asked ? 'asked' : undefined} />
 
       <div className={`${CARD} p-5`}>
-        <h2 id="accept-heading" className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <h2 id="accept-heading" className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           <ShieldCheck aria-hidden="true" className="h-4 w-4 text-slate-400" />
           Accepting this agreement
         </h2>
@@ -226,7 +226,7 @@ export function AcceptancePanel({
               </div>
               <div className="sm:col-span-2">
                 <dt className={LABEL}>Terms version</dt>
-                <dd className="font-mono text-[11px] break-all text-slate-600">
+                <dd className="font-sans text-[11px] break-all text-slate-600">
                   {acceptance.consentVersion} · sha256 {acceptance.agreementHash}
                 </dd>
               </div>
@@ -266,7 +266,7 @@ export function AcceptancePanel({
                   pattern="\d{6}"
                   maxLength={6}
                   required
-                  className={`${FIELD} max-w-40 font-mono text-lg tracking-[0.4em]`}
+                  className={`${FIELD} max-w-40 font-sans text-lg tracking-[0.4em]`}
                   placeholder="000000"
                 />
                 <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
@@ -277,7 +277,7 @@ export function AcceptancePanel({
 
               <button
                 type="submit"
-                className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+                className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
               >
                 <KeyRound aria-hidden="true" className="h-4 w-4" />
                 Verify and sign
@@ -311,7 +311,7 @@ export function AcceptancePanel({
 
             <button
               type="submit"
-              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
             >
               <MailCheck aria-hidden="true" className="h-4 w-4" />
               Sign &amp; Accept Agreement
@@ -320,7 +320,7 @@ export function AcceptancePanel({
             <p className="flex items-start gap-2 text-xs leading-relaxed text-slate-500">
               <AlertTriangle aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-600" />
               <span>
-                There are no <span className="font-mono">Download</span> buttons here beyond the browser&apos;s
+                There are no <span className="font-sans">Download</span> buttons here beyond the browser&apos;s
                 own print-to-PDF: no document is generated or stored, only these terms and the record of
                 accepting them. Nothing on this page is an e-signature.
               </span>
@@ -330,7 +330,7 @@ export function AcceptancePanel({
       </div>
 
       <div className={`${CARD} p-5`}>
-        <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+        <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           Recorded against this agreement
         </h2>
         <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-2">
@@ -347,7 +347,7 @@ export function AcceptancePanel({
           </div>
           <div>
             <dt className={LABEL}>Assignment</dt>
-            <dd className="font-mono text-[11px] break-all text-slate-600">{agreement.assignmentId}</dd>
+            <dd className="font-sans text-[11px] break-all text-slate-600">{agreement.assignmentId}</dd>
           </div>
           <div>
             <dt className={LABEL}>Status</dt>

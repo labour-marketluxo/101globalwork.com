@@ -43,7 +43,7 @@ export function ProjectHeader({ project }: { project: Project }) {
     <div className="grid gap-4">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
             Shared project · you are the {ROLE_LABEL[project.role].toLowerCase()}
           </p>
           <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
@@ -55,7 +55,7 @@ export function ProjectHeader({ project }: { project: Project }) {
             {started ? <span>Starts {started}</span> : <span>No date agreed yet</span>}
           </p>
         </div>
-        <span className={project.header.state === 'completed' ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
+        <span className={project.header.state === 'completed' ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
           {PROJECT_STATE_COPY[project.header.state] ?? project.header.state.replaceAll('_', ' ')}
         </span>
       </div>
@@ -66,7 +66,7 @@ export function ProjectHeader({ project }: { project: Project }) {
         <span className="flex items-center gap-2">
           <span
             aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-mono text-xs font-bold text-primary"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
           >
             {initialsOf(project.header.customerName, 'C')}
           </span>
@@ -78,7 +78,7 @@ export function ProjectHeader({ project }: { project: Project }) {
         <span className="flex items-center gap-2">
           <span
             aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-mono text-xs font-bold text-primary"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
           >
             {initialsOf(project.header.providerName, 'P')}
           </span>
@@ -121,7 +121,7 @@ export function ProjectOverview({ project }: { project: Project }) {
 
       {project.nextAction ? (
         <section className={`${CARD} p-5`} aria-labelledby="next-action-heading">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Your next action</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Your next action</p>
           <h2 id="next-action-heading" className="mt-1.5 text-base font-bold tracking-tight text-slate-900">
             {project.nextAction.title}
           </h2>
@@ -129,7 +129,7 @@ export function ProjectOverview({ project }: { project: Project }) {
           {href ? (
             <Link
               href={href}
-              className="mt-4 inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
+              className="mt-4 inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
             >
               Go there
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -145,7 +145,7 @@ export function ProjectOverview({ project }: { project: Project }) {
       <details className={`${CARD} p-5`}>
         <summary className="flex cursor-pointer items-center justify-between gap-3 text-sm font-bold tracking-tight text-slate-900">
           <span>Payment and agreement</span>
-          <span className="font-mono text-xs font-normal text-slate-500">
+          <span className="font-sans text-xs font-normal text-slate-500">
             {project.money.amountMinor && project.money.currencyCode
               ? `${formatMoney(project.money.amountMinor, project.money.currencyCode)} · ${(project.money.obligationStatus ?? 'no obligation').replaceAll('_', ' ')}`
               : 'No payment obligation'}
@@ -153,7 +153,7 @@ export function ProjectOverview({ project }: { project: Project }) {
         </summary>
         <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-2">
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Obligation</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Obligation</dt>
             <dd className="mt-0.5 text-slate-700">
               {project.money.obligationStatus ? project.money.obligationStatus.replaceAll('_', ' ') : 'None on this job'}
               {project.money.amountMinor && project.money.currencyCode
@@ -162,13 +162,13 @@ export function ProjectOverview({ project }: { project: Project }) {
             </dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Payout</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Payout</dt>
             <dd className="mt-0.5 text-slate-700">
               {project.money.payoutStatus ? project.money.payoutStatus.replaceAll('_', ' ') : 'No payout yet'}
             </dd>
           </div>
           <div className="sm:col-span-2">
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Agreement</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Agreement</dt>
             <dd className="mt-0.5 text-slate-700">
               {project.agreement
                 ? `${project.agreement.quoteVersion} accepted for ${formatMoney(project.agreement.totalMinor, project.agreement.currencyCode)}${
@@ -243,7 +243,7 @@ export function ChangesSection({ project }: { project: Project }) {
         <ul className="mt-3 grid gap-2">
           {project.changes.map(change => (
             <li key={change.id} className="rounded-xl border border-solid border-slate-200 p-3">
-              <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 {change.kind.replaceAll('_', ' ')} · {change.status}
               </p>
               <p className="mt-1 text-sm leading-relaxed whitespace-pre-line text-slate-700">{change.message}</p>

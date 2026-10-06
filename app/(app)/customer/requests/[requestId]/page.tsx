@@ -76,7 +76,7 @@ export default async function CustomerRequestDetailPage({
           <span className="text-slate-300" aria-hidden="true">
             /
           </span>
-          <span className="font-mono font-bold tracking-wider text-slate-500 uppercase">
+          <span className="font-sans font-bold tracking-wider text-slate-500 uppercase">
             REQ-{request.id.replace(/-/g, '').slice(0, 8).toUpperCase()}
           </span>
         </nav>
@@ -98,7 +98,7 @@ export default async function CustomerRequestDetailPage({
           {groups.length > 0 ? (
             <section aria-labelledby="quotes-heading" className={`${CARD} p-5`}>
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 id="quotes-heading" className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                <h2 id="quotes-heading" className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                   Quotes on this request
                 </h2>
                 {openForDecision > 0 ? (
@@ -117,7 +117,7 @@ export default async function CustomerRequestDetailPage({
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="min-w-0">
                           <p className="truncate text-sm font-semibold text-slate-900">{group.providerName}</p>
-                          <p className="mt-0.5 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                          <p className="mt-0.5 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                             version {group.latest.versionLabel}
                             {group.history.length > 0 ? ` · ${group.history.length} earlier` : ''}
                           </p>
@@ -155,7 +155,7 @@ export default async function CustomerRequestDetailPage({
               <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-solid border-slate-200 pt-4">
                 <Link
                   href={`/customer/requests/${request.id}/quotes`}
-                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-primary-dark"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white no-underline uppercase shadow-sm transition-colors hover:bg-primary-dark"
                 >
                   Open quotes comparison <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                 </Link>
@@ -166,7 +166,7 @@ export default async function CustomerRequestDetailPage({
             </section>
           ) : (
             <section className={`${CARD} p-5`}>
-              <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 Quotes on this request
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">
@@ -190,7 +190,7 @@ export default async function CustomerRequestDetailPage({
 
         <aside className="space-y-4">
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Matching status
             </h2>
             <div className="mt-4">
@@ -199,7 +199,7 @@ export default async function CustomerRequestDetailPage({
           </section>
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What you can do here
             </h2>
             <ul className="mt-2 space-y-2 text-xs leading-relaxed text-slate-600">
@@ -238,7 +238,7 @@ export default async function CustomerRequestDetailPage({
           />
 
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Where the money is
             </h2>
             {request.obligation ? (

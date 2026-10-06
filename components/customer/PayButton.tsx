@@ -20,7 +20,7 @@ export function PayButton({ label }: { label: string }) {
       type="submit"
       disabled={pending}
       aria-busy={pending}
-      className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-secondary"
+      className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-secondary"
     >
       {pending ? (
         <>
@@ -51,7 +51,7 @@ export function SendCodeButton({ label }: { label: string }) {
       type="submit"
       disabled={pending}
       aria-busy={pending}
-      className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-primary px-5 py-3 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
+      className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-primary px-5 py-3 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
     >
       {pending ? 'Sending…' : label}
     </button>

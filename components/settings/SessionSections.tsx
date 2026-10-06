@@ -47,7 +47,7 @@ function DeviceIcon({ session, className }: { session: SessionRecord; className:
 /** Teal, per the brief's "emerald/teal indicator tag" — the primary colour is this platform's teal. */
 function CurrentBadge() {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
       <CircleCheck aria-hidden="true" className="h-3 w-3" />
       Current session
     </span>
@@ -71,17 +71,17 @@ function SessionFacts({ session, now }: { session: SessionRecord; now: Date }) {
   return (
     <dl className="mt-3 grid gap-x-6 gap-y-2 text-xs sm:grid-cols-3">
       <div>
-        <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Device</dt>
+        <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Device</dt>
         <dd className="mt-0.5 text-slate-700" title={session.device.raw ?? undefined}>
           {session.device.label}
         </dd>
       </div>
       <div>
-        <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Address</dt>
-        <dd className="mt-0.5 font-mono text-slate-700">{session.ip ?? 'Not recorded'}</dd>
+        <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Address</dt>
+        <dd className="mt-0.5 font-sans text-slate-700">{session.ip ?? 'Not recorded'}</dd>
       </div>
       <div>
-        <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">{activity.label}</dt>
+        <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">{activity.label}</dt>
         <dd className="mt-0.5 flex items-center gap-1.5 text-slate-700">
           <Clock aria-hidden="true" className="h-3 w-3 text-slate-400" />
           {session.isCurrent ? 'Just now' : activity.value}
@@ -238,7 +238,7 @@ export function OtherSessionsPanel({
                     <h3 className="text-sm font-bold tracking-tight text-slate-900">
                       {session.device.label}
                     </h3>
-                    <p className="font-mono text-xs text-slate-500">
+                    <p className="font-sans text-xs text-slate-500">
                       Session {session.id.slice(0, 8)} · {session.aal === 'aal2' ? 'second factor' : 'password'}
                     </p>
                   </div>
@@ -293,7 +293,7 @@ export function DangerZone({
       <form action={revokeOtherSessionsAction} className="mt-4">
         <ConfirmSubmit
           label="Sign out all other devices"
-          triggerClassName="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
+          triggerClassName="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
           icon="danger"
           title="Sign out all other devices?"
           description={

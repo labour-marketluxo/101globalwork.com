@@ -33,7 +33,7 @@ function statusBadge(status: ProjectTask['status']) {
     <span
       className={
         copy.tone === 'teal'
-          ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+          ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
           : copy.tone === 'amber'
             ? BADGE_AMBER
             : BADGE_SLATE
@@ -107,7 +107,7 @@ export function ProjectWorkSection({
         <PendingButton
           idle="Apply"
           pending="Applying…"
-          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
         {filters.assignee || filters.status || filters.stage ? (
           <Link href={`/projects/${assignmentId}/work`} className={LINK_ARROW}>
@@ -269,7 +269,7 @@ export function ProjectWorkSection({
           <PendingButton
             idle="Add stage"
             pending="Adding…"
-            className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
           />
         </form>
       ) : null}
@@ -289,7 +289,7 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
       <section className={`${CARD} p-5`} aria-labelledby="task-heading">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+            <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
               {task.stageTitle} · task {task.ordinal}
             </p>
             <h2 id="task-heading" className="mt-1.5 text-lg font-bold tracking-tight text-slate-900">
@@ -317,7 +317,7 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
 
         <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-3">
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Window</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Window</dt>
             <dd className="mt-0.5 text-slate-700">
               {task.scheduledStart
                 ? `${new Date(task.scheduledStart).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}${
@@ -329,7 +329,7 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
             </dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Submitted</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Submitted</dt>
             <dd className="mt-0.5 text-slate-700">
               {task.submittedAt
                 ? new Date(task.submittedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -337,7 +337,7 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
             </dd>
           </div>
           <div>
-            <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Completed</dt>
+            <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Completed</dt>
             <dd className="mt-0.5 text-slate-700">
               {task.completedAt
                 ? new Date(task.completedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -382,7 +382,7 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
           <dl className="mt-3 grid gap-2 text-xs">
             {Object.entries(task.scopeParameters).map(([key, value]) => (
               <div key={key} className="rounded-xl border border-solid border-slate-200 p-3">
-                <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">{key.replaceAll('_', ' ')}</dt>
+                <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">{key.replaceAll('_', ' ')}</dt>
                 <dd className="mt-0.5 text-slate-700">{value || '—'}</dd>
               </div>
             ))}
@@ -446,8 +446,8 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
                     icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
                     className={
                       transition.status === 'completed'
-                        ? 'inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60'
-                        : 'inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60'
+                        ? 'inline-flex items-center gap-2 rounded-lg border-0 bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-secondary-dark disabled:cursor-not-allowed disabled:opacity-60'
+                        : 'inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60'
                     }
                   />
                 </div>
@@ -547,7 +547,7 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
               <PendingButton
                 idle="Save the task"
                 pending="Saving…"
-                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
           </form>
@@ -636,7 +636,7 @@ export function ProjectMessagesSection({
                         {message.authorName}
                         <span className="ml-2 font-normal text-slate-500">{ROLE_LABEL[message.authorRole]}</span>
                       </span>
-                      <span className="font-mono text-[11px] tracking-wide text-slate-400 uppercase">
+                      <span className="font-sans text-[11px] tracking-wide text-slate-400 uppercase">
                         {message.createdAt
                           ? new Date(message.createdAt).toLocaleString('en-GB', {
                               day: 'numeric',
@@ -745,7 +745,7 @@ export function ProjectMessagesSection({
             <PendingButton
               idle="Send message"
               pending="Sending…"
-              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             />
             <p className="text-xs leading-relaxed text-slate-500">
               The platform has no translation provider connected, so messages are stored and shown exactly as written.
@@ -775,7 +775,7 @@ export function ProjectMessagesSection({
             {activity.map((event, index) => (
               <li key={`${event.kind}-${index}`} className="flex flex-wrap items-center justify-between gap-2 border-b border-dashed border-slate-200 pb-2 text-xs last:border-0">
                 <span className="text-slate-700">{event.label}</span>
-                <span className="font-mono text-slate-400">
+                <span className="font-sans text-slate-400">
                   {event.at
                     ? new Date(event.at).toLocaleString('en-GB', {
                         day: 'numeric',

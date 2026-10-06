@@ -19,7 +19,7 @@ import Link from 'next/link';
 export default function NotFoundContent() {
   return (
     <div className="flex min-h-[75vh] flex-col items-center justify-center px-4 py-20 text-center">
-      <span className="mb-3 font-mono text-xs font-semibold tracking-wider text-[#F59E0B] uppercase">
+      <span className="mb-3 font-sans text-xs font-semibold tracking-wider text-[#F59E0B] uppercase">
         404
       </span>
       <h1 className="mb-4 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">

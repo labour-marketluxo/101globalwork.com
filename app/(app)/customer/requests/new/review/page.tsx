@@ -75,7 +75,7 @@ export default async function IntakeReviewPage({ searchParams }: { searchParams:
           {/* ── Intent ──────────────────────────────────────────────────────────────────── */}
           <section className={CARD}>
             <header className="flex items-center justify-between gap-3 border-b border-solid border-slate-200 px-5 py-3">
-              <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 {STEP_LABELS.intent}
               </h2>
               <Link href={`${CUSTOMER_PATHS.newRequest}?draft=${draft.id}`} className={LINK_ARROW}>
@@ -102,7 +102,7 @@ export default async function IntakeReviewPage({ searchParams }: { searchParams:
           {/* ── Clarify ─────────────────────────────────────────────────────────────────── */}
           <section className={CARD}>
             <header className="flex items-center justify-between gap-3 border-b border-solid border-slate-200 px-5 py-3">
-              <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 {STEP_LABELS.clarify}
               </h2>
               <Link href={`${CUSTOMER_PATHS.clarify}?draft=${draft.id}`} className={LINK_ARROW}>
@@ -126,14 +126,14 @@ export default async function IntakeReviewPage({ searchParams }: { searchParams:
                         </dt>
                         <dd className="mt-0.5 text-sm text-slate-800">
                           {value === NOT_SURE ? (
-                            <span className="font-mono text-[11px] font-bold tracking-wider text-amber-800 uppercase">
+                            <span className="font-sans text-[11px] font-bold tracking-wider text-amber-800 uppercase">
                               Not sure yet
                             </span>
                           ) : (
                             value
                           )}
                           {value !== NOT_SURE && isNotSure ? (
-                            <span className="ml-2 font-mono text-[11px] font-bold tracking-wider text-amber-800 uppercase">
+                            <span className="ml-2 font-sans text-[11px] font-bold tracking-wider text-amber-800 uppercase">
                               not certain
                             </span>
                           ) : null}
@@ -153,7 +153,7 @@ export default async function IntakeReviewPage({ searchParams }: { searchParams:
           {/* ── Logistics ───────────────────────────────────────────────────────────────── */}
           <section className={CARD}>
             <header className="flex items-center justify-between gap-3 border-b border-solid border-slate-200 px-5 py-3">
-              <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+              <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
                 {STEP_LABELS.logistics}
               </h2>
               <Link href={`${CUSTOMER_PATHS.logistics}?draft=${draft.id}`} className={LINK_ARROW}>
@@ -250,7 +250,7 @@ export default async function IntakeReviewPage({ searchParams }: { searchParams:
 
             <button
               type="submit"
-              className="mt-4 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-mono text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
+              className="mt-4 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
             >
               Submit request →
             </button>
@@ -266,7 +266,7 @@ export default async function IntakeReviewPage({ searchParams }: { searchParams:
             <input type="hidden" name="draft_id" value={draft.id} />
             <input type="hidden" name="intent" value="save" />
 
-            <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               Not ready?
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
@@ -275,14 +275,14 @@ export default async function IntakeReviewPage({ searchParams }: { searchParams:
             </p>
             <button
               type="submit"
-              className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-mono text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
             >
               Save as draft
             </button>
           </form>
 
           <div className="rounded-xl border border-solid border-slate-200 bg-slate-50 px-4 py-3">
-            <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               What happens after this
             </p>
             <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-slate-600">

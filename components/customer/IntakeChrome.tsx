@@ -43,7 +43,7 @@ export function StepBar({ current }: { current: IntakeStep }) {
             <li key={step} className="flex items-center gap-2">
               <span
                 aria-current={active ? 'step' : undefined}
-                className={`inline-flex items-center gap-2 rounded-full border border-solid px-3 py-1.5 font-mono text-[11px] font-bold tracking-wider uppercase ${
+                className={`inline-flex items-center gap-2 rounded-full border border-solid px-3 py-1.5 font-sans text-[11px] font-bold tracking-wider uppercase ${
                   active
                     ? 'border-transparent bg-primary text-white'
                     : done
@@ -76,7 +76,7 @@ export function StepBar({ current }: { current: IntakeStep }) {
           style={{ width: `${(currentNumber / INTAKE_STEPS.length) * 100}%` }}
         />
       </div>
-      <p className="mt-2 font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <p className="mt-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
         Step {currentNumber} of {INTAKE_STEPS.length}
       </p>
     </nav>
@@ -147,7 +147,7 @@ export function IntakeStepShell({
 
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-2xl">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Step {stepNumber(step)} of {INTAKE_STEPS.length} — {STEP_LABELS[step]}
           </p>
           <h1 className="mt-1 text-2xl font-bold tracking-tight text-primary sm:text-3xl">{title}</h1>
@@ -156,7 +156,7 @@ export function IntakeStepShell({
 
         <Link
           href={CUSTOMER_PATHS.dashboard}
-          className="font-mono text-xs font-semibold text-slate-500 no-underline transition-colors hover:text-primary"
+          className="font-sans text-xs font-semibold text-slate-500 no-underline transition-colors hover:text-primary"
         >
           Cancel and leave
         </Link>
@@ -176,7 +176,7 @@ export function IntakeStepShell({
 export function HonestGap({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-xl border border-solid border-slate-200 bg-slate-50 px-4 py-3">
-      <p className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">{title}</p>
+      <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">{title}</p>
       <div className="mt-1.5 text-sm leading-relaxed text-slate-600">{children}</div>
     </div>
   );

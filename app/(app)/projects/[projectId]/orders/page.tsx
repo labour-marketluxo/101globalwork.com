@@ -106,7 +106,7 @@ export default async function ProjectOrdersPage({
       <section aria-labelledby="orders-heading" className="grid gap-3">
         <h2 id="orders-heading" className="text-lg font-bold tracking-tight text-slate-900">
           Orders on this project
-          <span className="ml-2 font-mono text-xs font-normal text-slate-500">{read.orders.length}</span>
+          <span className="ml-2 font-sans text-xs font-normal text-slate-500">{read.orders.length}</span>
         </h2>
         {read.orders.length === 0 ? (
           <OrdersEmpty />

@@ -109,7 +109,7 @@ export default async function HelpCentrePage({ searchParams }: { searchParams: S
               <h2 id="results-heading" className="text-lg font-bold tracking-tight text-slate-900">
                 {hits.length} result{hits.length === 1 ? '' : 's'} for &ldquo;{query}&rdquo;
               </h2>
-              <Link href="/help" className="font-mono text-xs font-semibold text-primary no-underline hover:text-primary-dark">
+              <Link href="/help" className="font-sans text-xs font-semibold text-primary no-underline hover:text-primary-dark">
                 Clear search
               </Link>
             </div>

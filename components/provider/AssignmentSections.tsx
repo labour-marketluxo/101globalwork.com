@@ -93,7 +93,7 @@ export function AssignmentHeader({
     <header className="grid gap-4">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">Assigned work</p>
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Assigned work</p>
           <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
             {detail.request.needText}
           </h1>
@@ -119,7 +119,7 @@ export function AssignmentHeader({
           <span
             className={
               pill.tone === 'teal'
-                ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-mono text-[11px] font-bold tracking-wider text-primary uppercase'
+                ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase'
                 : pill.tone === 'amber'
                   ? BADGE_AMBER
                   : BADGE_SLATE
@@ -137,7 +137,7 @@ export function AssignmentHeader({
         <span className="flex items-center gap-2">
           <span
             aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-mono text-xs font-bold text-primary"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
           >
             {initials ?? '—'}
           </span>
@@ -203,27 +203,27 @@ export function AgreedScopePanel({ quote }: { quote: ProviderQuote | null }) {
           {quote.lineItems.map(item => (
             <div key={`${item.label}:${item.amountMinor}`} className="flex items-baseline justify-between gap-3 border-b border-dashed border-slate-200 pb-1.5 text-sm">
               <dt className="text-slate-700">{item.label}</dt>
-              <dd className="font-mono text-slate-800">{formatMoney(item.amountMinor, quote.currencyCode)}</dd>
+              <dd className="font-sans text-slate-800">{formatMoney(item.amountMinor, quote.currencyCode)}</dd>
             </div>
           ))}
           <div className="flex items-baseline justify-between gap-3 pt-1 text-sm font-bold">
             <dt className="text-slate-900">Total, including taxes and fees</dt>
-            <dd className="font-mono text-slate-900">{formatMoney(quote.totalMinor, quote.currencyCode)}</dd>
+            <dd className="font-sans text-slate-900">{formatMoney(quote.totalMinor, quote.currencyCode)}</dd>
           </div>
         </dl>
       ) : null}
 
       <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-3">
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Not covered</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Not covered</dt>
           <dd className="mt-0.5 text-slate-700">{quote.exclusions ?? 'Nothing stated as excluded'}</dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Warranty offered</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Warranty offered</dt>
           <dd className="mt-0.5 text-slate-700">{quote.warrantyTerms ?? 'None stated'}</dd>
         </div>
         <div>
-          <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Timeline</dt>
+          <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Timeline</dt>
           <dd className="mt-0.5 text-slate-700">
             {quote.timelineDays ? `${quote.timelineDays} working day${quote.timelineDays === 1 ? '' : 's'}` : 'Not stated'}
           </dd>
@@ -252,19 +252,19 @@ export function SitePanel({ detail }: { detail: AssignmentDetail }) {
         <dl className="mt-3 grid gap-3 text-xs">
           {detail.site.landmark ? (
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Landmark</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Landmark</dt>
               <dd className="mt-0.5 text-sm text-slate-700">{detail.site.landmark}</dd>
             </div>
           ) : null}
           {detail.site.accessNotes ? (
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Getting in</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Getting in</dt>
               <dd className="mt-0.5 text-sm whitespace-pre-line text-slate-700">{detail.site.accessNotes}</dd>
             </div>
           ) : null}
           {detail.site.areaText ? (
             <div>
-              <dt className="font-mono font-bold tracking-wider text-slate-500 uppercase">Area as they described it</dt>
+              <dt className="font-sans font-bold tracking-wider text-slate-500 uppercase">Area as they described it</dt>
               <dd className="mt-0.5 text-sm text-slate-700">{detail.site.areaText}</dd>
             </div>
           ) : null}
@@ -520,7 +520,7 @@ export function ThreadPanel({
         <ul className="mt-3 grid gap-2">
           {messages.map(message => (
             <li key={message.id} className="rounded-xl border border-solid border-primary-subtle bg-primary-surface p-3.5">
-              <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">You</p>
+              <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">You</p>
               <p className="mt-1 text-sm leading-relaxed whitespace-pre-line text-slate-700">{message.message}</p>
               <p className="mt-1 text-xs text-slate-400">
                 {message.createdAt ? new Date(message.createdAt).toLocaleString('en-GB') : 'Date not recorded'}

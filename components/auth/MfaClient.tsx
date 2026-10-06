@@ -188,13 +188,13 @@ export default function MfaClient({ nextPath }: { nextPath: string }) {
           className="rounded-lg border border-solid border-slate-200"
         />
         <details>
-          <summary className="cursor-pointer font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <summary className="cursor-pointer font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Can&rsquo;t scan it?
           </summary>
           <p className="mt-2 text-xs leading-relaxed text-slate-600">
             Enter this secret in your authenticator app by hand:
           </p>
-          <code className="mt-1 block break-all rounded-lg bg-slate-50 p-3 font-mono text-xs text-slate-800">
+          <code className="mt-1 block break-all rounded-lg bg-slate-50 p-3 font-sans text-xs text-slate-800">
             {enrollment.secret}
           </code>
         </details>

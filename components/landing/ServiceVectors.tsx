@@ -70,7 +70,7 @@ export default async function ServiceVectors() {
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
         {/* Section title */}
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <span className="rounded-full border border-primary-subtle bg-primary-surface px-3 py-1 font-mono text-xs font-bold tracking-wider text-primary uppercase">
+          <span className="rounded-full border border-primary-subtle bg-primary-surface px-3 py-1 font-sans text-xs font-bold tracking-wider text-primary uppercase">
             Architected for any scale
           </span>
           <h2 className="mt-3 mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
@@ -92,13 +92,13 @@ export default async function ServiceVectors() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
                   <Zap aria-hidden="true" className="h-8 w-8" />
                 </div>
-                <span className="flex items-center gap-1 rounded-full border border-amber-200 bg-secondary-light px-3 py-1 font-mono text-xs font-bold text-amber-800">
+                <span className="flex items-center gap-1 rounded-full border border-amber-200 bg-secondary-light px-3 py-1 font-sans text-xs font-bold text-amber-800">
                   <Timer aria-hidden="true" className="h-[15px] w-[15px]" />
                   Single trade
                 </span>
               </div>
               <h3 className="mb-2 text-2xl font-bold text-slate-900">Quick service</h3>
-              <p className="mb-4 font-mono text-xs tracking-wider text-slate-500 uppercase">
+              <p className="mb-4 font-sans text-xs tracking-wider text-slate-500 uppercase">
                 One provider, one visit
               </p>
               <p className="mb-6 text-sm leading-relaxed text-slate-600">
@@ -106,7 +106,7 @@ export default async function ServiceVectors() {
                 keeps tripping, a door that will not lock, an appliance that has stopped.
               </p>
 
-              <div className="mb-8 space-y-3 rounded-xl border border-slate-200/80 bg-white p-5 font-mono text-xs">
+              <div className="mb-8 space-y-3 rounded-xl border border-slate-200/80 bg-white p-5 font-sans text-xs">
                 {QUICK_STEPS.map((step, index) => (
                   <div
                     key={step.label}
@@ -125,10 +125,10 @@ export default async function ServiceVectors() {
             </div>
 
             <div className="flex items-center justify-between border-t border-slate-200 pt-4">
-              <span className="font-mono text-xs text-slate-500">Describe it in your own words</span>
+              <span className="font-sans text-xs text-slate-500">Describe it in your own words</span>
               <Link
                 href={`/${marketSlug}/search`}
-                className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 font-mono text-xs font-semibold text-white no-underline shadow-sm transition-colors hover:bg-primary-dark"
+                className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 font-sans text-xs font-semibold text-white no-underline shadow-sm transition-colors hover:bg-primary-dark"
               >
                 <Search aria-hidden="true" className="h-[15px] w-[15px]" />
                 Find providers
@@ -144,13 +144,13 @@ export default async function ServiceVectors() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Layers aria-hidden="true" className="h-8 w-8" />
                 </div>
-                <span className="flex items-center gap-1 rounded-full bg-primary px-3 py-1 font-mono text-xs font-bold text-white">
+                <span className="flex items-center gap-1 rounded-full bg-primary px-3 py-1 font-sans text-xs font-bold text-white">
                   <Sparkles aria-hidden="true" className="h-[15px] w-[15px] text-amber-300" />
                   Multi-stage
                 </span>
               </div>
               <h3 className="mb-2 text-2xl font-bold text-slate-900">Project work</h3>
-              <p className="mb-4 font-mono text-xs tracking-wider text-slate-500 uppercase">
+              <p className="mb-4 font-sans text-xs tracking-wider text-slate-500 uppercase">
                 Multi-trade and multi-visit
               </p>
               <p className="mb-6 text-sm leading-relaxed text-slate-600">
@@ -177,10 +177,10 @@ export default async function ServiceVectors() {
             </div>
 
             <div className="flex items-center justify-between border-t border-slate-200 pt-4">
-              <span className="font-mono text-xs text-slate-500">Multi-stage and multi-trade</span>
+              <span className="font-sans text-xs text-slate-500">Multi-stage and multi-trade</span>
               <Link
                 href="/requests/new"
-                className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 font-mono text-xs font-semibold text-white no-underline shadow-sm transition-colors hover:bg-primary-dark"
+                className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 font-sans text-xs font-semibold text-white no-underline shadow-sm transition-colors hover:bg-primary-dark"
               >
                 Post a request
                 <ArrowRight aria-hidden="true" className="h-[15px] w-[15px] text-amber-300" />

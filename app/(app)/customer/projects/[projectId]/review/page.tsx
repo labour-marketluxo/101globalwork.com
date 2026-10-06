@@ -86,7 +86,7 @@ export default async function ProjectReviewPage({
 
         <aside className="space-y-4">
           <section className={`${CARD} p-5`}>
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <h2 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               The job you are reviewing
             </h2>
             <dl className="mt-3 space-y-2 text-xs">
@@ -102,7 +102,7 @@ export default async function ProjectReviewPage({
               </div>
               <div className="flex items-baseline justify-between gap-3">
                 <dt className="text-slate-500">Quote version</dt>
-                <dd className="font-mono text-slate-800">{agreement.quoteVersionLabel}</dd>
+                <dd className="font-sans text-slate-800">{agreement.quoteVersionLabel}</dd>
               </div>
               <div className="flex items-baseline justify-between gap-3">
                 <dt className="text-slate-500">Approved complete</dt>

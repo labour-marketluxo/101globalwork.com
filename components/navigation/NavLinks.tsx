@@ -229,7 +229,7 @@ export function MobileNav({ marketSlugs }: { marketSlugs: readonly string[] }) {
               <Link
                 href="/auth/sign-in"
                 onClick={close}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 font-mono text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark active:scale-95"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all hover:bg-secondary-dark active:scale-95"
               >
                 Post a Request
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />

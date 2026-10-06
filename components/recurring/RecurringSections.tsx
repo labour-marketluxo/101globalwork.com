@@ -301,7 +301,7 @@ export function NewPlanPanel({
           <div>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-mono text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark"
+              className="inline-flex items-center gap-2 rounded-lg bg-secondary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase transition-colors hover:bg-secondary-dark"
             >
               Create the schedule
             </button>
@@ -348,19 +348,19 @@ export function PlanCard({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+            <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
               {plan.reference}
             </span>
             <span
               title={status.explains}
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-wider uppercase ${status.className}`}
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-sans text-[11px] font-bold tracking-wider uppercase ${status.className}`}
             >
               {status.label}
             </span>
             <span className={BADGE_SLATE}>{isCustomer ? 'You are the customer' : 'You are the provider'}</span>
             {plan.status === 'active' && next ? (
               <span
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[11px] font-bold tracking-wide uppercase ${
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-sans text-[11px] font-bold tracking-wide uppercase ${
                   next.tone === 'bad'
                     ? 'bg-red-50 text-red-700'
                     : next.tone === 'warn'
@@ -416,7 +416,7 @@ export function PlanCard({
 
       {plan.visits.length > 0 ? (
         <div className="mt-4 border-t border-solid border-slate-200 pt-4">
-          <h4 className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <h4 className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Scheduled visits
           </h4>
           <ol className="mt-2 grid gap-1.5">
@@ -427,10 +427,10 @@ export function PlanCard({
                   key={visit.sequence}
                   className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2 text-xs"
                 >
-                  <span className="font-mono text-slate-700">{formatDay(visit.scheduledFor)}</span>
+                  <span className="font-sans text-slate-700">{formatDay(visit.scheduledFor)}</span>
                   <span className="flex items-center gap-2">
                     {visit.note ? <span className="text-slate-500">{visit.note}</span> : null}
-                    <span className={`rounded-full px-2 py-0.5 font-mono text-[10px] font-bold tracking-wide uppercase ${state.className}`}>
+                    <span className={`rounded-full px-2 py-0.5 font-sans text-[10px] font-bold tracking-wide uppercase ${state.className}`}>
                       {state.label}
                     </span>
                   </span>
@@ -665,7 +665,7 @@ export function PlanCard({
 function Fact({ label, value, detail }: { label: string; value: string; detail?: string | null }) {
   return (
     <div>
-      <dt className="font-mono text-[10px] font-bold tracking-wider text-slate-500 uppercase">{label}</dt>
+      <dt className="font-sans text-[10px] font-bold tracking-wider text-slate-500 uppercase">{label}</dt>
       <dd className="mt-0.5 text-slate-800">{value}</dd>
       {detail ? <dd className="text-[11px] text-slate-500">{detail}</dd> : null}
     </div>

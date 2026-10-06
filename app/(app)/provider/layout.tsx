@@ -44,7 +44,7 @@ export default async function ProviderLayout({ children }: { children: React.Rea
     <div className={PAGE_SHELL}>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-solid border-slate-200 pb-3">
         <div className="min-w-0">
-          <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
             Provider workspace
           </p>
           <p className="mt-0.5 truncate text-sm font-bold tracking-tight text-slate-900">
@@ -54,7 +54,7 @@ export default async function ProviderLayout({ children }: { children: React.Rea
 
         <div className="flex flex-wrap items-center gap-3">
           <nav aria-label="Account view" className="hidden items-center gap-2 sm:flex">
-            <span className="font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">View</span>
+            <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">View</span>
             <Link
               href={PROVIDER_PATHS.today}
               aria-current="page"
@@ -104,7 +104,7 @@ export default async function ProviderLayout({ children }: { children: React.Rea
                 </p>
                 <Link
                   href={PROVIDER_PATHS.onboarding}
-                  className="mt-2 inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-amber-900 underline underline-offset-2 hover:text-amber-800"
+                  className="mt-2 inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-amber-900 underline underline-offset-2 hover:text-amber-800"
                 >
                   Set one up
                   <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />

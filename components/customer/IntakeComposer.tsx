@@ -181,7 +181,7 @@ export default function IntakeComposer({
           <button
             type="button"
             onClick={toggleListening}
-            className={`inline-flex items-center gap-1.5 rounded-lg border border-solid px-2.5 py-1.5 font-mono text-[11px] font-bold tracking-wider uppercase transition-colors ${
+            className={`inline-flex items-center gap-1.5 rounded-lg border border-solid px-2.5 py-1.5 font-sans text-[11px] font-bold tracking-wider uppercase transition-colors ${
               listening
                 ? 'border-transparent bg-secondary text-white'
                 : 'border-slate-300 bg-white text-slate-600 hover:border-primary hover:text-primary'
@@ -217,7 +217,7 @@ export default function IntakeComposer({
           A sentence or two is enough. Providers quote from this text, so what is wrong and where it is
           matter more than how well it is written.
         </p>
-        <p className="font-mono text-[11px] text-slate-400">
+        <p className="font-sans text-[11px] text-slate-400">
           {text.length}/{maxLength}
         </p>
       </div>
@@ -239,7 +239,7 @@ export default function IntakeComposer({
         id="need_text_privacy"
         className="mt-4 rounded-xl border border-solid border-primary-subtle bg-primary-surface px-4 py-3"
       >
-        <p className="font-mono text-[11px] font-bold tracking-wider text-primary uppercase">
+        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
           Before you type
         </p>
         <p className="mt-1.5 text-sm leading-relaxed text-primary-deep">{SAFETY_REMINDER}</p>
@@ -283,7 +283,7 @@ export default function IntakeComposer({
           attachment against a request, so a file would go nowhere — dropping one below shows you exactly
           what this page did with it: kept the name, sent nothing.
         </p>
-        <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3 py-2 font-mono text-[11px] font-bold tracking-wider text-slate-600 uppercase transition-colors hover:border-primary hover:text-primary">
+        <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3 py-2 font-sans text-[11px] font-bold tracking-wider text-slate-600 uppercase transition-colors hover:border-primary hover:text-primary">
           Choose a file
           {/* No `name`: with no name the browser cannot submit this input at all. */}
           <input
@@ -306,7 +306,7 @@ export default function IntakeComposer({
               >
                 <FileWarning aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-amber-600" />
                 <span className="truncate">{name}</span>
-                <span className="ml-auto shrink-0 font-mono text-[10px] font-bold tracking-wider text-amber-700 uppercase">
+                <span className="ml-auto shrink-0 font-sans text-[10px] font-bold tracking-wider text-amber-700 uppercase">
                   not attached
                 </span>
               </li>

@@ -164,7 +164,7 @@ async function OnboardingBody({
 
       <form action={chooseJourneyAction} className="grid gap-4">
         <fieldset className="m-0 min-w-0 border-0 p-0">
-          <legend className="mb-2 block font-mono text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <legend className="mb-2 block font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             Where do you want to start?
           </legend>
 
@@ -200,7 +200,7 @@ async function OnboardingBody({
               <UsersRound aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" />
               <div>
                 <p className="text-sm font-semibold text-slate-500">
-                  Manage a team <span className="font-mono text-[11px] font-bold tracking-wider uppercase">· not available</span>
+                  Manage a team <span className="font-sans text-[11px] font-bold tracking-wider uppercase">· not available</span>
                 </p>
                 <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
                   Multi-user accounts do not exist on this platform yet: every account here belongs to one
