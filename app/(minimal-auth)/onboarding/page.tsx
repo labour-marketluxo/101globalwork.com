@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { Briefcase, CalendarClock, HardHat, Mail, MapPin, UsersRound } from 'lucide-react';
+import { Briefcase, CalendarClock, HardHat, Mail, MapPin, UsersRound } from '@/components/ui/icons';
 import { SubmitButton } from '@/components/auth/AuthFormFields';
 import { AUTH_LINK, AuthNotice, AuthShell } from '@/components/auth/AuthSections';
 import { chooseJourneyAction } from '@/features/onboarding/actions';

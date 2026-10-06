@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, Scale } from 'lucide-react';
+import { ArrowRight, Scale } from '@/components/ui/icons';
 import { PAGE_SHELL } from '@/components/discovery/tokens';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import { NotInForceNotice, Prose, ReaderLayout } from '@/components/marketing/ReaderLayout';

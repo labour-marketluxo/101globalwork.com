@@ -9,7 +9,7 @@ import {
   Search,
   ShieldAlert,
   Users,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { BADGE_SLATE, CARD, CARD_INTERACTIVE, FIELD, LINK_ARROW, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import {
   COMPONENT_STATE_COPY,

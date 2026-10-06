@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Users, Wallet } from 'lucide-react';
+import { Users, Wallet } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { CellValue, PrivacyPanel, ProgrammeNotice, RateValue } from '@/components/programmes/ProgrammeChrome';
 import { COHORT_STATUS_COPY, formatMinor } from '@/features/programmes/copy';

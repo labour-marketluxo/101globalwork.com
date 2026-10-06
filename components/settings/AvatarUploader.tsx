@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { ImageUp } from 'lucide-react';
+import { ImageUp } from '@/components/ui/icons';
 import { LABEL } from '@/components/discovery/tokens';
 import { uploadAvatarAction } from '@/features/settings/identity-actions';
 

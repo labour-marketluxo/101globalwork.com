@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShieldCheck, Sparkles } from 'lucide-react';
+import { ShieldCheck, Sparkles } from '@/components/ui/icons';
 import OutcomePromptBar from '@/components/landing/OutcomePromptBar';
 import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { ArrowRight, MapPin } from '@/components/ui/icons';
 import { AreaQuickLinks, MarketDataNotice, NoticePanel } from '@/components/discovery/MarketSections';
 import {
   DirectoryBody,

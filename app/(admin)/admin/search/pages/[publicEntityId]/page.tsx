@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ExternalLink, FileCode2, Link2, ScanLine } from 'lucide-react';
+import { ArrowLeft, ExternalLink, FileCode2, Link2, ScanLine } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { searchPages } from '@/features/admin/ui-placeholders';
 

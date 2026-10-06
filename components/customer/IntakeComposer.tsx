@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { AlertTriangle, FileWarning, Mic, Paperclip, Square } from 'lucide-react';
+import { AlertTriangle, FileWarning, Mic, Paperclip, Square } from '@/components/ui/icons';
 import { FIELD, LABEL } from '@/components/discovery/tokens';
 import { SAFETY_REMINDER } from '@/features/customer/intake';
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { FlaskConical, MapPin, TriangleAlert } from 'lucide-react';
+import { FlaskConical, MapPin, TriangleAlert } from '@/components/ui/icons';
 import {
   MarketDataNotice,
   MarketEmptyState,

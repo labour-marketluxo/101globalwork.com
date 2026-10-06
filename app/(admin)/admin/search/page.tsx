@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, FileWarning, Globe2, Map as MapIcon, RefreshCw, ScanSearch } from 'lucide-react';
+import { ArrowRight, FileWarning, Globe2, Map as MapIcon, RefreshCw, ScanSearch } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { redirects, searchPages, searchPresence, sitemaps } from '@/features/admin/ui-placeholders';
 

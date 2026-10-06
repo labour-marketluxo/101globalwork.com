@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { MailCheck, ShieldCheck } from 'lucide-react';
+import { MailCheck, ShieldCheck } from '@/components/ui/icons';
 import { OtpInput } from '@/components/auth/OtpInput';
 import { ResendCode } from '@/components/auth/ResendCode';
 import { SubmitButton } from '@/components/auth/AuthFormFields';

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BadgeCheck, Check, CircleCheckBig, ShieldCheck, TriangleAlert } from 'lucide-react';
+import { BadgeCheck, Check, CircleCheckBig, ShieldCheck, TriangleAlert } from '@/components/ui/icons';
 import {
   ActionLink,
   ActionRow,

@@ -1,4 +1,4 @@
-import { CircleCheck, Info, LifeBuoy } from 'lucide-react';
+import { CircleCheck, Info, LifeBuoy } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD } from '@/components/discovery/tokens';
 import { PROVIDER_PUBLISH_STEPS, type ProviderPublishStepKey } from '@/features/provider-workspace/paths';
 

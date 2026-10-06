@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowDown, ArrowUp, Bot, Gauge, Pause, Plus, RefreshCw, ShieldAlert } from 'lucide-react';
+import { ArrowDown, ArrowUp, Bot, Gauge, Pause, Plus, RefreshCw, ShieldAlert } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { formatMoney } from '@/features/provider-workspace/format';
 import { aiPolicies, aiProposals, aiRoutes, aiTraces } from '@/features/admin/ui-placeholders';

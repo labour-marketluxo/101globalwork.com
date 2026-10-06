@@ -1,4 +1,4 @@
-import { ArrowRight, BadgeCheck, FileText, ScrollText, ShieldAlert } from 'lucide-react';
+import { ArrowRight, BadgeCheck, FileText, ScrollText, ShieldAlert } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';

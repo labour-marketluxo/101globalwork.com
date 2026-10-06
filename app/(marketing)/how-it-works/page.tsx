@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BadgeCheck, ShieldCheck, Sparkles } from 'lucide-react';
+import { BadgeCheck, ShieldCheck, Sparkles } from '@/components/ui/icons';
 import {
   ActionLink,
   ActionRow,

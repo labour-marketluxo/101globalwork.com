@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, History } from 'lucide-react';
+import { ArrowRight, History } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import type { ReasonCode } from '@/features/admin/copy';
 import {

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowRight, ExternalLink } from '@/components/ui/icons';
 import { ExceptionTags, PhaseBadge, StateBadge } from '@/components/admin/ProjectSections';
 import {
   PROJECT_EXCEPTIONS,

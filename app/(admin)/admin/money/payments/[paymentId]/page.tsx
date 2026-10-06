@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import { DecisionList, Money, StatusPill } from '@/components/admin/MoneySections';
 import { adminFailureCopy } from '@/features/admin/copy';

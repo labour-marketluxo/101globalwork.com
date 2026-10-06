@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { ArrowRight, MapPin, Tag } from 'lucide-react';
+import { ArrowRight, MapPin, Tag } from '@/components/ui/icons';
 import { ProblemPageView, placeOf, type LocalizedPlace } from '@/components/discovery/IntentSections';
 import { LocalPageBody } from '@/components/discovery/LocalServiceSections';
 import { MetaChip, TaxonomyHero, TaxonomySkeleton } from '@/components/discovery/TaxonomySections';

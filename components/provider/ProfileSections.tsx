@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CircleCheck, Eye, EyeOff, Image as ImageIcon, Info, Plus, ShieldAlert, Trash2 } from 'lucide-react';
+import { ArrowRight, CircleCheck, Eye, EyeOff, Image as ImageIcon, Info, Plus, ShieldAlert, Trash2 } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { PendingButton } from '@/components/provider/ProviderControls';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Camera, Check, CloudOff, Image as ImageIcon, Loader2, RefreshCw, Trash2, TriangleAlert, Upload } from 'lucide-react';
+import { Camera, Check, CloudOff, Image as ImageIcon, Loader2, RefreshCw, Trash2, TriangleAlert, Upload } from '@/components/ui/icons';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 import { submitEvidencePackageAction } from '@/features/provider-workspace/actions';
 import {

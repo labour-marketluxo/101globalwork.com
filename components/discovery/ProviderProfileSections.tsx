@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { ArrowRight, BadgeCheck, Clock, Info, MapPin, ShieldCheck } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Clock, Info, MapPin, ShieldCheck } from '@/components/ui/icons';
 import { CARD, CTA_AMBER, LINK_ARROW } from '@/components/discovery/tokens';
 import { NoticePanel } from '@/components/discovery/MarketSections';
 import type { Market } from '@/features/discovery/data/market-catalog';

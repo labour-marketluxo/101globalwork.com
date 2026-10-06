@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from '@/components/ui/icons';
 import { LINK_ARROW } from '@/components/discovery/tokens';
 import { TaskDetailView } from '@/components/projects/ProjectWork';
 import { WorkspaceNotice } from '@/components/provider/WorkspaceNotices';

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BadgeCheck, Clock, Languages, MapPin, Ruler } from 'lucide-react';
+import { BadgeCheck, Clock, Languages, MapPin, Ruler } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, CTA_AMBER, LINK_ARROW } from '@/components/discovery/tokens';
 import { WEEKDAYS, WEEKDAY_LABELS, type OperatingHours } from '@/features/provider-workspace/hours';
 import type { PublicProviderProfile } from '@/lib/providers/public-profile';

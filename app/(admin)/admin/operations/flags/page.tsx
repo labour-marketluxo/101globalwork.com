@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, Flag, Plus, ShieldAlert, SlidersHorizontal, Undo2 } from 'lucide-react';
+import { ArrowLeft, Flag, Plus, ShieldAlert, SlidersHorizontal, Undo2 } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { featureFlags } from '@/features/admin/ui-placeholders';
 

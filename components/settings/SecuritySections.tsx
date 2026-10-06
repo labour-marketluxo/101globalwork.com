@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BadgeCheck, CircleAlert, CircleCheck, Info, KeyRound, Lock, ShieldCheck, TriangleAlert } from 'lucide-react';
+import { BadgeCheck, CircleAlert, CircleCheck, Info, KeyRound, Lock, ShieldCheck, TriangleAlert } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { AUTH_PATHS } from '@/features/auth/post-auth';

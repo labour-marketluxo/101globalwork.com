@@ -1,4 +1,4 @@
-import { LayoutGrid, Sparkles } from 'lucide-react';
+import { LayoutGrid, Sparkles } from '@/components/ui/icons';
 import { ActionLink, ActionRow, CtaBand } from '@/components/marketing/PageSections';
 
 /**

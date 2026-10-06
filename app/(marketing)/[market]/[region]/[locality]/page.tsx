@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { ArrowRight, MapPin } from '@/components/ui/icons';
 import {
   HubHero,
   IndexabilityNotice,

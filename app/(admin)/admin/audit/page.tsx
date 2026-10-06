@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Download, Eye, GitBranch, Lock, Search, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Download, Eye, GitBranch, Lock, Search, ShieldCheck } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { auditAccessLog, auditEvents } from '@/features/admin/ui-placeholders';
 

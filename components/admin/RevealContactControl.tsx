@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState, useState } from 'react';
-import { Eye, TriangleAlert } from 'lucide-react';
+import { Eye, TriangleAlert } from '@/components/ui/icons';
 import { revealAccountContactAction, type RevealState } from '@/features/admin/actions';
 import { ADMIN_FAILURE_COPY, type ReasonCode } from '@/features/admin/copy';
 

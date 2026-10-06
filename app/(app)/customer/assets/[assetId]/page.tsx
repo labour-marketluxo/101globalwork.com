@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import { CARD, LABEL, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
 import {
   AftercareActions,

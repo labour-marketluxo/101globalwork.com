@@ -11,7 +11,7 @@ import {
   ShieldCheck,
   TriangleAlert,
   Wrench,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import Breadcrumbs, { type BreadcrumbItem } from '@/components/ui/Breadcrumbs';
 import { NoticePanel } from '@/components/discovery/MarketSections';
 import { Faq } from '@/components/marketing/PageSections';

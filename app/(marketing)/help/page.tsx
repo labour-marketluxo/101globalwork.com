@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BookOpen, LifeBuoy } from 'lucide-react';
+import { BookOpen, LifeBuoy } from '@/components/ui/icons';
 import { PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import {

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CircleCheck, ExternalLink, FileText, ShieldAlert, TriangleAlert } from 'lucide-react';
+import { CircleCheck, ExternalLink, FileText, ShieldAlert, TriangleAlert } from '@/components/ui/icons';
 import {
   CASE_STATE_COPY,
   CREDENTIAL_DECISION_COPY,

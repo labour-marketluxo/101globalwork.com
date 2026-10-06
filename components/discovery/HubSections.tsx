@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MapPin } from 'lucide-react';
+import { MapPin } from '@/components/ui/icons';
 import { PUBLIC_BAND } from '@/components/discovery/tokens';
 import type { LocationLink, ProviderPreview, ServiceLink } from '@/types/discovery';
 

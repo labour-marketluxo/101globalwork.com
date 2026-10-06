@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CalendarClock, CircleAlert, FileText, MessageSquareQuote, Wallet } from 'lucide-react';
+import { ArrowRight, CalendarClock, CircleAlert, FileText, MessageSquareQuote, Wallet } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, CTA_AMBER, LINK_ARROW } from '@/components/discovery/tokens';
 import { CUSTOMER_PATHS, requestReference } from '@/features/customer/intake';
 import type { ActiveRequest, CustomerDashboard, PaymentDue, QuoteAwaitingReview, ScheduledWork } from '@/features/customer/requests';

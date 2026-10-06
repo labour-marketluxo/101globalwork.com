@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Info } from 'lucide-react';
+import { Info } from '@/components/ui/icons';
 import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
 import {
   BookingCalendar,

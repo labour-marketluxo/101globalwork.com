@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Droplets, Hammer, Lightbulb, Thermometer, type LucideIcon } from 'lucide-react';
+import { Droplets, Hammer, Lightbulb, Thermometer, type IconComponent } from '@/components/ui/icons';
 
 /**
  * ExpandableBentoGrid — interactive category showcase.

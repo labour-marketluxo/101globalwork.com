@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CalendarClock, CircleAlert, CircleCheck, Info, Repeat, Timer } from 'lucide-react';
+import { CalendarClock, CircleAlert, CircleCheck, Info, Repeat, Timer } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { formatRelativeTime } from '@/features/settings/device-label';

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Gavel } from 'lucide-react';
+import { ArrowRight, Gavel } from '@/components/ui/icons';
 import { IncidentFeedList } from './overview-sections';
 import { adminFailureCopy, INCIDENT_SEVERITIES, INCIDENT_WINDOWS } from '@/features/admin/copy';
 import { getAdminContext } from '@/features/admin/context';

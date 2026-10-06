@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormStatus } from 'react-dom';
-import { CircleCheck, Loader2, Power } from 'lucide-react';
+import { CircleCheck, Loader2, Power } from '@/components/ui/icons';
 import { setAvailabilityAction } from '@/features/provider-workspace/actions';
 
 /**

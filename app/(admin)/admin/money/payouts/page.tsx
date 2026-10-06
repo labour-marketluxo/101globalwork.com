@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import { BlockReason, Money, StatusPill } from '@/components/admin/MoneySections';
 import { PAYOUT_STATUSES, adminFailureCopy } from '@/features/admin/copy';

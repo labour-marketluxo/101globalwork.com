@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { MapPin, Search } from 'lucide-react';
+import { MapPin, Search } from '@/components/ui/icons';
 import { useMemo, useState } from 'react';
 
 /**

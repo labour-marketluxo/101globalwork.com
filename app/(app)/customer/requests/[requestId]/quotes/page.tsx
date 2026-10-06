@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, Info } from 'lucide-react';
+import { ArrowRight, Info } from '@/components/ui/icons';
 import {
   ComparisonCard,
   ComparisonEmpty,

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Archive, ArchiveRestore, CircleAlert, CircleCheck, Inbox, Search } from 'lucide-react';
+import { Archive, ArchiveRestore, CircleAlert, CircleCheck, Inbox, Search } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD, FIELD, LINK_ARROW } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { MESSAGES_PATH } from '@/features/settings/paths';

@@ -1,4 +1,4 @@
-import { CircleCheck, Info, ShieldAlert } from 'lucide-react';
+import { CircleCheck, Info, ShieldAlert } from '@/components/ui/icons';
 import { CARD } from '@/components/discovery/tokens';
 
 /**

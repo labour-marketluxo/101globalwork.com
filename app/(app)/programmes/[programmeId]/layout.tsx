@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { Building2 } from 'lucide-react';
+import { Building2 } from '@/components/ui/icons';
 import { PAGE_SHELL } from '@/components/discovery/tokens';
 import { ProgrammeTabs, ProgrammeUnavailable, RoleBadge } from '@/components/programmes/ProgrammeChrome';
 import { AUTH_PATHS, hrefWith } from '@/features/auth/post-auth';

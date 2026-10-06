@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from '@/components/ui/icons';
 import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { CONTACT_PREFERENCES, CUSTOMER_PATHS, requestReference } from '@/features/customer/intake';
 import { getRequestConfirmation } from '@/features/customer/requests';

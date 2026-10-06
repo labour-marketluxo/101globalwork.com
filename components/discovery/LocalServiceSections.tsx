@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Banknote, Info, MapPin, TriangleAlert } from 'lucide-react';
+import { ArrowRight, Banknote, Info, MapPin, TriangleAlert } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, CTA_AMBER, LINK_ARROW } from '@/components/discovery/tokens';
 import { MarketDataNotice, NoticePanel, ProviderResultCard } from '@/components/discovery/MarketSections';
 import {

@@ -9,7 +9,7 @@ import {
   Navigation,
   Play,
   Wallet,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
 import { AvailabilityToggle, PendingButton } from '@/components/provider/ProviderControls';

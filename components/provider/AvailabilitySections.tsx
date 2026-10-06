@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { Copy } from 'lucide-react';
+import { Copy } from '@/components/ui/icons';
 import { FIELD } from '@/components/discovery/tokens';
 import { WEEKDAYS, WEEKDAY_LABELS, type OperatingHours } from '@/features/provider-workspace/hours';
 

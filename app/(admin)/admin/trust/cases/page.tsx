@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import { CaseBadge, CaseStateBadge } from '@/components/admin/TrustSections';
 import { ACCESS_NOTE } from '@/components/admin/trust-copy';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useRef } from 'react';
-import { LogOut, TriangleAlert } from 'lucide-react';
+import { LogOut, TriangleAlert } from '@/components/ui/icons';
 
 /**
  * A submit button that asks first, in a modal dialog.

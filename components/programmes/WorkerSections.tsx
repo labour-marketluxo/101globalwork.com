@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BadgeCheck, EyeOff, FolderPlus, Link2, UserPlus, Users } from 'lucide-react';
+import { BadgeCheck, EyeOff, FolderPlus, Link2, UserPlus, Users } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { formatRelativeTime } from '@/features/settings/device-label';

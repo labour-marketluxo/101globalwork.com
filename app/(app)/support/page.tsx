@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { LifeBuoy } from 'lucide-react';
+import { LifeBuoy } from '@/components/ui/icons';
 import { PAGE_SHELL } from '@/components/discovery/tokens';
 import AccountSettingsHeader from '@/components/settings/AccountSettingsHeader';
 import {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { CheckCircle2, KeyRound } from 'lucide-react';
+import { CheckCircle2, KeyRound } from '@/components/ui/icons';
 import { PasswordField, SubmitButton } from '@/components/auth/AuthFormFields';
 import { AUTH_LINK, AuthField, AuthInput, AuthNotice, AuthShell } from '@/components/auth/AuthSections';
 import { requestPasswordResetAction, resetPasswordAction } from '@/features/auth/actions';

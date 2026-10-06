@@ -10,7 +10,7 @@ import {
   Sparkles,
   Timer,
   Zap,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 
 /**
  * ServiceVectors — "two ways to get work done", plus the three-step flow.

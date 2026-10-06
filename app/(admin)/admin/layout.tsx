@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from '@/components/ui/icons';
 import { redirect } from 'next/navigation';
 import { describeAdminEnvironment } from '@/features/admin/environment';
 import { getAdminContext } from '@/features/admin/context';

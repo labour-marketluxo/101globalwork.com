@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Package } from 'lucide-react';
+import { Package } from '@/components/ui/icons';
 import {
   CatalogPanel,
   GoodsHeldPanel,

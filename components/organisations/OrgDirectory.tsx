@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Building2, ShieldCheck, TriangleAlert, UserMinus, Users } from 'lucide-react';
+import { ArrowRight, Building2, ShieldCheck, TriangleAlert, UserMinus, Users } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
 import { PendingButton } from '@/components/provider/ProviderControls';

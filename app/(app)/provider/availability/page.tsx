@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
-import { ArrowRight, CalendarOff, Compass, Info, Plus, Ruler, Trash2 } from 'lucide-react';
+import { ArrowRight, CalendarOff, Compass, Info, Plus, Ruler, Trash2 } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL } from '@/components/discovery/tokens';
 import HoursMatrix from '@/components/provider/AvailabilitySections';
 import { PendingButton } from '@/components/provider/ProviderControls';

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from '@/components/ui/icons';
 import { FIELD } from '@/components/discovery/tokens';
 import { AUTH_CTA } from '@/components/auth/AuthSections';
 

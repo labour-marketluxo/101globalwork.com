@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, Menu, X } from '@/components/ui/icons';
 
 /**
  * NavLinks / MobileNav — the header's links, active states and mobile drawer.

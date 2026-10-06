@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Boxes, CircleAlert, CircleCheck, Info, PackageCheck, ShieldCheck, Truck } from 'lucide-react';
+import { Boxes, CircleAlert, CircleCheck, Info, PackageCheck, ShieldCheck, Truck } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD, FIELD, LABEL } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { formatRelativeTime } from '@/features/settings/device-label';

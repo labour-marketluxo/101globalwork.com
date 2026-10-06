@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { Repeat } from 'lucide-react';
+import { Repeat } from '@/components/ui/icons';
 import { PAGE_SHELL } from '@/components/discovery/tokens';
 import AccountSettingsHeader from '@/components/settings/AccountSettingsHeader';
 import {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ArrowRight, Wrench } from 'lucide-react';
+import { ArrowRight, Wrench } from '@/components/ui/icons';
 import { AvailabilityToggle } from '@/components/provider/ProviderControls';
 import WorkspaceNav, { WorkspaceSectionLinks } from '@/components/provider/WorkspaceNav';
 import { PAGE_SHELL } from '@/components/discovery/tokens';

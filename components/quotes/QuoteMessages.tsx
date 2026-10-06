@@ -1,4 +1,4 @@
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare } from '@/components/ui/icons';
 import { CARD } from '@/components/discovery/tokens';
 import type { ProviderMessage } from '@/features/quotes/messages';
 

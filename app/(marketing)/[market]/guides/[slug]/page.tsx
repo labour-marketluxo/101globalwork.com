@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowRight, BookOpen, BadgeCheck } from 'lucide-react';
+import { ArrowRight, BookOpen, BadgeCheck } from '@/components/ui/icons';
 import { CARD, CTA_AMBER, LINK_ARROW, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';
 import { Prose, ReaderLayout } from '@/components/marketing/ReaderLayout';

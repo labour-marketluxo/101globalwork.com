@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, CheckCircle2, Radio, Siren, UserPlus } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle2, Radio, Siren, UserPlus } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { incidentAlerts, incidents } from '@/features/admin/ui-placeholders';
 

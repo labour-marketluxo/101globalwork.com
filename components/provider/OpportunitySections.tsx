@@ -10,7 +10,7 @@ import {
   ShieldAlert,
   Star,
   TriangleAlert,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
 import { PendingButton } from '@/components/provider/ProviderControls';

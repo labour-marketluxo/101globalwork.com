@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { CloudOff, Loader2, Navigation, Pause, Play, RefreshCw, Check, MapPin } from 'lucide-react';
+import { CloudOff, Loader2, Navigation, Pause, Play, RefreshCw, Check, MapPin } from '@/components/ui/icons';
 import {
   dequeue,
   enqueue,

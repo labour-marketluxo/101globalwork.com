@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CircleCheck, ShieldAlert } from 'lucide-react';
+import { ArrowRight, CircleCheck, ShieldAlert } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD } from '@/components/discovery/tokens';
 import { formatMoney } from '@/features/provider-workspace/format';
 import {

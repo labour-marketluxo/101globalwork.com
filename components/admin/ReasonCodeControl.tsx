@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useRef } from 'react';
-import { IdCard, TriangleAlert } from 'lucide-react';
+import { IdCard, TriangleAlert } from '@/components/ui/icons';
 import type { ReasonCode } from '@/features/admin/copy';
 
 /**

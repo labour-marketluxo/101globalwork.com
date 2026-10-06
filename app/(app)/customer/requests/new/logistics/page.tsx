@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from '@/components/ui/icons';
 import { HonestGap, IntakeStepShell } from '@/components/customer/IntakeChrome';
 import { CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { saveIntakeDraftAction } from '@/features/customer/actions';

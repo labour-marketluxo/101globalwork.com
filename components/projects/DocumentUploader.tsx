@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Check, Loader2, Upload } from 'lucide-react';
+import { Check, Loader2, Upload } from '@/components/ui/icons';
 import { FIELD, LABEL } from '@/components/discovery/tokens';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 import { addProjectDocumentAction } from '@/features/projects/actions';

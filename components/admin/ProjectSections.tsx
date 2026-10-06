@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Ban, CircleCheck, TriangleAlert } from 'lucide-react';
+import { ArrowRight, Ban, CircleCheck, TriangleAlert } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import { PROJECT_EXCEPTION_COPY, type ReasonCode } from '@/features/admin/copy';
 import type { ProjectJobRow, ProjectOverrideRow, ProjectTimelineEvent } from '@/features/admin/projects';

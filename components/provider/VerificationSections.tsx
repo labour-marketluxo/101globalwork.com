@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, FileText, ShieldCheck } from 'lucide-react';
+import { ArrowRight, FileText, ShieldCheck } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';

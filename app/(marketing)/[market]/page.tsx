@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { MapPin } from 'lucide-react';
+import { MapPin } from '@/components/ui/icons';
 import { PUBLIC_BAND } from '@/components/discovery/tokens';
 import { IndexabilityNotice } from '@/components/discovery/HubSections';
 import { getCountryHub } from '@/features/discovery/data/mock-locations';

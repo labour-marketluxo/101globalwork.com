@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CalendarClock, ClipboardCheck, MapPin, Pause, Search, TriangleAlert, User } from 'lucide-react';
+import { ArrowRight, CalendarClock, ClipboardCheck, MapPin, Pause, Search, TriangleAlert, User } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
 import { PendingButton } from '@/components/provider/ProviderControls';

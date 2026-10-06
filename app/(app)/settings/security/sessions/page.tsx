@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from '@/components/ui/icons';
 import {
   CurrentSessionPanel,
   DangerZone,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Clock, TimerOff } from 'lucide-react';
+import { Clock, TimerOff } from '@/components/ui/icons';
 import { expiryState } from '@/features/customer/expiry';
 
 /**

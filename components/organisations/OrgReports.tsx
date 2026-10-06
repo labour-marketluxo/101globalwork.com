@@ -1,4 +1,4 @@
-import { BarChart3, Info, ShieldCheck } from 'lucide-react';
+import { BarChart3, Info, ShieldCheck } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD } from '@/components/discovery/tokens';
 import { formatMoney } from '@/features/provider-workspace/format';
 import type { ReportsRead } from '@/features/organisations/governance';

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import { PAGE_SHELL, LINK_ARROW } from '@/components/discovery/tokens';
 import {
   PaymentEmpty,

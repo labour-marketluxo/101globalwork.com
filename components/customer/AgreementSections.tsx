@@ -1,4 +1,4 @@
-import { AlertTriangle, BadgeCheck, CircleSlash, Download, KeyRound, MailCheck, MessageSquare, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, BadgeCheck, CircleSlash, Download, KeyRound, MailCheck, MessageSquare, ShieldCheck } from '@/components/ui/icons';
 import { CARD, FIELD, LABEL } from '@/components/discovery/tokens';
 import {
   acceptAgreementAction,

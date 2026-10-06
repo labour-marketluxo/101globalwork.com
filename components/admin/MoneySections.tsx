@@ -1,4 +1,4 @@
-import { BadgeCheck, TriangleAlert } from 'lucide-react';
+import { BadgeCheck, TriangleAlert } from '@/components/ui/icons';
 import { PAYMENT_ANOMALY_COPY, PAYOUT_BLOCK_COPY, CHARGEBACK_RESOLUTION_COPY } from '@/features/admin/copy';
 import { formatMoney } from '@/features/provider-workspace/format';
 

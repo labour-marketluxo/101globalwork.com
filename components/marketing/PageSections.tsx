@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown } from '@/components/ui/icons';
 
 /**
  * PageSections — the shared building blocks for the PUBLIC marketing routes.

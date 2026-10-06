@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
-import { ArrowRight, FileText } from 'lucide-react';
+import { ArrowRight, FileText } from '@/components/ui/icons';
 import {
   RequestListCard,
   RequestListControls,

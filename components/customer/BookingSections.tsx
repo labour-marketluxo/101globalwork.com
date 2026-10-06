@@ -10,7 +10,7 @@ import {
   MapPin,
   Pencil,
   RefreshCw,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import {
   cancelBookingAction,

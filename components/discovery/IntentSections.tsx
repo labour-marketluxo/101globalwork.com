@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { ArrowRight, BadgeCheck, Info, MapPin, ShieldCheck, Sparkles, Tag, TriangleAlert } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Info, MapPin, ShieldCheck, Sparkles, Tag, TriangleAlert } from '@/components/ui/icons';
 import type { BreadcrumbItem } from '@/components/ui/Breadcrumbs';
 import {
   BADGE_AMBER,

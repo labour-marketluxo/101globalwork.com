@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Search } from 'lucide-react';
+import { ArrowRight, Search } from '@/components/ui/icons';
 import { Section } from '@/components/marketing/PageSections';
 import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 

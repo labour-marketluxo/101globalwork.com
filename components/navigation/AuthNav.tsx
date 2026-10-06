@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { IS_MOCK_MODE } from '@/lib/supabase/mock';
 

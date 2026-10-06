@@ -1,6 +1,6 @@
 'use client';
 
-import { Mic, PencilLine, Sparkles, Square, TriangleAlert, Zap } from 'lucide-react';
+import { Mic, PencilLine, Sparkles, Square, TriangleAlert, Zap } from '@/components/ui/icons';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 /**

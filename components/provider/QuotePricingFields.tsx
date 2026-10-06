@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from '@/components/ui/icons';
 import { FIELD, LABEL } from '@/components/discovery/tokens';
 
 /**

@@ -9,7 +9,7 @@ import {
   SearchX,
   SlidersHorizontal,
   TriangleAlert,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import type { MarketLocation, MarketProvider, MarketService } from '@/features/discovery/data/market-catalog';
 import { BADGE_AMBER, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 

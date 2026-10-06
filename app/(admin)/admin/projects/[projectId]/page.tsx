@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, Ban, ShieldAlert } from 'lucide-react';
+import { ArrowRight, Ban, ShieldAlert } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import {
   ExceptionTags,

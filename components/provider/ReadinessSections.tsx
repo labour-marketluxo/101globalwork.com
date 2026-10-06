@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CircleCheck, Info, Search, TriangleAlert } from 'lucide-react';
+import { ArrowRight, CircleCheck, Info, Search, TriangleAlert } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { dimensionTone, readinessLabel, type ProviderReadiness } from '@/features/provider-workspace/readiness';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';

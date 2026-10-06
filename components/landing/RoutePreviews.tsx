@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BadgeCheck, CircleCheck, Lock, ShieldCheck } from 'lucide-react';
+import { ArrowRight, BadgeCheck, CircleCheck, Lock, ShieldCheck } from '@/components/ui/icons';
 import { ActionLink, Section, SectionHeader } from '@/components/marketing/PageSections';
 
 /**

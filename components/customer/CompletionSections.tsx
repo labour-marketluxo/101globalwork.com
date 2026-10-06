@@ -11,7 +11,7 @@ import {
   Link2,
   ShieldCheck,
   Star,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import {
   approveProjectCompletionAction,

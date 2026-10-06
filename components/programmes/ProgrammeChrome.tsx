@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CircleAlert, CircleCheck, Info, Lock, ShieldCheck } from 'lucide-react';
+import { CircleAlert, CircleCheck, Info, Lock, ShieldCheck } from '@/components/ui/icons';
 import { CARD } from '@/components/discovery/tokens';
 import { PROGRAMME_TABS } from '@/features/programmes/paths';
 import { cellReasonText, privacySentence, type PrivacyCell, type PrivacyRate, type PrivacySummary } from '@/features/programmes/privacy';

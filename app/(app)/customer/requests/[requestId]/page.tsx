@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, Pencil } from 'lucide-react';
+import { ArrowRight, Pencil } from '@/components/ui/icons';
 import {
   CancelRequestPanel,
   EditRequestPanel,

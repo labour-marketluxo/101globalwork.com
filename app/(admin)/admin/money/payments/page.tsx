@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import { AnomalyTags, Money, StatusPill } from '@/components/admin/MoneySections';
 import { PAYMENT_ANOMALY_FILTERS, PAYMENT_ANOMALY_FILTER_COPY, PAYMENT_ATTEMPT_STATUSES } from '@/features/admin/copy';
 import { getAdminContext } from '@/features/admin/context';

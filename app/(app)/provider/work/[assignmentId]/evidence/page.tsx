@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowLeft, Info } from 'lucide-react';
+import { ArrowLeft, Info } from '@/components/ui/icons';
 import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import EvidenceCapture from '@/components/provider/EvidenceCapture';
 import { OfflineSyncStatus } from '@/components/provider/WorkStatusActions';

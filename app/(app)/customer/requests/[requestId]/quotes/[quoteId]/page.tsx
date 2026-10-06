@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, BadgeCheck, Download, FileText, FileWarning, Lock } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Download, FileText, FileWarning, Lock } from '@/components/ui/icons';
 import { ExpirationTimer } from '@/components/customer/ExpirationTimer';
 import QuoteMessages from '@/components/quotes/QuoteMessages';
 import {

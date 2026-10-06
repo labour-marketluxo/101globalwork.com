@@ -13,7 +13,7 @@ import {
   Search,
   ScrollText,
   UserRound,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
 
 /**

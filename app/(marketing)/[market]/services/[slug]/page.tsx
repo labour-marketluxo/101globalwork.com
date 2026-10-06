@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { ArrowRight, Boxes, MapPin, Tag } from 'lucide-react';
+import { ArrowRight, Boxes, MapPin, Tag } from '@/components/ui/icons';
 import { MarketDataNotice } from '@/components/discovery/MarketSections';
 import {
   AvailabilityChip,

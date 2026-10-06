@@ -15,8 +15,8 @@ import {
   Wind,
   Wrench,
   Zap,
-  type LucideIcon,
-} from 'lucide-react';
+  type IconComponent,
+} from '@/components/ui/icons';
 
 /**
  * Homepage sections — PRD 7.1 (Home Experience), Option A design tokens.

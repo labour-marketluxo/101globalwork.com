@@ -1,4 +1,4 @@
-import { BarChart3, Info, TrendingUp } from 'lucide-react';
+import { BarChart3, Info, TrendingUp } from '@/components/ui/icons';
 import { BADGE_SLATE, CARD } from '@/components/discovery/tokens';
 import { CellValue, PrivacyPanel, ProgrammeNotice, RateValue } from '@/components/programmes/ProgrammeChrome';
 import { CREDENTIAL_KIND_COPY } from '@/features/programmes/copy';

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
-import { ArrowRight, BadgeCheck, Building2, MapPin } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Building2, MapPin } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CTA_AMBER, PUBLIC_SHELL } from '@/components/discovery/tokens';
 import { NoticePanel } from '@/components/discovery/MarketSections';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';

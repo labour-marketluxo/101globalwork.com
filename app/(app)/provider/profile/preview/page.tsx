@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ArrowLeft, CircleAlert, Eye, Search } from 'lucide-react';
+import { ArrowLeft, CircleAlert, Eye, Search } from '@/components/ui/icons';
 import PublicProfileView from '@/components/providers/PublicProfileView';
 import { LINK_ARROW } from '@/components/discovery/tokens';
 import { WorkspaceNotice, WorkspaceUnavailable } from '@/components/provider/WorkspaceNotices';

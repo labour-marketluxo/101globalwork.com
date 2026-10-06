@@ -10,7 +10,7 @@ import {
   Save,
   Search,
   Sparkles,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { cancelRequestAction, updateRequestAction } from '@/features/customer/actions';
 import { formatMoney } from '@/features/customer/quotes';

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { CalendarClock, MailCheck, ShieldAlert, ShieldCheck, UserCog } from 'lucide-react';
+import { CalendarClock, MailCheck, ShieldAlert, ShieldCheck, UserCog } from '@/components/ui/icons';
 import {
   AUTH_CTA,
   AUTH_CTA_SECONDARY,

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { CircleCheck, Info, TriangleAlert } from 'lucide-react';
+import { CircleCheck, Info, TriangleAlert } from '@/components/ui/icons';
 import { FIELD, LABEL } from '@/components/discovery/tokens';
 import { signInWithGoogleAction } from '@/features/auth/actions';
 

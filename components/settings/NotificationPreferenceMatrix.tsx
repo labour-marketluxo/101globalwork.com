@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CircleAlert, CircleCheck, Info, Lock } from 'lucide-react';
+import { CircleAlert, CircleCheck, Info, Lock } from '@/components/ui/icons';
 import { CARD } from '@/components/discovery/tokens';
 import { setNotificationPreferenceAction } from '@/features/settings/preference-actions';
 import {

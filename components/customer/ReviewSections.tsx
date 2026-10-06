@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BadgeCheck, ExternalLink, Info, Lock, Star } from 'lucide-react';
+import { BadgeCheck, ExternalLink, Info, Lock, Star } from '@/components/ui/icons';
 import { CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { submitProviderReviewAction } from '@/features/customer/review-actions';
 import {

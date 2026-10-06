@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Info, Scale } from 'lucide-react';
+import { ArrowRight, Info, Scale } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, PAGE_SHELL } from '@/components/discovery/tokens';
 import { NoticePanel } from '@/components/discovery/MarketSections';
 import { TaxonomyHero } from '@/components/discovery/TaxonomySections';

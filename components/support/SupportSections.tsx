@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CircleAlert, CircleCheck, Clock, FileText, Info, LifeBuoy, Paperclip, ShieldAlert, Timer } from 'lucide-react';
+import { CircleAlert, CircleCheck, Clock, FileText, Info, LifeBuoy, Paperclip, ShieldAlert, Timer } from '@/components/ui/icons';
 import { CARD, CARD_INTERACTIVE, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { formatRelativeTime } from '@/features/settings/device-label';

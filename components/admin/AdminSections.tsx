@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, ExternalLink, ShieldAlert } from 'lucide-react';
+import { ArrowRight, ExternalLink, ShieldAlert } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import { acknowledgeIncidentAction, applyProviderRestrictionAction, liftProviderRestrictionAction } from '@/features/admin/actions';
 import {

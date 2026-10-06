@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import { StatusBadge } from '@/components/admin/TrustSections';
 import { ACCESS_NOTE } from '@/components/admin/trust-copy';
 import { getAdminContext } from '@/features/admin/context';

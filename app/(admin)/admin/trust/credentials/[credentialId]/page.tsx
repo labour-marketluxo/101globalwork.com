@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, ShieldAlert } from 'lucide-react';
+import { ArrowRight, ShieldAlert } from '@/components/ui/icons';
 import ReasonCodeControl from '@/components/admin/ReasonCodeControl';
 import {
   DecisionHistory,

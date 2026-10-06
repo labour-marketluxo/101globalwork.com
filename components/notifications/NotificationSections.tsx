@@ -8,7 +8,7 @@ import {
   ShieldAlert,
   ShieldCheck,
   Sparkles,
-} from 'lucide-react';
+} from '@/components/ui/icons';
 import { BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import ConfirmSubmit from '@/components/ui/ConfirmSubmit';
 import { NOTIFICATION_SETTINGS_PATH } from '@/features/settings/paths';

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from '@/components/ui/icons';
 import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { OpportunityScopePanel } from '@/components/provider/OpportunitySections';
 import { QuoteBuilderForm } from '@/components/provider/ProviderQuoteSections';

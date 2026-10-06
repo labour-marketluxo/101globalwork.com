@@ -1,4 +1,4 @@
-import { Info } from 'lucide-react';
+import { Info } from '@/components/ui/icons';
 import { CARD, PAGE_SHELL } from '@/components/discovery/tokens';
 import {
   AddAssetForm,

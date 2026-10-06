@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@/components/ui/icons';
 import { AcceptancePanel, AgreementAlternatives, AgreementTerms } from '@/components/customer/AgreementSections';
 import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
 import { buildAgreementDocument, agreementHash, getProjectAgreement } from '@/features/customer/agreement';

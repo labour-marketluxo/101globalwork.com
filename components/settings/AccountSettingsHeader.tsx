@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Bell, CalendarClock, LifeBuoy, MessagesSquare, Settings } from 'lucide-react';
+import { Bell, CalendarClock, LifeBuoy, MessagesSquare, Settings } from '@/components/ui/icons';
 import type { AccountShell } from '@/features/settings/shell';
 import { MESSAGES_PATH, NOTIFICATIONS_PATH, PROFILE_PATH } from '@/features/settings/paths';
 import { RECURRING_PATH } from '@/features/recurring/paths';
