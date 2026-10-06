@@ -25,7 +25,7 @@ import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
  * THE CATEGORY SET IS THE BRIEF'S, VERBATIM. The headings and the scope chips describe the shape of
  * the directory, not a count of supply — the platform's published position is that the catalogue is
  * nearly empty, so nothing here shows a provider count, a rating or a "jobs completed" figure.
- * ("[ ACTIVE ]" reads as "this category is browsable", not "providers are available"; the copy
+ * ("ACTIVE" reads as "this category is browsable", not "providers are available"; the copy
  * avoids implying the latter.)
  */
 

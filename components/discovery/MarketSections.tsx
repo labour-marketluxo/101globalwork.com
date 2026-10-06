@@ -25,7 +25,7 @@ import { BADGE_AMBER, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/to
  * continue that page rather than switch dialects halfway through a session. The
  * vocabulary comes from components/marketing/PageSections.tsx and
  * components/navigation/AuthNav.tsx — `rounded-xl`/`-2xl` cards on slate-200
- * hairlines with `shadow-sm`, mono for metadata, amber strictly for action and
+ * hairlines with `shadow-sm`, uppercase labels for metadata, amber strictly for action and
  * status. The `.pill`/`.notice`/`.button-link` classes these components used to
  * carry are all still defined; they are simply no longer used here, because
  * `.button-link` and `.secondary-link` live in the UNLAYERED entry-points.css
@@ -513,13 +513,13 @@ export function MarketEmptyState({
 
       {/* Amber is the CTA colour, so the primary action here is the same amber
           as the navbar's — one destination, one look — and the secondary is an
-          underlined mono link beside it. */}
+          underlined link beside it. */}
       <div className="mt-2 flex flex-wrap items-center gap-4">
         <Link
           href="/requests/new"
           className="no-underline flex items-center gap-2 rounded-xl bg-[#F59E0B] px-6 py-3.5 font-sans text-xs font-bold text-slate-950 shadow-sm transition-all hover:bg-[#D97706] active:scale-95"
         >
-          [ Post an open request → ]
+          Post an open request →
         </Link>
         <Link
           href="/how-it-works"

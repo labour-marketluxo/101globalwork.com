@@ -7,7 +7,7 @@ import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
  * TradeVerticals — the dark deep-teal section of photographed category cards.
  *
  * Ported from the design's section 3. The cards, the image treatment (gradient
- * from `primary-dark`, slow scale on hover) and the mono tag chips all match.
+ * from `primary-dark`, slow scale on hover) and the tag chips all match.
  *
  * TWO DEPARTURES
  *

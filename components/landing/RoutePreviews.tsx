@@ -75,7 +75,7 @@ function StepBadge({ step, tone = 'light' }: { step: string; tone?: 'light' | 'd
           : 'bg-emerald-50 text-emerald-700'
       }`}
     >
-      [ {step} / step ]
+      {step} / step
     </span>
   );
 }
@@ -115,7 +115,7 @@ export function HowItWorksPreview() {
             </p>
 
             {/* THE EXAMPLE REQUEST.
-                It is an OBJECT rather than more prose — a dark surface, an emerald frame and mono metadata around
+                It is an OBJECT rather than more prose — a dark surface, an emerald frame and metadata around
                 a quoted paragraph — so the eye reads it as "here is what a description looks like" and not as a
                 fourth sentence of explanation.
                 ⚠️ `m-0` IS NOT TIDINESS, IT IS THE FIX FOR THE WIDTH. This project deliberately does not import
@@ -169,7 +169,7 @@ export function HowItWorksPreview() {
 
             <div className="flex items-center gap-2 rounded-xl border border-emerald-800/40 bg-emerald-950/60 p-3 font-sans text-xs text-emerald-400">
               <CircleCheck aria-hidden="true" className="h-4 w-4 shrink-0" />
-              <span className="font-bold tracking-wider uppercase">[ held by the payment provider ]</span>
+              <span className="font-bold tracking-wider uppercase">held by the payment provider</span>
             </div>
             <p className="mt-3 text-xs leading-relaxed text-slate-400">
               Released once, on your completion approval — not passed to the provider up front, and not held by
@@ -180,7 +180,7 @@ export function HowItWorksPreview() {
       </div>
 
       {/* The link carries its own styling rather than the shared `ActionLink`, because the brief asked for a
-          treatment nothing else on the page uses: mono, underlined, and a press nudge. `active:translate-x-1`
+          treatment nothing else on the page uses: underlined, with a press nudge. `active:translate-x-1`
           moves it a quarter of a rem and `active:scale-[0.98]` presses it slightly, which on an inline-flex
           anchor is the difference between a link that acknowledges the click and one that does not.
           Both transforms are Tailwind v4 properties (`translate` and `scale`) rather than `transform`, and both

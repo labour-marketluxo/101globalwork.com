@@ -55,7 +55,7 @@ import { PREVIEW_PROVIDERS } from '@/features/discovery/data/preview-providers';
  * THE PAGE IS DRESSED AS A CONTINUATION OF THE LANDING PAGE (restyled
  * 2026-09-20). Every visitor reaches a search result from the hero's prompt bar
  * or one of its preset chips, so the first thing they see here has to look like
- * the page they just left: the same deep-teal band, the same mono metadata, the
+ * the page they just left: the same deep-teal band, the same metadata styling, the
  * same amber-for-actions rule. Concretely, the band, the callouts and the
  * result cards now use the vocabulary of components/marketing/PageSections.tsx
  * and components/navigation/AuthNav.tsx.
@@ -111,7 +111,7 @@ const META_CHIP =
 
 /**
  * The count badge on the light canvas. Both variants are the SAME shape — a
- * quiet mono pill — so the row reads as one bar whichever way it lands; only
+ * quiet pill — so the row reads as one bar whichever way it lands; only
  * the tone changes. Amber TEXT on white must be amber-800 (#d97706 measures
  * ~3.1:1 and fails AA), so the applied variant keeps amber-800 on amber-100.
  * Labels are written in caps rather than uppercased by a utility: the badge

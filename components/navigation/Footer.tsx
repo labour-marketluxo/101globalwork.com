@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 
 /**
- * Footer — the design's corporate footer: near-black teal, five columns, mono
+ * Footer — the design's corporate footer: near-black teal, five columns, small
  * uppercase headings, hairline rules.
  *
  * Rendered as a bare <footer> with NO wrapper element, deliberately:

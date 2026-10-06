@@ -274,7 +274,7 @@ export function JourneyStepList({
   );
 }
 
-/** Label/value rows — the platform's own facts, in the mono face it reserves. */
+/** Label/value rows — the platform's own facts, set as metadata rather than prose. */
 export function FactList({ items }: { items: { label: string; value: string }[] }) {
   return (
     <dl className="grid gap-2.5 font-sans text-xs">
