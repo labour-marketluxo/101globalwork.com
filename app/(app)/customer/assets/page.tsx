@@ -1,5 +1,6 @@
 import { Info } from '@/components/ui/icons';
-import { CARD, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD } from '@/components/discovery/tokens';
+import WorkspaceHero from '@/components/customer/WorkspaceHero';
 import {
   AddAssetForm,
   AssetCard,
@@ -55,16 +56,14 @@ export default async function CustomerAssetsPage({
   const dueCount = assets.filter(asset => isMaintenanceDue(asset)).length;
 
   return (
-    <section className={PAGE_SHELL}>
-      <AssetNotice failed={query.failed} saved={query.saved} logged={query.logged} claimed={query.claimed} />
+    <section>
+      <WorkspaceHero
+        eyebrow="Assets"
+        title="My assets"
+        description="The things you own that were installed, made or maintained — with their model and serial numbers, who did the work, what is under warranty and when they were last seen to."
+      />
 
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-primary sm:text-3xl">My assets</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          The things you own that were installed, made or maintained — with their model and serial numbers, who
-          did the work, what is under warranty and when they were last seen to.
-        </p>
-      </header>
+      <AssetNotice failed={query.failed} saved={query.saved} logged={query.logged} claimed={query.claimed} />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="space-y-4">

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Check } from '@/components/ui/icons';
+import WorkspaceHero from '@/components/customer/WorkspaceHero';
 import {
   CUSTOMER_PATHS,
   INTAKE_FAILURE_COPY,
@@ -123,6 +124,12 @@ export function IntakeNotice({ failed, saved }: { failed?: string; saved?: boole
 /**
  * A step's heading and its stepper, in the one order every step uses.
  *
+ * THE HEADING IS THE SHARED `WorkspaceHero`, not a one-off block. Every other customer workspace page
+ * opens with that dark-teal banner, and the four intake steps were the last surface still opening with
+ * a plain white h1 — so the wizard now speaks the same visual language as the pages it starts from.
+ * The stepper stays above the banner, where it reads as the progress of the flow rather than as part
+ * of the page's title.
+ *
  * The sub-navigation is not repeated here: the workspace bar above already says where this is, and a
  * second set of the same links inside a form is a second thing to keep pointing at the same place.
  */
@@ -145,22 +152,14 @@ export function IntakeStepShell({
     <section>
       <StepBar current={step} />
 
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div className="max-w-2xl">
-          <p className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-            Step {stepNumber(step)} of {INTAKE_STEPS.length} — {STEP_LABELS[step]}
-          </p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-primary sm:text-3xl">{title}</h1>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600">{lede}</p>
-        </div>
-
+      <WorkspaceHero eyebrow="New request" title={title} description={lede}>
         <Link
           href={CUSTOMER_PATHS.dashboard}
-          className="font-sans text-xs font-semibold text-slate-500 no-underline transition-colors hover:text-primary"
+          className="inline-flex items-center gap-2 font-sans text-xs font-semibold text-slate-300 no-underline transition-colors hover:text-white"
         >
           Cancel and leave
         </Link>
-      </div>
+      </WorkspaceHero>
 
       <IntakeNotice failed={failed} saved={saved} />
 

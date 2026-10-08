@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, CircleAlert, FileText, MessageSquareQuote, Wallet } from '@/components/ui/icons';
-import { BADGE_AMBER, BADGE_SLATE, CARD, CTA_AMBER, LINK_ARROW } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
+import WorkspaceHero, { WORKSPACE_HERO_ACTION, WORKSPACE_HERO_INPUT } from '@/components/customer/WorkspaceHero';
 import { CUSTOMER_PATHS, requestReference } from '@/features/customer/intake';
 import type { ActiveRequest, CustomerDashboard, PaymentDue, QuoteAwaitingReview, ScheduledWork } from '@/features/customer/requests';
 
@@ -83,21 +84,14 @@ function SectionCard({
 /** The hero: greeting, and the one input the whole flow starts from. */
 export function CustomerHero({ firstName }: { firstName: string | null }) {
   return (
-    <section className="rounded-2xl border border-solid border-primary/10 bg-primary-surface p-6 sm:p-8">
-      <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
-        {firstName ? `Welcome back, ${firstName}` : 'Welcome back'}
-      </p>
-      <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-        What do you need done today?
-      </h1>
-      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-        Describe it in your own words. The next steps ask only what a provider needs to quote it, and
-        nothing is sent to anybody until you submit at the end.
-      </p>
-
+    <WorkspaceHero
+      eyebrow={firstName ? `Welcome back, ${firstName}` : 'Welcome back'}
+      title="What do you need done today?"
+      description="Describe it in your own words. The next steps ask only what a provider needs to quote it, and nothing is sent to anybody until you submit at the end."
+    >
       {/* A GET form, deliberately: the first step is a page that reads `?q=`, so the intent survives a
           reload, a bookmark and a shared link without any client state. */}
-      <form action={CUSTOMER_PATHS.newRequest} method="get" className="mt-5 flex flex-col gap-3 sm:flex-row">
+      <form action={CUSTOMER_PATHS.newRequest} method="get" className="flex flex-col gap-3 sm:flex-row">
         <label htmlFor="intent-quick" className="sr-only">
           What do you need done today?
         </label>
@@ -107,14 +101,14 @@ export function CustomerHero({ firstName }: { firstName: string | null }) {
           type="text"
           maxLength={400}
           placeholder="e.g. The kitchen tap has been dripping for a week"
-          className="w-full flex-1 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2.5 text-sm font-normal text-slate-900 outline-none placeholder:text-slate-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+          className={WORKSPACE_HERO_INPUT}
         />
-        <button type="submit" className={`${CTA_AMBER} justify-center`}>
+        <button type="submit" className={`${WORKSPACE_HERO_ACTION} justify-center`}>
           Start New Request
           <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </button>
       </form>
-    </section>
+    </WorkspaceHero>
   );
 }
 

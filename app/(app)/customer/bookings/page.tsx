@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Info } from '@/components/ui/icons';
-import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
+import WorkspaceHero from '@/components/customer/WorkspaceHero';
 import {
   BookingCalendar,
   BookingControls,
@@ -88,7 +89,13 @@ export default async function CustomerBookingsPage({ searchParams }: { searchPar
   const past = bookings.filter(booking => ['completed', 'cancelled'].includes(booking.status));
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
+      <WorkspaceHero
+        eyebrow="Bookings"
+        title="Bookings & schedule"
+        description="The appointments for work you have agreed. A provider sets the time; you confirm it. If it does not suit you, propose another one — only the provider can move a booking, so yours is a request until they accept it."
+      />
+
       <BookingNotice
         failed={query.failed}
         confirmed={query.confirmed}
@@ -96,18 +103,12 @@ export default async function CustomerBookingsPage({ searchParams }: { searchPar
         cancelled={query.cancelled}
       />
 
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-primary sm:text-3xl">Bookings &amp; schedule</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          The appointments for work you have agreed. A provider sets the time; you confirm it. If it does not
-          suit you, propose another one — only the provider can move a booking, so yours is a request until they
-          accept it.
-        </p>
-        <p className="mt-2 flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+      <div className="mb-6 space-y-2">
+        <p className="flex items-center gap-2 font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           Times shown in {timeZone}
         </p>
         {assumed ? (
-          <p className="mt-2 flex items-start gap-2 rounded-xl border border-solid border-amber-300 bg-secondary-light px-4 py-3 text-xs leading-relaxed text-amber-900">
+          <p className="flex items-start gap-2 rounded-xl border border-solid border-amber-300 bg-secondary-light px-4 py-3 text-xs leading-relaxed text-amber-900">
             <Info aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
               Your account has not recorded a timezone, and neither has any provider on these bookings, so times
@@ -119,7 +120,7 @@ export default async function CustomerBookingsPage({ searchParams }: { searchPar
             </span>
           </p>
         ) : null}
-      </header>
+      </div>
 
       {unavailable ? (
         <p role="alert" className="rounded-xl border border-solid border-amber-300 bg-secondary-light px-4 py-3 text-sm font-semibold text-amber-900">

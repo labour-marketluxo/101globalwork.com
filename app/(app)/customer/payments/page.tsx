@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from '@/components/ui/icons';
-import { PAGE_SHELL, LINK_ARROW } from '@/components/discovery/tokens';
+import { LINK_ARROW } from '@/components/discovery/tokens';
+import WorkspaceHero from '@/components/customer/WorkspaceHero';
 import {
   PaymentEmpty,
   PaymentLedger,
@@ -39,16 +40,14 @@ export default async function CustomerPaymentsPage({
   const attention = rows.filter(row => row.reconciledState === 'attention').length;
 
   return (
-    <section className={PAGE_SHELL}>
-      <PaymentNotice failed={query.failed} requested={query.requested} paymentError={query.payment_error} />
+    <section>
+      <WorkspaceHero
+        eyebrow="Payments"
+        title="Payments"
+        description="Every payment for work you have agreed, grouped by what it means right now. Money is held until you approve the finished work, and only then released to the provider."
+      />
 
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-primary sm:text-3xl">Payments</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          Every payment for work you have agreed, grouped by what it means right now. Money is held until you
-          approve the finished work, and only then released to the provider.
-        </p>
-      </header>
+      <PaymentNotice failed={query.failed} requested={query.requested} paymentError={query.payment_error} />
 
       <section className="mb-6 rounded-xl border border-solid border-primary-subtle bg-primary-surface px-4 py-3">
         <h2 className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">

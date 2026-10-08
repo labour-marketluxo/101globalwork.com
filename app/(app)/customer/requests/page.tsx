@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FileText } from '@/components/ui/icons';
+import WorkspaceHero, { WORKSPACE_HERO_ACTION } from '@/components/customer/WorkspaceHero';
 import {
   RequestListCard,
   RequestListControls,
@@ -8,7 +9,6 @@ import {
   RequestListSkeleton,
   RequestTabs,
 } from '@/components/customer/RequestSections';
-import { PAGE_SHELL } from '@/components/discovery/tokens';
 import {
   REQUEST_TABS,
   getCustomerRequestList,
@@ -46,22 +46,16 @@ export default async function CustomerRequestsPage({ searchParams }: { searchPar
   const sort: Sort = (SORTS as readonly string[]).includes(params.sort ?? '') ? (params.sort as Sort) : 'newest';
 
   return (
-    <section className={PAGE_SHELL}>
-      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-primary sm:text-3xl">My requests</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-            Everything you have posted, from the drafts you have not finished to the work that is done. A
-            request stays here after it closes — the record of what was asked for is as useful as the work.
-          </p>
-        </div>
-        <Link
-          href="/customer/requests/new"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
-        >
+    <section>
+      <WorkspaceHero
+        eyebrow="Customer workspace"
+        title="My requests"
+        description="Everything you have posted, from the drafts you have not finished to the work that is done. A request stays here after it closes — the record of what was asked for is as useful as the work."
+      >
+        <Link href="/customer/requests/new" className={WORKSPACE_HERO_ACTION}>
           Post a Request <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Link>
-      </header>
+      </WorkspaceHero>
 
       {/* In-page Suspense on purpose: a route-level `loading.tsx` would sit ABOVE the layout's sign-in guard
           and turn a signed-out visitor into a soft 404 instead of a redirect. */}
