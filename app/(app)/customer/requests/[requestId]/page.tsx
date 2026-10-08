@@ -8,7 +8,7 @@ import {
   MatchesGrid,
   RequestSummaryCard,
 } from '@/components/customer/RequestSections';
-import { BADGE_AMBER, CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { BADGE_AMBER, CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { DecisionNotice, MessageProviderPanel } from '@/components/customer/QuoteSections';
 import { CUSTOMER_PATHS } from '@/features/customer/intake';
 import { expiryState } from '@/features/customer/expiry';
@@ -65,7 +65,7 @@ export default async function CustomerRequestDetailPage({
     : 'This request is closed, so nothing on it can be edited any more.';
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <DecisionNotice failed={query.failed} decided={query.decided} />
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">

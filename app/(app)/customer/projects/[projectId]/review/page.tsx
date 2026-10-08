@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from '@/components/ui/icons';
-import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import {
   ReviewAudienceNote,
   ReviewForm,
@@ -46,7 +46,7 @@ export default async function ProjectReviewPage({
   const { review, unavailable } = await getReviewForAssignment(agreement.assignmentId);
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <ReviewNotice failed={query.failed} reviewed={query.reviewed} />
 
       <nav aria-label="Review" className="mb-4 flex flex-wrap items-center gap-2 text-xs">

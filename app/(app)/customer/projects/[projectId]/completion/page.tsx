@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from '@/components/ui/icons';
-import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import {
   CompletionDecisionPanel,
   CompletionHistory,
@@ -51,7 +51,7 @@ export default async function ProjectCompletionPage({
   const criteria = completionCriteria(agreement.quote);
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <CompletionNotice
         failed={query.failed}
         approved={query.approved}

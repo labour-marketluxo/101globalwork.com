@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from '@/components/ui/icons';
 import { AcceptancePanel, AgreementAlternatives, AgreementTerms } from '@/components/customer/AgreementSections';
-import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { buildAgreementDocument, agreementHash, getProjectAgreement } from '@/features/customer/agreement';
 import { formatMoney } from '@/features/customer/quotes';
 
@@ -45,7 +45,7 @@ export default async function ProjectAgreementPage({
   const currentHash = agreementHash(canonical);
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <nav aria-label="Agreement" className="mb-4 flex flex-wrap items-center gap-2 text-xs">
         <Link href={`/customer/requests/${agreement.requestId}`} className={LINK_ARROW}>
           ← Back to the request

@@ -7,7 +7,7 @@ import {
   ComparisonMatrix,
   DecisionNotice,
 } from '@/components/customer/QuoteSections';
-import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { groupQuotes, quoteActionability } from '@/features/customer/quotes';
 import { getCustomerRequestDetail } from '@/features/customer/requests';
 
@@ -50,7 +50,7 @@ export default async function QuoteComparisonPage({
     quoteActionability(group.latest, { requestState: request.state, hasActiveAssignment }).canAccept).length;
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <DecisionNotice failed={query.failed} decided={query.decided} />
 
       <header className="mb-6">

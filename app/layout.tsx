@@ -62,11 +62,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   // app/(admin)/admin/layout.tsx had to do, injecting `display: none` on every admin screen
   // while still shipping the nav markup.
   //
-  // Each group draws its own now: components/navigation/SiteChrome.tsx for the public and
-  // workspace routes, components/auth/MinimalAuthLayout.tsx for the credential and onboarding
-  // screens, and its own frame for /admin. <body> keeps `display: flex; flex-direction:
-  // column` from globals.css, so whichever layout renders here must still put <main> directly
-  // under <body> — that is what pins the footer to the bottom of a short page.
+  // Each group draws its own now: components/navigation/SiteChrome.tsx for the public routes,
+  // components/auth/MinimalAuthLayout.tsx for the credential and onboarding screens, its own
+  // bars for the signed-in workspace (layouts/DashboardLayout.tsx), and its own frame for
+  // /admin. <body> keeps `display: flex; flex-direction: column` from globals.css, so whichever
+  // layout renders here must still put <main> directly under <body> — that is what pins the
+  // footer to the bottom of a short page.
   return (
     <html lang="en" className={`${sourceSans.variable} ${inter.variable}`}>
       <body suppressHydrationWarning>{children}</body>

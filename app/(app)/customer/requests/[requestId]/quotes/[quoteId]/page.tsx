@@ -10,7 +10,7 @@ import {
   QuoteTermsList,
   VersionHistory,
 } from '@/components/customer/QuoteSections';
-import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { acceptQuoteAction, declineQuoteAction, requestQuoteChangeAction } from '@/features/customer/actions';
 import { expiryState } from '@/features/customer/expiry';
 import { formatMoney, groupQuotes, lineItemSubtotal, quoteActionability } from '@/features/customer/quotes';
@@ -80,7 +80,7 @@ export default async function QuoteDetailPage({
   const expiry = expiryState(quote.validUntil);
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <DecisionNotice failed={query.failed} decided={query.decided} />
 
       <nav aria-label="Quote" className="mb-4 flex flex-wrap items-center gap-2 text-xs">

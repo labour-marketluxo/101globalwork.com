@@ -31,8 +31,8 @@ import { MobileNav, NavLinks } from '@/components/navigation/NavLinks';
  * dark bar over a dark hero, not something a stronger shadow fixes.
  *
  * ⚠️ AND IT IS NOT LANDING-PAGE-ONLY. This component is the site header for every group that renders SiteChrome
- * — marketing, the signed-in workspaces, the account pages, /legal, /payments and the 404 — so the shadow
- * appears in all of them. The alternative is a per-group header, which is a bigger change than a shadow.
+ * — marketing, the account pages, /legal, /payments and the 404 — so the shadow appears in all of them. The
+ * signed-in workspace (`(app)`) draws its own bars instead; see layouts/DashboardLayout.tsx.
  *
  * STICKY, not fixed. The design uses `fixed`, which removes the bar from flow —
  * every page underneath would then need its own top offset, and the admin

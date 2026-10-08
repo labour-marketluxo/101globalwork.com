@@ -114,8 +114,21 @@ export const HERO_INNER = `relative z-10 ${PUBLIC_BAND} px-4 py-8 sm:px-6 sm:py-
 /**
  * Signed-in workspace container — deliberately NOT the public 1320 band.
  *
- * The dashboard pages are laid out for tables, sidebars and forms; the public
- * pages are laid out for browsing, and they follow the landing page's width
- * (`PUBLIC_SHELL`) instead. 7xl = 1280px, 40px tighter than the landing.
+ * The account, legal and organisation pages are laid out for forms and prose; the public pages are
+ * laid out for browsing and follow the landing page's width (`PUBLIC_SHELL`) instead. 7xl = 1280px,
+ * 40px tighter than the landing.
+ *
+ * The two operational workspaces — customer and provider — use `WORKSPACE_SHELL` below rather than
+ * this token, so they are not pinned to a 1280px column.
  */
 export const PAGE_SHELL = 'mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10';
+
+/**
+ * Full-bleed workspace container — same gutters and rhythm as `PAGE_SHELL`, no width cap.
+ *
+ * `PAGE_SHELL`'s 1280px column is right for legal copy and the account forms, but a workspace made
+ * of sidebars, tables and project cards reads as "lean" when it is pinned to the middle of a wide
+ * screen. The customer and provider shells are the two screens that opt out, so only they (and the
+ * pages that render inside them) use this token.
+ */
+export const WORKSPACE_SHELL = 'w-full px-4 py-8 sm:px-6 lg:px-8 lg:py-10';

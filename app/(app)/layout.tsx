@@ -7,6 +7,10 @@ import DashboardLayout from '@/layouts/DashboardLayout';
  * The signed-in workspace surfaces: /notifications, /messages, /settings/*, /work, /requests/*,
  * /customer/*, /projects/*, /provider/* and /org/*. The group name does not appear in the URL.
  *
+ * ⚠️ NO PUBLIC CHROME HERE. DashboardLayout (layouts/DashboardLayout.tsx) draws the workspace
+ * shell and deliberately does not render the marketing header and footer, so none of these
+ * signed-in screens show a bar advertising "Sign in" and "Create an account".
+ *
  * ⚠️ NOINDEX IS DECLARED HERE, ONCE, FOR EVERY ROUTE IN THE GROUP. The brief asks for it on all app
  * routes and a per-page export is exactly the kind of requirement that is met everywhere until one new
  * page forgets. Metadata is inherited, so a page added under this group next year is excluded from

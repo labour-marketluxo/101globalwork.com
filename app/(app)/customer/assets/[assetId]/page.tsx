@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from '@/components/ui/icons';
-import { CARD, LABEL, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import {
   AftercareActions,
   AssetDetailsForm,
@@ -46,7 +46,7 @@ export default async function CustomerAssetPage({
 
   if (unavailable) {
     return (
-      <section className={PAGE_SHELL}>
+      <section>
         <div
           role="alert"
           className="rounded-2xl border border-solid border-amber-300 bg-secondary-light px-6 py-8 text-center"
@@ -67,7 +67,7 @@ export default async function CustomerAssetPage({
   const due = isMaintenanceDue(detail);
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <AssetNotice failed={query.failed} saved={query.saved} logged={query.logged} claimed={query.claimed} />
 
       <nav aria-label="Asset" className="mb-4 flex flex-wrap items-center gap-2 text-xs">

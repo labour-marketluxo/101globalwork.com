@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, Download, ShieldCheck } from '@/components/ui/icons';
-import { CARD, LABEL, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import {
   DisputeRequestPanel,
   PaymentNotice,
@@ -51,7 +51,7 @@ export default async function CustomerPaymentPage({
   // vanished.
   if (unavailable) {
     return (
-      <section className={PAGE_SHELL}>
+      <section>
         <PaymentUnavailable />
       </section>
     );
@@ -68,7 +68,7 @@ export default async function CustomerPaymentPage({
   const reconciledCopy = RECONCILED_COPY[row.reconciledState];
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <PaymentNotice failed={query.failed} requested={query.requested} paymentError={query.payment_error} />
 
       <nav aria-label="Payment" className="mb-4 flex flex-wrap items-center gap-2 text-xs">

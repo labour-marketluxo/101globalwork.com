@@ -14,7 +14,7 @@ import Footer from '@/components/navigation/Footer';
  * So the chrome moved here, and each route group decides whether to render it:
  *
  *   (marketing)   yes — the public pages
- *   (app)         yes — the signed-in workspace
+ *   (app)         no — the signed-in workspace draws its own bars (see layouts/DashboardLayout.tsx)
  *   (auth)        yes — /account/* and the redirect aliases, which are workspace surfaces
  *   (minimal-auth) no — it draws its own bar and footer instead
  *   (admin)       no — it has its own frame and hides nothing now

@@ -6,7 +6,7 @@ import {
   PaymentNotice,
   PaymentUnavailable,
 } from '@/components/customer/PaymentSections';
-import { CARD, LINK_ARROW, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { checkoutBreakdown, getCheckoutAdapters, getCustomerPayment } from '@/features/customer/payments';
 
@@ -51,7 +51,7 @@ export default async function CheckoutPage({
   ]);
   if (unavailable) {
     return (
-      <section className={PAGE_SHELL}>
+      <section>
         <PaymentUnavailable />
       </section>
     );
@@ -69,7 +69,7 @@ export default async function CheckoutPage({
   const justVerified = query.verified === '1';
 
   return (
-    <section className={PAGE_SHELL}>
+    <section>
       <PaymentNotice failed={query.failed} paymentError={query.payment_error} />
 
       <nav aria-label="Checkout" className="mb-4 flex flex-wrap items-center gap-2 text-xs">

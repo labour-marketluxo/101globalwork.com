@@ -4,13 +4,17 @@ import { redirect } from 'next/navigation';
 import { ArrowRight, Wrench } from '@/components/ui/icons';
 import { AvailabilityToggle } from '@/components/provider/ProviderControls';
 import WorkspaceNav, { WorkspaceSectionLinks } from '@/components/provider/WorkspaceNav';
-import { PAGE_SHELL } from '@/components/discovery/tokens';
+import { WORKSPACE_SHELL } from '@/components/discovery/tokens';
 import { AUTH_PATHS, hrefWith } from '@/features/auth/post-auth';
 import { getProviderContext } from '@/features/provider-workspace/context';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
 
 /**
  * The provider workspace shell — mobile-first, and deliberately not the customer shell.
+ *
+ * FULL-BLEED, VIA `WORKSPACE_SHELL`. The provider workspace is a sidebar plus dense tables of jobs,
+ * quotes and payouts, so it takes the whole width instead of the 1280px `PAGE_SHELL` column the
+ * account and legal pages keep.
  *
  * ⚠️ `robots` IS SET HERE AND INHERITED BY EVERY PAGE UNDER IT. Next merges metadata from a layout
  * into its pages, so a new provider route with no `robots` export of its own is still noindex. The
@@ -22,10 +26,10 @@ import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
  * layout cannot see the pathname. Each page decides what to do with a missing provider; the shell
  * stays out of it. Same reasoning as the customer workspace layout.
  *
- * ⚠️ THE GLOBAL SITE HEADER IS STILL ABOVE THIS BAR. It comes from the root layout via
- * SiteChrome, so this is a SECONDARY bar: workspace identity, the one control a field provider
- * changes several times a day (availability) and the way back to the customer side of the same
- * account. A full replacement header would mean duplicating the primary nav here.
+ * ⚠️ THERE IS NO PUBLIC SITE HEADER ABOVE THIS BAR. layouts/DashboardLayout.tsx draws no marketing
+ * chrome for the (app) group, so this is the workspace's own header: workspace identity, the one
+ * control a field provider changes several times a day (availability) and the way back to the
+ * customer side of the same account.
  */
 export const metadata: Metadata = {
   title: 'Provider workspace',
@@ -41,7 +45,7 @@ export default async function ProviderLayout({ children }: { children: React.Rea
   const multiple = context.providers.length > 1;
 
   return (
-    <div className={PAGE_SHELL}>
+    <div className={WORKSPACE_SHELL}>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-solid border-slate-200 pb-3">
         <div className="min-w-0">
           <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
