@@ -1,8 +1,7 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { PAGE_SHELL } from '@/components/discovery/tokens';
-import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { WORKSPACE_SHELL } from '@/components/discovery/tokens';
+import CustomerWorkspaceNav from '@/components/customer/CustomerWorkspaceNav';
 import { CUSTOMER_PATHS } from '@/features/customer/intake';
 
 export const metadata = {
@@ -13,10 +12,21 @@ export const metadata = {
 /**
  * The customer workspace shell.
  *
- * WHAT IT ADDS TO THE SITE HEADER: a breadcrumb trail and a view switcher. The global header is still
- * there above it (components/navigation/SiteChrome.tsx), so this is a SECONDARY bar — the brief asks
- * for "clean secondary sub-navigation/breadcrumbs", and duplicating the primary nav inside the
- * workspace would give a signed-in visitor two menus that disagree about where they are.
+ * FULL-BLEED, VIA `WORKSPACE_SHELL`. The old `PAGE_SHELL` capped this at 1280px and left a wide
+ * screen mostly empty; a workspace of tables and project views should use the whole width. The
+ * page-level `PAGE_SHELL` wrappers that used to nest inside this shell are gone for the same
+ * reason — a second capped column inside a full-width one just reproduced the old look.
+ *
+ * WHAT IT DRAWS: a breadcrumb trail, a view switcher and the account's identity. There is no public
+ * header above it any more (see layouts/DashboardLayout.tsx), so this bar is the workspace's own
+ * header rather than a secondary one — the brief asks for "clean secondary sub-navigation/breadcrumbs",
+ * and the workspace nav below stays the only menu that says where the visitor is.
+ *
+ * THE HEADER IS TWO FULL-BLEED ROWS OWNED BY `CustomerWorkspaceNav`: the nav bar, then the breadcrumb
+ * strip. Both need the pathname to mark the current link and name the current crumb, so they live in a
+ * client component; this layout stays a server component and only supplies identity. The content below
+ * them keeps the shared `WORKSPACE_SHELL` gutters, with its TOP padding cut to three-quarters
+ * (`py-8` → `pt-6`, `lg:py-10` → `lg:pt-[30px]`) so the first card sits closer under the trail.
  *
  * THE "ROLE SWITCHER" IS A VIEW SWITCHER, AND SAYS SO. One account can both commission work and offer
  * it — provider capability is granted by the platform after verification, not chosen here. So these
@@ -41,52 +51,10 @@ export default async function CustomerLayout({ children }: { children: React.Rea
   const initials = (displayName ?? '?').slice(0, 2).toUpperCase();
 
   return (
-    <div className={PAGE_SHELL}>
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Customer workspace' }]} />
-
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-b border-solid border-slate-200 pb-3">
-        <nav aria-label="Customer workspace" className="flex flex-wrap items-center gap-1">
-          {[
-            { href: CUSTOMER_PATHS.dashboard, label: 'Dashboard' },
-            { href: '/customer/requests', label: 'My requests' },
-            { href: '/customer/bookings', label: 'Bookings' },
-            { href: '/customer/payments', label: 'Payments' },
-            { href: '/customer/assets', label: 'Assets' },
-            { href: CUSTOMER_PATHS.newRequest, label: 'New request' },
-          ].map(item => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 no-underline transition-colors hover:bg-slate-100 hover:text-slate-900"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <div className="hidden items-center gap-2 sm:flex">
-            <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">View</span>
-            <Link href={CUSTOMER_PATHS.dashboard} aria-current="page" className="rounded-full bg-primary-subtle px-3 py-1 text-xs font-semibold text-primary no-underline">
-              Customer
-            </Link>
-            <Link href="/provider" className="rounded-full px-3 py-1 text-xs font-semibold text-slate-500 no-underline hover:bg-slate-100 hover:text-slate-800">
-              Provider
-            </Link>
-          </div>
-
-          <span
-            aria-hidden="true"
-            title={displayName ?? undefined}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
-          >
-            {initials}
-          </span>
-          <span className="sr-only">Signed in as {displayName ?? 'this account'}</span>
-        </div>
-      </div>
-
-      <div className="mt-6">{children}</div>
-    </div>
+    <>
+      <CustomerWorkspaceNav displayName={displayName} initials={initials} />
+      {/* `pt` overrides its `py` here: Tailwind emits padding-top after padding-block, so no `!` needed. */}
+      <div className={`${WORKSPACE_SHELL} pt-6 lg:pt-[30px]`}>{children}</div>
+    </>
   );
 }
