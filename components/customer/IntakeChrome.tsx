@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Check } from '@/components/ui/icons';
-import WorkspaceHero from '@/components/customer/WorkspaceHero';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import {
   CUSTOMER_PATHS,
   INTAKE_FAILURE_COPY,

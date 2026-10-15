@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, CircleAlert, FileText, MessageSquareQuote, Wallet } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
-import WorkspaceHero, { WORKSPACE_HERO_ACTION, WORKSPACE_HERO_INPUT } from '@/components/customer/WorkspaceHero';
+import WorkspaceHero, { WORKSPACE_HERO_ACTION, WORKSPACE_HERO_INPUT } from '@/components/workspace/WorkspaceHero';
 import { CUSTOMER_PATHS, requestReference } from '@/features/customer/intake';
 import type { ActiveRequest, CustomerDashboard, PaymentDue, QuoteAwaitingReview, ScheduledWork } from '@/features/customer/requests';
 
@@ -171,7 +171,7 @@ export function ActionRequiredBanner({
 
       {paymentsDue.length > 0 ? (
         <Link
-          href={`/customer/payments/${paymentsDue[0].obligationId}/checkout`}
+          href={`/app/customer/payments/${paymentsDue[0].obligationId}/checkout`}
           className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border-0 bg-secondary px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary-deep uppercase no-underline transition-colors hover:bg-amber-500"
         >
           Pay Due Amount
@@ -188,7 +188,7 @@ export function ActiveRequestsCard({ requests }: { requests: ActiveRequest[] }) 
       title="Active requests & projects"
       icon={<FileText aria-hidden="true" className="h-4 w-4" />}
       badge={<span className={BADGE_SLATE}>{requests.length}</span>}
-      href={requests.length > 0 ? `/customer/requests/${requests[0].id}` : undefined}
+      href={requests.length > 0 ? `/app/customer/requests/${requests[0].id}` : undefined}
       linkLabel={requests.length > 0 ? 'Open the most recent' : undefined}
     >
       {requests.length === 0 ? (
@@ -200,7 +200,7 @@ export function ActiveRequestsCard({ requests }: { requests: ActiveRequest[] }) 
           {requests.slice(0, 4).map(request => (
             <li key={request.id} className="rounded-lg border border-solid border-slate-200 p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <Link href={`/customer/requests/${request.id}`} className="text-sm font-semibold text-slate-900 no-underline hover:text-primary">
+                <Link href={`/app/customer/requests/${request.id}`} className="text-sm font-semibold text-slate-900 no-underline hover:text-primary">
                   {request.needText.length > 60 ? `${request.needText.slice(0, 57)}…` : request.needText}
                 </Link>
                 <StatusPill pill={request.pill} />
@@ -247,7 +247,7 @@ export function QuotesCard({ quotes }: { quotes: QuoteAwaitingReview[] }) {
           {quotes.slice(0, 4).map(quote => (
             <li key={quote.quoteId} className="rounded-lg border border-solid border-slate-200 p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <Link href={`/customer/requests/${quote.requestId}/quotes`} className="text-sm font-semibold text-slate-900 no-underline hover:text-primary">
+                <Link href={`/app/customer/requests/${quote.requestId}/quotes`} className="text-sm font-semibold text-slate-900 no-underline hover:text-primary">
                   {quote.requestLabel}
                 </Link>
                 {quote.totalMinor !== null ? (
@@ -293,7 +293,7 @@ export function ScheduledCard({ scheduled }: { scheduled: ScheduledWork[] }) {
           {scheduled.map(item => (
             <li key={item.assignmentId} className="rounded-lg border border-solid border-slate-200 p-3">
               <Link
-                href={`/customer/bookings#booking-${item.assignmentId}`}
+                href={`/app/customer/bookings#booking-${item.assignmentId}`}
                 className="text-sm font-semibold text-slate-900 no-underline hover:text-primary"
               >
                 {item.requestLabel}
@@ -333,7 +333,7 @@ export function PaymentsCard({ payments }: { payments: PaymentDue[] }) {
                 {/* Straight to the payment, not the request: the next thing this customer has to do is pay,
                     and the payment page is where that happens now. */}
                 <Link
-                  href={`/customer/payments/${payment.obligationId}/checkout`}
+                  href={`/app/customer/payments/${payment.obligationId}/checkout`}
                   className="text-sm font-semibold text-slate-900 no-underline hover:text-primary"
                 >
                   {payment.requestLabel}

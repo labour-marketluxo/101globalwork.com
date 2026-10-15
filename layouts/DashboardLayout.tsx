@@ -1,7 +1,7 @@
 /**
  * DashboardLayout — the shell for the (app) route group: the signed-in workspace surfaces
- * (/customer/*, /provider/*, /settings/*, /messages, /notifications, /requests/*, /projects/*,
- * /org/*, /programmes/*, /work and /support).
+ * (/customer/*, /provider/*, /account/settings/*, /account/messages, /account/notifications, /requests/*, /projects/*,
+ * /org/*, /programmes/*, /work and /account/support).
  *
  * ⚠️ IT RENDERS NO PUBLIC CHROME, AND THAT IS THE POINT. The marketing header and footer
  * (components/navigation/SiteChrome.tsx) advertise "Sign in" and "Create an account", so they
@@ -11,7 +11,7 @@
  *
  * Each workspace draws its own identity and navigation now: app/(app)/customer/layout.tsx
  * (breadcrumbs + view switcher), app/(app)/provider/layout.tsx (workspace header + sidebar) and
- * the account header shared by /settings, /messages and /notifications. A workspace route that
+ * the account header shared by /account/settings, /account/messages and /account/notifications. A workspace route that
  * draws nothing simply inherits the plain canvas instead of the marketing bar.
  *
  * ⚠️ <main> STAYS A DIRECT CHILD OF <body>. globals.css sets `body { display: flex;
