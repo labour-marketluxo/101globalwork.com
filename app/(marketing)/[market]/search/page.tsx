@@ -359,7 +359,7 @@ export default async function MarketSearchPage({
             <p className="mt-6 max-w-3xl text-sm leading-relaxed text-slate-500">
               Need something this list does not cover?{' '}
               <Link
-                href="/requests/new"
+                href="/app/requests/new"
                 className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary-dark"
               >
                 Describe the work

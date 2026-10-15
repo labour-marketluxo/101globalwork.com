@@ -623,7 +623,7 @@ export async function submitQuoteAction(formData: FormData) {
   await supabase.rpc('save_quote_draft_command', { p_provider_id: providerId, p_request_id: requestId, p_payload: {} });
 
   const quoteId = typeof data === 'string' ? data : '';
-  redirect(quoteId ? `/provider/quotes/${quoteId}?submitted=1` : PROVIDER_PATHS.today);
+  redirect(quoteId ? `/app/provider/quotes/${quoteId}?submitted=1` : PROVIDER_PATHS.today);
 }
 
 export async function withdrawQuoteAction(formData: FormData) {

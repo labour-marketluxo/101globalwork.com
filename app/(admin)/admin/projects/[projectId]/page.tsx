@@ -265,7 +265,7 @@ export default async function ProjectDiagnosticsPage({
               </Link>
             ) : null}
             {diagnostics.provider ? (
-              <Link className="text-button" href={`/projects/${diagnostics.provider.assignmentId}`}>
+              <Link className="text-button" href={`/app/projects/${diagnostics.provider.assignmentId}`}>
                 The project workspace
               </Link>
             ) : null}

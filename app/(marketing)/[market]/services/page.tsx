@@ -164,7 +164,7 @@ export default async function MarketServicesPage({
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
-              <Link href="/requests/new" className={CTA_AMBER}>
+              <Link href="/app/requests/new" className={CTA_AMBER}>
                 Start request
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </Link>

@@ -16,9 +16,9 @@ export default function ProvidersPage() {
       <h1>Turn your skills into trusted work.</h1>
       <p className="lede left">Use the same 101GlobalWork account you use as a customer, or create one now. Add the services and areas you cover, complete the required verification, then publish when your profile is ready.</p>
       <div className="entry-actions">
-        <Link href="/provider" className="button-link">Open provider workspace</Link>
-        <Link href="/auth/sign-up?intent=provider&next=/provider/onboarding" className="secondary-link">Create provider account</Link>
-        <Link href="/auth/sign-in?next=/provider" className="secondary-link">Sign in as provider</Link>
+        <Link href="/app/provider" className="button-link">Open provider workspace</Link>
+        <Link href="/auth/sign-up?intent=provider&next=/app/provider/onboarding" className="secondary-link">Create provider account</Link>
+        <Link href="/auth/sign-in?next=/app/provider" className="secondary-link">Sign in as provider</Link>
       </div>
       <p className="hint">Need someone to do work instead? <Link href="/auth/sign-up?intent=customer&next=/">Create a customer account</Link>.</p>
       <section className="action-panel">

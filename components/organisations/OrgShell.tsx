@@ -10,14 +10,14 @@ import { usePathname } from 'next/navigation';
 export default function OrgTabs({ organisationId }: { organisationId: string }) {
   const pathname = usePathname();
   const tabs = [
-    { href: `/org/${organisationId}`, label: 'Overview' },
-    { href: `/org/${organisationId}/projects`, label: 'Projects' },
-    { href: `/org/${organisationId}/approvals`, label: 'Approvals' },
-    { href: `/org/${organisationId}/locations`, label: 'Locations' },
-    { href: `/org/${organisationId}/members`, label: 'Members' },
-    { href: `/org/${organisationId}/budgets`, label: 'Budgets' },
-    { href: `/org/${organisationId}/providers`, label: 'Providers' },
-    { href: `/org/${organisationId}/reports`, label: 'Reports' },
+    { href: `/app/org/${organisationId}`, label: 'Overview' },
+    { href: `/app/org/${organisationId}/projects`, label: 'Projects' },
+    { href: `/app/org/${organisationId}/approvals`, label: 'Approvals' },
+    { href: `/app/org/${organisationId}/locations`, label: 'Locations' },
+    { href: `/app/org/${organisationId}/members`, label: 'Members' },
+    { href: `/app/org/${organisationId}/budgets`, label: 'Budgets' },
+    { href: `/app/org/${organisationId}/providers`, label: 'Providers' },
+    { href: `/app/org/${organisationId}/reports`, label: 'Reports' },
   ];
   return (
     <nav aria-label="Organisation sections" className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">

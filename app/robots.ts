@@ -15,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
          * this is the belt to that pair of braces, kept because crawl budget spent
          * on parameterised URLs is waste even when the pages are noindex.
          */
-        disallow: ['/search', '/*/search', '/account', '/work', '/api'],
+        disallow: ['/search', '/*/search', '/app/account', '/app/work', '/api'],
       },
     ],
     sitemap: `${site}/sitemap.xml`,

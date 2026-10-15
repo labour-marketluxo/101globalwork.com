@@ -327,7 +327,7 @@ export function HelpSearchResults({ query, hits }: { query: string; hits: HelpSe
           <Link href="/help" className={LINK_ARROW}>
             Clear the search
           </Link>
-          <Link href="/support" className={LINK_ARROW}>
+          <Link href="/app/account/support" className={LINK_ARROW}>
             Contact support
           </Link>
         </p>
@@ -378,7 +378,7 @@ export function SupportActionCards() {
             to an account, so you will be asked to sign in first — that is what keeps it private.
           </p>
         </div>
-        <Link href="/support" className={LINK_ARROW}>
+        <Link href="/app/account/support" className={LINK_ARROW}>
           Open a case
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
@@ -398,7 +398,7 @@ export function SupportActionCards() {
             This is not an emergency service. If somebody is in danger, contact the emergency services first.
           </p>
         </div>
-        <Link href="/support?kind=safety" className={LINK_ARROW}>
+        <Link href="/app/account/support?kind=safety" className={LINK_ARROW}>
           Report a concern
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
@@ -482,7 +482,7 @@ export function ArticleFooter({ article }: { article: PublicHelpArticle }) {
             files you attach.
           </p>
           <p className="mt-3 flex flex-wrap gap-4">
-            <Link href="/support" className={LINK_ARROW}>
+            <Link href="/app/account/support" className={LINK_ARROW}>
               Contact support
             </Link>
             <Link href="/help" className={LINK_ARROW}>

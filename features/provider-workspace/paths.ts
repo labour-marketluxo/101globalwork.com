@@ -5,28 +5,28 @@
  * building links) both need these, and a module that imported the Supabase server client could not
  * cross into a client bundle. Same reasoning, and the same shape, as features/settings/paths.ts.
  *
- * ⚠️ `/provider` AND `/providers` DIFFER BY ONE CHARACTER, and the two must never be confused:
- * `/provider` is this signed-in operational workspace and `/providers/[slug]` is the public
+ * ⚠️ `/app/provider` AND `/providers` DIFFER BY ONE CHARACTER, and the two must never be confused:
+ * `/app/provider` is this signed-in operational workspace and `/providers/[slug]` is the public
  * directory of published profiles. A link built from the wrong one sends a provider to their own
  * marketing page.
  */
 
 export const PROVIDER_PATHS = {
-  today: '/provider',
-  onboarding: '/provider/onboarding',
-  profile: '/provider/profile',
-  profilePreview: '/provider/profile/preview',
-  verification: '/provider/verification',
-  credentials: '/provider/credentials',
-  searchReadiness: '/provider/search-readiness',
-  earnings: '/provider/earnings',
-  payouts: '/provider/earnings/payouts',
-  earningsSummary: '/provider/earnings/summary',
-  availability: '/provider/availability',
-  work: '/provider/work',
-  opportunities: '/provider/opportunities',
-  quotesNew: '/provider/quotes/new',
-  quotes: '/provider/quotes',
+  today: '/app/provider',
+  onboarding: '/app/provider/onboarding',
+  profile: '/app/provider/profile',
+  profilePreview: '/app/provider/profile/preview',
+  verification: '/app/provider/verification',
+  credentials: '/app/provider/credentials',
+  searchReadiness: '/app/provider/search-readiness',
+  earnings: '/app/provider/earnings',
+  payouts: '/app/provider/earnings/payouts',
+  earningsSummary: '/app/provider/earnings/summary',
+  availability: '/app/provider/availability',
+  work: '/app/provider/work',
+  opportunities: '/app/provider/opportunities',
+  quotesNew: '/app/provider/quotes/new',
+  quotes: '/app/provider/quotes',
 } as const;
 
 /**

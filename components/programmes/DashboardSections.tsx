@@ -156,7 +156,7 @@ export function ProgrammeDashboardBody({ read }: { read: ProgrammeDashboardRead 
                     </span>
                     <CellValue cell={project.allocated} />
                   </span>
-                  <Link href={`/projects/${project.assignmentId}`} className={LINK_ARROW}>
+                  <Link href={`/app/projects/${project.assignmentId}`} className={LINK_ARROW}>
                     Open
                   </Link>
                 </div>

@@ -347,7 +347,7 @@ async function AreaSupplySection({
                 are not published here yet.
               </p>
             </div>
-            <Link href="/requests/new" className={CTA_AMBER}>
+            <Link href="/app/requests/new" className={CTA_AMBER}>
               Start a request
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>
@@ -424,7 +424,7 @@ export function ProblemPageView({
           // and returns them to the form, which is why this does not point at /auth/sign-in
           // directly. The label stays area-free even on a localized page: the request form is
           // not pre-scoped to an area, and a button that says "in Gwarinpa" would claim it is.
-          <Link href="/requests/new" className={CTA_AMBER}>
+          <Link href="/app/requests/new" className={CTA_AMBER}>
             Start request to fix this
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>
@@ -488,7 +488,7 @@ export function OutcomePageView({
           </>
         }
         actions={
-          <Link href="/requests/new" className={CTA_AMBER}>
+          <Link href="/app/requests/new" className={CTA_AMBER}>
             Plan your project
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>
@@ -670,7 +670,7 @@ export function ProblemBody({
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
-          <Link href="/requests/new" className={CTA_AMBER}>
+          <Link href="/app/requests/new" className={CTA_AMBER}>
             Start request to fix this
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>
@@ -865,7 +865,7 @@ export function OutcomeBody({
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
-          <Link href="/requests/new" className={CTA_AMBER}>
+          <Link href="/app/requests/new" className={CTA_AMBER}>
             Plan your project
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>

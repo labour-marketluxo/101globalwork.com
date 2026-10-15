@@ -6,5 +6,5 @@
  * assignment id, the same mapping every other project surface uses.
  */
 export function projectOrdersPath(projectId: string): string {
-  return `/projects/${projectId}/orders`;
+  return `/app/projects/${projectId}/orders`;
 }

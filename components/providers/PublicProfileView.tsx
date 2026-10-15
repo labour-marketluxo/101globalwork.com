@@ -164,7 +164,7 @@ export default function PublicProfileView({ profile }: { profile: PublicProvider
           Start with what you need done. The platform checks the request against this provider&apos;s
           accepted service area and the marketplace eligibility rules before anybody is hired.
         </p>
-        <Link href={`/requests/new${requestQuery}`} className={`mt-4 ${CTA_AMBER}`}>
+        <Link href={`/app/requests/new${requestQuery}`} className={`mt-4 ${CTA_AMBER}`}>
           Start a request
         </Link>
       </section>

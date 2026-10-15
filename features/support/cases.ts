@@ -261,7 +261,7 @@ export async function getMySupportCase(caseId: string): Promise<SupportCaseRead>
           id: textFrom(linkRaw.id) ?? '',
           label: textFrom(linkRaw.label) ?? 'Linked record',
           detail: textFrom(linkRaw.detail) ?? '',
-          href: textFrom(linkRaw.href) ?? '/support',
+          href: textFrom(linkRaw.href) ?? '/app/account/support',
         }
       : null,
     messages: rowsFrom(raw.messages)

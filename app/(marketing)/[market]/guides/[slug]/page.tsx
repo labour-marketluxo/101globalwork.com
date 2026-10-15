@@ -175,7 +175,7 @@ export default async function GuidePage({ params }: { params: Params }) {
               need an account to look around.
             </p>
           </div>
-          <Link href="/requests/new" className={CTA_AMBER}>
+          <Link href="/app/requests/new" className={CTA_AMBER}>
             Start a request
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>

@@ -13,7 +13,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
  *
  * IT GRANTS NOTHING. This metadata is a hint for routing and copy; capability is decided in the
  * database, per account, after verification. Nothing reachable from a sign-up form can confer it —
- * which is exactly why the provider path here is a redirect to `/provider/onboarding` rather than a
+ * which is exactly why the provider path here is a redirect to `/app/provider/onboarding` rather than a
  * switch that makes the account a provider.
  *
  * The provider journey is an existing flow: /provider/onboarding collects services, service area and
@@ -33,5 +33,5 @@ export async function chooseJourneyAction(formData: FormData) {
     data: { ...(user.user_metadata ?? {}), signup_intent: journey },
   });
 
-  redirect(journey === 'provider' ? '/provider/onboarding' : '/work');
+  redirect(journey === 'provider' ? '/app/provider/onboarding' : '/app/work');
 }

@@ -22,19 +22,19 @@ export async function POST(request: Request) {
 
   let obligationId = '';
   let channel: string | null = null;
-  let returnTo = '/customer/payments';
+  let returnTo = '/app/customer/payments';
 
   try {
     if (asForm) {
       const form = await request.formData();
       obligationId = String(form.get('obligationId') ?? '');
       channel = String(form.get('channel') ?? '').trim() || null;
-      returnTo = safeReturnTo(String(form.get('returnTo') ?? ''), '/customer/payments');
+      returnTo = safeReturnTo(String(form.get('returnTo') ?? ''), '/app/customer/payments');
     } else {
       const body = (await request.json()) as { obligationId?: unknown; channel?: unknown; returnTo?: unknown };
       obligationId = typeof body.obligationId === 'string' ? body.obligationId : '';
       channel = typeof body.channel === 'string' && body.channel.trim() ? body.channel.trim() : null;
-      returnTo = safeReturnTo(typeof body.returnTo === 'string' ? body.returnTo : null, '/customer/payments');
+      returnTo = safeReturnTo(typeof body.returnTo === 'string' ? body.returnTo : null, '/app/customer/payments');
     }
   } catch {
     return failure(request, returnTo, asForm, 'invalid_request', 400);

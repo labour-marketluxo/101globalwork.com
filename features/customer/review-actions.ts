@@ -16,7 +16,7 @@ import { reviewFailureFromMessage } from '@/features/customer/reviews';
  * command, and the copy on the page says exactly that rather than implying an upload happened.
  */
 
-const reviewPath = (assignmentId: string) => `/customer/projects/${assignmentId}/review`;
+const reviewPath = (assignmentId: string) => `/app/customer/projects/${assignmentId}/review`;
 
 function rating(formData: FormData, name: string): number | null {
   const value = Number(String(formData.get(name) ?? ''));

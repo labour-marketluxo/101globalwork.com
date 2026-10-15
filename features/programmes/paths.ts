@@ -7,15 +7,15 @@
  * /programmes/{id}/insights.
  */
 export function programmePath(programmeId: string): string {
-  return `/programmes/${programmeId}`;
+  return `/app/programmes/${programmeId}`;
 }
 
 export function programmeWorkersPath(programmeId: string): string {
-  return `/programmes/${programmeId}/workers`;
+  return `/app/programmes/${programmeId}/workers`;
 }
 
 export function programmeInsightsPath(programmeId: string): string {
-  return `/programmes/${programmeId}/insights`;
+  return `/app/programmes/${programmeId}/insights`;
 }
 
 export const PROGRAMME_TABS = [

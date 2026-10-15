@@ -15,8 +15,8 @@ import { assetFailureFromMessage } from '@/features/customer/assets';
  * ⚠️ REFUSALS ARE CODES. None of these ever puts the database's own message in a URL.
  */
 
-const assetsPath = '/customer/assets';
-const assetPath = (assetId: string) => `/customer/assets/${assetId}`;
+const assetsPath = '/app/customer/assets';
+const assetPath = (assetId: string) => `/app/customer/assets/${assetId}`;
 
 function text(formData: FormData, name: string): string {
   return String(formData.get(name) ?? '').trim();

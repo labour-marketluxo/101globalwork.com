@@ -14,7 +14,7 @@ import { bookingFailureFromMessage } from '@/features/customer/bookings';
  * platform's own notice styling.
  */
 
-const BOOKINGS_PATH = '/customer/bookings';
+const BOOKINGS_PATH = '/app/customer/bookings';
 
 function back(codes: Record<string, string | undefined>): string {
   const params = new URLSearchParams();

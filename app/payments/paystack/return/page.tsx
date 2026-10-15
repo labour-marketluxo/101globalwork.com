@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 export const metadata = { title: 'Payment processing', robots: { index: false, follow: false } };
 
 function safeReturnTo(value?: string) {
-  if (!value || !value.startsWith('/') || value.startsWith('//')) return '/work';
+  if (!value || !value.startsWith('/') || value.startsWith('//')) return '/app/work';
   return value;
 }
 
@@ -22,7 +22,7 @@ export default async function PaystackReturnPage({ searchParams }: { searchParam
   // ⚠️ THE ATTEMPT'S UUID IS NOT PRINTED. It identifies a row in this database and nothing the customer can
   // act on; the payment record is where the reference they can quote, the itemised amount and the timeline
   // live. What used to be an internal id on this page is now a link to that record.
-  const recordHref = paymentAttempt?.obligation_id ? `/customer/payments/${paymentAttempt.obligation_id}` : destination;
+  const recordHref = paymentAttempt?.obligation_id ? `/app/customer/payments/${paymentAttempt.obligation_id}` : destination;
 
   return <section className="content-shell">
     <p className="eyebrow">Payment</p>

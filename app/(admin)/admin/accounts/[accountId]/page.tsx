@@ -355,7 +355,7 @@ export default async function AdminAccountDetailPage({
             <ul className="admin-facts">
               {detail.organisations.map(org => (
                 <li key={org.organisationId}>
-                  <Link href={`/org/${org.organisationId}`}>{org.name}</Link>
+                  <Link href={`/app/org/${org.organisationId}`}>{org.name}</Link>
                   <span>
                     {org.role.replaceAll('_', ' ')} · {org.status}
                     {org.joinedAt ? ` · joined ${formatWhen(org.joinedAt)}` : ''}

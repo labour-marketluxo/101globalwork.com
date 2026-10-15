@@ -89,19 +89,19 @@ function criteriaFromLines(formData: FormData): { label: string; done: boolean }
 
 export async function addProjectStageAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/work`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/work`);
   const { error } = await supabase.rpc('add_project_stage_command', {
     p_assignment_id: assignmentId,
     p_title: String(formData.get('title') ?? '').trim(),
     p_description: String(formData.get('description') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/work`);
-  backTo(formData, { added: 'stage' }, `/projects/${assignmentId}/work`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/work`);
+  backTo(formData, { added: 'stage' }, `/app/projects/${assignmentId}/work`);
 }
 
 export async function addProjectTaskAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/work`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/work`);
   const { error } = await supabase.rpc('add_project_task_command', {
     p_assignment_id: assignmentId,
     p_stage_id: String(formData.get('stage_id') ?? ''),
@@ -109,14 +109,14 @@ export async function addProjectTaskAction(formData: FormData) {
     p_description: String(formData.get('description') ?? '').trim() || null,
     p_assignee_account_id: String(formData.get('assignee_account_id') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/work`);
-  backTo(formData, { added: 'task' }, `/projects/${assignmentId}/work`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/work`);
+  backTo(formData, { added: 'task' }, `/app/projects/${assignmentId}/work`);
 }
 
 export async function updateProjectTaskAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
   const taskId = String(formData.get('task_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/tasks/${taskId}`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/tasks/${taskId}`);
   const { error } = await supabase.rpc('update_project_task_command', {
     p_task_id: taskId,
     p_title: String(formData.get('title') ?? '').trim(),
@@ -129,9 +129,9 @@ export async function updateProjectTaskAction(formData: FormData) {
     p_scheduled_end: String(formData.get('scheduled_end') ?? '').trim() || null,
   });
   if (error) {
-    return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/tasks/${taskId}`);
+    return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/tasks/${taskId}`);
   }
-  backTo(formData, { saved: 'task' }, `/projects/${assignmentId}/tasks/${taskId}`);
+  backTo(formData, { saved: 'task' }, `/app/projects/${assignmentId}/tasks/${taskId}`);
 }
 
 /**
@@ -144,32 +144,32 @@ export async function setProjectTaskStatusAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
   const taskId = String(formData.get('task_id') ?? '');
   const status = String(formData.get('status') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/tasks/${taskId}`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/tasks/${taskId}`);
   const { error } = await supabase.rpc('set_project_task_status_command', {
     p_task_id: taskId,
     p_status: status,
     p_note: String(formData.get('note') ?? '').trim() || null,
   });
   if (error) {
-    return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/tasks/${taskId}`);
+    return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/tasks/${taskId}`);
   }
-  backTo(formData, { moved: status }, `/projects/${assignmentId}/tasks/${taskId}`);
+  backTo(formData, { moved: status }, `/app/projects/${assignmentId}/tasks/${taskId}`);
 }
 
 export async function moveProjectTaskAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/work`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/work`);
   const { error } = await supabase.rpc('move_project_task_command', {
     p_task_id: String(formData.get('task_id') ?? ''),
     p_direction: String(formData.get('direction') ?? ''),
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/work`);
-  backTo(formData, { moved: 'task' }, `/projects/${assignmentId}/work`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/work`);
+  backTo(formData, { moved: 'task' }, `/app/projects/${assignmentId}/work`);
 }
 
 export async function sendProjectMessageAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/messages`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/messages`);
   const { error } = await supabase.rpc('send_project_message_command', {
     p_assignment_id: assignmentId,
     p_context_kind: String(formData.get('context_kind') ?? 'project'),
@@ -177,8 +177,8 @@ export async function sendProjectMessageAction(formData: FormData) {
     p_body: String(formData.get('body') ?? '').trim(),
     p_attachment_evidence_id: String(formData.get('attachment_evidence_id') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/messages`);
-  backTo(formData, { sent: '1' }, `/projects/${assignmentId}/messages`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/messages`);
+  backTo(formData, { sent: '1' }, `/app/projects/${assignmentId}/messages`);
 }
 
 /**
@@ -190,24 +190,24 @@ export async function sendProjectMessageAction(formData: FormData) {
  */
 export async function flagEvidenceAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/evidence`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/evidence`);
   const { error } = await supabase.rpc('flag_project_evidence_command', {
     p_evidence_id: String(formData.get('evidence_id') ?? ''),
     p_reason_code: String(formData.get('reason_code') ?? 'other'),
     p_note: String(formData.get('note') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/evidence`);
-  backTo(formData, { flagged: '1' }, `/projects/${assignmentId}/evidence`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/evidence`);
+  backTo(formData, { flagged: '1' }, `/app/projects/${assignmentId}/evidence`);
 }
 
 export async function withdrawEvidenceFlagAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/evidence`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/evidence`);
   const { error } = await supabase.rpc('withdraw_project_evidence_flag_command', {
     p_flag_id: String(formData.get('flag_id') ?? ''),
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/evidence`);
-  backTo(formData, { flagged: 'withdrawn' }, `/projects/${assignmentId}/evidence`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/evidence`);
+  backTo(formData, { flagged: 'withdrawn' }, `/app/projects/${assignmentId}/evidence`);
 }
 
 /**
@@ -219,7 +219,7 @@ export async function withdrawEvidenceFlagAction(formData: FormData) {
  */
 export async function addProjectDocumentAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/documents`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/documents`);
   const { error } = await supabase.rpc('add_project_document_command', {
     p_assignment_id: assignmentId,
     p_title: String(formData.get('title') ?? '').trim(),
@@ -230,20 +230,20 @@ export async function addProjectDocumentAction(formData: FormData) {
     p_size_bytes: String(formData.get('size_bytes') ?? '').trim() ? Number(formData.get('size_bytes')) : null,
     p_document_group_id: String(formData.get('document_group_id') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/documents`);
-  backTo(formData, { document: 'added' }, `/projects/${assignmentId}/documents`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/documents`);
+  backTo(formData, { document: 'added' }, `/app/projects/${assignmentId}/documents`);
 }
 
 export async function decideProjectDocumentAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/documents`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/documents`);
   const { error } = await supabase.rpc('decide_project_document_command', {
     p_document_id: String(formData.get('document_id') ?? ''),
     p_decision: String(formData.get('decision') ?? 'approved'),
     p_note: String(formData.get('note') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/documents`);
-  backTo(formData, { document: 'decided' }, `/projects/${assignmentId}/documents`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/documents`);
+  backTo(formData, { document: 'decided' }, `/app/projects/${assignmentId}/documents`);
 }
 
 // ── Change requests, cases, and the escrow checkpoint ─────────────────────────────────────────
@@ -251,7 +251,7 @@ export async function decideProjectDocumentAction(formData: FormData) {
 /** The baseline, the deltas and the decision are all taken from rows; the form supplies only the proposal. */
 export async function createChangeRequestAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/changes`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/changes`);
   const priceRaw = String(formData.get('proposed_total_minor') ?? '').trim();
   const scheduleRaw = String(formData.get('proposed_scheduled_start') ?? '').trim();
   const evidenceIds = formData.getAll('evidence_ids').map(value => String(value)).filter(Boolean);
@@ -267,31 +267,31 @@ export async function createChangeRequestAction(formData: FormData) {
     p_evidence_ids: evidenceIds,
     p_submit: String(formData.get('intent') ?? 'propose') === 'propose',
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/changes`);
-  backTo(formData, { change: 'created' }, `/projects/${assignmentId}/changes`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/changes`);
+  backTo(formData, { change: 'created' }, `/app/projects/${assignmentId}/changes`);
 }
 
 export async function decideChangeRequestAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/changes`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/changes`);
   const { error } = await supabase.rpc('decide_project_change_request_command', {
     p_change_id: String(formData.get('change_id') ?? ''),
     p_decision: String(formData.get('decision') ?? 'rejected'),
     p_note: String(formData.get('note') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/changes`);
-  backTo(formData, { change: String(formData.get('decision') ?? 'decided') }, `/projects/${assignmentId}/changes`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/changes`);
+  backTo(formData, { change: String(formData.get('decision') ?? 'decided') }, `/app/projects/${assignmentId}/changes`);
 }
 
 export async function withdrawChangeRequestAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/changes`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/changes`);
   const { error } = await supabase.rpc('withdraw_project_change_request_command', {
     p_change_id: String(formData.get('change_id') ?? ''),
     p_note: String(formData.get('note') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/changes`);
-  backTo(formData, { change: 'withdrawn' }, `/projects/${assignmentId}/changes`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/changes`);
+  backTo(formData, { change: 'withdrawn' }, `/app/projects/${assignmentId}/changes`);
 }
 
 /**
@@ -302,7 +302,7 @@ export async function withdrawChangeRequestAction(formData: FormData) {
  */
 export async function openProjectIssueAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/milestones`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/milestones`);
   const dueRaw = String(formData.get('response_due_at') ?? '').trim();
   const { error } = await supabase.rpc('open_project_issue_command', {
     p_assignment_id: assignmentId,
@@ -310,33 +310,33 @@ export async function openProjectIssueAction(formData: FormData) {
     p_summary: String(formData.get('summary') ?? '').trim(),
     p_response_due_at: dueRaw ? new Date(dueRaw).toISOString() : null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/milestones`);
-  backTo(formData, { case: 'opened' }, `/projects/${assignmentId}/milestones`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/milestones`);
+  backTo(formData, { case: 'opened' }, `/app/projects/${assignmentId}/milestones`);
 }
 
 export async function respondToIssueAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
   const issueId = String(formData.get('issue_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/issues/${issueId}`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/issues/${issueId}`);
   const { error } = await supabase.rpc('respond_to_project_issue_command', {
     p_issue_id: issueId,
     p_kind: String(formData.get('kind') ?? 'response'),
     p_body: String(formData.get('body') ?? '').trim(),
     p_evidence_id: String(formData.get('evidence_id') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/issues/${issueId}`);
-  backTo(formData, { case: 'responded' }, `/projects/${assignmentId}/issues/${issueId}`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/issues/${issueId}`);
+  backTo(formData, { case: 'responded' }, `/app/projects/${assignmentId}/issues/${issueId}`);
 }
 
 export async function setIssueStatusAction(formData: FormData) {
   const assignmentId = String(formData.get('assignment_id') ?? '');
   const issueId = String(formData.get('issue_id') ?? '');
-  const supabase = await authedClient(`/projects/${assignmentId}/issues/${issueId}`);
+  const supabase = await authedClient(`/app/projects/${assignmentId}/issues/${issueId}`);
   const { error } = await supabase.rpc('set_project_issue_status_command', {
     p_issue_id: issueId,
     p_status: String(formData.get('status') ?? 'escalated'),
     p_resolution: String(formData.get('resolution') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/projects/${assignmentId}/issues/${issueId}`);
-  backTo(formData, { case: String(formData.get('status') ?? 'moved') }, `/projects/${assignmentId}/issues/${issueId}`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/projects/${assignmentId}/issues/${issueId}`);
+  backTo(formData, { case: String(formData.get('status') ?? 'moved') }, `/app/projects/${assignmentId}/issues/${issueId}`);
 }

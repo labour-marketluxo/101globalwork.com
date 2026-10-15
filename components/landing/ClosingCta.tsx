@@ -27,7 +27,7 @@ export default function ClosingCta() {
       actions={
         <ActionRow>
           <ActionLink
-            href="/requests/new"
+            href="/app/requests/new"
             variant="amber"
             icon={<Sparkles aria-hidden="true" className="h-5 w-5" />}
           >

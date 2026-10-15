@@ -249,16 +249,16 @@ export type IntakeStep = (typeof INTAKE_STEPS)[number];
  *
  * ⚠️ THE BRIEF SPELLS THESE `/app/customer/...`. There is no `/app` prefix anywhere in this app's
  * URLs — that is the route group `(app)`, which never appears in a path — so the real routes are
- * `/customer/...`. Treating `/app/customer` as a literal URL would have created a prefix used by
+ * `/app/customer/...`. Treating `/app/customer` as a literal URL would have created a prefix used by
  * nothing else and broken the sub-navigation the brief also asks for.
  */
 export const CUSTOMER_PATHS = {
-  dashboard: '/customer',
-  newRequest: '/customer/requests/new',
-  clarify: '/customer/requests/new/clarify',
-  logistics: '/customer/requests/new/logistics',
-  review: '/customer/requests/new/review',
-  confirmation: (requestId: string) => `/customer/requests/${requestId}/confirmation`,
+  dashboard: '/app/customer',
+  newRequest: '/app/customer/requests/new',
+  clarify: '/app/customer/requests/new/clarify',
+  logistics: '/app/customer/requests/new/logistics',
+  review: '/app/customer/requests/new/review',
+  confirmation: (requestId: string) => `/app/customer/requests/${requestId}/confirmation`,
 } as const;
 
 /** Error codes the step pages render. A fixed vocabulary: the parameter is user-editable. */

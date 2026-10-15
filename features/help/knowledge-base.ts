@@ -261,7 +261,7 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     readMinutes: 5,
     keywords: ['schedule', 'appointment', 'approve completion', 'evidence', 'work steps'],
     related: [
-      { label: 'My work', href: '/work' },
+      { label: 'My work', href: '/app/work' },
       { label: 'Trust and safety', href: '/trust-and-safety' },
     ],
     draft: false,
@@ -386,7 +386,7 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     readMinutes: 5,
     keywords: ['evidence', 'submit work', 'payout', 'completion', 'paid'],
     related: [
-      { label: 'Earnings and payouts', href: '/provider/earnings' },
+      { label: 'Earnings and payouts', href: '/app/provider/earnings' },
       { label: 'Trust and safety', href: '/trust-and-safety' },
     ],
     draft: false,
@@ -428,7 +428,7 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     reviewedAt: '2026-09-24',
     readMinutes: 3,
     keywords: ['organisation', 'business account', 'members', 'roles', 'invite'],
-    related: [{ label: 'Organisation workspace', href: '/org/new' }],
+    related: [{ label: 'Organisation workspace', href: '/app/org/new' }],
     draft: false,
     sections: [
       {
@@ -464,7 +464,7 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     reviewedAt: '2026-09-24',
     readMinutes: 3,
     keywords: ['budget', 'approval', 'cost centre', 'spend', 'authorisation'],
-    related: [{ label: 'Organisation workspace', href: '/org/new' }],
+    related: [{ label: 'Organisation workspace', href: '/app/org/new' }],
     draft: false,
     sections: [
       {
@@ -590,7 +590,7 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     keywords: ['safety', 'report', 'harm', 'threat', 'fraud', 'urgent'],
     related: [
       { label: 'Trust and safety', href: '/trust-and-safety' },
-      { label: 'Open a support case', href: '/support?kind=safety' },
+      { label: 'Open a support case', href: '/app/account/support?kind=safety' },
     ],
     draft: false,
     sections: [
@@ -631,7 +631,7 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     keywords: ['dispute', 'payment dispute', 'unhappy with work', 'not as agreed'],
     related: [
       { label: 'Trust and safety', href: '/trust-and-safety' },
-      { label: 'Open a support case', href: '/support?kind=payment' },
+      { label: 'Open a support case', href: '/app/account/support?kind=payment' },
     ],
     draft: false,
     sections: [
@@ -703,7 +703,7 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     reviewedAt: '2026-09-24',
     readMinutes: 4,
     keywords: ['password', 'two-factor', '2fa', 'authenticator', 'sessions', 'signed in devices'],
-    related: [{ label: 'Security settings', href: '/settings/security' }],
+    related: [{ label: 'Security settings', href: '/app/account/settings/security' }],
     draft: false,
     sections: [
       {
@@ -743,8 +743,8 @@ export const HELP_ARTICLES: readonly HelpArticleRecord[] = [
     readMinutes: 3,
     keywords: ['email', 'phone', 'contact', 'notifications', 'preferences', 'language', 'timezone'],
     related: [
-      { label: 'Profile settings', href: '/settings/profile' },
-      { label: 'Notification preferences', href: '/settings/notifications' },
+      { label: 'Profile settings', href: '/app/account/settings/profile' },
+      { label: 'Notification preferences', href: '/app/account/settings/notifications' },
     ],
     draft: false,
     sections: [

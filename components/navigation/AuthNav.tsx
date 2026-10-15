@@ -121,8 +121,8 @@ export default async function AuthNav() {
     return (
       <div className="flex shrink-0 items-center gap-3 sm:gap-5">
         <nav aria-label="Account navigation" className="hidden items-center gap-5 sm:flex">
-          <Link href="/work" className={LINK}>My work</Link>
-          <Link href={hasProvider ? '/provider' : '/providers'} className={`hidden lg:inline-flex ${LINK}`}>
+          <Link href="/app/work" className={LINK}>My work</Link>
+          <Link href={hasProvider ? '/app/provider' : '/providers'} className={`hidden lg:inline-flex ${LINK}`}>
             {hasProvider ? 'Provider workspace' : 'Become a provider'}
           </Link>
           <Link
@@ -133,7 +133,7 @@ export default async function AuthNav() {
             Account
           </Link>
         </nav>
-        <Link href="/requests/new" className={CTA}>
+        <Link href="/app/requests/new" className={CTA}>
           Post a Request
           <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Link>

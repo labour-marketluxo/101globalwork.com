@@ -527,7 +527,7 @@ export type RequestListItem = {
 };
 
 /**
- * The list behind `/customer/requests`.
+ * The list behind `/app/customer/requests`.
  *
  * ⚠️ SEARCH, FILTER AND SORT HAPPEN IN THE PAGE, NOT HERE, AND THAT IS DELIBERATE. The cap is fifty
  * requests — the same cap the dashboard already reads — so filtering fifty rows in memory costs nothing,

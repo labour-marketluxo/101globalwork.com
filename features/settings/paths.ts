@@ -6,13 +6,13 @@
  * server client, which cannot cross into a client bundle.
  */
 
-export const PROFILE_PATH = '/settings/profile';
-export const SECURITY_PATH = '/settings/security';
-export const NOTIFICATION_SETTINGS_PATH = '/settings/notifications';
-export const SESSIONS_PATH = '/settings/security/sessions';
+export const PROFILE_PATH = '/app/account/settings/profile';
+export const SECURITY_PATH = '/app/account/settings/security';
+export const NOTIFICATION_SETTINGS_PATH = '/app/account/settings/notifications';
+export const SESSIONS_PATH = '/app/account/settings/security/sessions';
 /** The account's two inboxes. Named here because several surfaces link to them. */
-export const NOTIFICATIONS_PATH = '/notifications';
-export const MESSAGES_PATH = '/messages';
+export const NOTIFICATIONS_PATH = '/app/account/notifications';
+export const MESSAGES_PATH = '/app/account/messages';
 
 export type SettingsTab = {
   label: string;

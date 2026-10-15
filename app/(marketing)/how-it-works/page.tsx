@@ -204,7 +204,7 @@ export default async function HowItWorksPage() {
         lede="The platform does one thing: it turns what you need done into a scope both sides agree on, holds the payment, and releases it against your approval. Here is the whole journey, for both sides of it."
         actions={
           <ActionRow>
-            <ActionLink href="/requests/new" variant="amber" icon={<ArrowIcon />}>
+            <ActionLink href="/app/requests/new" variant="amber" icon={<ArrowIcon />}>
               Get started
             </ActionLink>
             <ActionLink href="/providers" variant="ghost">
@@ -226,7 +226,7 @@ export default async function HowItWorksPage() {
               align="left"
             />
             <div className="mt-6">
-              <ActionLink href="/requests/new" variant="primary" icon={<ArrowIcon />}>
+              <ActionLink href="/app/requests/new" variant="primary" icon={<ArrowIcon />}>
                 Start a request
               </ActionLink>
             </div>
@@ -312,7 +312,7 @@ export default async function HowItWorksPage() {
         }
         actions={
           <ActionRow>
-            <ActionLink href="/requests/new" variant="amber" icon={<Sparkles aria-hidden="true" className="h-5 w-5" />}>
+            <ActionLink href="/app/requests/new" variant="amber" icon={<Sparkles aria-hidden="true" className="h-5 w-5" />}>
               Get started
             </ActionLink>
             <ActionLink href="/providers" variant="ghost">

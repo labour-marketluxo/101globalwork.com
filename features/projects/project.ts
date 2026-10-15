@@ -288,13 +288,13 @@ export function nextActionHref(kind: string, project: Project): string | null {
     case 'provider_evidence':
       return `${PROVIDER_PATHS.work}/${project.header.assignmentId}${kind === 'provider_evidence' ? '/evidence' : ''}`;
     case 'customer_request':
-      return `/customer/requests/${project.header.requestId}`;
+      return `/app/customer/requests/${project.header.requestId}`;
     case 'customer_booking':
-      return `/customer/bookings`;
+      return `/app/customer/bookings`;
     case 'customer_completion':
-      return `/customer/projects/${project.header.assignmentId}/completion`;
+      return `/app/customer/projects/${project.header.assignmentId}/completion`;
     case 'project_work':
-      return `/projects/${project.header.assignmentId}/work`;
+      return `/app/projects/${project.header.assignmentId}/work`;
     default:
       return null;
   }

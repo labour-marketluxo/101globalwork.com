@@ -16,7 +16,7 @@ import { completionFailureFromMessage } from '@/features/customer/completion';
  * echoed into the URL would let anyone type a sentence into the platform's own notice styling.
  */
 
-const completionPath = (assignmentId: string) => `/customer/projects/${assignmentId}/completion`;
+const completionPath = (assignmentId: string) => `/app/customer/projects/${assignmentId}/completion`;
 
 /**
  * The ticked criteria, read from the checkboxes themselves.

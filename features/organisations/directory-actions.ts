@@ -46,7 +46,7 @@ function fail(formData: FormData, message: string, section: string): never {
 
 export async function updateMemberAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/members`;
+  const next = `/app/org/${organisationId}/members`;
   const supabase = await authed(next);
   await requireStepUp(next);
   const { error } = await supabase.rpc('update_organisation_member_command', {
@@ -62,7 +62,7 @@ export async function updateMemberAction(formData: FormData) {
 
 export async function setMemberStatusAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/members`;
+  const next = `/app/org/${organisationId}/members`;
   const supabase = await authed(next);
   await requireStepUp(next);
   const { error } = await supabase.rpc('set_organisation_member_status_command', {
@@ -77,7 +77,7 @@ export async function setMemberStatusAction(formData: FormData) {
 /** Invite by email. The token is generated here, stored hashed, and handed back to the inviter to pass on. */
 export async function inviteMemberAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/members`;
+  const next = `/app/org/${organisationId}/members`;
   const supabase = await authed(next);
   await requireStepUp(next);
 
@@ -101,7 +101,7 @@ export async function inviteMemberAction(formData: FormData) {
 
 export async function updateLocationAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/locations`;
+  const next = `/app/org/${organisationId}/locations`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('update_organisation_location_command', {
     p_organisation_id: organisationId,
@@ -125,7 +125,7 @@ export async function updateLocationAction(formData: FormData) {
 
 export async function setLocationArchivedAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/locations`;
+  const next = `/app/org/${organisationId}/locations`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('set_organisation_location_archived_command', {
     p_organisation_id: organisationId,
@@ -138,7 +138,7 @@ export async function setLocationArchivedAction(formData: FormData) {
 
 export async function addPreferredProviderAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/providers`;
+  const next = `/app/org/${organisationId}/providers`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('add_preferred_provider_command', {
     p_organisation_id: organisationId,
@@ -153,7 +153,7 @@ export async function addPreferredProviderAction(formData: FormData) {
 
 export async function removePreferredProviderAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/providers`;
+  const next = `/app/org/${organisationId}/providers`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('remove_preferred_provider_command', {
     p_organisation_id: organisationId,
@@ -166,11 +166,11 @@ export async function removePreferredProviderAction(formData: FormData) {
 /** Accept an invitation: the signed-in account's email must match the one it was sent to. */
 export async function acceptInvitationAction(formData: FormData) {
   const token = String(formData.get('token') ?? '');
-  const supabase = await authed(`/org/join/${token}`);
+  const supabase = await authed(`/app/org/join/${token}`);
   const tokenHash = createHash('sha256').update(token).digest('hex');
   const { data, error } = await supabase.rpc('accept_organisation_invitation_command', { p_token_hash: tokenHash });
   if (error) {
-    redirect(`/org/join/${token}?failed=1`);
+    redirect(`/app/org/join/${token}?failed=1`);
   }
-  redirect(`/org/${String(data ?? '')}?joined=1`);
+  redirect(`/app/org/${String(data ?? '')}?joined=1`);
 }

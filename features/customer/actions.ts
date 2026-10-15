@@ -244,10 +244,10 @@ export async function submitIntakeAction(formData: FormData) {
  * phrase and send the visitor back to the page they came from with nothing changed.
  */
 const DECISION_PATHS = {
-  request: (id: string) => `/customer/requests/${id}`,
-  quotes: (id: string) => `/customer/requests/${id}/quotes`,
-  quote: (requestId: string, quoteId: string) => `/customer/requests/${requestId}/quotes/${quoteId}`,
-  agreement: (assignmentId: string) => `/customer/projects/${assignmentId}/agreement`,
+  request: (id: string) => `/app/customer/requests/${id}`,
+  quotes: (id: string) => `/app/customer/requests/${id}/quotes`,
+  quote: (requestId: string, quoteId: string) => `/app/customer/requests/${requestId}/quotes/${quoteId}`,
+  agreement: (assignmentId: string) => `/app/customer/projects/${assignmentId}/agreement`,
 } as const;
 
 /** Runs a decision RPC and turns a refusal into a code on the URL. Returns the error message, or null. */

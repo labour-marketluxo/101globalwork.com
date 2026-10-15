@@ -63,9 +63,9 @@ const SERVICE_CATEGORIES: { slug: string; name: string; icon: IconComponent }[] 
  */
 const ACTION_CHIPS: { label: string; href: string }[] = [
   { label: 'Find a Service', href: '/services' },
-  { label: 'Plan a Project', href: '/requests/new' },
-  { label: 'My Work', href: '/work' },
-  { label: 'My Assets', href: '/work' },
+  { label: 'Plan a Project', href: '/app/requests/new' },
+  { label: 'My Work', href: '/app/work' },
+  { label: 'My Assets', href: '/app/work' },
   { label: 'Help Me Figure It Out', href: '/search' },
 ];
 

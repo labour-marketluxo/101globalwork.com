@@ -179,7 +179,7 @@ export default async function ServiceVectors() {
             <div className="flex items-center justify-between border-t border-slate-200 pt-4">
               <span className="font-sans text-xs text-slate-500">Multi-stage and multi-trade</span>
               <Link
-                href="/requests/new"
+                href="/app/requests/new"
                 className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 font-sans text-xs font-semibold text-white no-underline shadow-sm transition-colors hover:bg-primary-dark"
               >
                 Post a request

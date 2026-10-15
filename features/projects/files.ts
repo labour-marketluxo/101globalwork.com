@@ -201,12 +201,12 @@ export function timelineHref(event: TimelineEvent, assignmentId: string): string
   if (!event.resourceId) return null;
   switch (event.resourceType) {
     case 'assignment':
-      return `/projects/${assignmentId}`;
+      return `/app/projects/${assignmentId}`;
     case 'request':
-      return `/projects/${assignmentId}`;
+      return `/app/projects/${assignmentId}`;
     case 'payment_obligation':
     case 'payout':
-      return `/projects/${assignmentId}#milestones`;
+      return `/app/projects/${assignmentId}#milestones`;
     default:
       return null;
   }

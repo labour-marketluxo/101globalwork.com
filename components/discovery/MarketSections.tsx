@@ -516,7 +516,7 @@ export function MarketEmptyState({
           underlined link beside it. */}
       <div className="mt-2 flex flex-wrap items-center gap-4">
         <Link
-          href="/requests/new"
+          href="/app/requests/new"
           className="no-underline flex items-center gap-2 rounded-xl bg-[#F59E0B] px-6 py-3.5 font-sans text-xs font-bold text-slate-950 shadow-sm transition-all hover:bg-[#D97706] active:scale-95"
         >
           Post an open request →

@@ -34,7 +34,7 @@ function codeFor(message: string): string {
 
 export async function decideApprovalAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/approvals`;
+  const next = `/app/org/${organisationId}/approvals`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('decide_organisation_approval_command', {
     p_organisation_id: organisationId,
@@ -50,7 +50,7 @@ export async function decideApprovalAction(formData: FormData) {
 
 export async function createCostCentreAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/budgets`;
+  const next = `/app/org/${organisationId}/budgets`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('create_organisation_cost_centre_command', {
     p_organisation_id: organisationId,
@@ -66,7 +66,7 @@ export async function createCostCentreAction(formData: FormData) {
 
 export async function adjustCostCentreAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/budgets`;
+  const next = `/app/org/${organisationId}/budgets`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('adjust_organisation_cost_centre_command', {
     p_cost_centre_id: String(formData.get('cost_centre_id') ?? ''),
@@ -79,7 +79,7 @@ export async function adjustCostCentreAction(formData: FormData) {
 
 export async function assignProjectCostCentreAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const next = `/org/${organisationId}/budgets`;
+  const next = `/app/org/${organisationId}/budgets`;
   const supabase = await authed(next);
   const { error } = await supabase.rpc('assign_project_cost_centre_command', {
     p_organisation_id: organisationId,

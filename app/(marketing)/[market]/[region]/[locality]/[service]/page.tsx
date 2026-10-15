@@ -304,7 +304,7 @@ export default async function LocalLeafPage({
         }
         actions={
           <>
-            <Link href="/requests/new" className={CTA_AMBER}>
+            <Link href="/app/requests/new" className={CTA_AMBER}>
               Start request in {context.locality.name}
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>

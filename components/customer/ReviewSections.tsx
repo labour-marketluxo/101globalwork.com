@@ -266,10 +266,10 @@ export function ReviewNotAvailable({
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-slate-600">{copy}</p>
       <div className="mt-3 flex flex-wrap gap-3">
-        <Link href={`/customer/projects/${assignmentId}/completion`} className={LINK_ARROW}>
+        <Link href={`/app/customer/projects/${assignmentId}/completion`} className={LINK_ARROW}>
           Open the completion review
         </Link>
-        <Link href={`/customer/requests/${requestId}`} className={LINK_ARROW}>
+        <Link href={`/app/customer/requests/${requestId}`} className={LINK_ARROW}>
           Open the job
         </Link>
       </div>

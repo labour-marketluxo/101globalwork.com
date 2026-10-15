@@ -8,7 +8,7 @@ import { formatMoney } from '@/features/customer/quotes';
  * The project agreement: the terms a customer accepts after choosing a quote, and the record of having
  * accepted them.
  *
- * ⚠️ THERE IS NO PROJECTS TABLE. The brief's URL is `/projects/[projectId]/agreement`; the unit of agreed
+ * ⚠️ THERE IS NO PROJECTS TABLE. The brief's URL is `/app/projects/[projectId]/agreement`; the unit of agreed
  * work this schema actually has is the ASSIGNMENT — created by `accept_quote_command` from the accepted
  * quote, with its payment obligation beside it. `projectId` is the assignment id, and the route keeps the
  * brief's shape so a real projects table could be pointed at it later.

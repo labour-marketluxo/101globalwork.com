@@ -158,7 +158,7 @@ export function PreferenceMatrix({ preferences }: { preferences: PreferencesRead
           <span>
             <strong className="font-semibold text-slate-700">Email</strong> is delivered through the platform&rsquo;s
             own outbox, and{' '}
-            <Link href="/notifications" className="underline underline-offset-2">
+            <Link href="/app/account/notifications" className="underline underline-offset-2">
               delivery depends on that queue being published
             </Link>
             . <strong className="font-semibold text-slate-700">Push</strong> and{' '}

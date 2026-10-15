@@ -10,7 +10,7 @@ import { AUTH_PATHS, aliasTarget, hrefWith, type RawSearchParams } from '@/featu
  * tab or a browser back button would land on the sign-up form and silently lose the one piece of
  * information the visitor needed.
  *
- * Everything else keeps its parameters: /sign-up?intent=provider&next=/provider/onboarding still
+ * Everything else keeps its parameters: /sign-up?intent=provider&next=/app/provider/onboarding still
  * lands on the provider journey, which is what the marketing pages link to today.
  */
 export default async function LegacySignUpRedirect({

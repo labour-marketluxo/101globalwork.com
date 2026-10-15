@@ -16,8 +16,8 @@ import { startCheckout } from '@/lib/payments/start-checkout';
  * human to look at it after.
  */
 
-const paymentsPath = (paymentId: string) => `/customer/payments/${paymentId}`;
-const checkoutPath = (paymentId: string) => `/customer/payments/${paymentId}/checkout`;
+const paymentsPath = (paymentId: string) => `/app/customer/payments/${paymentId}`;
+const checkoutPath = (paymentId: string) => `/app/customer/payments/${paymentId}/checkout`;
 
 /**
  * Start the payment.

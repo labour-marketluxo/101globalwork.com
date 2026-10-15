@@ -35,7 +35,7 @@ function failureCode(message: string): OrganisationFailureCode {
 }
 
 export async function createOrganisationAction(formData: FormData) {
-  const supabase = await authed('/org/new');
+  const supabase = await authed('/app/org/new');
   const locationIds = formData.getAll('location_ids').map(value => String(value)).filter(Boolean);
   const { data, error } = await supabase.rpc('create_organisation_workspace_command', {
     p_display_name: String(formData.get('display_name') ?? '').trim(),
@@ -54,12 +54,12 @@ export async function createOrganisationAction(formData: FormData) {
     },
     p_location_ids: locationIds,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, '/org/new');
-  redirect(`/org/${String(data ?? '')}?created=1`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, '/app/org/new');
+  redirect(`/app/org/${String(data ?? '')}?created=1`);
 }
 
 export async function saveOrganisationDraftAction(formData: FormData) {
-  const supabase = await authed('/org/new');
+  const supabase = await authed('/app/org/new');
   const payload: Record<string, string> = {};
   for (const field of ['display_name', 'legal_name', 'organisation_type', 'market_id', 'currency_code', 'timezone', 'contact_name', 'contact_email', 'contact_phone', 'subscription_plan', 'safety_notes', 'approvals_above']) {
     const value = String(formData.get(field) ?? '').trim();
@@ -68,26 +68,26 @@ export async function saveOrganisationDraftAction(formData: FormData) {
   const locationIds = formData.getAll('location_ids').map(value => String(value)).filter(Boolean);
   if (locationIds.length > 0) payload.location_ids = locationIds.join(',');
   const { error } = await supabase.rpc('save_organisation_draft_command', { p_payload: payload });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, '/org/new');
-  backTo(formData, { draft: 'saved' }, '/org/new');
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, '/app/org/new');
+  backTo(formData, { draft: 'saved' }, '/app/org/new');
 }
 
 export async function addOrganisationLocationAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const supabase = await authed(`/org/${organisationId}`);
+  const supabase = await authed(`/app/org/${organisationId}`);
   const { error } = await supabase.rpc('add_organisation_location_command', {
     p_organisation_id: organisationId,
     p_location_id: String(formData.get('location_id') ?? ''),
     p_kind: String(formData.get('kind') ?? 'site'),
     p_label: String(formData.get('label') ?? '').trim() || null,
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/org/${organisationId}`);
-  backTo(formData, { saved: 'location' }, `/org/${organisationId}`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/org/${organisationId}`);
+  backTo(formData, { saved: 'location' }, `/app/org/${organisationId}`);
 }
 
 export async function setOrganisationBudgetAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const supabase = await authed(`/org/${organisationId}`);
+  const supabase = await authed(`/app/org/${organisationId}`);
   const { error } = await supabase.rpc('set_organisation_budget_command', {
     p_organisation_id: organisationId,
     p_location_id: String(formData.get('location_id') ?? '').trim() || null,
@@ -97,18 +97,18 @@ export async function setOrganisationBudgetAction(formData: FormData) {
     p_committed_minor: Math.round(Number(String(formData.get('committed') ?? '0').trim() || '0') * 100),
     p_actual_minor: Math.round(Number(String(formData.get('actual') ?? '0').trim() || '0') * 100),
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/org/${organisationId}`);
-  backTo(formData, { saved: 'budget' }, `/org/${organisationId}`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/org/${organisationId}`);
+  backTo(formData, { saved: 'budget' }, `/app/org/${organisationId}`);
 }
 
 export async function assignProjectOwnerAction(formData: FormData) {
   const organisationId = String(formData.get('organisation_id') ?? '');
-  const supabase = await authed(`/org/${organisationId}/projects`);
+  const supabase = await authed(`/app/org/${organisationId}/projects`);
   const { error } = await supabase.rpc('assign_organisation_project_owner_command', {
     p_organisation_id: organisationId,
     p_request_id: String(formData.get('request_id') ?? ''),
     p_owner_account_id: String(formData.get('owner_account_id') ?? ''),
   });
-  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/org/${organisationId}/projects`);
-  backTo(formData, { saved: 'owner' }, `/org/${organisationId}/projects`);
+  if (error) return backTo(formData, { failed: failureCode(error.message) }, `/app/org/${organisationId}/projects`);
+  backTo(formData, { saved: 'owner' }, `/app/org/${organisationId}/projects`);
 }

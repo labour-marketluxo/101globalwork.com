@@ -96,7 +96,7 @@ const HOME_ROOTED_ROOTS = ['legal', 'help'] as const;
  * than guessed from the shape of the URL, so a new country is recognised the moment its hub exists.
  *
  * Two exclusions keep it honest. A section page owns its own link, so `/services` and `/pricing`
- * never light Home as well. And the signed-in workspace — `/settings`, `/admin`, `/customer` — is
+ * never light Home as well. And the signed-in workspace — `/app/account/settings`, `/admin`, `/app/customer` — is
  * not a child of Home even though the customer layout draws its own trail, so those roots are simply
  * not in the list.
  */
