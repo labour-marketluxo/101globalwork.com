@@ -14,6 +14,7 @@ import {
   Wrench,
 } from '@/components/ui/icons';
 import Breadcrumbs, { type BreadcrumbItem } from '@/components/ui/Breadcrumbs';
+import { CheckItem, CheckList } from '@/components/ui/CheckList';
 import { NoticePanel } from '@/components/discovery/MarketSections';
 import { Faq } from '@/components/marketing/PageSections';
 import {
@@ -294,19 +295,24 @@ export function AliasChips({
   );
 }
 
-/** Platform guidance bullets: the how-to-get-a-useful-quote lines, not claims. */
+/**
+ * Platform guidance bullets: the how-to-get-a-useful-quote lines, not claims.
+ *
+ * The marker is the shared check (components/ui/CheckList.tsx), navy on the light cards every
+ * caller puts this in. It used to be a 6px amber dot, which read as a footnote marker rather than
+ * as the short list of things a customer should do.
+ */
 export function GuidanceList({ items }: { items: string[] }) {
   if (!items.length) return null;
 
   return (
-    <ul className="grid gap-2.5">
+    <CheckList>
       {items.map((item) => (
-        <li key={item} className="flex gap-3 text-sm leading-relaxed text-slate-600">
-          <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary" />
-          <span>{item}</span>
-        </li>
+        <CheckItem key={item} className="text-sm leading-relaxed text-slate-600">
+          {item}
+        </CheckItem>
       ))}
-    </ul>
+    </CheckList>
   );
 }
 
@@ -642,7 +648,7 @@ export function EmptyTaxonomy({ marketName }: { marketName: string }) {
         behind a guessed list of trades. Describing the work still creates a request.
       </p>
       <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-        <Link href="/requests/new" className={CTA_AMBER}>
+        <Link href="/app/requests/new" className={CTA_AMBER}>
           Describe what you need
           <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Link>
@@ -661,7 +667,7 @@ export function TaxonomyUnavailable() {
     <NoticePanel tone="amber" icon={<TriangleAlert className="h-5 w-5" />}>
       The service catalog did not respond, so nothing can be listed right now. This is a problem on
       our side rather than a statement about which services exist — reload in a moment, or{' '}
-      <Link href="/requests/new">describe the work</Link> and it will be recorded either way.
+      <Link href="/app/requests/new">describe the work</Link> and it will be recorded either way.
     </NoticePanel>
   );
 }
@@ -1026,7 +1032,7 @@ export async function ServiceBody({
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-3">
-          <Link href="/requests/new" className={CTA_AMBER}>
+          <Link href="/app/requests/new" className={CTA_AMBER}>
             Start request
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>

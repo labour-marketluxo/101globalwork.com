@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { ArrowRight, ChevronDown } from '@/components/ui/icons';
+import { CheckItem, CheckList } from '@/components/ui/CheckList';
 
 /**
  * PageSections — the shared building blocks for the PUBLIC marketing routes.
@@ -251,21 +252,23 @@ export function JourneyStepList({
               {step.body}
             </p>
             {step.detail?.length ? (
-              <ul className="mt-3 grid gap-1.5">
+              /* The small print of a step is a short list of facts, so it gets the shared check
+                 rather than the amber dash it used to carry. The tone follows the band the step
+                 sits on: navy on the light panels, amber-300 on the deep-teal ones. */
+              <CheckList className="mt-3 grid list-none gap-1.5">
                 {step.detail.map((line) => (
-                  <li
+                  <CheckItem
                     key={line}
-                    className={`flex gap-2 text-xs leading-relaxed ${
+                    tone={tone === 'dark' ? 'dark' : 'light'}
+                    iconClassName="h-3.5 w-3.5"
+                    className={`text-xs leading-relaxed ${
                       tone === 'dark' ? 'text-slate-400' : 'text-slate-500'
                     }`}
                   >
-                    <span aria-hidden="true" className="text-secondary">
-                      &ndash;
-                    </span>
-                    <span>{line}</span>
-                  </li>
+                    {line}
+                  </CheckItem>
                 ))}
-              </ul>
+              </CheckList>
             ) : null}
           </div>
         </li>

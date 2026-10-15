@@ -43,6 +43,7 @@ import iconArrowDown from '@iconify-icons/lucide/arrow-down';
 import iconArrowLeft from '@iconify-icons/lucide/arrow-left';
 import iconArrowRight from '@iconify-icons/lucide/arrow-right';
 import iconArrowUp from '@iconify-icons/lucide/arrow-up';
+import iconArrowUpRight from '@iconify-icons/lucide/arrow-up-right';
 import iconBadgeCheck from '@iconify-icons/lucide/badge-check';
 import iconBan from '@iconify-icons/lucide/ban';
 import iconBanknote from '@iconify-icons/lucide/banknote';
@@ -216,6 +217,10 @@ export function ArrowRight(props: IconProps): ReactElement {
 
 export function ArrowUp(props: IconProps): ReactElement {
   return <Icon icon={iconArrowUp} {...props} />;
+}
+
+export function ArrowUpRight(props: IconProps): ReactElement {
+  return <Icon icon={iconArrowUpRight} {...props} />;
 }
 
 export function BadgeCheck(props: IconProps): ReactElement {

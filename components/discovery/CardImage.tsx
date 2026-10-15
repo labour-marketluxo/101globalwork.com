@@ -6,9 +6,10 @@ import Image from 'next/image';
  * ⚠️ THIS IS THE INPUT POINT FOR IMAGES. The catalogue has no image column, so card art lives
  * here: drop the file under `public/images/` and map it to the entity's key. Keys are the
  * catalogue's `canonical_key` for services and categories (e.g. `plumbing_residential`,
- * `home_property_maintenance`), plus the two symbolic keys for the provider page's fact cards,
- * which have no catalogue row of their own. Anything unmapped keeps the grey placeholder, so a
- * half-filled set still renders.
+ * `home_property_maintenance`), the `directory:<slug>` keys for the hand-written categories on the
+ * public /services directory (which have no catalogue row), and the `provider:*` keys for the
+ * provider page's fact cards. Anything unmapped keeps the grey placeholder, so a half-filled set
+ * still renders.
  */
 export const CARD_ART: Record<string, string> = {
   // plumbing_residential: '/images/services/plumbing.jpg',

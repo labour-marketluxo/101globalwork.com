@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { BadgeCheck, CircleCheckBig, TriangleAlert } from '@/components/ui/icons';
+import { BadgeCheck, TriangleAlert } from '@/components/ui/icons';
+import { CheckItem, CheckList } from '@/components/ui/CheckList';
 import {
   ActionLink,
   ActionRow,
@@ -159,7 +160,7 @@ export default function PricingPage() {
         }
         actions={
           <ActionRow>
-            <ActionLink href="/requests/new" variant="amber" icon={<ArrowIcon />}>
+            <ActionLink href="/app/requests/new" variant="amber" icon={<ArrowIcon />}>
               Start a request
             </ActionLink>
             <ActionLink href="/providers" variant="ghost">
@@ -219,14 +220,13 @@ export default function PricingPage() {
             </div>
 
             {schedule.notes.length ? (
-              <ul className="mx-auto mt-10 grid max-w-3xl gap-2.5">
+              <CheckList className="mx-auto mt-10 grid max-w-3xl list-none gap-2.5">
                 {schedule.notes.map((note) => (
-                  <li key={note} className="flex gap-2 text-sm leading-relaxed text-slate-600">
-                    <CircleCheckBig aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    <span>{note}</span>
-                  </li>
+                  <CheckItem key={note} className="text-sm leading-relaxed text-slate-600">
+                    {note}
+                  </CheckItem>
                 ))}
-              </ul>
+              </CheckList>
             ) : null}
           </>
         ) : (
@@ -270,16 +270,13 @@ export default function PricingPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <Card tone="white">
             <h3 className="mb-4 text-lg font-bold text-slate-900">Cost lines</h3>
-            <ul className="flex flex-wrap gap-2">
+            <CheckList className="grid list-none gap-2.5">
               {QUOTE_COST_LINES.map((line) => (
-                <li
-                  key={line}
-                  className="rounded-sm border border-slate-200 bg-canvas px-2.5 py-1 font-sans text-[11px] text-slate-700"
-                >
+                <CheckItem key={line} className="text-sm leading-relaxed text-slate-600">
                   {line}
-                </li>
+                </CheckItem>
               ))}
-            </ul>
+            </CheckList>
             <p className="mt-5 text-sm leading-relaxed text-slate-600">
               A provider can price these separately, which is what makes two quotes comparable
               instead of merely different.
@@ -288,16 +285,13 @@ export default function PricingPage() {
 
           <Card tone="white">
             <h3 className="mb-4 text-lg font-bold text-slate-900">Terms that matter as much</h3>
-            <ul className="flex flex-wrap gap-2">
+            <CheckList className="grid list-none gap-2.5">
               {QUOTE_TERMS.map((term) => (
-                <li
-                  key={term}
-                  className="rounded-sm border border-slate-200 bg-canvas px-2.5 py-1 font-sans text-[11px] text-slate-700"
-                >
+                <CheckItem key={term} className="text-sm leading-relaxed text-slate-600">
                   {term}
-                </li>
+                </CheckItem>
               ))}
-            </ul>
+            </CheckList>
             <p className="mt-5 text-sm leading-relaxed text-slate-600">
               Most disagreements are not about price. They are about exclusions, materials
               responsibility and dates — so those sit on the quote, not in a message thread.
@@ -447,7 +441,7 @@ export default function PricingPage() {
         }
         actions={
           <ActionRow>
-            <ActionLink href="/requests/new" variant="amber" icon={<ArrowIcon />}>
+            <ActionLink href="/app/requests/new" variant="amber" icon={<ArrowIcon />}>
               Start a request
             </ActionLink>
             <ActionLink href="/providers" variant="ghost">

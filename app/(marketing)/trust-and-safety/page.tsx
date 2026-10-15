@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { BadgeCheck, Check, CircleCheckBig, ShieldCheck, TriangleAlert } from '@/components/ui/icons';
+import { BadgeCheck, ShieldCheck, TriangleAlert } from '@/components/ui/icons';
+import { CheckItem, CheckList } from '@/components/ui/CheckList';
 import {
   ActionLink,
   ActionRow,
@@ -207,21 +208,18 @@ export default function TrustAndSafetyPage() {
                 </span>
                 <h3 className="text-lg font-bold text-slate-900">What it does not mean</h3>
               </div>
-              <ul className="grid gap-2.5">
+              <CheckList>
                 {[
                   'It is not a guarantee that the work will be done well',
                   'It is not insurance and it does not cover damage',
                   'It is not a rating, and it is not a recommendation',
                   'It is checked at a point in time, not continuously',
                 ].map((line) => (
-                  <li key={line} className="flex gap-2 text-sm leading-relaxed text-slate-600">
-                    <span aria-hidden="true" className="text-slate-400">
-                      &ndash;
-                    </span>
-                    <span>{line}</span>
-                  </li>
+                  <CheckItem key={line} className="text-sm leading-relaxed text-slate-600">
+                    {line}
+                  </CheckItem>
                 ))}
-              </ul>
+              </CheckList>
             </Card>
           </div>
         </div>
@@ -248,14 +246,13 @@ export default function TrustAndSafetyPage() {
               Your payment sits with the payment provider until the work is confirmed, so a
               disagreement about what was finished is settled before anyone is paid.
             </p>
-            <ul className="grid gap-2.5 rounded-xl border border-white/10 bg-primary-dark/60 p-4">
+            <CheckList className="grid list-none gap-2.5 rounded-xl border border-white/10 bg-primary-dark/60 p-4">
               {PAYMENT_MECHANICS.map((point) => (
-                <li key={point} className="flex gap-2 font-sans text-xs text-slate-200">
-                  <Check aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
-                  <span>{point}</span>
-                </li>
+                <CheckItem key={point} tone="dark" className="font-sans text-xs text-slate-200">
+                  {point}
+                </CheckItem>
               ))}
-            </ul>
+            </CheckList>
             <p className="mt-6 flex items-center gap-2 font-sans text-xs text-amber-300">
               <BadgeCheck aria-hidden="true" className="h-[15px] w-[15px]" />
               Payments handled by our payment provider
@@ -294,26 +291,24 @@ export default function TrustAndSafetyPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <Card tone="canvas">
             <h3 className="mb-4 text-lg font-bold text-slate-900">If you are the customer</h3>
-            <ul className="grid gap-3">
+            <CheckList className="grid list-none gap-3">
               {CUSTOMER_TIPS.map((tip) => (
-                <li key={tip} className="flex gap-2.5 text-sm leading-relaxed text-slate-600">
-                  <CircleCheckBig aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  <span>{tip}</span>
-                </li>
+                <CheckItem key={tip} className="text-sm leading-relaxed text-slate-600">
+                  {tip}
+                </CheckItem>
               ))}
-            </ul>
+            </CheckList>
           </Card>
 
           <Card tone="canvas">
             <h3 className="mb-4 text-lg font-bold text-slate-900">If you are the provider</h3>
-            <ul className="grid gap-3">
+            <CheckList className="grid list-none gap-3">
               {PROVIDER_TIPS.map((tip) => (
-                <li key={tip} className="flex gap-2.5 text-sm leading-relaxed text-slate-600">
-                  <CircleCheckBig aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  <span>{tip}</span>
-                </li>
+                <CheckItem key={tip} className="text-sm leading-relaxed text-slate-600">
+                  {tip}
+                </CheckItem>
               ))}
-            </ul>
+            </CheckList>
           </Card>
         </div>
       </Section>
@@ -334,14 +329,17 @@ export default function TrustAndSafetyPage() {
             <Card key={path.title} tone="white" className="flex flex-col">
               <h3 className="mb-3 text-base font-bold text-slate-900">{path.title}</h3>
               <p className="mb-5 text-sm leading-relaxed text-slate-600">{path.body}</p>
-              <ul className="mt-auto grid gap-2 border-t border-slate-100 pt-4">
+              <CheckList className="mt-auto grid list-none gap-2 border-t border-slate-100 pt-4">
                 {path.steps.map((step) => (
-                  <li key={step} className="flex gap-2 font-sans text-[11px] text-slate-500">
-                    <Check aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                    <span>{step}</span>
-                  </li>
+                  <CheckItem
+                    key={step}
+                    iconClassName="h-3.5 w-3.5"
+                    className="font-sans text-[11px] text-slate-500"
+                  >
+                    {step}
+                  </CheckItem>
                 ))}
-              </ul>
+              </CheckList>
             </Card>
           ))}
         </div>

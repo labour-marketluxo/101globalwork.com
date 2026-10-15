@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapPin } from '@/components/ui/icons';
 import { PUBLIC_BAND } from '@/components/discovery/tokens';
+import { CheckItem, CheckList } from '@/components/ui/CheckList';
 import { IndexabilityNotice } from '@/components/discovery/HubSections';
 import { getCountryHub } from '@/features/discovery/data/mock-locations';
 import { getMarket, getMarketLocations } from '@/features/discovery/data/market-catalog';
@@ -375,21 +376,24 @@ export default async function CountryHubPage({ params }: { params: Params }) {
                   <p className="mb-4 text-sm leading-relaxed text-slate-600">
                     Describe the symptom; the platform maps it to the trade that fixes it.
                   </p>
-                  <ul className="m-0 grid list-none gap-2 p-0">
+                  <CheckList className="m-0 grid list-none gap-2 p-0">
                     {problems.map((problem) => (
-                      <li
+                      <CheckItem
                         key={problem.problemEntityId}
-                        className="flex flex-wrap items-center justify-between gap-3"
+                        iconClassName="h-3.5 w-3.5"
+                        className="items-center"
+                        trailing={
+                          <span className="font-sans text-[10px] tracking-wider text-slate-400 uppercase">
+                            {problem.severity}
+                          </span>
+                        }
                       >
                         <Link href={problemHref(marketSlug, problem)} className={LINK_ROW}>
                           {problem.displayName}
                         </Link>
-                        <span className="font-sans text-[10px] tracking-wider text-slate-400 uppercase">
-                          {problem.severity}
-                        </span>
-                      </li>
+                      </CheckItem>
                     ))}
-                  </ul>
+                  </CheckList>
                 </div>
               ) : null}
 
@@ -399,15 +403,19 @@ export default async function CountryHubPage({ params }: { params: Params }) {
                   <p className="mb-4 text-sm leading-relaxed text-slate-600">
                     What a job is for — written as the result, not as the trade.
                   </p>
-                  <ul className="m-0 grid list-none gap-2 p-0">
+                  <CheckList className="m-0 grid list-none gap-2 p-0">
                     {outcomes.map((outcome) => (
-                      <li key={outcome.outcomeEntityId}>
+                      <CheckItem
+                        key={outcome.outcomeEntityId}
+                        iconClassName="h-3.5 w-3.5"
+                        className="items-center"
+                      >
                         <Link href={outcomeHref(marketSlug, outcome)} className={LINK_ROW}>
-                          {outcome.displayName} →
+                          {outcome.displayName}
                         </Link>
-                      </li>
+                      </CheckItem>
                     ))}
-                  </ul>
+                  </CheckList>
                 </div>
               ) : null}
             </div>
