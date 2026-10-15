@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Banknote, Download, Landmark, Scale, TriangleAlert } from '@/components/ui/icons';
 import { BADGE_AMBER, CARD, LINK_ARROW } from '@/components/discovery/tokens';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { formatMoney } from '@/features/provider-workspace/format';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
@@ -26,18 +27,11 @@ import { requestPayoutsAction } from '@/features/provider-workspace/payout-actio
 
 export function EarningsHeader({ earnings }: { earnings: EarningsRead }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
-      <div>
-        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Earnings</p>
-        <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-          Your books
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          Every figure here is read from the platform&apos;s double-entry ledger and cross-checked against the jobs
-          and payouts it describes. The ledger is the financial record; this page is a view of it, not a summary
-          kept beside it.
-        </p>
-      </div>
+    <WorkspaceHero
+      eyebrow="Earnings"
+      title="Your books"
+      description="Every figure here is read from the platform's double-entry ledger and cross-checked against the jobs and payouts it describes. The ledger is the financial record; this page is a view of it, not a summary kept beside it."
+    >
       <span
         className={
           earnings.provider.payoutVerified
@@ -47,7 +41,7 @@ export function EarningsHeader({ earnings }: { earnings: EarningsRead }) {
       >
         {earnings.provider.payoutVerified ? 'Payout account verified' : 'No verified payout account'}
       </span>
-    </div>
+    </WorkspaceHero>
   );
 }
 

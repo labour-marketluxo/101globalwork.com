@@ -58,9 +58,15 @@ export const CTA_PRIMARY =
 export const LINK_ARROW =
   'inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-primary no-underline transition-all hover:gap-2.5 hover:text-primary-dark';
 
-/** The same link inverted for the deep-teal bands. Amber on dark is amber-300. */
+/**
+ * The same link inverted for the deep-teal bands. Amber on dark is amber-300.
+ *
+ * ⚠️ IT IS UNDERLINED, AND `LINK_ARROW` IS NOT. On a white card a trailing arrow and a colour change
+ * are enough to read as a link; on the teal bands these sit among status chips and plain text, and a
+ * sentence in amber with a small arrow at the end does not say "clickable" on its own.
+ */
 export const LINK_ARROW_DARK =
-  'inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-amber-300 no-underline transition-all hover:gap-2.5 hover:text-amber-200';
+  'inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-amber-300 underline decoration-amber-300/50 underline-offset-2 transition-all hover:gap-2.5 hover:text-amber-200 hover:decoration-amber-200';
 
 /** Card surface. `CARD_INTERACTIVE` adds the hover the brief asks for. */
 export const CARD = 'rounded-xl border border-solid border-slate-200/80 bg-white shadow-sm';

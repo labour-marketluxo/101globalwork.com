@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, CircleCheck, Info, Search, TriangleAlert } from '@/components/ui/icons';
-import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW, LINK_ARROW_DARK } from '@/components/discovery/tokens';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { dimensionTone, readinessLabel, type ProviderReadiness } from '@/features/provider-workspace/readiness';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
 
@@ -33,31 +34,21 @@ function ScoreBar({ score, tone }: { score: number; tone: 'teal' | 'amber' | 'sl
 
 export function ReadinessHeader({ data }: { data: ProviderReadiness }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
-      <div>
-        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
-          {data.displayName}
-        </p>
-        <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-          Search readiness
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          This measures whether your profile is complete enough to be matched and to be eligible for
-          indexing. It does not predict or promise a ranking — search engines decide their own order from
-          their own signals.
-        </p>
-      </div>
-
+    <WorkspaceHero
+      eyebrow={data.displayName}
+      title="Search readiness"
+      description="This measures whether your profile is complete enough to be matched and to be eligible for indexing. It does not predict or promise a ranking — search engines decide their own order from their own signals."
+    >
       <div className="flex flex-col items-start gap-2">
         <span className={data.isPublic ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_AMBER}>
           {data.isPublic ? 'Published' : 'Not published'}
         </span>
-        <Link href={PROVIDER_PATHS.profile} className={LINK_ARROW}>
+        <Link href={PROVIDER_PATHS.profile} className={LINK_ARROW_DARK}>
           Edit your profile
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
       </div>
-    </div>
+    </WorkspaceHero>
   );
 }
 

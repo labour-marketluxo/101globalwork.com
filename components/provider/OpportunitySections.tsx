@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
 import {
@@ -169,7 +170,7 @@ function CardActions({
               idle={opportunity.response === 'interested' ? 'Interested ✓' : 'Mark interested'}
               pending="Saving…"
               icon={<Star aria-hidden="true" className="h-4 w-4" />}
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             />
           </form>
         ) : null}
@@ -232,7 +233,7 @@ function CardActions({
               <PendingButton
                 idle="Decline"
                 pending="Saving…"
-                className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
               />
               <p className="text-xs leading-relaxed text-slate-500">
                 The customer never sees this. It is how the platform learns why eligible work goes unanswered.
@@ -402,46 +403,39 @@ export function RequirementTags({ detail }: { detail: OpportunityDetail }) {
 export function OpportunityDetailHeader({ detail }: { detail: OpportunityDetail }) {
   const band = BAND_COPY[detail.request.band];
   return (
-    <header className="grid gap-3">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0">
-          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Opportunity</p>
-          <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-            {detail.request.needText}
-          </h1>
-          <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+    <WorkspaceHero eyebrow="Opportunity" title={detail.request.needText} description={band.note}>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-300">
+          <span className="inline-flex items-center gap-1">
+            <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
+            {[detail.request.locationName, detail.request.cityName].filter(Boolean).join(', ') || 'Area matched'}
+          </span>
+          {detail.request.serviceName ? (
             <span className="inline-flex items-center gap-1">
-              <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
-              {[detail.request.locationName, detail.request.cityName].filter(Boolean).join(', ') || 'Area matched'}
+              <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
+              {detail.request.serviceName}
             </span>
-            {detail.request.serviceName ? (
-              <span className="inline-flex items-center gap-1">
-                <BadgeCheck aria-hidden="true" className="h-3.5 w-3.5" />
-                {detail.request.serviceName}
-              </span>
-            ) : null}
-            {detail.request.postedAt ? (
-              <span className="inline-flex items-center gap-1">
-                <CalendarClock aria-hidden="true" className="h-3.5 w-3.5" />
-                Posted{' '}
-                {new Date(detail.request.postedAt).toLocaleDateString('en-GB', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })}
-              </span>
-            ) : null}
-            {detail.request.currencyCode ? <span className={BADGE_SLATE}>Prices in {detail.request.currencyCode}</span> : null}
-          </p>
-        </div>
+          ) : null}
+          {detail.request.postedAt ? (
+            <span className="inline-flex items-center gap-1">
+              <CalendarClock aria-hidden="true" className="h-3.5 w-3.5" />
+              Posted{' '}
+              {new Date(detail.request.postedAt).toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}
+            </span>
+          ) : null}
+          {detail.request.currencyCode ? <span className={BADGE_SLATE}>Prices in {detail.request.currencyCode}</span> : null}
+        </p>
         <div className="flex flex-wrap items-center gap-1.5">
           {urgencyBadge(detail.request.urgency)}
           <span className={BADGE_SLATE}>{band.label}</span>
           <span className={BADGE_SLATE}>Fit {detail.fit.score}/100</span>
         </div>
       </div>
-      <p className="text-xs leading-relaxed text-slate-500">{band.note}</p>
-    </header>
+    </WorkspaceHero>
   );
 }
 
@@ -611,7 +605,7 @@ export function OpportunityDetailActions({
               idle={detail.response.response === 'interested' ? 'Marked interested ✓' : 'Express interest'}
               pending="Saving…"
               icon={<Star aria-hidden="true" className="h-4 w-4" />}
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             />
           </form>
 
@@ -659,7 +653,7 @@ export function OpportunityDetailActions({
               idle="Send message"
               pending="Sending…"
               icon={<MessageSquare aria-hidden="true" className="h-4 w-4" />}
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
         </form>
@@ -707,7 +701,7 @@ export function OpportunityDetailActions({
             <PendingButton
               idle="Decline"
               pending="Saving…"
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             />
           </form>
         )}

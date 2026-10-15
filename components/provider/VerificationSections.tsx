@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, FileText, ShieldCheck } from '@/components/ui/icons';
-import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW_DARK } from '@/components/discovery/tokens';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
 import {
@@ -232,27 +233,21 @@ function RequirementCard({
 
 export function VerificationHeader({ centre }: { centre: VerificationCentre }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
-      <div>
-        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Verification</p>
-        <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-          Prove who you are
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          A person reviews each claim by hand. Only identity verification blocks publication; the other
-          two are asked for because they win commercial work, not because the platform requires them.
-        </p>
-      </div>
+    <WorkspaceHero
+      eyebrow="Verification"
+      title="Prove who you are"
+      description="A person reviews each claim by hand. Only identity verification blocks publication; the other two are asked for because they win commercial work, not because the platform requires them."
+    >
       <div className="flex flex-col items-start gap-2">
         <span className={centre.needsAction ? BADGE_AMBER : BADGE_SLATE}>
           {centre.needsAction ? 'Action needed' : 'Nothing waiting on you'}
         </span>
-        <Link href={PROVIDER_PATHS.credentials} className={LINK_ARROW}>
+        <Link href={PROVIDER_PATHS.credentials} className={LINK_ARROW_DARK}>
           Licences and insurance
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
       </div>
-    </div>
+    </WorkspaceHero>
   );
 }
 

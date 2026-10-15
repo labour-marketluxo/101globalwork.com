@@ -5,12 +5,14 @@ import {
   Bell,
   CalendarClock,
   CircleAlert,
+  CircleCheckBig,
   MapPin,
   Navigation,
   Play,
   Wallet,
 } from '@/components/ui/icons';
-import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CARD, LINK_ARROW, LINK_ARROW_DARK } from '@/components/discovery/tokens';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
 import { AvailabilityToggle, PendingButton } from '@/components/provider/ProviderControls';
 import { PROVIDER_ACTION_COPY, PROVIDER_PATHS, type ProviderActionKind } from '@/features/provider-workspace/paths';
@@ -104,19 +106,12 @@ export function TodayHero({
       : { label: 'Published, not taking new work', tone: 'amber' as const };
 
   return (
-    <section className="rounded-2xl border border-solid border-primary/10 bg-primary-surface p-6 sm:p-8">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Today</p>
-          <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-            Today&apos;s overview
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-            {provider.displayName} · {counts.activeJobs} active job{counts.activeJobs === 1 ? '' : 's'} ·{' '}
-            {counts.unansweredOpportunities} request{counts.unansweredOpportunities === 1 ? '' : 's'} waiting on your quote.
-          </p>
-        </div>
-
+    <WorkspaceHero
+      eyebrow="Today"
+      title="Today's overview"
+      description={`${provider.displayName} · ${counts.activeJobs} active job${counts.activeJobs === 1 ? '' : 's'} · ${counts.unansweredOpportunities} request${counts.unansweredOpportunities === 1 ? '' : 's'} waiting on your quote.`}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <span
           className={
             status.tone === 'teal'
@@ -126,9 +121,8 @@ export function TodayHero({
         >
           {status.label}
         </span>
+        {notice}
       </div>
-
-      {notice}
 
       <div className="mt-5 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
         <div className="max-w-md">
@@ -138,7 +132,7 @@ export function TodayHero({
             nextPath={nextPath}
             variant="hero"
           />
-          <p className="mt-2 text-xs leading-relaxed text-slate-500">
+          <p className="mt-2 text-xs leading-relaxed text-slate-300">
             {provider.acceptsNewWork
               ? 'Requests that match your services and areas can reach you. Going offline stops new matches; it does not end work you have already accepted.'
               : 'You are not being matched to new requests. Existing jobs and quotes are unaffected.'}
@@ -146,27 +140,27 @@ export function TodayHero({
         </div>
 
         <div className="flex flex-col items-start gap-2 sm:items-end">
-          <span className="font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+          <span className="font-sans text-[11px] font-bold tracking-wider text-slate-300 uppercase">
             Search readiness {readiness.totalScore}/100
           </span>
-          <Link href={PROVIDER_PATHS.searchReadiness} className={LINK_ARROW}>
+          <Link href={PROVIDER_PATHS.searchReadiness} className={LINK_ARROW_DARK}>
             See what is missing
             <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
           </Link>
           {provider.isPublic && provider.slug ? (
-            <Link href={`/providers/${provider.slug}`} className={LINK_ARROW}>
+            <Link href={`/providers/${provider.slug}`} className={LINK_ARROW_DARK}>
               View your public profile
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
             </Link>
           ) : (
-            <Link href={PROVIDER_PATHS.profile} className={LINK_ARROW}>
+            <Link href={PROVIDER_PATHS.profile} className={LINK_ARROW_DARK}>
               Finish your profile
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
             </Link>
           )}
         </div>
       </div>
-    </section>
+    </WorkspaceHero>
   );
 }
 
@@ -196,7 +190,7 @@ function JobActions({ job, nextPath }: { job: ProviderDayJob; nextPath: string }
             idle={checkpoint.label}
             pending="Saving…"
             icon={checkpoint.icon}
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           />
         </form>
       ))}
@@ -352,30 +346,36 @@ export function OpportunitiesWidget({ day }: { day: ProviderDay }) {
       ) : (
         <ul className="grid gap-3">
           {day.opportunities.map(opportunity => (
-            <li key={opportunity.requestId} className="rounded-xl border border-solid border-slate-200 p-3.5">
-              <p className="text-sm font-semibold text-slate-900">{opportunity.needText}</p>
-              <p className="mt-1 text-xs text-slate-500">
-                {[opportunity.serviceName, opportunity.locationName].filter(Boolean).join(' · ') || 'Matched request'}
-              </p>
-              <div className="mt-2.5 flex flex-wrap items-center gap-3">
-                {opportunity.quoteId ? (
-                  <Link href={`${PROVIDER_PATHS.quotes}/${opportunity.quoteId}`} className={LINK_ARROW}>
-                    Open your quote
+            <li key={opportunity.requestId} className="flex gap-2.5 rounded-xl border border-solid border-slate-200 p-3.5">
+              {/* The platform's one list marker is the check, not a bullet. Written out rather than
+                  imported from CheckItem because these rows hold block content and CheckItem wraps its
+                  children in a span. */}
+              <CircleCheckBig aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-slate-900">{opportunity.needText}</p>
+                <p className="mt-1 text-xs text-slate-500">
+                  {[opportunity.serviceName, opportunity.locationName].filter(Boolean).join(' · ') || 'Matched request'}
+                </p>
+                <div className="mt-2.5 flex flex-wrap items-center gap-3">
+                  {opportunity.quoteId ? (
+                    <Link href={`${PROVIDER_PATHS.quotes}/${opportunity.quoteId}`} className={LINK_ARROW}>
+                      Open your quote
+                      <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                    </Link>
+                  ) : (
+                    <Link href={`${PROVIDER_PATHS.quotesNew}?request=${opportunity.requestId}`} className={LINK_ARROW}>
+                      Send a quote
+                      <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                    </Link>
+                  )}
+                  <Link href={`${PROVIDER_PATHS.opportunities}/${opportunity.requestId}`} className={LINK_ARROW}>
+                    Open the opportunity
                     <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                   </Link>
-                ) : (
-                  <Link href={`${PROVIDER_PATHS.quotesNew}?request=${opportunity.requestId}`} className={LINK_ARROW}>
-                    Send a quote
-                    <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-                  </Link>
-                )}
-                <Link href={`${PROVIDER_PATHS.opportunities}/${opportunity.requestId}`} className={LINK_ARROW}>
-                  Open the opportunity
-                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-                </Link>
-                {opportunity.quoteStatus ? (
-                  <span className={BADGE_SLATE}>{opportunity.quoteStatus.replaceAll('_', ' ')}</span>
-                ) : null}
+                  {opportunity.quoteStatus ? (
+                    <span className={BADGE_SLATE}>{opportunity.quoteStatus.replaceAll('_', ' ')}</span>
+                  ) : null}
+                </div>
               </div>
             </li>
           ))}
@@ -437,16 +437,22 @@ export function ActionsWidget({ day, now }: { day: ProviderDay; now: Date }) {
             const link = actionLink(action);
             const due = action.dueAt ? formatExpiry(action.dueAt, now) : null;
             return (
-              <li key={`${action.kind}:${action.assignmentId ?? action.requestId ?? action.credentialId ?? index}`} className="rounded-xl border border-solid border-slate-200 p-3.5">
-                <p className="text-sm font-semibold text-slate-900">{copy.title}</p>
-                {action.detail ? <p className="mt-1 text-xs leading-relaxed text-slate-600">{action.detail}</p> : null}
-                {due ? <p className="mt-1 text-xs font-semibold text-amber-800">{due}</p> : null}
-                {link ? (
-                  <Link href={link.href} className={`mt-2 ${LINK_ARROW}`}>
-                    {link.cta}
-                    <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-                  </Link>
-                ) : null}
+              <li
+                key={`${action.kind}:${action.assignmentId ?? action.requestId ?? action.credentialId ?? index}`}
+                className="flex gap-2.5 rounded-xl border border-solid border-slate-200 p-3.5"
+              >
+                <CircleCheckBig aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-slate-900">{copy.title}</p>
+                  {action.detail ? <p className="mt-1 text-xs leading-relaxed text-slate-600">{action.detail}</p> : null}
+                  {due ? <p className="mt-1 text-xs font-semibold text-amber-800">{due}</p> : null}
+                  {link ? (
+                    <Link href={link.href} className={`mt-2 ${LINK_ARROW}`}>
+                      {link.cta}
+                      <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                    </Link>
+                  ) : null}
+                </div>
               </li>
             );
           })}

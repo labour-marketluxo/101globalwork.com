@@ -1,7 +1,8 @@
 import { ArrowRight, BadgeCheck, FileText, ScrollText, ShieldAlert } from '@/components/ui/icons';
-import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
+import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW_DARK } from '@/components/discovery/tokens';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { EmptyState } from '@/components/provider/WorkspaceNotices';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { formatExpiry } from '@/features/provider-workspace/format';
 import { VERIFICATION_STATUS_COPY } from '@/features/provider-workspace/verification';
 import {
@@ -45,18 +46,11 @@ function CredentialStatus({ credential }: { credential: CredentialRecord }) {
 
 export function CredentialHeader({ data }: { data: ProviderCredentials }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
-      <div>
-        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Credentials</p>
-        <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-          Licences, certifications and insurance
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          What you hold, who issued it, and when it runs out. A verified credential is published on your
-          profile as a count only — the issuing body, jurisdiction and reference stay on this page.
-        </p>
-      </div>
-
+    <WorkspaceHero
+      eyebrow="Credentials"
+      title="Licences, certifications and insurance"
+      description="What you hold, who issued it, and when it runs out. A verified credential is published on your profile as a count only — the issuing body, jurisdiction and reference stay on this page."
+    >
       <div className="flex flex-col items-start gap-2">
         <span className={data.verifiedCount > 0 ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
           {data.verifiedCount} verified
@@ -64,12 +58,12 @@ export function CredentialHeader({ data }: { data: ProviderCredentials }) {
         {data.attentionCount > 0 ? (
           <span className={BADGE_AMBER}>{data.attentionCount} needing attention</span>
         ) : null}
-        <Link href={PROVIDER_PATHS.verification} className={LINK_ARROW}>
+        <Link href={PROVIDER_PATHS.verification} className={LINK_ARROW_DARK}>
           Identity and business checks
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
       </div>
-    </div>
+    </WorkspaceHero>
   );
 }
 
@@ -136,7 +130,7 @@ function RenewForm({ credential, nextPath }: { credential: CredentialRecord; nex
           idle="Renew / upload updated document"
           pending="Saving…"
           icon={<ArrowRight aria-hidden="true" className="h-4 w-4" />}
-          className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
         />
       </div>
     </form>

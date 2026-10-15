@@ -14,6 +14,7 @@ import {
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { BlockerControls, TaskStepControls } from '@/components/provider/WorkStatusActions';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { PROVIDER_PATHS } from '@/features/provider-workspace/paths';
 import { formatDayLabel, formatMoney, formatWindow } from '@/features/provider-workspace/format';
 import type { AssignmentDetail } from '@/features/provider-workspace/work';
@@ -90,14 +91,10 @@ export function AssignmentHeader({
   });
 
   return (
-    <header className="grid gap-4">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0">
-          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">Assigned work</p>
-          <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-            {detail.request.needText}
-          </h1>
-          <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+    <WorkspaceHero eyebrow="Assigned work" title={detail.request.needText}>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-300">
             <span className="inline-flex items-center gap-1">
               <CalendarClock aria-hidden="true" className="h-3.5 w-3.5" />
               {dayLabel && window ? `${dayLabel}, ${window}` : dayLabel ?? 'No time agreed yet'}
@@ -114,8 +111,7 @@ export function AssignmentHeader({
               </span>
             ) : null}
           </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5">
           <span
             className={
               pill.tone === 'teal'
@@ -130,35 +126,36 @@ export function AssignmentHeader({
           <span className={payment.tone === 'amber' ? BADGE_AMBER : BADGE_SLATE} title={payment.note}>
             {payment.label}
           </span>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-wrap items-center gap-4">
-        <span className="flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
-          >
-            {initials ?? '—'}
-          </span>
-          <span className="text-sm font-semibold text-slate-800">
-            {detail.customer.displayName ?? 'Customer name not on file'}
-            <span className="block text-xs font-normal text-slate-500">
-              {detail.customer.hasPhoto ? '' : 'No photograph on file — the platform holds none.'}
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
+            >
+              {initials ?? '—'}
+            </span>
+            <span className="text-sm font-semibold text-white">
+              {detail.customer.displayName ?? 'Customer name not on file'}
+              <span className="block text-xs font-normal text-slate-300">
+                {detail.customer.hasPhoto ? '' : 'No photograph on file — the platform holds none.'}
+              </span>
             </span>
           </span>
-        </span>
 
-        {detail.obligation ? (
-          <span className="text-xs text-slate-500">
-            {formatMoney(detail.obligation.amountMinor, detail.obligation.currencyCode)} · payment{' '}
-            {detail.obligation.status.replaceAll('_', ' ')}
-          </span>
-        ) : (
-          <span className="text-xs text-slate-500">No payment obligation on this job.</span>
-        )}
+          {detail.obligation ? (
+            <span className="text-xs text-slate-300">
+              {formatMoney(detail.obligation.amountMinor, detail.obligation.currencyCode)} · payment{' '}
+              {detail.obligation.status.replaceAll('_', ' ')}
+            </span>
+          ) : (
+            <span className="text-xs text-slate-300">No payment obligation on this job.</span>
+          )}
+        </div>
       </div>
-    </header>
+    </WorkspaceHero>
   );
 }
 
@@ -380,7 +377,7 @@ export function ChecklistPanel({
                   <PendingButton
                     idle="Remove"
                     pending="Removing…"
-                    className="inline-flex items-center rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 transition-colors hover:border-slate-400 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </form>
               </span>
@@ -411,7 +408,7 @@ export function ChecklistPanel({
             idle="Add step"
             pending="Adding…"
             icon={<Plus aria-hidden="true" className="h-4 w-4" />}
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           />
         </form>
       ) : null}
@@ -552,7 +549,7 @@ export function ThreadPanel({
           <PendingButton
             idle="Send message"
             pending="Sending…"
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           />
         </div>
       </form>
