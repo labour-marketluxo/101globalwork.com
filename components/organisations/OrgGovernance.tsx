@@ -115,7 +115,7 @@ export function ApprovalsInbox({
                   <input type="hidden" name="request_id" value={item.requestId} />
                   <input type="hidden" name="kind" value={item.kind} />
                   <input type="hidden" name="decision" value="approved" />
-                  <input type="hidden" name="next" value={`/org/${organisationId}/approvals`} />
+                  <input type="hidden" name="next" value={`/app/org/${organisationId}/approvals`} />
                   <label htmlFor={`note_${item.requestId}`} className={LABEL}>
                     Approve — note (optional)
                   </label>
@@ -136,7 +136,7 @@ export function ApprovalsInbox({
                     {/* ⚠️ /requests/[id], NOT /customer/requests/[id]: the customer page is scoped to the account
                         that commissioned the request, and the whole point of this inbox is that the decider is
                         somebody else. The reviewer page is readable by an active member of the organisation. */}
-                    <Link href={`/requests/${item.requestId}`} className={LINK_ARROW}>
+                    <Link href={`/app/requests/${item.requestId}`} className={LINK_ARROW}>
                       Open the request
                       <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                     </Link>
@@ -147,7 +147,7 @@ export function ApprovalsInbox({
                     <input type="hidden" name="organisation_id" value={organisationId} />
                     <input type="hidden" name="request_id" value={item.requestId} />
                     <input type="hidden" name="kind" value={item.kind} />
-                    <input type="hidden" name="next" value={`/org/${organisationId}/approvals`} />
+                    <input type="hidden" name="next" value={`/app/org/${organisationId}/approvals`} />
                     <label htmlFor={`reject_${item.requestId}`} className={LABEL}>
                       Reject, or ask for more information — note (optional)
                     </label>
@@ -159,7 +159,7 @@ export function ApprovalsInbox({
                         formAction={decideApprovalAction}
                         name="decision"
                         value="rejected"
-                        className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                       />
                       <PendingButton
                         idle="Request additional information"
@@ -167,7 +167,7 @@ export function ApprovalsInbox({
                         formAction={decideApprovalAction}
                         name="decision"
                         value="information_requested"
-                        className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary disabled:cursor-not-allowed disabled:opacity-60"
                       />
                     </div>
                   </form>
@@ -176,7 +176,7 @@ export function ApprovalsInbox({
                     <input type="hidden" name="request_id" value={item.requestId} />
                     <input type="hidden" name="kind" value={item.kind} />
                     <input type="hidden" name="decision" value="delegated" />
-                    <input type="hidden" name="next" value={`/org/${organisationId}/approvals`} />
+                    <input type="hidden" name="next" value={`/app/org/${organisationId}/approvals`} />
                     <label htmlFor={`delegate_${item.requestId}`} className={LABEL}>
                       Delegate to
                     </label>
@@ -196,7 +196,7 @@ export function ApprovalsInbox({
                         idle="Delegate Approval"
                         pending="Saving…"
                         formAction={decideApprovalAction}
-                        className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                       />
                     </div>
                   </form>
@@ -296,7 +296,7 @@ export function CostCentreCards({ budgets, organisationId }: { budgets: BudgetsR
           </p>
 
           <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-solid border-slate-200 pt-3">
-            <Link href={`/org/${organisationId}/budgets?centre=${centre.id}#ledger`} className={LINK_ARROW}>
+            <Link href={`/app/org/${organisationId}/budgets?centre=${centre.id}#ledger`} className={LINK_ARROW}>
               View the transaction log
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
             </Link>
@@ -306,7 +306,7 @@ export function CostCentreCards({ budgets, organisationId }: { budgets: BudgetsR
             <form action={adjustCostCentreAction} className="mt-3 grid gap-2 border-t border-solid border-slate-200 pt-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
               <input type="hidden" name="organisation_id" value={organisationId} />
               <input type="hidden" name="cost_centre_id" value={centre.id} />
-              <input type="hidden" name="next" value={`/org/${organisationId}/budgets`} />
+              <input type="hidden" name="next" value={`/app/org/${organisationId}/budgets`} />
               <div className="min-w-0 flex-1">
                 <label htmlFor={`alloc_${centre.id}`} className={LABEL}>
                   Adjust the allocation ({centre.currencyCode})

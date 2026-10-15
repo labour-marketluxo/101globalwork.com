@@ -497,7 +497,7 @@ export function PlanCard({
                   type="submit"
                   name="accept"
                   value="false"
-                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
                 >
                   Decline
                 </button>
@@ -534,7 +534,7 @@ export function PlanCard({
                 />
                 <ConfirmSubmit
                   label="Pause plan"
-                  triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                  triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
                   icon="danger"
                   title="Pause this plan?"
                   description="No visits are expected while it is paused. The dates are kept rather than thrown away, and resuming moves the next one to the first date that is not in the past."
@@ -612,7 +612,7 @@ export function PlanCard({
                 <div className="sm:col-span-2">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
                   >
                     Send the request
                   </button>

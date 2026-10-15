@@ -61,7 +61,7 @@ export function RequestTabs({
     params.set('tab', tab);
     if (query) params.set('q', query);
     if (sort) params.set('sort', sort);
-    return `/customer/requests?${params.toString()}`;
+    return `/app/customer/requests?${params.toString()}`;
   };
 
   return (
@@ -101,7 +101,7 @@ export function RequestListControls({
   sort: string;
 }) {
   return (
-    <form method="get" action="/customer/requests" className="flex flex-wrap items-end gap-3">
+    <form method="get" action="/app/customer/requests" className="flex flex-wrap items-end gap-3">
       <input type="hidden" name="tab" value={tab} />
 
       <div className="min-w-[14rem] flex-1">
@@ -149,7 +149,7 @@ export function RequestListCard({ item }: { item: RequestListItem }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <Link
-            href={`/customer/requests/${item.id}`}
+            href={`/app/customer/requests/${item.id}`}
             className="text-sm font-bold text-slate-900 no-underline hover:text-primary"
           >
             {item.needText.trim() || 'Untitled draft'}
@@ -192,7 +192,7 @@ export function RequestListCard({ item }: { item: RequestListItem }) {
             <span className="text-slate-500">Nothing waiting on you.</span>
           )}
         </p>
-        <Link href={`/customer/requests/${item.id}`} className={LINK_ARROW}>
+        <Link href={`/app/customer/requests/${item.id}`} className={LINK_ARROW}>
           Open <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
       </div>
@@ -214,7 +214,7 @@ export function RequestListEmpty({ tab, query }: { tab: RequestTab; query: strin
           : 'A request is how work starts: describe it, answer a few questions, and providers who do that trade in your area can quote for it.'}
       </p>
       <Link
-        href="/customer/requests/new"
+        href="/app/customer/requests/new"
         className="mt-5 inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-2.5 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
       >
         Post a Request <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -415,7 +415,7 @@ export function MatchesGrid({
       <p className="mt-3 text-xs text-slate-500">
         Matched providers cannot be messaged from here — this platform has no chat or messaging system, so a
         question goes on the quote itself as a clarification request and is visible to that provider.{' '}
-        <Link href={`/customer/requests/${requestId}/quotes`} className={LINK_ARROW}>
+        <Link href={`/app/customer/requests/${requestId}/quotes`} className={LINK_ARROW}>
           Open the quote comparison <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
       </p>
@@ -624,7 +624,7 @@ export function CancelRequestPanel({ request, cancellable }: { request: RequestD
             </div>
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               <CircleSlash aria-hidden="true" className="h-3.5 w-3.5" />
               Cancel the request
@@ -715,7 +715,7 @@ export function RequestSummaryCard({ request }: { request: RequestDetail }) {
 
           <div className="flex flex-wrap gap-3">
             {request.assignment ? (
-              <Link href={`/customer/projects/${request.assignment.id}/agreement`} className={LINK_ARROW}>
+              <Link href={`/app/customer/projects/${request.assignment.id}/agreement`} className={LINK_ARROW}>
                 <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
                 {request.agreement ? 'Review the agreement' : 'Review and sign the agreement'}
                 <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
@@ -724,14 +724,14 @@ export function RequestSummaryCard({ request }: { request: RequestDetail }) {
             {/* The decision that releases money lives on the completion page, and this is the way to it from the
                 job itself. It only appears when the work is actually waiting on the customer. */}
             {request.assignment && request.state === 'submitted_for_approval' ? (
-              <Link href={`/customer/projects/${request.assignment.id}/completion`} className={LINK_ARROW}>
+              <Link href={`/app/customer/projects/${request.assignment.id}/completion`} className={LINK_ARROW}>
                 <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
                 Review the completed work
                 <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
               </Link>
             ) : null}
             {request.obligation ? (
-              <Link href={`/requests/${request.id}`} className={LINK_ARROW}>
+              <Link href={`/app/requests/${request.id}`} className={LINK_ARROW}>
                 Work, evidence and payment <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
               </Link>
             ) : null}

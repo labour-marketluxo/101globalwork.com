@@ -480,7 +480,7 @@ export function OrderCard({
             <div className="sm:col-span-2">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 <PackageCheck aria-hidden="true" className="h-3.5 w-3.5" />
                 Record it
@@ -534,7 +534,7 @@ export function OrderCard({
             <div>
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Send the request
               </button>
@@ -574,7 +574,7 @@ export function OrderCard({
       ) : null}
 
       <p className="mt-3 text-[11px] text-slate-400">
-        <Link href={projectId ? `/projects/${projectId}` : '/work'} className="underline underline-offset-2">
+        <Link href={projectId ? `/app/projects/${projectId}` : '/app/work'} className="underline underline-offset-2">
           Back to the project
         </Link>{' '}
         · order placed {formatRelativeTime(order.createdAt, now)}

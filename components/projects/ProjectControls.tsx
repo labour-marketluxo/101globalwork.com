@@ -200,7 +200,7 @@ export function ChangesSection({
                         <input type="hidden" name="assignment_id" value={assignmentId} />
                         <input type="hidden" name="change_id" value={change.id} />
                         <input type="hidden" name="decision" value="accepted" />
-                        <input type="hidden" name="next" value={`/projects/${assignmentId}/changes`} />
+                        <input type="hidden" name="next" value={`/app/projects/${assignmentId}/changes`} />
                         <label htmlFor={`accept_note_${change.id}`} className={LABEL}>
                           Accept and adjust the baseline — note (optional)
                         </label>
@@ -223,7 +223,7 @@ export function ChangesSection({
                         <input type="hidden" name="assignment_id" value={assignmentId} />
                         <input type="hidden" name="change_id" value={change.id} />
                         <input type="hidden" name="decision" value="rejected" />
-                        <input type="hidden" name="next" value={`/projects/${assignmentId}/changes`} />
+                        <input type="hidden" name="next" value={`/app/projects/${assignmentId}/changes`} />
                         <label htmlFor={`reject_note_${change.id}`} className={LABEL}>
                           Reject — why (optional)
                         </label>
@@ -232,7 +232,7 @@ export function ChangesSection({
                           <PendingButton
                             idle="Reject proposal"
                             pending="Saving…"
-                            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                           />
                         </div>
                       </form>
@@ -242,11 +242,11 @@ export function ChangesSection({
                     <form action={withdrawChangeRequestAction} className="grid gap-2">
                       <input type="hidden" name="assignment_id" value={assignmentId} />
                       <input type="hidden" name="change_id" value={change.id} />
-                      <input type="hidden" name="next" value={`/projects/${assignmentId}/changes`} />
+                      <input type="hidden" name="next" value={`/app/projects/${assignmentId}/changes`} />
                       <PendingButton
                         idle="Withdraw my proposal"
                         pending="Withdrawing…"
-                        className="inline-flex w-fit items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="inline-flex w-fit items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary disabled:cursor-not-allowed disabled:opacity-60"
                       />
                     </form>
                   ) : null}
@@ -260,7 +260,7 @@ export function ChangesSection({
       {canPropose ? (
         <form action={createChangeRequestAction} className={`${CARD} grid gap-4 p-5`}>
           <input type="hidden" name="assignment_id" value={assignmentId} />
-          <input type="hidden" name="next" value={`/projects/${assignmentId}/changes`} />
+          <input type="hidden" name="next" value={`/app/projects/${assignmentId}/changes`} />
           <div>
             <h2 className="text-sm font-bold tracking-tight text-slate-900">Create a change proposal</h2>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
@@ -340,7 +340,7 @@ export function ChangesSection({
               idle="Save as a draft"
               pending="Saving…"
               formAction={createChangeRequestAction}
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             />
             <p className="text-xs leading-relaxed text-slate-500">
               A draft is visible to both parties but cannot be decided until it is proposed. The buttons differ only in
@@ -420,7 +420,7 @@ export function EscrowCheckpoint({ milestones, assignmentId, evidence }: { miles
         {evidence.length > 0 ? (
           <p className="mt-2 text-xs text-slate-500">
             Evidence on this job:{' '}
-            <Link href={`/projects/${assignmentId}/evidence`} className={LINK_ARROW}>
+            <Link href={`/app/projects/${assignmentId}/evidence`} className={LINK_ARROW}>
               open the gallery
             </Link>
           </p>
@@ -439,7 +439,7 @@ export function EscrowCheckpoint({ milestones, assignmentId, evidence }: { miles
 
       <p className="mt-3 text-xs leading-relaxed text-slate-500">
         Submitting for review happens where the work is recorded —{' '}
-        <Link href={`/projects/${assignmentId}/work`} className={LINK_ARROW}>
+        <Link href={`/app/projects/${assignmentId}/work`} className={LINK_ARROW}>
           the plan
         </Link>{' '}
         and the provider&apos;s job page — and approving happens in the customer&apos;s completion review. The
@@ -484,7 +484,7 @@ export function CasesSection({
                   </span>
                 </div>
                 <p className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                  <Link href={`/projects/${assignmentId}/issues/${issue.id}`} className={LINK_ARROW}>
+                  <Link href={`/app/projects/${assignmentId}/issues/${issue.id}`} className={LINK_ARROW}>
                     Open the case
                   </Link>
                   {issue.responseDueAt ? (
@@ -503,7 +503,7 @@ export function CasesSection({
       {canOpen ? (
         <form action={openProjectIssueAction} className={`${CARD} grid gap-3 p-5`}>
           <input type="hidden" name="assignment_id" value={assignmentId} />
-          <input type="hidden" name="next" value={`/projects/${assignmentId}/milestones`} />
+          <input type="hidden" name="next" value={`/app/projects/${assignmentId}/milestones`} />
           <div>
             <h2 className="text-sm font-bold tracking-tight text-slate-900">Raise a case</h2>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
@@ -645,7 +645,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
                 {response.evidenceId ? (
                   <p className="mt-1.5 text-xs text-slate-500">
                     Attached evidence:{' '}
-                    <Link href={`/projects/${assignmentId}/evidence`} className={LINK_ARROW}>
+                    <Link href={`/app/projects/${assignmentId}/evidence`} className={LINK_ARROW}>
                       open the gallery
                     </Link>
                   </p>
@@ -664,7 +664,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
           <form action={respondToIssueAction} className={`${CARD} grid gap-3 p-5`}>
             <input type="hidden" name="assignment_id" value={assignmentId} />
             <input type="hidden" name="issue_id" value={issue.issue.id} />
-            <input type="hidden" name="next" value={`/projects/${assignmentId}/issues/${issue.issue.id}`} />
+            <input type="hidden" name="next" value={`/app/projects/${assignmentId}/issues/${issue.issue.id}`} />
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
                 <label htmlFor="response_kind" className={LABEL}>
@@ -711,7 +711,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
               <input type="hidden" name="assignment_id" value={assignmentId} />
               <input type="hidden" name="issue_id" value={issue.issue.id} />
               <input type="hidden" name="status" value="escalated" />
-              <input type="hidden" name="next" value={`/projects/${assignmentId}/issues/${issue.issue.id}`} />
+              <input type="hidden" name="next" value={`/app/projects/${assignmentId}/issues/${issue.issue.id}`} />
               <p className="text-sm font-bold tracking-tight text-slate-900">Escalate to the platform</p>
               <p className="text-xs leading-relaxed text-slate-500">
                 Asking for a platform decision does not decide anything by itself; it moves the case to the platform,
@@ -721,7 +721,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
                 idle="Escalate"
                 pending="Escalating…"
                 icon={<TriangleAlert aria-hidden="true" className="h-4 w-4" />}
-                className="inline-flex w-fit items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex w-fit items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
               />
             </form>
 
@@ -729,7 +729,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
               <input type="hidden" name="assignment_id" value={assignmentId} />
               <input type="hidden" name="issue_id" value={issue.issue.id} />
               <input type="hidden" name="status" value="resolved" />
-              <input type="hidden" name="next" value={`/projects/${assignmentId}/issues/${issue.issue.id}`} />
+              <input type="hidden" name="next" value={`/app/projects/${assignmentId}/issues/${issue.issue.id}`} />
               <p className="text-sm font-bold tracking-tight text-slate-900">Accept the settlement</p>
               <p className="text-xs leading-relaxed text-slate-500">
                 {settlementOffered
@@ -756,7 +756,7 @@ export function IssueCase({ issue, assignmentId, evidence }: { issue: IssueRead;
         <form action={setIssueStatusAction} className={`${CARD} grid gap-3 p-5`}>
           <input type="hidden" name="assignment_id" value={assignmentId} />
           <input type="hidden" name="issue_id" value={issue.issue.id} />
-          <input type="hidden" name="next" value={`/projects/${assignmentId}/issues/${issue.issue.id}`} />
+          <input type="hidden" name="next" value={`/app/projects/${assignmentId}/issues/${issue.issue.id}`} />
           <div>
             <h2 className="text-sm font-bold tracking-tight text-slate-900">Platform decision</h2>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-600">

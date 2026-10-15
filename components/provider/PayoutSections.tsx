@@ -104,7 +104,7 @@ export function DestinationPanel({
                 idle="Retry verification"
                 pending="Checking…"
                 icon={<RefreshCw aria-hidden="true" className="h-3.5 w-3.5" />}
-                className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
               />
             </form>
             <p className="text-xs leading-relaxed text-slate-500">

@@ -257,7 +257,7 @@ function WorkerCard({
               {worker.allocations.map((allocation) => (
                 <li key={allocation.assignmentId} className="rounded-lg bg-slate-50 px-3 py-2 text-xs">
                   <span className="flex flex-wrap items-center justify-between gap-2">
-                    <Link href={`/projects/${allocation.assignmentId}`} className="font-semibold text-primary no-underline hover:text-primary-dark">
+                    <Link href={`/app/projects/${allocation.assignmentId}`} className="font-semibold text-primary no-underline hover:text-primary-dark">
                       {allocation.projectLabel}
                     </Link>
                     <span className="text-slate-500">{allocation.roleLabel}</span>
@@ -289,7 +289,7 @@ function WorkerCard({
                       />
                       <button
                         type="submit"
-                        className="rounded-lg border border-solid border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                        className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
                       >
                         Consent for this project
                       </button>
@@ -360,7 +360,7 @@ function WorkerCard({
                         <input type="hidden" name="purpose" value="revoked" />
                         <button
                           type="submit"
-                          className="rounded-lg border border-solid border-slate-300 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                          className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1 text-[11px] font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
                         >
                           Revoke
                         </button>
@@ -407,7 +407,7 @@ function WorkerCard({
               />
               <button
                 type="submit"
-                className="rounded-lg border border-solid border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Consent across the programme
               </button>
@@ -538,7 +538,7 @@ function LinkedProjectsPanel({ read, programmeId }: { read: ProgrammeWorkersRead
                 <span className="ml-2 font-sans text-[11px] text-slate-500">{project.status}</span>
               </span>
               <span className="flex items-center gap-3">
-                <Link href={`/projects/${project.assignmentId}`} className={LINK_ARROW}>
+                <Link href={`/app/projects/${project.assignmentId}`} className={LINK_ARROW}>
                   Open
                 </Link>
                 {read.canAssign ? (
@@ -579,7 +579,7 @@ function LinkedProjectsPanel({ read, programmeId }: { read: ProgrammeWorkersRead
           <div className="flex items-end">
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               <FolderPlus aria-hidden="true" className="h-3.5 w-3.5" />
               Link

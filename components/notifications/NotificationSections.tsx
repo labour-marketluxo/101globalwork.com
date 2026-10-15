@@ -186,7 +186,7 @@ export function MarkAllReadForm({
       <button
         type="submit"
         disabled={unread === 0}
-        className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         Mark {category === 'all' ? 'everything' : 'this category'} as read
       </button>
@@ -305,7 +305,7 @@ function NotificationRow({
               <input type="hidden" name="category" value={category} />
               <button
                 type="submit"
-                className="w-full rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="w-full rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Mark as read
               </button>

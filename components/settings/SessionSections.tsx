@@ -134,7 +134,7 @@ export function CurrentSessionPanel({
           <input type="hidden" name="session_id" value={session.id} />
           <ConfirmSubmit
             label="Sign out this device"
-            triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             icon="danger"
             title="Sign out of this device?"
             description={
@@ -248,7 +248,7 @@ export function OtherSessionsPanel({
                   <input type="hidden" name="session_id" value={session.id} />
                   <ConfirmSubmit
                     label="Revoke access"
-                    triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     title="Revoke access for this device?"
                     description={`${session.device.label} will lose access and disappear from this list. Its browser tab may still look signed in until it next needs a new token — which it will not get.`}
                     confirmLabel="Revoke access"

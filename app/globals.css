@@ -240,6 +240,20 @@
      naming a width, so nothing that was meant to show a border loses one. */
   *,::before,::after{border-width:0}
 
+  /* ------------------------------------------------------------------ lists carry no markers
+     The platform has exactly ONE list marker: the check, in components/ui/CheckList.tsx. Nothing
+     else in this product is bulleted or numbered.
+
+     ⚠️ THIS RULE EXISTS BECAUSE PREFLIGHT DOES NOT. Tailwind's reset is deliberately not imported
+     (see the header of this file), so every `<ul>` kept the browser's `list-style: disc` and every
+     `<ol>` its decimal counter — which is what put a bullet beside a bordered card that was never a
+     list of bullets, and a stray "1." outside each setup step. Six call sites had remembered
+     `list-none`; the other 166 had not. This is that rule, once.
+
+     Only the marker and its indent are reset. `margin` is left alone on purpose: the browser default
+     is what most of these lists are spaced by, and zeroing it would move ~170 layouts at once. */
+  ul,ol{list-style:none;padding-left:0}
+
   html{
     font-family:var(--font-sans);
     /* Option A base: Surface Canvas #FAFAF9, Text Main #0F172A.
@@ -344,7 +358,7 @@
 
   .need-form button:hover,.stack-form button:hover{@apply bg-accent-strong;transform:translateY(-1px)}
 
-  .stack-form .secondary-button{@apply bg-surface-strong text-ink;border:1px solid var(--line-strong);width:100%}
+  .stack-form .secondary-button{@apply bg-primary-subtle text-primary;border:1px solid var(--color-primary);width:100%}
 
   .need-form.stacked button{justify-self:start}
   .need-form.stacked label,.stack-form label{font-weight:700;font-size:14px}
@@ -679,8 +693,8 @@
     @apply inline-flex items-center;gap:6px;
     border:1px solid var(--line-strong);
     border-radius:9px;
-    background:#fff;
-    color:var(--color-ink-soft);
+    background:var(--color-primary-subtle);
+    color:var(--color-primary);
     padding:7px 12px;
     font-size:12px;
     font-weight:720;

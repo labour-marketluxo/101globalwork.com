@@ -107,7 +107,7 @@ export function EvidenceGallery({
 
           <div className="mt-3 flex flex-wrap items-center gap-3">
             {item.storagePath ? (
-              <Link href={`/projects/${assignmentId}/evidence/${item.id}/download`} className={LINK_ARROW}>
+              <Link href={`/app/projects/${assignmentId}/evidence/${item.id}/download`} className={LINK_ARROW}>
                 <Download aria-hidden="true" className="h-3.5 w-3.5" />
                 Download asset
               </Link>
@@ -135,11 +135,11 @@ export function EvidenceGallery({
                     <form action={withdrawEvidenceFlagAction} className="mt-2">
                       <input type="hidden" name="assignment_id" value={assignmentId} />
                       <input type="hidden" name="flag_id" value={flag.id} />
-                      <input type="hidden" name="next" value={`/projects/${assignmentId}/evidence`} />
+                      <input type="hidden" name="next" value={`/app/projects/${assignmentId}/evidence`} />
                       <PendingButton
                         idle="Withdraw my flag"
                         pending="Withdrawing…"
-                        className="rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary disabled:cursor-not-allowed disabled:opacity-60"
                       />
                     </form>
                   ) : null}
@@ -157,7 +157,7 @@ export function EvidenceGallery({
               <form action={flagEvidenceAction} className="mt-2 grid gap-2 rounded-xl border border-solid border-slate-200 bg-slate-50 p-3.5">
                 <input type="hidden" name="assignment_id" value={assignmentId} />
                 <input type="hidden" name="evidence_id" value={item.id} />
-                <input type="hidden" name="next" value={`/projects/${assignmentId}/evidence`} />
+                <input type="hidden" name="next" value={`/app/projects/${assignmentId}/evidence`} />
                 <div>
                   <label htmlFor={`reason_${item.id}`} className={LABEL}>
                     What is wrong with it
@@ -187,7 +187,7 @@ export function EvidenceGallery({
                   <PendingButton
                     idle="Flag it"
                     pending="Saving…"
-                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </form>
@@ -313,11 +313,11 @@ function versionRow(version: DocumentVersion, assignmentId: string, role: string
       ) : null}
 
       <div className="mt-2 flex flex-wrap items-center gap-3">
-        <Link href={`/projects/${assignmentId}/documents/${version.id}/download`} className={LINK_ARROW}>
+        <Link href={`/app/projects/${assignmentId}/documents/${version.id}/download`} className={LINK_ARROW}>
           <Download aria-hidden="true" className="h-3.5 w-3.5" />
           Download
         </Link>
-        <Link href={`/projects/${assignmentId}/documents/${version.id}/download?inline=1`} className={LINK_ARROW}>
+        <Link href={`/app/projects/${assignmentId}/documents/${version.id}/download?inline=1`} className={LINK_ARROW}>
           <Eye aria-hidden="true" className="h-3.5 w-3.5" />
           Preview
         </Link>
@@ -327,7 +327,7 @@ function versionRow(version: DocumentVersion, assignmentId: string, role: string
         <form action={decideProjectDocumentAction} className="mt-3 grid gap-2 border-t border-solid border-slate-200 pt-3">
           <input type="hidden" name="assignment_id" value={assignmentId} />
           <input type="hidden" name="document_id" value={version.id} />
-          <input type="hidden" name="next" value={`/projects/${assignmentId}/documents`} />
+          <input type="hidden" name="next" value={`/app/projects/${assignmentId}/documents`} />
           <label htmlFor={`decision_note_${version.id}`} className={LABEL}>
             Sign / approve this version — note (optional)
           </label>

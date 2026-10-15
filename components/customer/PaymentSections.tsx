@@ -189,7 +189,7 @@ export function PaymentCard({ row }: { row: PaymentLedgerRow }) {
             <p className="text-lg font-bold text-primary">{formatMoney(row.amountMinor, row.currencyCode)}</p>
             <p className="mt-0.5 truncate text-sm font-semibold text-slate-800">{row.providerName}</p>
             <Link
-              href={`/customer/requests/${row.requestId}`}
+              href={`/app/customer/requests/${row.requestId}`}
               className="mt-0.5 block truncate text-xs text-slate-500 no-underline hover:text-primary"
             >
               {row.requestLabel}
@@ -235,17 +235,17 @@ export function PaymentCard({ row }: { row: PaymentLedgerRow }) {
       <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-solid border-slate-200 pt-3">
         {isPayable(row) ? (
           <Link
-            href={`/customer/payments/${row.paymentId}/checkout`}
+            href={`/app/customer/payments/${row.paymentId}/checkout`}
             className="inline-flex shrink-0 items-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-4 py-2 font-sans text-xs font-bold text-white no-underline shadow-sm transition-colors hover:bg-secondary-dark"
           >
             Pay {formatMoney(row.amountMinor, row.currencyCode)} safely
             <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
           </Link>
         ) : null}
-        <Link href={`/customer/payments/${row.paymentId}`} className={LINK_ARROW}>
+        <Link href={`/app/customer/payments/${row.paymentId}`} className={LINK_ARROW}>
           Open the record <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
-        <a href={`/customer/payments/${row.paymentId}/receipt`} className={LINK_ARROW}>
+        <a href={`/app/customer/payments/${row.paymentId}/receipt`} className={LINK_ARROW}>
           <Download aria-hidden="true" className="h-3.5 w-3.5" />
           Receipt
         </a>
@@ -292,7 +292,7 @@ export function PaymentEmpty() {
         A payment appears here when you accept a quote. It is payable straight away, and none of it reaches the
         provider until you approve the finished work.
       </p>
-      <Link href="/customer/requests" className={`${LINK_ARROW} mt-4`}>
+      <Link href="/app/customer/requests" className={`${LINK_ARROW} mt-4`}>
         Open your requests
       </Link>
     </div>
@@ -320,7 +320,7 @@ export function PaymentUnavailable() {
         Nothing has changed about any payment — this is a read failure on the platform&apos;s side, not a
         statement that the payment is missing or unpaid. Reload in a moment.
       </p>
-      <Link href="/customer/payments" className={`${LINK_ARROW} mt-4`}>
+      <Link href="/app/customer/payments" className={`${LINK_ARROW} mt-4`}>
         Back to payments
       </Link>
     </div>
@@ -654,8 +654,8 @@ export function CheckoutPanel({
               charged twice.
             </p>
             <Link
-              href={`/customer/payments/${row.paymentId}`}
-              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+              href={`/app/customer/payments/${row.paymentId}`}
+              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary no-underline uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               Cancel
             </Link>
@@ -881,7 +881,7 @@ export function DisputeRequestPanel({ row, requests }: { row: PaymentLedgerRow; 
 
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               <Clock aria-hidden="true" className="h-3.5 w-3.5" />
               Send this to the platform team

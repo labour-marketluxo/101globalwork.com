@@ -153,7 +153,7 @@ function PasswordStrength({ id, value, minLength }: { id: string; value: string;
         <summary className="cursor-pointer font-sans text-[11px] font-bold tracking-wider text-slate-500 uppercase">
           What actually helps
         </summary>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-slate-600">
+        <ul className="mt-2 list-none space-y-1 pl-0 text-xs leading-relaxed text-slate-600">
           <li>
             Length is the part that matters. Three unrelated words are stronger — and easier to
             remember — than one word with a capital letter and a symbol bolted on.

@@ -47,7 +47,7 @@ export default function HoursMatrix({ hours }: { hours: OperatingHours }) {
         <button
           type="button"
           onClick={copyFirstDay}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <Copy aria-hidden="true" className="h-3.5 w-3.5" />
           Copy Monday to all days

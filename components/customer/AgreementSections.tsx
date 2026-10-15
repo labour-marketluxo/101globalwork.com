@@ -70,8 +70,8 @@ export function AgreementAlternatives({ agreement }: { agreement: ProjectAgreeme
       </h2>
 
       <a
-        href={`/customer/projects/${agreement.assignmentId}/agreement/download`}
-        className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+        href={`/app/customer/projects/${agreement.assignmentId}/agreement/download`}
+        className="mt-3 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary no-underline uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
       >
         <Download aria-hidden="true" className="h-3.5 w-3.5" />
         Download Draft Agreement
@@ -111,7 +111,7 @@ export function AgreementAlternatives({ agreement }: { agreement: ProjectAgreeme
           </p>
           <button
             type="submit"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
           >
             Send the question
           </button>
@@ -150,7 +150,7 @@ export function AgreementAlternatives({ agreement }: { agreement: ProjectAgreeme
           </p>
           <button
             type="submit"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
           >
             <CircleSlash aria-hidden="true" className="h-3.5 w-3.5" />
             Decline and cancel the request

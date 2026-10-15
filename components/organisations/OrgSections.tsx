@@ -124,7 +124,7 @@ export function ApprovalsWidget({ organisation }: { organisation: Organisation }
               <p className="mt-2">
                 {/* ⚠️ /requests/[id], NOT the customer-scoped page: the approvals list is filtered to work somebody
                     ELSE asked for, and the customer page is scoped to the account that commissioned it. */}
-                <Link href={`/requests/${item.requestId}`} className={LINK_ARROW}>
+                <Link href={`/app/requests/${item.requestId}`} className={LINK_ARROW}>
                   Open the request
                   <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                 </Link>
@@ -134,7 +134,7 @@ export function ApprovalsWidget({ organisation }: { organisation: Organisation }
         </ul>
       )}
       <p className="mt-3">
-        <Link href={`/org/${organisation.entity.id}/approvals`} className={LINK_ARROW}>
+        <Link href={`/app/org/${organisation.entity.id}/approvals`} className={LINK_ARROW}>
           Open the approvals inbox
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
@@ -150,7 +150,7 @@ export function BudgetWidgets({ organisation }: { organisation: Organisation }) 
         A budget is a plan for a period, per branch or for the whole organisation. Set one below and it is compared with
         the funded work the platform has reconciled.
         <span className="mt-3 block">
-          <Link href={`/org/${organisation.entity.id}/budgets`} className={LINK_ARROW}>
+          <Link href={`/app/org/${organisation.entity.id}/budgets`} className={LINK_ARROW}>
             Cost centres and the ledger
             <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
           </Link>
@@ -198,7 +198,7 @@ export function BudgetWidgets({ organisation }: { organisation: Organisation }) 
         );
       })}
       <p>
-        <Link href={`/org/${organisation.entity.id}/budgets`} className={LINK_ARROW}>
+        <Link href={`/app/org/${organisation.entity.id}/budgets`} className={LINK_ARROW}>
           Cost centres and the ledger
           <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
@@ -307,12 +307,12 @@ export function PortfolioTable({
             <div className="mt-3 flex flex-wrap items-center gap-4">
               {/* The customer view is scoped to the commissioning account; an organisation member reads the request
                   itself, which is the same record with the controls they are not entitled to already absent. */}
-              <Link href={`/requests/${project.requestId}`} className={LINK_ARROW}>
+              <Link href={`/app/requests/${project.requestId}`} className={LINK_ARROW}>
                 Open the request
                 <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
               </Link>
               {project.assignmentId ? (
-                <Link href={`/projects/${project.assignmentId}`} className={LINK_ARROW}>
+                <Link href={`/app/projects/${project.assignmentId}`} className={LINK_ARROW}>
                   The project workspace
                   <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                 </Link>
@@ -322,7 +322,7 @@ export function PortfolioTable({
               <form action={assignProjectOwnerAction} className="mt-3 flex flex-wrap items-end gap-2 border-t border-solid border-slate-200 pt-3">
                 <input type="hidden" name="organisation_id" value={organisation.entity.id} />
                 <input type="hidden" name="request_id" value={project.requestId} />
-                <input type="hidden" name="next" value={`/org/${organisation.entity.id}/projects`} />
+                <input type="hidden" name="next" value={`/app/org/${organisation.entity.id}/projects`} />
                 <div className="min-w-0 flex-1">
                   <label htmlFor={`owner_${project.requestId}`} className={LABEL}>
                     Assign an internal owner
@@ -341,7 +341,7 @@ export function PortfolioTable({
                 <PendingButton
                   idle="Assign owner"
                   pending="Saving…"
-                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                 />
               </form>
             ) : null}

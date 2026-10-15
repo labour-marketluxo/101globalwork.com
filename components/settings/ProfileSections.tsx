@@ -176,7 +176,7 @@ export function AvatarPanel({
       <div className="mt-4 flex flex-wrap items-center gap-4">
         {identity.profile.hasAvatar ? (
           <Image
-            src={`/settings/profile/avatar${version ? `?v=${version}` : ''}`}
+            src={`/app/account/settings/profile/avatar${version ? `?v=${version}` : ''}`}
             alt={`${displayName || 'Your'} profile photo`}
             width={64}
             height={64}
@@ -206,7 +206,7 @@ export function AvatarPanel({
         <form action={removeAvatarAction} className="mt-4">
           <ConfirmSubmit
             label="Remove photo"
-            triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+            triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
             icon="danger"
             title="Remove your photo?"
             description="Your initials are shown instead. The stored image is deleted, and anything that has already cached it will stop showing it the next time it is fetched."
@@ -307,7 +307,7 @@ export function SignInContactPanel({ identity }: { identity: IdentityRead }) {
             <div>
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Send the confirmation
               </button>
@@ -436,7 +436,7 @@ function ContactRow({ contact, now }: { contact: ContactMethod; now: Date }) {
               <input type="hidden" name="contact_id" value={contact.id} />
               <button
                 type="submit"
-                className="rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Use first
               </button>
@@ -491,7 +491,7 @@ function ContactRow({ contact, now }: { contact: ContactMethod; now: Date }) {
               <input type="hidden" name="contact_id" value={contact.id} />
               <button
                 type="submit"
-                className="rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Send a new code
               </button>

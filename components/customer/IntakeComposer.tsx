@@ -283,7 +283,7 @@ export default function IntakeComposer({
           attachment against a request, so a file would go nowhere — dropping one below shows you exactly
           what this page did with it: kept the name, sent nothing.
         </p>
-        <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3 py-2 font-sans text-[11px] font-bold tracking-wider text-slate-600 uppercase transition-colors hover:border-primary hover:text-primary">
+        <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-2 font-sans text-[11px] font-bold tracking-wider text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white">
           Choose a file
           {/* No `name`: with no name the browser cannot submit this input at all. */}
           <input

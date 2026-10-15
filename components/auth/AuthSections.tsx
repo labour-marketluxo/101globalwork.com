@@ -39,7 +39,7 @@ export const AUTH_CTA =
 
 /** Full-width secondary action (the social provider button). */
 export const AUTH_CTA_SECONDARY =
-  'inline-flex w-full items-center justify-center gap-2.5 rounded-lg border-[1.5px] border-solid border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition-colors hover:border-primary hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70';
+  'inline-flex w-full items-center justify-center gap-2.5 rounded-lg border-[1.5px] border-solid border-primary/30 bg-primary-subtle px-5 py-3 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-70';
 
 /** Inline link. Preflight is not imported, so underlines and colour are both explicit. */
 export const AUTH_LINK = 'font-semibold text-primary underline underline-offset-2 hover:text-primary-dark';

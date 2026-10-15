@@ -298,7 +298,7 @@ export function AssetCard({ asset }: { asset: CustomerAsset }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <Link
-            href={`/customer/assets/${asset.assetId}`}
+            href={`/app/customer/assets/${asset.assetId}`}
             className="text-sm font-bold text-slate-900 no-underline hover:text-primary"
           >
             {asset.name}
@@ -367,10 +367,10 @@ export function AssetCard({ asset }: { asset: CustomerAsset }) {
       ) : null}
 
       <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-solid border-slate-200 pt-3">
-        <Link href={`/customer/assets/${asset.assetId}`} className={LINK_ARROW}>
+        <Link href={`/app/customer/assets/${asset.assetId}`} className={LINK_ARROW}>
           Open the record <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
         </Link>
-        <Link href="/customer/requests/new" className={LINK_ARROW}>
+        <Link href="/app/customer/requests/new" className={LINK_ARROW}>
           <Wrench aria-hidden="true" className="h-3.5 w-3.5" />
           Request maintenance
         </Link>
@@ -598,7 +598,7 @@ export function AssetDetailsForm({
 
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           Save the details
         </button>
@@ -680,7 +680,7 @@ export function LogServiceEventForm({ detail }: { detail: AssetDetailRow }) {
 
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <Plus aria-hidden="true" className="h-3.5 w-3.5" />
           Add to history
@@ -796,7 +796,7 @@ export function WarrantyClaimPanel({ detail }: { detail: AssetDetailRow }) {
             </fieldset>
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               <FileText aria-hidden="true" className="h-3.5 w-3.5" />
               Record the claim
@@ -832,21 +832,21 @@ export function AftercareActions({ detail }: { detail: AssetDetailRow }) {
 
       <div className="mt-3 space-y-3">
         <Link
-          href="/customer/requests/new"
+          href="/app/customer/requests/new"
           className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border-[1.5px] border-solid border-transparent bg-secondary px-5 py-3 font-sans text-sm font-bold text-white no-underline shadow-lg shadow-amber-950/20 transition-all duration-200 hover:bg-secondary-dark active:scale-95"
         >
           <Wrench aria-hidden="true" className="h-4 w-4" />
           {due ? 'Schedule maintenance' : 'Request maintenance'}
         </Link>
         <Link
-          href="/customer/requests/new"
-          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+          href="/app/customer/requests/new"
+          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary no-underline uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           Hire {detail.installedByName ?? 'the original provider'} again
         </Link>
         <a
-          href={`/customer/assets/${detail.assetId}/documents`}
-          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+          href={`/app/customer/assets/${detail.assetId}/documents`}
+          className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary no-underline uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <Download aria-hidden="true" className="h-3.5 w-3.5" />
           Download documents
@@ -872,7 +872,7 @@ export function AssetSourceLink({ detail }: { detail: AssetDetailRow }) {
     <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-600">
       <CheckCircle2 aria-hidden="true" className="h-3.5 w-3.5 text-primary" />
       Installed through
-      <Link href={`/customer/requests/${detail.sourceRequestId}`} className={LINK_ARROW}>
+      <Link href={`/app/customer/requests/${detail.sourceRequestId}`} className={LINK_ARROW}>
         {detail.sourceRequestLabel ?? 'a job on this platform'}
       </Link>
       {detail.installedByName ? <span>with {detail.installedByName}.</span> : null}

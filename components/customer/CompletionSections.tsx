@@ -268,12 +268,12 @@ export function CompletionDecisionPanel({
           </p>
         ) : null}
         <div className="mt-4 flex flex-wrap gap-3 border-t border-solid border-slate-200 pt-4">
-          <Link href={`/customer/projects/${agreement.assignmentId}/review`} className={LINK_ARROW}>
+          <Link href={`/app/customer/projects/${agreement.assignmentId}/review`} className={LINK_ARROW}>
             <Star aria-hidden="true" className="h-3.5 w-3.5" />
             Review this provider <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
           </Link>
           {agreement.obligation ? (
-            <Link href={`/customer/payments/${agreement.obligation.id}`} className={LINK_ARROW}>
+            <Link href={`/app/customer/payments/${agreement.obligation.id}`} className={LINK_ARROW}>
               Open the payment record
             </Link>
           ) : null}
@@ -298,7 +298,7 @@ export function CompletionDecisionPanel({
         <p className="mt-2 rounded-xl border border-solid border-amber-300 bg-secondary-light px-4 py-3 text-sm font-semibold text-amber-900">
           The payment for this job has not cleared, so there is nothing to release. Approving now would be refused
           — the money has to actually be there first. Check{' '}
-          <Link href={`/customer/payments/${agreement.obligation?.id ?? ''}`} className={LINK_ARROW}>
+          <Link href={`/app/customer/payments/${agreement.obligation?.id ?? ''}`} className={LINK_ARROW}>
             the payment record
           </Link>
           .
@@ -394,7 +394,7 @@ export function CompletionDecisionPanel({
               </p>
               <button
                 type="submit"
-                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Send it back
               </button>
@@ -433,7 +433,7 @@ export function CompletionDecisionPanel({
               </div>
               <button
                 type="submit"
-                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Open a dispute
               </button>

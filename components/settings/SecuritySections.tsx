@@ -208,7 +208,7 @@ export function FactorsPanel({
                 <input type="hidden" name="factor_id" value={factor.id} />
                 <ConfirmSubmit
                   label="Remove factor"
-                  triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                  triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
                   icon="danger"
                   title="Remove this factor?"
                   description="The account will fall back to a password alone, and the provider ends every signed-in session when a verified factor is deleted — including this one. You will be asked to sign in again."
@@ -233,7 +233,7 @@ export function FactorsPanel({
               <input type="hidden" name="factor_id" value={factor.id} />
               <button
                 type="submit"
-                className="rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 Discard it
               </button>
@@ -253,7 +253,7 @@ export function FactorsPanel({
             action={
               <Link
                 href="/account/security?next=/settings/security"
-                className="inline-flex items-center rounded-lg border border-solid border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 no-underline transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3.5 py-2 text-xs font-semibold text-primary no-underline transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 {kinds.includes('totp') ? 'Add another' : 'Set up'}
               </Link>

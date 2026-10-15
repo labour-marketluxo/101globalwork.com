@@ -174,7 +174,7 @@ export function OfflineSyncStatus() {
           type="button"
           onClick={() => void flush()}
           disabled={syncing || !online}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
           {syncing ? <Loader2 aria-hidden="true" className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw aria-hidden="true" className="h-3.5 w-3.5" />}
           Send now
@@ -244,7 +244,7 @@ export function WorkStatusActions({
               <input type="hidden" name="next" value={nextPath} />
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 <Icon aria-hidden="true" className="h-4 w-4" />
                 {checkpoint.label}
@@ -273,7 +273,7 @@ export function WorkStatusActions({
         {requestState === 'in_progress' && !blocked ? (
           <a
             href="#blocker"
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 no-underline transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary no-underline transition-colors hover:border-primary hover:bg-primary hover:text-white"
           >
             <Pause aria-hidden="true" className="h-4 w-4" />
             Pause / blocked
@@ -436,7 +436,7 @@ export function BlockerControls({
       </div>
       <button
         type="submit"
-        className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+        className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
       >
         <Pause aria-hidden="true" className="h-4 w-4" />
         Pause

@@ -166,7 +166,7 @@ export function BookingCard({ booking, timeZone }: { booking: Booking; timeZone:
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-slate-900">{booking.providerName}</p>
             <Link
-              href={`/customer/requests/${booking.requestId}`}
+              href={`/app/customer/requests/${booking.requestId}`}
               className="mt-0.5 block truncate text-xs text-slate-500 no-underline hover:text-primary"
             >
               {booking.requestLabel}
@@ -251,7 +251,7 @@ export function BookingCard({ booking, timeZone }: { booking: Booking; timeZone:
           </form>
         ) : null}
 
-        <Link href={`/requests/${booking.requestId}`} className={LINK_ARROW}>
+        <Link href={`/app/requests/${booking.requestId}`} className={LINK_ARROW}>
           Open project
         </Link>
         {booking.providerSlug ? (
@@ -314,7 +314,7 @@ export function BookingCard({ booking, timeZone }: { booking: Booking; timeZone:
             </p>
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               <Pencil aria-hidden="true" className="h-3.5 w-3.5" />
               Send this time to the provider
@@ -356,7 +356,7 @@ export function BookingCard({ booking, timeZone }: { booking: Booking; timeZone:
             </p>
             <button
               type="submit"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               <CircleSlash aria-hidden="true" className="h-3.5 w-3.5" />
               Cancel the booking
@@ -427,7 +427,7 @@ export function BookingCalendar({
                 {bookings.map(booking => (
                   <li key={booking.assignmentId}>
                     <Link
-                      href={`/customer/bookings?view=${view}&month=${cell.dateKey.slice(0, 7)}#booking-${booking.assignmentId}`}
+                      href={`/app/customer/bookings?view=${view}&month=${cell.dateKey.slice(0, 7)}#booking-${booking.assignmentId}`}
                       className="block truncate rounded bg-primary-subtle px-1.5 py-1 text-[11px] font-semibold text-primary no-underline hover:bg-primary hover:text-white"
                       title={`${booking.providerName} — ${booking.scheduledStart ? formatTimeOnly(booking.scheduledStart, timeZone) : ''}`}
                     >
@@ -459,7 +459,7 @@ export function BookingControls({
   view: 'calendar' | 'list';
 }) {
   const link = (month: string, nextView: 'calendar' | 'list') =>
-    `/customer/bookings?view=${nextView}&month=${month}`;
+    `/app/customer/bookings?view=${nextView}&month=${month}`;
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -533,7 +533,7 @@ export function BookingEmpty() {
         A booking appears here once a provider you chose sets a time for the work. Accepting a quote creates the
         job; setting the appointment is the next step, and it is theirs to propose and yours to confirm.
       </p>
-      <Link href="/customer/requests" className={`${LINK_ARROW} mt-4`}>
+      <Link href="/app/customer/requests" className={`${LINK_ARROW} mt-4`}>
         Open your requests
       </Link>
     </div>

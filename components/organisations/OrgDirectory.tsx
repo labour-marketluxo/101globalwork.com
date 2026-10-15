@@ -80,7 +80,7 @@ export function MembersTable({
               <form action={updateMemberAction} className="grid gap-2">
                 <input type="hidden" name="organisation_id" value={organisationId} />
                 <input type="hidden" name="account_id" value={member.accountId} />
-                <input type="hidden" name="next" value={`/org/${organisationId}/members`} />
+                <input type="hidden" name="next" value={`/app/org/${organisationId}/members`} />
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div>
                     <label htmlFor={`role_${member.accountId}`} className={LABEL}>Role</label>
@@ -116,7 +116,7 @@ export function MembersTable({
                 <input type="hidden" name="organisation_id" value={organisationId} />
                 <input type="hidden" name="account_id" value={member.accountId} />
                 <input type="hidden" name="status" value={member.status === 'suspended' ? 'active' : 'suspended'} />
-                <input type="hidden" name="next" value={`/org/${organisationId}/members`} />
+                <input type="hidden" name="next" value={`/app/org/${organisationId}/members`} />
                 <p className="text-xs leading-relaxed text-slate-500">
                   Suspending keeps the membership and its history; the person simply cannot act for the organisation
                   while it is suspended.
@@ -126,7 +126,7 @@ export function MembersTable({
                     idle={member.status === 'suspended' ? 'Reactivate member' : 'Suspend member'}
                     pending="Saving…"
                     icon={<UserMinus aria-hidden="true" className="h-4 w-4" />}
-                    className="inline-flex w-fit items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex w-fit items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </form>
@@ -169,7 +169,7 @@ export function MembersTable({
       {canAdminister ? (
         <form action={inviteMemberAction} className={`${CARD} grid gap-4 p-5`}>
           <input type="hidden" name="organisation_id" value={organisationId} />
-          <input type="hidden" name="next" value={`/org/${organisationId}/members`} />
+          <input type="hidden" name="next" value={`/app/org/${organisationId}/members`} />
           <div>
             <h2 className="text-sm font-bold tracking-tight text-slate-900">Invite a member</h2>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
@@ -277,7 +277,7 @@ export function LocationsDirectory({
           </div>
 
           <p className="mt-2">
-            <Link href={`/org/${organisationId}/projects?site=${encodeURIComponent(location.areaName)}`} className={LINK_ARROW}>
+            <Link href={`/app/org/${organisationId}/projects?site=${encodeURIComponent(location.areaName)}`} className={LINK_ARROW}>
               View site projects
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
             </Link>
@@ -306,7 +306,7 @@ export function LocationsDirectory({
               <form action={updateLocationAction} className="mt-3 grid gap-3 border-t border-solid border-slate-200 pt-3">
                 <input type="hidden" name="organisation_id" value={organisationId} />
                 <input type="hidden" name="location_row_id" value={location.id} />
-                <input type="hidden" name="next" value={`/org/${organisationId}/locations`} />
+                <input type="hidden" name="next" value={`/app/org/${organisationId}/locations`} />
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div>
                     <label htmlFor={`label_${location.id}`} className={LABEL}>Branch name</label>
@@ -374,11 +374,11 @@ export function LocationsDirectory({
                 <input type="hidden" name="organisation_id" value={organisationId} />
                 <input type="hidden" name="location_row_id" value={location.id} />
                 <input type="hidden" name="archived" value={location.archived ? '0' : '1'} />
-                <input type="hidden" name="next" value={`/org/${organisationId}/locations`} />
+                <input type="hidden" name="next" value={`/app/org/${organisationId}/locations`} />
                 <PendingButton
                   idle={location.archived ? 'Restore site' : 'Archive site'}
                   pending="Saving…"
-                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary disabled:cursor-not-allowed disabled:opacity-60"
                 />
                 <span className="ml-3 text-xs leading-relaxed text-slate-500">
                   A site with work in progress cannot be archived.
@@ -469,7 +469,7 @@ export function PreferredProvidersDirectory({
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-4">
-                <Link href={`/org/${organisationId}/projects`} className={LINK_ARROW}>
+                <Link href={`/app/org/${organisationId}/projects`} className={LINK_ARROW}>
                   Invite to a project
                   <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                 </Link>
@@ -487,11 +487,11 @@ export function PreferredProvidersDirectory({
                 <form action={removePreferredProviderAction} className="mt-3 border-t border-solid border-slate-200 pt-3">
                   <input type="hidden" name="organisation_id" value={organisationId} />
                   <input type="hidden" name="provider_id" value={provider.providerId} />
-                  <input type="hidden" name="next" value={`/org/${organisationId}/providers`} />
+                  <input type="hidden" name="next" value={`/app/org/${organisationId}/providers`} />
                   <PendingButton
                     idle="Remove preference"
                     pending="Removing…"
-                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </form>
               ) : null}
@@ -503,7 +503,7 @@ export function PreferredProvidersDirectory({
       {canAdminister ? (
         <form action={addPreferredProviderAction} className={`${CARD} grid gap-4 p-5`}>
           <input type="hidden" name="organisation_id" value={organisationId} />
-          <input type="hidden" name="next" value={`/org/${organisationId}/providers`} />
+          <input type="hidden" name="next" value={`/app/org/${organisationId}/providers`} />
           <div>
             <h2 className="text-sm font-bold tracking-tight text-slate-900">Add a preferred provider</h2>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-600">

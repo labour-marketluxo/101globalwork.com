@@ -642,7 +642,7 @@ export function AttachmentsPanel({
           <div>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               <Paperclip aria-hidden="true" className="h-3.5 w-3.5" />
               Attach
@@ -666,7 +666,7 @@ export function ReplyPanel({ detail }: { detail: SupportCaseDetail }) {
           same record — the platform can read this one alongside it.
         </p>
         <p className="mt-3">
-          <Link href="/support" className={LINK_ARROW}>
+          <Link href="/app/account/support" className={LINK_ARROW}>
             Open a new case
           </Link>
         </p>
@@ -742,7 +742,7 @@ export function CloseCasePanel({ detail }: { detail: SupportCaseDetail }) {
         <div>
           <ConfirmSubmit
             label="Close case"
-            triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+            triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
             icon="danger"
             title="Close this case?"
             description="The thread ends and no further replies are possible on it. Nothing about the project or the payment changes."
@@ -819,7 +819,7 @@ export function FeedbackPanel({
         <div>
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
           >
             {feedback ? 'Update rating' : 'Send feedback'}
           </button>

@@ -339,7 +339,7 @@ export default function EvidenceCapture({
               <button
                 type="button"
                 onClick={retryFailed}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-solid border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               >
                 <RefreshCw aria-hidden="true" className="h-3.5 w-3.5" />
                 Retry {failed.length} failed upload{failed.length === 1 ? '' : 's'}

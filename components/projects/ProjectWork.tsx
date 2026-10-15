@@ -66,7 +66,7 @@ export function ProjectWorkSection({
 
   return (
     <div className="grid gap-5">
-      <form method="get" action={`/projects/${assignmentId}/work`} className={`${CARD} flex flex-wrap items-end gap-3 p-5`}>
+      <form method="get" action={`/app/projects/${assignmentId}/work`} className={`${CARD} flex flex-wrap items-end gap-3 p-5`}>
         <div className="min-w-0 flex-1">
           <label htmlFor="assignee" className={LABEL}>
             Assigned to
@@ -110,7 +110,7 @@ export function ProjectWorkSection({
           className="inline-flex items-center gap-2 rounded-lg border-0 bg-primary px-5 py-2.5 font-sans text-xs font-bold tracking-wide text-white uppercase shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         />
         {filters.assignee || filters.status || filters.stage ? (
-          <Link href={`/projects/${assignmentId}/work`} className={LINK_ARROW}>
+          <Link href={`/app/projects/${assignmentId}/work`} className={LINK_ARROW}>
             Clear
           </Link>
         ) : null}
@@ -156,7 +156,7 @@ export function ProjectWorkSection({
                     <li key={task.id} className="rounded-xl border border-solid border-slate-200 p-3">
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <Link
-                          href={`/projects/${assignmentId}/tasks/${task.id}`}
+                          href={`/app/projects/${assignmentId}/tasks/${task.id}`}
                           className="text-sm font-semibold text-slate-900 no-underline hover:text-primary"
                         >
                           {task.ordinal}. {task.title}
@@ -185,25 +185,25 @@ export function ProjectWorkSection({
                             <input type="hidden" name="assignment_id" value={assignmentId} />
                             <input type="hidden" name="task_id" value={task.id} />
                             <input type="hidden" name="direction" value="up" />
-                            <input type="hidden" name="next" value={`/projects/${assignmentId}/work`} />
+                            <input type="hidden" name="next" value={`/app/projects/${assignmentId}/work`} />
                             <PendingButton
                               idle="Move up"
                               pending="Moving…"
-                              className="rounded-lg border border-solid border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                              className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                             />
                           </form>
                           <form action={moveProjectTaskAction}>
                             <input type="hidden" name="assignment_id" value={assignmentId} />
                             <input type="hidden" name="task_id" value={task.id} />
                             <input type="hidden" name="direction" value="down" />
-                            <input type="hidden" name="next" value={`/projects/${assignmentId}/work`} />
+                            <input type="hidden" name="next" value={`/app/projects/${assignmentId}/work`} />
                             <PendingButton
                               idle="Move down"
                               pending="Moving…"
-                              className="rounded-lg border border-solid border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                              className="rounded-lg border border-solid border-primary/30 bg-primary-subtle px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                             />
                           </form>
-                          <Link href={`/projects/${assignmentId}/tasks/${task.id}`} className={LINK_ARROW}>
+                          <Link href={`/app/projects/${assignmentId}/tasks/${task.id}`} className={LINK_ARROW}>
                             Open
                           </Link>
                         </div>
@@ -217,7 +217,7 @@ export function ProjectWorkSection({
                 <form action={addProjectTaskAction} className="mt-4 flex flex-wrap items-end gap-2 border-t border-solid border-slate-200 pt-4">
                   <input type="hidden" name="assignment_id" value={assignmentId} />
                   <input type="hidden" name="stage_id" value={stage.id} />
-                  <input type="hidden" name="next" value={`/projects/${assignmentId}/work`} />
+                  <input type="hidden" name="next" value={`/app/projects/${assignmentId}/work`} />
                   <div className="min-w-0 flex-1">
                     <label htmlFor={`task_${stage.id}`} className={LABEL}>
                       Add a task to this stage
@@ -241,7 +241,7 @@ export function ProjectWorkSection({
                   <PendingButton
                     idle="Add task"
                     pending="Adding…"
-                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </form>
               ) : null}
@@ -253,7 +253,7 @@ export function ProjectWorkSection({
       {canPlan ? (
         <form action={addProjectStageAction} className={`${CARD} flex flex-wrap items-end gap-2 p-5`}>
           <input type="hidden" name="assignment_id" value={assignmentId} />
-          <input type="hidden" name="next" value={`/projects/${assignmentId}/work`} />
+          <input type="hidden" name="next" value={`/app/projects/${assignmentId}/work`} />
           <div className="min-w-0 flex-1">
             <label htmlFor="stage_title" className={LABEL}>
               Add a stage
@@ -280,7 +280,7 @@ export function ProjectWorkSection({
 export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; notice?: React.ReactNode }) {
   const { task } = detail;
   const canEdit = detail.role !== 'admin' && task.status !== 'completed';
-  const taskHref = `/projects/${task.assignmentId}/tasks/${task.id}`;
+  const taskHref = `/app/projects/${task.assignmentId}/tasks/${task.id}`;
 
   return (
     <div className="grid gap-5">
@@ -562,7 +562,7 @@ export function TaskDetailView({ detail, notice }: { detail: ProjectTaskDetail; 
           <ul className="mt-3 grid gap-2 text-xs">
             {detail.siblings.map(sibling => (
               <li key={sibling.id} className="flex flex-wrap items-center justify-between gap-2">
-                <Link href={`/projects/${task.assignmentId}/tasks/${sibling.id}`} className={LINK_ARROW}>
+                <Link href={`/app/projects/${task.assignmentId}/tasks/${sibling.id}`} className={LINK_ARROW}>
                   {sibling.ordinal}. {sibling.title}
                 </Link>
                 <span className="text-slate-500">{TASK_STATUS_COPY[sibling.status].label}</span>
@@ -679,7 +679,7 @@ export function ProjectMessagesSection({
       {canPost ? (
         <form action={sendProjectMessageAction} className={`${CARD} grid gap-3 p-5`}>
           <input type="hidden" name="assignment_id" value={assignmentId} />
-          <input type="hidden" name="next" value={`/projects/${assignmentId}/messages`} />
+          <input type="hidden" name="next" value={`/app/projects/${assignmentId}/messages`} />
           <div className="flex flex-wrap gap-3">
             <div className="min-w-0 flex-1">
               <label htmlFor="context_kind" className={LABEL}>

@@ -328,14 +328,14 @@ export function QuoteBuilderForm({
             idle="Save draft"
             pending="Saving…"
             formAction={saveQuoteDraftAction}
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-3 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           />
           {draft ? (
             <PendingButton
               idle="Discard draft"
               pending="Discarding…"
               formAction={discardQuoteDraftAction}
-              className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-500 transition-colors hover:border-slate-400 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-3 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             />
           ) : null}
         </div>
@@ -361,7 +361,7 @@ export function QuoteBuilderForm({
             idle="Request an on-site inspection"
             pending="Sending…"
             formAction={requestInspectionAction}
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           />
           <span className="text-xs leading-relaxed text-slate-500">
             Sends the customer a message asking to visit and keeps this page as a draft. It does not submit a
@@ -739,7 +739,7 @@ export function QuoteCustomerPanel({
           <PendingButton
             idle="Send message"
             pending="Sending…"
-            className="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           />
         </div>
       </form>
@@ -787,7 +787,7 @@ export function QuoteActionsPanel({ quote, nextPath }: { quote: ProviderQuote; n
             <input type="hidden" name="next" value={nextPath} />
             <ConfirmSubmit
               label="Withdraw quote"
-              triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary"
+              triggerClassName="inline-flex items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
               icon="danger"
               title="Withdraw this quote?"
               description="The customer can no longer accept it. It stays visible in the history so they can see what was offered, and a revised quote is a new version beside it rather than a replacement."

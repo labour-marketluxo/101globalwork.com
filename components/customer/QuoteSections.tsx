@@ -176,7 +176,7 @@ function AskPanel({ group, requestId }: { group: ProviderQuoteGroup; requestId: 
         </p>
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           Send to the provider
         </button>
@@ -238,7 +238,7 @@ export function MessageProviderPanel({
         </p>
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           Send to the provider
         </button>
@@ -274,7 +274,7 @@ function DeclinePanel({ group, requestId }: { group: ProviderQuoteGroup; request
         </p>
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 uppercase transition-colors hover:border-primary hover:text-primary"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           Decline
         </button>
@@ -307,8 +307,8 @@ function QuoteDecisionActions({
   return (
     <div className="space-y-2">
       <Link
-        href={`/customer/requests/${requestId}/quotes/${quote.quoteId}`}
-        className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-slate-300 bg-white px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-slate-700 no-underline uppercase transition-colors hover:border-primary hover:text-primary"
+        href={`/app/customer/requests/${requestId}/quotes/${quote.quoteId}`}
+        className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-solid border-primary/30 bg-primary-subtle px-4 py-2.5 font-sans text-xs font-bold tracking-wide text-primary no-underline uppercase transition-colors hover:border-primary hover:bg-primary hover:text-white"
       >
         <FileText aria-hidden="true" className="h-3.5 w-3.5" />
         View full quote {quote.versionLabel}
@@ -550,7 +550,7 @@ export function ComparisonEmpty({ requestId, hasQuotes }: { requestId: string; h
           ? 'Every quote on this request has been decided or has expired. The request page lists them with their versions.'
           : 'Providers matched to this request can quote it. Quotes appear here as they arrive, and this platform sends no notification when one does — come back to this page.'}
       </p>
-      <Link href={`/customer/requests/${requestId}`} className={`${LINK_ARROW} mt-4`}>
+      <Link href={`/app/customer/requests/${requestId}`} className={`${LINK_ARROW} mt-4`}>
         Back to the request <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
       </Link>
     </div>
@@ -618,7 +618,7 @@ export function VersionHistory({
                 <p className="mt-2 text-xs leading-relaxed whitespace-pre-wrap text-slate-600">{version.summary}</p>
               ) : null}
               {!current ? (
-                <Link href={`/customer/requests/${requestId}/quotes/${version.quoteId}`} className={`${LINK_ARROW} mt-2`}>
+                <Link href={`/app/customer/requests/${requestId}/quotes/${version.quoteId}`} className={`${LINK_ARROW} mt-2`}>
                   Open this version <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                 </Link>
               ) : null}
