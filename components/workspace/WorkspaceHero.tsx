@@ -42,12 +42,17 @@ export default function WorkspaceHero({
         <p className="mb-2 font-sans text-xs font-bold tracking-wider text-amber-400 uppercase">{eyebrow}</p>
       ) : null}
 
-      <h1 className={`text-2xl font-bold tracking-tight text-white md:text-3xl${description || children ? ' mb-3' : ''}`}>
+      {/* ⚠️ THE SPACE BEFORE `${` IS LOAD-BEARING. Tailwind's scanner reads a candidate up to the first
+          character it cannot use in a class name, and `$` is one it accepts — so `md:text-3xl${on ? … }`
+          yields the candidate `md:text-3xl${description`, which is not a utility, and the class is never
+          emitted. This title silently stayed at 24px on every screen until it was measured; the space ends
+          the candidate cleanly. Verified by compiling this file through the project's own Tailwind. */}
+      <h1 className={`text-2xl font-bold tracking-tight text-white md:text-3xl ${description || children ? 'mb-3' : ''}`}>
         {title}
       </h1>
 
       {description ? (
-        <p className={`max-w-2xl text-sm leading-relaxed text-slate-300${children ? ' mb-6' : ''}`}>
+        <p className={`max-w-2xl text-sm leading-relaxed text-slate-300 ${children ? 'mb-6' : ''}`}>
           {description}
         </p>
       ) : null}
