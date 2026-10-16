@@ -406,6 +406,331 @@ const MOCK_TABLE_ROWS: Record<string, Record<string, unknown>[]> = {
  * redirect to `/`, so preview mode returns an owner context instead — every capability is granted,
  * so the whole admin navigation renders.
  */
+/**
+ * The two preview projects, keyed by assignment id.
+ *
+ * ⚠️ THEY ARE DELIBERATELY DIFFERENT FROM EACH OTHER. One is a provider's funded job in progress with a blocked
+ * task and evidence already on it; the other is a customer's accepted job with no time agreed and the payment not
+ * funded. Between them they exercise the amber risk band, both flavours of next-action card, the progress bar, the
+ * collapsed money disclosure and the empty states — which is the point of a preview, and the reason a single
+ * polished project would have been the wrong fixture.
+ *
+ * THE SHAPE IS `get_project_command`'s OWN, NOT A CONVENIENT ONE. Every key below is the jsonb key that command
+ * builds and that `features/projects/project.ts` reads back, including the ones nothing renders yet.
+ */
+const MOCK_PROJECTS: Record<string, unknown> = {
+  [MOCK_ASSIGNMENT_ID]: {
+    allowed: true,
+    role: 'provider',
+    project: {
+      assignment_id: MOCK_ASSIGNMENT_ID,
+      request_id: MOCK_REQUEST_ID,
+      outcome: 'Replace the kitchen mixer tap and reseal the sink',
+      state: 'in_progress',
+      urgency: 'soon',
+      assigned_at: daysAgo(2),
+      completed_at: null,
+      timezone: 'Africa/Lagos',
+      service_name: 'Plumbing',
+      location_name: 'Gwarinpa',
+      city_name: 'Abuja',
+      currency_code: 'NGN',
+      customer_name: 'Ada O.',
+      provider_name: 'Mock Provider Co',
+      customer_account_id: MOCK_ACCOUNT_ID,
+      provider_account_id: MOCK_ACCOUNT_ID,
+    },
+    schedule: {
+      scheduled_start: hoursFromNow(3),
+      scheduled_end: hoursFromNow(5),
+      timezone: 'Africa/Lagos',
+      status: 'confirmed',
+      confirmed_at: daysAgo(1),
+    },
+    agreement: {
+      quote_version: 'v1.0',
+      total_minor: 4_500_000,
+      currency_code: 'NGN',
+      accepted_at: daysAgo(2),
+      auth_method: 'password',
+    },
+    money: {
+      obligation_status: 'funded',
+      amount_minor: 4_500_000,
+      currency_code: 'NGN',
+      payout_status: 'pending',
+      payout_amount_minor: 4_050_000,
+    },
+    risks: [
+      {
+        key: 'tasks_blocked',
+        severity: 'medium',
+        label: '1 task(s) blocked',
+        detail: 'Individual tasks are marked blocked. The job itself is still running.',
+      },
+    ],
+    next_action: {
+      key: 'plan_next',
+      title: 'Continue the plan',
+      detail: '2 of 4 tasks are done.',
+      href_kind: 'project_work',
+    },
+    progress: {
+      tasks_total: 4,
+      tasks_done: 2,
+      tasks_blocked: 1,
+      tasks_awaiting_approval: 0,
+      tasks_overdue: 0,
+      stages: 2,
+    },
+    stages: [
+      {
+        id: 'mock-stage-1',
+        ordinal: 1,
+        title: 'Make safe and isolate',
+        description: 'Stop the water and protect the cabinet before anything is removed.',
+        task_count: 2,
+        done_count: 2,
+        tasks: [
+          {
+            id: 'mock-task-1',
+            ordinal: 1,
+            title: 'Isolate the water supply',
+            status: 'completed',
+            blocked_reason: null,
+            scheduled_start: hoursFromNow(-26),
+            scheduled_end: hoursFromNow(-25),
+            assignee_role: 'provider',
+            criteria_total: 2,
+            criteria_done: 2,
+            completed_at: hoursFromNow(-25),
+            updated_at: hoursFromNow(-25),
+          },
+          {
+            id: 'mock-task-2',
+            ordinal: 2,
+            title: 'Empty the cabinet and lay down protection',
+            status: 'completed',
+            blocked_reason: null,
+            scheduled_start: hoursFromNow(-24),
+            scheduled_end: hoursFromNow(-23),
+            assignee_role: 'provider',
+            criteria_total: 1,
+            criteria_done: 1,
+            completed_at: hoursFromNow(-23),
+            updated_at: hoursFromNow(-23),
+          },
+        ],
+      },
+      {
+        id: 'mock-stage-2',
+        ordinal: 2,
+        title: 'Replace and reseal',
+        description: 'Fit the new mixer, reseal the sink and test for leaks.',
+        task_count: 2,
+        done_count: 0,
+        tasks: [
+          {
+            id: 'mock-task-3',
+            ordinal: 1,
+            title: 'Fit the replacement mixer tap',
+            status: 'in_progress',
+            blocked_reason: null,
+            scheduled_start: hoursFromNow(3),
+            scheduled_end: hoursFromNow(4),
+            assignee_role: 'provider',
+            criteria_total: 3,
+            criteria_done: 1,
+            completed_at: null,
+            updated_at: hoursFromNow(-2),
+          },
+          {
+            id: 'mock-task-4',
+            ordinal: 2,
+            title: 'Reseal the sink and run a leak test',
+            status: 'blocked',
+            blocked_reason: 'Waiting on a material or part',
+            scheduled_start: hoursFromNow(4),
+            scheduled_end: hoursFromNow(5),
+            assignee_role: 'provider',
+            criteria_total: 2,
+            criteria_done: 0,
+            completed_at: null,
+            updated_at: hoursFromNow(-1),
+          },
+        ],
+      },
+    ],
+    milestones: [
+      { key: 'agreement', label: 'Agreement accepted', at: daysAgo(2), done: true },
+      { key: 'funded', label: 'Payment funded', at: daysAgo(2), done: true },
+      { key: 'started', label: 'Work started', at: hoursFromNow(-26), done: true },
+      { key: 'submitted', label: 'Submitted for approval', at: null, done: false },
+      { key: 'paid', label: 'Paid out', at: null, done: false },
+    ],
+    evidence: [
+      {
+        id: 'mock-evidence-1',
+        kind: 'photo',
+        note: 'The isolation valve under the sink, closed.',
+        storage_path: 'mock/evidence-1.jpg',
+        submitted_at: hoursFromNow(-26),
+      },
+      {
+        id: 'mock-evidence-2',
+        kind: 'note',
+        note: 'Cabinet floor was dry when I started, so the damp is from the tap and not the trap.',
+        storage_path: null,
+        submitted_at: hoursFromNow(-24),
+      },
+    ],
+    changes: [
+      {
+        id: 'mock-change-1',
+        kind: 'change_request',
+        message: 'The waste trap is cracked as well. Can it be replaced in the same visit?',
+        status: 'open',
+        created_at: hoursFromNow(-1),
+      },
+    ],
+  },
+
+  [MOCK_SECOND_ASSIGNMENT_ID]: {
+    allowed: true,
+    role: 'customer',
+    project: {
+      assignment_id: MOCK_SECOND_ASSIGNMENT_ID,
+      request_id: MOCK_SECOND_REQUEST_ID,
+      outcome: 'Service the split air conditioner in the main bedroom',
+      state: 'accepted',
+      urgency: 'normal',
+      assigned_at: daysAgo(1),
+      completed_at: null,
+      timezone: 'Africa/Lagos',
+      service_name: 'Air Conditioning',
+      location_name: 'Gwarinpa',
+      city_name: 'Abuja',
+      currency_code: 'NGN',
+      customer_name: 'Mock User',
+      provider_name: 'Cold Room Services Ltd',
+      customer_account_id: MOCK_ACCOUNT_ID,
+      provider_account_id: 'mock-provider-2',
+    },
+    schedule: null,
+    agreement: {
+      quote_version: 'v1.0',
+      total_minor: 2_800_000,
+      currency_code: 'NGN',
+      accepted_at: daysAgo(1),
+      auth_method: 'password',
+    },
+    money: {
+      obligation_status: 'pending',
+      amount_minor: 2_800_000,
+      currency_code: 'NGN',
+      payout_status: null,
+      payout_amount_minor: null,
+    },
+    risks: [
+      {
+        key: 'unfunded',
+        severity: 'medium',
+        label: 'The payment has not been funded',
+        detail: 'Paid work cannot start until the customer funds the obligation.',
+      },
+    ],
+    next_action: {
+      key: 'fund_payment',
+      title: 'Fund the agreed amount',
+      detail: 'The provider is assigned and cannot start until the money is in place.',
+      href_kind: 'customer_booking',
+    },
+    progress: {
+      tasks_total: 3,
+      tasks_done: 0,
+      tasks_blocked: 0,
+      tasks_awaiting_approval: 0,
+      tasks_overdue: 0,
+      stages: 1,
+    },
+    stages: [
+      {
+        id: 'mock-stage-3',
+        ordinal: 1,
+        title: 'Service the unit',
+        description: 'Clean the filters, check the gas pressure and confirm the drain runs clear.',
+        task_count: 3,
+        done_count: 0,
+        tasks: [
+          {
+            id: 'mock-task-5',
+            ordinal: 1,
+            title: 'Clean the filters and the indoor coil',
+            status: 'not_started',
+            blocked_reason: null,
+            scheduled_start: null,
+            scheduled_end: null,
+            assignee_role: 'provider',
+            criteria_total: 2,
+            criteria_done: 0,
+            completed_at: null,
+            updated_at: null,
+          },
+          {
+            id: 'mock-task-6',
+            ordinal: 2,
+            title: 'Check the gas pressure',
+            status: 'not_started',
+            blocked_reason: null,
+            scheduled_start: null,
+            scheduled_end: null,
+            assignee_role: 'provider',
+            criteria_total: 1,
+            criteria_done: 0,
+            completed_at: null,
+            updated_at: null,
+          },
+          {
+            id: 'mock-task-7',
+            ordinal: 3,
+            title: 'Confirm the drain runs clear',
+            status: 'not_started',
+            blocked_reason: null,
+            scheduled_start: null,
+            scheduled_end: null,
+            assignee_role: 'provider',
+            criteria_total: 1,
+            criteria_done: 0,
+            completed_at: null,
+            updated_at: null,
+          },
+        ],
+      },
+    ],
+    milestones: [
+      { key: 'agreement', label: 'Agreement accepted', at: daysAgo(1), done: true },
+      { key: 'funded', label: 'Payment funded', at: null, done: false },
+      { key: 'started', label: 'Work started', at: null, done: false },
+      { key: 'submitted', label: 'Submitted for approval', at: null, done: false },
+      { key: 'paid', label: 'Paid out', at: null, done: false },
+    ],
+    evidence: [],
+    changes: [],
+  },
+};
+
+/**
+ * A preview read whose answer depends on which project is being opened.
+ *
+ * ⚠️ ONLY THE PROJECT READS USE THIS. Everything else in this file ignores the argument on purpose (see the note
+ * on `MOCK_TABLE_ROWS`), but "which project" is the one parameter a reviewer is actively switching between. The
+ * first project is the fallback, so a hand-typed or stale id renders a seeded document rather than an empty page.
+ */
+const perProject =
+  (byAssignment: Record<string, unknown>) =>
+  (args?: Record<string, unknown>): unknown =>
+    byAssignment[String(args?.p_assignment_id)] ?? byAssignment[MOCK_ASSIGNMENT_ID];
+
 const MOCK_RPC_RESULTS: Record<string, unknown> = {
   /** `true` so /account/activate-admin-access renders its screen instead of redirecting to `/`. */
   platform_admin_activation_required_command: true,
@@ -859,6 +1184,367 @@ const MOCK_RPC_RESULTS: Record<string, unknown> = {
     quote_count: 0,
     assignment_id: null,
   },
+
+  // ── The project workspace, /app/projects/{assignmentId} ─────────────────────────────────────────
+  //
+  // ⚠️ THESE WERE MISSING AND THE ROUTE 404'd BECAUSE OF IT. `get_project_command` is the read that answers
+  // "may this caller see this project", and the page turns anything but `allowed: true` into `notFound()`. The
+  // mock answers `null` for a function it has no fixture for, so every project card led to a 404 while the app
+  // behaved exactly as written. The gap was here, not in the page.
+  //
+  // ⚠️ THE ARGUMENT IS HONOURED FOR THESE, UNLIKE EVERYWHERE ELSE. `MOCK_TABLE_ROWS` deliberately ignores
+  // filters, but two cards that open the same document would read as a bug in the index, so each read looks the
+  // assignment up and falls back to the first project — a stale id still renders instead of 404ing.
+  get_project_command: perProject(MOCK_PROJECTS),
+
+  get_project_messages_command: perProject({
+    [MOCK_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'provider',
+      contexts: [
+        { kind: 'project', label: 'The project', tasks: [] },
+        {
+          kind: 'task',
+          label: 'Task',
+          tasks: [{ id: 'mock-task-4', title: 'Reseal the sink and run a leak test' }],
+        },
+      ],
+      messages: [
+        {
+          id: 'mock-message-1',
+          context_kind: 'task',
+          context_id: 'mock-task-4',
+          context_label: 'Reseal the sink and run a leak test',
+          author_role: 'provider',
+          author_name: 'Mock Provider Co',
+          body: 'The waste trap is cracked, so the seal will not hold without a new one. I can fit it today if you agree to add it.',
+          translated_body: null,
+          translated_language: null,
+          attachment: null,
+          created_at: hoursFromNow(-2),
+        },
+        {
+          id: 'mock-message-2',
+          context_kind: 'project',
+          context_id: null,
+          context_label: 'The project',
+          author_role: 'customer',
+          author_name: 'Ada O.',
+          body: 'Go ahead if it is under ₦8,000. Anything more than that, send me a photo first.',
+          translated_body: null,
+          translated_language: null,
+          attachment: {
+            evidence_id: 'mock-evidence-2',
+            kind: 'note',
+            note: 'The cracked trap, photographed before removal',
+          },
+          created_at: hoursFromNow(-1),
+        },
+      ],
+      activity: [
+        {
+          kind: 'task_status_changed',
+          label: 'Task "Fit the replacement mixer tap" moved to in progress',
+          at: hoursFromNow(-2),
+        },
+        { kind: 'evidence_added', label: 'A photo was added as evidence', at: hoursFromNow(-26) },
+      ],
+    },
+    [MOCK_SECOND_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'customer',
+      contexts: [{ kind: 'project', label: 'The project', tasks: [] }],
+      messages: [
+        {
+          id: 'mock-message-3',
+          context_kind: 'project',
+          context_id: null,
+          context_label: 'The project',
+          author_role: 'customer',
+          author_name: 'Mock User',
+          body: 'The unit is in the main bedroom. The gate is usually open after 9am.',
+          translated_body: null,
+          translated_language: null,
+          attachment: null,
+          created_at: hoursFromNow(-20),
+        },
+      ],
+      activity: [{ kind: 'assignment_created', label: 'The quote was accepted and the work was agreed', at: daysAgo(1) }],
+    },
+  }),
+
+  get_project_evidence_command: perProject({
+    [MOCK_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'provider',
+      request_state: 'in_progress',
+      items: [
+        {
+          id: 'mock-evidence-1',
+          kind: 'photo',
+          note: 'The isolation valve under the sink, closed.',
+          storage_path: 'mock/evidence-1.jpg',
+          external_url: null,
+          source: 'provider',
+          submitted_at: hoursFromNow(-26),
+          step_label: 'Isolate the water supply',
+          uploader_role: 'provider',
+          uploader_name: 'Mock Provider Co',
+          open_flag_count: 0,
+          flags: [],
+          verification: 'submitted',
+        },
+        {
+          id: 'mock-evidence-2',
+          kind: 'note',
+          note: 'The cabinet floor was dry when I started, so the damp is from the tap and not the trap.',
+          storage_path: null,
+          external_url: null,
+          source: 'provider',
+          submitted_at: hoursFromNow(-24),
+          step_label: 'Empty the cabinet and lay down protection',
+          uploader_role: 'provider',
+          uploader_name: 'Mock Provider Co',
+          open_flag_count: 1,
+          flags: [
+            {
+              id: 'mock-flag-1',
+              reason_code: 'incomplete',
+              note: 'I cannot see the trap in this photo.',
+              status: 'open',
+              raised_by_role: 'customer',
+              raised_by_me: false,
+              created_at: hoursFromNow(-20),
+            },
+          ],
+          verification: 'flagged',
+        },
+      ],
+    },
+    [MOCK_SECOND_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'customer',
+      request_state: 'accepted',
+      // Nothing has been submitted yet, which is the point: the empty state is what the customer sees here.
+      items: [],
+    },
+  }),
+
+  get_project_timeline_command: perProject({
+    [MOCK_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'provider',
+      events: [
+        {
+          kind: 'assignment_created',
+          at: daysAgo(2),
+          actor_role: 'customer',
+          actor_type: 'account',
+          description: 'Accepted the quote and agreed the work',
+          resource_type: 'assignment',
+          resource_id: MOCK_ASSIGNMENT_ID,
+          reason_code: null,
+          is_override: false,
+        },
+        {
+          kind: 'obligation_funded',
+          at: daysAgo(2),
+          actor_role: 'customer',
+          actor_type: 'account',
+          description: 'Funded ₦45,000',
+          resource_type: 'payment_obligation',
+          resource_id: 'mock-obligation-1',
+          reason_code: null,
+          is_override: false,
+        },
+        {
+          kind: 'task_completed',
+          at: hoursFromNow(-25),
+          actor_role: 'provider',
+          actor_type: 'account',
+          description: 'Completed "Isolate the water supply"',
+          resource_type: 'task',
+          resource_id: 'mock-task-1',
+          reason_code: null,
+          is_override: false,
+        },
+        {
+          kind: 'blocker_raised',
+          at: hoursFromNow(-1),
+          actor_role: 'provider',
+          actor_type: 'account',
+          description: 'Paused the job: waiting on a material or part',
+          resource_type: 'assignment',
+          resource_id: MOCK_ASSIGNMENT_ID,
+          reason_code: 'missing_material',
+          is_override: false,
+        },
+      ],
+    },
+    [MOCK_SECOND_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'customer',
+      events: [
+        {
+          kind: 'assignment_created',
+          at: daysAgo(1),
+          actor_role: 'customer',
+          actor_type: 'account',
+          description: 'Accepted the quote and agreed the work',
+          resource_type: 'assignment',
+          resource_id: MOCK_SECOND_ASSIGNMENT_ID,
+          reason_code: null,
+          is_override: false,
+        },
+      ],
+    },
+  }),
+
+  get_project_documents_command: perProject({
+    [MOCK_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'provider',
+      agreement_acceptance: { version: 'v1.0', accepted_at: daysAgo(2), auth_method: 'password' },
+      documents: [
+        {
+          document_group_id: 'mock-doc-group-1',
+          title: 'Signed agreement',
+          document_type: 'agreement',
+          latest_version: 1,
+          latest_created_at: daysAgo(2),
+          access_scope: 'participants',
+          versions: [
+            {
+              id: 'mock-doc-1',
+              version_major: 1,
+              title: 'Signed agreement',
+              document_type: 'agreement',
+              mime_type: 'application/pdf',
+              size_bytes: 184_320,
+              access_scope: 'participants',
+              created_at: daysAgo(2),
+              uploader_role: 'customer',
+              uploader_name: 'Ada O.',
+              uploaded_by_me: false,
+              signer_status: 'signed',
+              decisions: [
+                { decision: 'approved', role: 'provider', note: 'Agreed as written.', decided_at: daysAgo(2) },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    [MOCK_SECOND_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'customer',
+      agreement_acceptance: { version: 'v1.0', accepted_at: daysAgo(1), auth_method: 'password' },
+      documents: [],
+    },
+  }),
+
+  get_project_milestones_command: perProject({
+    [MOCK_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'provider',
+      state: 'in_progress',
+      checkpoint: {
+        amount_minor: 4_500_000,
+        currency_code: 'NGN',
+        obligation_status: 'funded',
+        payout_status: 'pending',
+        payout_verified_destination: true,
+        required_approver: 'customer',
+        tasks_total: 4,
+        tasks_done: 2,
+        evidence_count: 2,
+        approved_at: null,
+        correction_open: false,
+      },
+      stages: [
+        { id: 'mock-stage-1', ordinal: 1, title: 'Make safe and isolate', task_count: 2, done_count: 2 },
+        { id: 'mock-stage-2', ordinal: 2, title: 'Replace and reseal', task_count: 2, done_count: 0 },
+      ],
+      issues: [],
+    },
+    [MOCK_SECOND_ASSIGNMENT_ID]: {
+      allowed: true,
+      role: 'customer',
+      state: 'accepted',
+      checkpoint: {
+        amount_minor: 2_800_000,
+        currency_code: 'NGN',
+        obligation_status: 'pending',
+        payout_status: null,
+        payout_verified_destination: false,
+        required_approver: 'customer',
+        tasks_total: 3,
+        tasks_done: 0,
+        evidence_count: 0,
+        approved_at: null,
+        correction_open: false,
+      },
+      stages: [{ id: 'mock-stage-3', ordinal: 1, title: 'Service the unit', task_count: 3, done_count: 0 }],
+      issues: [],
+    },
+  }),
+
+  /**
+   * The goods hub. An empty catalogue rather than no fixture at all: without one the page would open on its
+   * "unavailable" notice, which reads as a broken preview rather than a project with nothing ordered yet.
+   */
+  get_project_orders_command: {
+    allowed: true,
+    role: 'provider',
+    canPlace: false,
+    projectLabel: 'Replace the kitchen mixer tap and reseal the sink',
+    catalog: [],
+    orders: [],
+    goodsHeld: [],
+    paymentNote:
+      'Goods are held on the commerce ledger and the job’s payment obligation on the service ledger. Neither can settle the other.',
+  },
+
+  /**
+   * The customer's side of the same two jobs.
+   *
+   * ⚠️ THIS IS WHAT PUTS BOTH CARD SHAPES ON THE PROJECTS INDEX. `/app/projects` composes the customer's bookings
+   * with the provider's work list, and only the provider half had a fixture — so every card read "you are
+   * delivering this" and the customer's view of a project was unreachable from the index. The second assignment
+   * is deliberately in both reads: `getMyProjects` resolves that collision the way the real command does.
+   */
+  get_customer_bookings: [
+    {
+      assignment_id: MOCK_SECOND_ASSIGNMENT_ID,
+      request_id: MOCK_SECOND_REQUEST_ID,
+      request_label: 'Service the split air conditioner in the main bedroom',
+      request_state: 'accepted',
+      assignment_status: 'active',
+      provider_id: 'mock-provider-2',
+      provider_name: 'Cold Room Services Ltd',
+      provider_slug: null,
+      location_name: 'Gwarinpa',
+      landmark: 'Second gate on the left',
+      access_notes: 'Call when you reach the estate gate.',
+      scheduled_start: null,
+      scheduled_end: null,
+      schedule_timezone: 'Africa/Lagos',
+      schedule_note: null,
+      schedule_status: 'unscheduled',
+      confirmed_at: null,
+      rescheduled_at: null,
+      proposal_id: null,
+      proposal_start: null,
+      proposal_end: null,
+      proposal_timezone: null,
+      proposal_message: null,
+      proposal_created_at: null,
+      obligation_id: 'mock-obligation-2',
+      obligation_status: 'pending',
+      amount_minor: 2_800_000,
+      currency_code: 'NGN',
+    },
+  ],
 };
 
 /**
@@ -966,7 +1652,14 @@ export function createMockSupabaseClient(): SupabaseClient {
       },
     },
     from: (table: string) => createQueryBuilder(table),
-    rpc: (fn: string) => createThenable({ data: MOCK_RPC_RESULTS[fn] ?? null, error: null }),
+    /**
+     * ⚠️ THE ARGUMENT IS FORWARDED, which the original one-parameter form could not do. Most entries are plain
+     * values and ignore it; the project reads are functions that key off `p_assignment_id` — see `perProject`.
+     */
+    rpc: (fn: string, args?: Record<string, unknown>) => {
+      const entry = MOCK_RPC_RESULTS[fn];
+      return createThenable({ data: typeof entry === 'function' ? entry(args) : (entry ?? null), error: null });
+    },
     storage: { from: () => createStorageBucket() },
     channel: () => {
       const channel = {
