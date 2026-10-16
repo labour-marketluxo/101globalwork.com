@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { Bell, ChevronDown, HardHat, LayoutGrid, Search, UserRound } from '@/components/ui/icons';
+import { Bell, Briefcase, ChevronDown, HardHat, LayoutGrid, Search, UserRound } from '@/components/ui/icons';
 import AccountMenu from '@/components/workspace/AccountMenu';
 import { MESSAGES_PATH, NOTIFICATIONS_PATH, PROFILE_PATH } from '@/features/settings/paths';
 import { SUPPORT_PATH } from '@/features/support/paths';
@@ -53,6 +53,21 @@ import { SUPPORT_PATH } from '@/features/support/paths';
  * ⚠️ THE SWITCHER IS A VIEW SWITCHER, NOT NAVIGATION. It marks the active view with
  * `aria-current="true"` (generic, not "page") so it can never be confused with the page-level
  * `aria-current="page"` on a nav link.
+ *
+ * ⚠️ IT CARRIES ONE ENTRY THAT IS NOT A WORKSPACE, AND THAT IS THE POINT OF IT. `/app/projects/*` is a
+ * shared destination belonging to neither side — intentionally a sibling of `/app/customer/*` and
+ * `/app/provider/*` — so no section list owns it and this bar, which is the only chrome that appears on
+ * every signed-in route outside the three sections, is the only place a link to it can live. Without the
+ * entry a customer reached a project only from the completion review at the end of the job.
+ *
+ * ⚠️ WHICH ENTRY IS CURRENT IS DERIVED FROM THE PATHNAME, NOT HAND-MAINTAINED. The flag used to be written
+ * into each list, which worked while every view could name its own workspace; a destination that belongs to
+ * no view cannot, and a hardcoded "current" would have shown the wrong entry from `/app/projects/*`. The
+ * account view is unchanged by the derivation: the pathname there is `/app/account/*`, which matches no
+ * option, so none of them is marked — which is what that panel means.
+ *
+ * ⚠️ THE SAME ANSWER NAMES THE CLOSED TRIGGER. The button used to print the panel's own name ("Workspaces")
+ * wherever a view had no better one, which left a project page labelled by its menu rather than by itself.
  *
  * ⚠️ THE ICONS COME FROM components/ui/icons.tsx, WHICH IS ICONIFY. That module renders the bundled
  * `@iconify-icons/lucide` data through `@iconify/react/offline`, so an icon stays a server-safe svg
@@ -128,8 +143,8 @@ type ViewConfig = {
   switcherId: string;
   /** The closed trigger. */
   trigger: { label: string; icon: typeof UserRound };
-  /** What the panel offers, with the workspace you are currently in marked. */
-  options: { href: string; label: string; icon: typeof UserRound; current: boolean }[];
+  /** What the panel offers. Which one is marked comes from the pathname — see the note above `VIEWS`. */
+  options: { href: string; label: string; icon: typeof UserRound }[];
 };
 
 const VIEWS: Record<WorkspaceView, ViewConfig> = {
@@ -143,8 +158,9 @@ const VIEWS: Record<WorkspaceView, ViewConfig> = {
     switcherId: 'customer-workspace-switcher',
     trigger: { label: 'Customer', icon: UserRound },
     options: [
-      { href: '/app/customer', label: 'Customer', icon: UserRound, current: true },
-      { href: '/app/provider', label: 'Provider', icon: HardHat, current: false },
+      { href: '/app/customer', label: 'Customer', icon: UserRound },
+      { href: '/app/provider', label: 'Provider', icon: HardHat },
+      { href: '/app/projects', label: 'Projects', icon: Briefcase },
     ],
   },
   provider: {
@@ -157,8 +173,9 @@ const VIEWS: Record<WorkspaceView, ViewConfig> = {
     switcherId: 'provider-workspace-switcher',
     trigger: { label: 'Provider', icon: HardHat },
     options: [
-      { href: '/app/provider', label: 'Provider', icon: HardHat, current: true },
-      { href: '/app/customer', label: 'Customer', icon: UserRound, current: false },
+      { href: '/app/provider', label: 'Provider', icon: HardHat },
+      { href: '/app/customer', label: 'Customer', icon: UserRound },
+      { href: '/app/projects', label: 'Projects', icon: Briefcase },
     ],
   },
   account: {
@@ -171,20 +188,26 @@ const VIEWS: Record<WorkspaceView, ViewConfig> = {
       id: 'account-workspace-search',
     },
     switcherId: 'account-workspace-switcher',
-    // Neither workspace is "current" here — this panel is the way back to one, not a statement about
-    // where you are. Without it, /account/settings would be a page with no route out of it.
+    // Nothing is "current" here — this panel is the way back out, not a statement about where you are.
+    // Without it, /account/settings would be a page with no route out of it.
     trigger: { label: 'Workspaces', icon: LayoutGrid },
     options: [
-      { href: '/app/customer', label: 'Customer workspace', icon: UserRound, current: false },
-      { href: '/app/provider', label: 'Provider workspace', icon: HardHat, current: false },
+      { href: '/app/customer', label: 'Customer workspace', icon: UserRound },
+      { href: '/app/provider', label: 'Provider workspace', icon: HardHat },
+      { href: '/app/projects', label: 'Projects', icon: Briefcase },
     ],
   },
   /**
    * The bar for signed-in routes that are not one of the three sections — /work, /requests/*,
    * /projects/*, /org/*, /programmes/*, /recurring. They used to have no chrome at all, which is the
    * "the navbar disappeared" half of the complaint: a rail-less page with no way back. The list is the
-   * customer's, because that is the context these surfaces belong to; the switcher is neutral, because
-   * none of them is a workspace.
+   * customer's, because that is the context these surfaces belong to.
+   *
+   * ⚠️ THE SWITCHER IS NOT NEUTRAL HERE ANY MORE, AND THE ONE MARKED ENTRY IS THE POINT. On `/app/projects/*`
+   * it says "Projects", because that is the surface the visitor is actually on; on every other fallback route
+   * — /work, /requests/*, /org/*, /programmes/*, /recurring — nothing is marked, because none of those is a
+   * workspace. Keep that in mind when adding an entry: the mark is derived from the pathname, so an entry
+   * whose href is a prefix of another's would light up for the wrong page.
    */
   fallback: {
     navLabel: 'Workspace',
@@ -196,8 +219,9 @@ const VIEWS: Record<WorkspaceView, ViewConfig> = {
     switcherId: 'workspace-switcher',
     trigger: { label: 'Workspaces', icon: LayoutGrid },
     options: [
-      { href: '/app/customer', label: 'Customer workspace', icon: UserRound, current: false },
-      { href: '/app/provider', label: 'Provider workspace', icon: HardHat, current: false },
+      { href: '/app/customer', label: 'Customer workspace', icon: UserRound },
+      { href: '/app/provider', label: 'Provider workspace', icon: HardHat },
+      { href: '/app/projects', label: 'Projects', icon: Briefcase },
     ],
   },
 };
@@ -339,6 +363,20 @@ export default function WorkspaceNavbar({
           ]
         : [];
 
+  /**
+   * The switcher entry this URL belongs to, if any.
+   *
+   * ⚠️ WHICH ENTRY IS MARKED IS DERIVED FROM THE PATHNAME, NOT HAND-MAINTAINED. The flag used to be written into
+   * each list, which worked while every view could name its own workspace; a destination that belongs to no view
+   * cannot, and a hardcoded "current" would have marked the wrong entry from `/app/projects/*`. Longest match
+   * wins, as with `active` above, so a nested entry beats its parent if one is ever added.
+   */
+  const surface = config.options.reduce<ViewConfig['options'][number] | null>((best, option) => {
+    const contains = pathname === option.href || pathname.startsWith(`${option.href}/`);
+    if (!contains) return best;
+    return !best || option.href.length > best.href.length ? option : best;
+  }, null);
+
   const TriggerIcon = config.trigger.icon;
 
   return (
@@ -456,21 +494,25 @@ export default function WorkspaceNavbar({
                   <div className="grid gap-1">
                     {config.options.map(option => {
                       const OptionIcon = option.icon;
+                      // Derived from the URL rather than declared in the list: one of these entries is a
+                      // destination that belongs to no view, so the pathname is the only thing that can say
+                      // which entry is current — see `surface` above.
+                      const isOptionCurrent = option.href === surface?.href;
                       return (
                         <Link
                           key={option.href}
                           href={option.href}
                           onClick={() => setMenuOpen(false)}
-                          aria-current={option.current ? 'true' : undefined}
+                          aria-current={isOptionCurrent ? 'true' : undefined}
                           className={`flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 font-semibold no-underline transition-colors ${
-                            option.current
+                            isOptionCurrent
                               ? 'bg-[#0D282E] text-white shadow-xs'
                               : 'text-slate-700 hover:bg-slate-100'
                           }`}
                         >
                           <OptionIcon
                             aria-hidden="true"
-                            className={`h-4 w-4 shrink-0 ${option.current ? 'text-[#F59E0B]' : ''}`}
+                            className={`h-4 w-4 shrink-0 ${isOptionCurrent ? 'text-[#F59E0B]' : ''}`}
                           />
                           {option.label}
                         </Link>
