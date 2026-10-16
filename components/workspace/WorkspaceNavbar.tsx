@@ -364,12 +364,18 @@ export default function WorkspaceNavbar({
         : [];
 
   /**
-   * The switcher entry this URL belongs to, if any.
+   * The surface this URL belongs to, when the switcher has an entry for it.
    *
-   * ⚠️ WHICH ENTRY IS MARKED IS DERIVED FROM THE PATHNAME, NOT HAND-MAINTAINED. The flag used to be written into
-   * each list, which worked while every view could name its own workspace; a destination that belongs to no view
-   * cannot, and a hardcoded "current" would have marked the wrong entry from `/app/projects/*`. Longest match
-   * wins, as with `active` above, so a nested entry beats its parent if one is ever added.
+   * ⚠️ THE TRIGGER NAMES WHERE YOU ARE, NOT WHAT THE PANEL IS. On a project page the closed button read
+   * "Workspaces" — the name of the panel — even though the visitor is on a surface the panel itself lists as
+   * "Projects". The customer and provider bars have always named their surface ("Customer", "Provider"); this
+   * gives every bar the same rule instead of one of them describing the menu. Where nothing matches — the
+   * account screens, /work, /requests/*, /org/*, /programmes/*, /recurring — it still says "Workspaces",
+   * because there the panel really is just the way back out.
+   *
+   * WHICH ENTRY IS MARKED, AND WHICH IS NAMED, ARE THE SAME ANSWER. `surface` feeds both, so the button can
+   * never name one entry while the panel highlights another. Longest match wins, as with `active` above, so a
+   * nested entry beats its parent if one is ever added.
    */
   const surface = config.options.reduce<ViewConfig['options'][number] | null>((best, option) => {
     const contains = pathname === option.href || pathname.startsWith(`${option.href}/`);
@@ -377,7 +383,8 @@ export default function WorkspaceNavbar({
     return !best || option.href.length > best.href.length ? option : best;
   }, null);
 
-  const TriggerIcon = config.trigger.icon;
+  const TriggerIcon = surface?.icon ?? config.trigger.icon;
+  const triggerLabel = surface?.label ?? config.trigger.label;
 
   return (
     <>
@@ -478,7 +485,7 @@ export default function WorkspaceNavbar({
                 className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#0D282E] px-3 py-2 text-xs font-semibold text-white shadow-xs transition-all hover:bg-primary-dark"
               >
                 <TriggerIcon aria-hidden="true" className="h-4 w-4 text-[#F59E0B]" />
-                {config.trigger.label}
+                {triggerLabel}
                 <ChevronDown aria-hidden="true" className="h-3.5 w-3.5 text-slate-300" />
               </button>
 
@@ -496,7 +503,7 @@ export default function WorkspaceNavbar({
                       const OptionIcon = option.icon;
                       // Derived from the URL rather than declared in the list: one of these entries is a
                       // destination that belongs to no view, so the pathname is the only thing that can say
-                      // which entry is current — see `surface` above.
+                      // which entry is current — see `surface` above, which the trigger also reads.
                       const isOptionCurrent = option.href === surface?.href;
                       return (
                         <Link
