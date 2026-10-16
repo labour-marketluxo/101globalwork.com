@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { ArrowRight, CircleCheck, ShieldAlert } from '@/components/ui/icons';
-import { BADGE_SLATE, CARD } from '@/components/discovery/tokens';
+import { CARD, PILL_DARK } from '@/components/discovery/tokens';
+import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import { formatMoney } from '@/features/provider-workspace/format';
 import {
   PROJECT_STATE_COPY,
   ROLE_LABEL,
   nextActionHref,
   type Project,
-  type ProjectRole,
 } from '@/features/projects/project';
 
 /**
@@ -20,6 +20,11 @@ import {
  * ⚠️ THE NEXT-ACTION CARD IS THE PLATFORM'S ANSWER, NOT THE PAGE'S. `next_action` comes from the state the job is
  * actually in and the role the caller actually has; the page only decides where the button points. A page that
  * chose its own call to action would eventually contradict the state machine.
+ *
+ * ⚠️ THE PROJECT OPENS ON THE SHARED TEAL BAND, LIKE EVERY OTHER SIGNED-IN SURFACE. It did not, and that was the
+ * odd one out: the index that links to a project opened with the band, so following a card dropped the reader onto
+ * a bare white heading. The band comes from `WorkspaceHero` rather than being drawn again here, because a second
+ * copy of it is how the two ends of that click drift apart.
  */
 
 function initialsOf(name: string | null, fallback: string): string {
@@ -29,8 +34,48 @@ function initialsOf(name: string | null, fallback: string): string {
   return initials.length > 0 ? initials : fallback;
 }
 
-function roleBadge(role: ProjectRole) {
-  return <span className={BADGE_SLATE}>{ROLE_LABEL[role]}</span>;
+/** The states in which a job has stopped moving. */
+const QUIET_STATES = new Set(['completed', 'cancelled']);
+
+/** The muted twin of `PILL_DARK`, for a job that is finished rather than one that needs watching. */
+const PILL_QUIET =
+  'inline-flex items-center gap-1.5 rounded-full border border-solid border-white/10 bg-white/5 px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-slate-300 uppercase';
+
+/**
+ * The job's state, in the band's top corner.
+ *
+ * ⚠️ AMBER MEANS STILL MOVING AND SLATE MEANS STOPPED, the same two-tone the projects index uses on its cards, so
+ * the state reads the same way before and after the click.
+ */
+function StatePill({ state }: { state: string }) {
+  return (
+    <span className={QUIET_STATES.has(state) ? PILL_QUIET : PILL_DARK}>
+      {PROJECT_STATE_COPY[state] ?? state.replaceAll('_', ' ')}
+    </span>
+  );
+}
+
+/**
+ * One party: initials, name, and which side of the job they are.
+ *
+ * ⚠️ INITIALS RATHER THAN PHOTOGRAPHS. `profiles` has no image column, so a picture here would be a generated one
+ * pretending to be a person.
+ */
+function Party({ name, role, fallback }: { name: string | null; role: string; fallback: string }) {
+  return (
+    <span className="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-white/20 bg-white/10 font-sans text-xs font-bold text-amber-300"
+      >
+        {initialsOf(name, fallback)}
+      </span>
+      <span className="text-sm font-semibold text-white">
+        {name ?? role}
+        <span className="block text-xs font-normal text-slate-400">{role}</span>
+      </span>
+    </span>
+  );
 }
 
 export function ProjectHeader({ project }: { project: Project }) {
@@ -40,56 +85,24 @@ export function ProjectHeader({ project }: { project: Project }) {
   const place = [project.header.locationName, project.header.cityName].filter(Boolean).join(', ');
 
   return (
-    <div className="grid gap-4">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0">
-          <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">
-            Shared project · you are the {ROLE_LABEL[project.role].toLowerCase()}
-          </p>
-          <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-            {project.header.outcome}
-          </h1>
-          <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
-            {project.header.serviceName ? <span>{project.header.serviceName}</span> : null}
-            {place ? <span>{place}</span> : null}
-            {started ? <span>Starts {started}</span> : <span>No date agreed yet</span>}
-          </p>
-        </div>
-        <span className={project.header.state === 'completed' ? 'inline-flex items-center gap-1.5 rounded-full bg-primary-subtle px-3 py-1 font-sans text-[11px] font-bold tracking-wider text-primary uppercase' : BADGE_SLATE}>
-          {PROJECT_STATE_COPY[project.header.state] ?? project.header.state.replaceAll('_', ' ')}
-        </span>
-      </div>
+    <WorkspaceHero
+      eyebrow={`Shared project · you are the ${ROLE_LABEL[project.role].toLowerCase()}`}
+      title={project.header.outcome}
+      trailing={<StatePill state={project.header.state} />}
+    >
+      <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-300">
+        {project.header.serviceName ? <span>{project.header.serviceName}</span> : null}
+        {place ? <span>{place}</span> : null}
+        {started ? <span>Starts {started}</span> : <span>No date agreed yet</span>}
+      </p>
 
-      {/* The two parties. Initials rather than photographs: `profiles` has no image column, so a picture here would
-          be a generated one pretending to be a person. */}
-      <div className="flex flex-wrap items-center gap-4">
-        <span className="flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
-          >
-            {initialsOf(project.header.customerName, 'C')}
-          </span>
-          <span className="text-sm font-semibold text-slate-800">
-            {project.header.customerName ?? 'Customer'}
-            <span className="block text-xs font-normal text-slate-500">Customer</span>
-          </span>
-        </span>
-        <span className="flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-slate-300 bg-white font-sans text-xs font-bold text-primary"
-          >
-            {initialsOf(project.header.providerName, 'P')}
-          </span>
-          <span className="text-sm font-semibold text-slate-800">
-            {project.header.providerName ?? 'Provider'}
-            <span className="block text-xs font-normal text-slate-500">Provider</span>
-          </span>
-        </span>
-        {roleBadge(project.role)}
+      <div className="mt-6 flex flex-wrap items-center gap-4">
+        <Party name={project.header.customerName} role="Customer" fallback="C" />
+        <Party name={project.header.providerName} role="Provider" fallback="P" />
+        {/* Names the side the reader is on, which is what the eyebrow above says in words. */}
+        <span className={PILL_DARK}>{ROLE_LABEL[project.role]}</span>
       </div>
-    </div>
+    </WorkspaceHero>
   );
 }
 

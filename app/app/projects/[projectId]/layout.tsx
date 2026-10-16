@@ -53,9 +53,9 @@ export default async function ProjectLayout({
     <div className={PAGE_SHELL}>
       <ProjectHeader project={project} />
 
-      <div className="mt-5">
-        <ProjectTabs assignmentId={project.header.assignmentId} />
-      </div>
+      {/* No top margin here: the band above owns the 32px below itself (`mb-8`), and adding a second gap to it
+          would put the tab bar further from the project's name than from the tabs' own content. */}
+      <ProjectTabs assignmentId={project.header.assignmentId} />
 
       <div className="mt-6">{children}</div>
     </div>

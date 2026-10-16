@@ -13,6 +13,12 @@ import type { ReactNode } from 'react';
  * anything passed as `children` renders under both — the dashboard's one-field request form, the
  * "Post a Request" action on the requests list, or a page's status chip.
  *
+ * ⚠️ `trailing` IS THE ONE SLOT, AND IT IS FOR A STATUS PILL RATHER THAN A SECOND ACTION. The project's
+ * header puts the job's state opposite its title, where the eye lands first; before this the only way to
+ * place anything there was to stop using the shared band and hand-roll the surface again. It wraps to
+ * its own line when the title is long, and the title block carries `min-w-0` so it can never be pushed
+ * off the band by a long job name.
+ *
  * ⚠️ `font-sans`, NOT `font-mono`. Briefs for this band spell the eyebrow in monospace, but this app
  * has no monospace face at all — `--font-mono` is set to `initial` in globals.css and the rule there
  * says the utility "should not exist to be reached for". The classes keep the rest of those briefs
@@ -28,34 +34,43 @@ export default function WorkspaceHero({
   eyebrow,
   title,
   description,
+  trailing,
   children,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
+  /** Rendered opposite the eyebrow and title. A status pill, a badge — not a second call to action. */
+  trailing?: ReactNode;
   /** Rendered under the description — a form, an action, a status chip, or nothing at all. */
   children?: ReactNode;
 }) {
   return (
     <section className="mb-8 rounded-2xl border border-slate-800/50 bg-[#0D282E] p-8 text-white shadow-md md:p-10">
-      {eyebrow ? (
-        <p className="mb-2 font-sans text-xs font-bold tracking-wider text-amber-400 uppercase">{eyebrow}</p>
-      ) : null}
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          {eyebrow ? (
+            <p className="mb-2 font-sans text-xs font-bold tracking-wider text-amber-400 uppercase">{eyebrow}</p>
+          ) : null}
 
-      {/* ⚠️ THE SPACE BEFORE `${` IS LOAD-BEARING. Tailwind's scanner reads a candidate up to the first
-          character it cannot use in a class name, and `$` is one it accepts — so `md:text-3xl${on ? … }`
-          yields the candidate `md:text-3xl${description`, which is not a utility, and the class is never
-          emitted. This title silently stayed at 24px on every screen until it was measured; the space ends
-          the candidate cleanly. Verified by compiling this file through the project's own Tailwind. */}
-      <h1 className={`text-2xl font-bold tracking-tight text-white md:text-3xl ${description || children ? 'mb-3' : ''}`}>
-        {title}
-      </h1>
+          {/* ⚠️ THE SPACE BEFORE `${` IS LOAD-BEARING. Tailwind's scanner reads a candidate up to the first
+              character it cannot use in a class name, and `$` is one it accepts — so `md:text-3xl${on ? … }`
+              yields the candidate `md:text-3xl${description`, which is not a utility, and the class is never
+              emitted. This title silently stayed at 24px on every screen until it was measured; the space ends
+              the candidate cleanly. Verified by compiling this file through the project's own Tailwind. */}
+          <h1 className={`text-2xl font-bold tracking-tight text-white md:text-3xl ${description || children ? 'mb-3' : ''}`}>
+            {title}
+          </h1>
 
-      {description ? (
-        <p className={`max-w-2xl text-sm leading-relaxed text-slate-300 ${children ? 'mb-6' : ''}`}>
-          {description}
-        </p>
-      ) : null}
+          {description ? (
+            <p className={`max-w-2xl text-sm leading-relaxed text-slate-300 ${children ? 'mb-6' : ''}`}>
+              {description}
+            </p>
+          ) : null}
+        </div>
+
+        {trailing ? <div className="shrink-0">{trailing}</div> : null}
+      </div>
 
       {children}
     </section>
