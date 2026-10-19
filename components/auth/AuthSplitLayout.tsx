@@ -74,7 +74,7 @@ export default function AuthSplitLayout({ children }: { children: React.ReactNod
             className="object-cover opacity-50 mix-blend-overlay"
           />
         </div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0D282E] via-[#0D282E]/40 to-transparent" />
+        <div className="absolute inset-0 z-10 bg-[#0D282E]/55" />
 
         <div className="relative z-20 mt-auto w-full rounded-2xl border border-emerald-500/20 bg-white/10 p-6 shadow-xl backdrop-blur-md xl:p-8">
           <p className="mb-3 w-fit rounded-full border border-emerald-800/60 bg-emerald-950/80 px-3 py-1 font-sans text-xs text-emerald-400">

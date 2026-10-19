@@ -93,7 +93,7 @@ export default function ReasonCodeControl({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="m-auto w-full max-w-lg rounded-lg border border-solid border-[var(--line)] bg-[var(--color-surface)] p-6 text-left shadow-xl backdrop:bg-slate-900/50"
+        className="m-auto w-full max-w-lg rounded-lg border border-solid border-[var(--line)] bg-[var(--color-surface)] p-6 text-left backdrop:bg-slate-900/50"
       >
         <h2 id={titleId} className="admin-dialog-title">{title}</h2>
         <p id={descriptionId} className="admin-dialog-lede">{description}</p>

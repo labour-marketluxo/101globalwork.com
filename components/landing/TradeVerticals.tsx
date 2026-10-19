@@ -6,8 +6,8 @@ import { getDefaultMarketSlug } from '@/features/discovery/data/market-catalog';
 /**
  * TradeVerticals — the dark deep-teal section of photographed category cards.
  *
- * Ported from the design's section 3. The cards, the image treatment (gradient
- * from `primary-dark`, slow scale on hover) and the tag chips all match.
+ * Ported from the design's section 3. The cards, the solid `primary-dark` image
+ * overlay, slow scale on hover and the tag chips all match.
  *
  * TWO DEPARTURES
  *
@@ -105,7 +105,7 @@ export default async function TradeVerticals() {
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/20 to-transparent" />
+                  <div className="absolute inset-0 bg-primary-dark/55" />
                 </div>
 
                 <div className="p-5">

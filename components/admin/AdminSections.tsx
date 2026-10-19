@@ -100,7 +100,7 @@ export function IncidentCard({
   return (
     <article className="admin-incident" data-state={state}>
       <div className="admin-incident-head">
-        <div>
+        <div className="admin-incident-heading">
           <div className="admin-incident-meta">
             <SeverityBadge severity={item.severity} />
             <span>{INCIDENT_AREAS[item.area] ?? item.area}</span>

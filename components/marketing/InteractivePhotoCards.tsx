@@ -87,7 +87,7 @@ export default function InteractivePhotoCards({ className = '' }: { className?: 
                 z-10 sits above the image, below the content at z-20. */}
             <div
               aria-hidden="true"
-              className="absolute inset-0 z-10 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"
+              className="absolute inset-0 z-10 bg-slate-950/55"
             />
 
             <div className="relative z-20 flex h-full flex-col justify-end p-5">

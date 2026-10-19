@@ -56,7 +56,7 @@ export const CTA_PRIMARY =
  * `linkArrowSize` is the matching icon size; pass it to the ArrowRight.
  */
 export const LINK_ARROW =
-  'inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-primary no-underline transition-all hover:gap-2.5 hover:text-primary-dark';
+  'inline-flex items-center gap-2 font-sans text-xs font-semibold text-primary no-underline transition-all hover:gap-3 hover:text-primary-dark';
 
 /**
  * The same link inverted for the deep-teal bands. Amber on dark is amber-300.
@@ -69,8 +69,8 @@ export const LINK_ARROW_DARK =
   'inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-amber-300 underline decoration-amber-300/50 underline-offset-2 transition-all hover:gap-2.5 hover:text-amber-200 hover:decoration-amber-200';
 
 /** Card surface. `CARD_INTERACTIVE` adds the hover the brief asks for. */
-export const CARD = 'rounded-xl border border-solid border-slate-200/80 bg-white shadow-sm';
-export const CARD_INTERACTIVE = `${CARD} transition-shadow hover:shadow-md`;
+export const CARD = 'rounded-xl border border-solid border-slate-200/80 bg-white';
+export const CARD_INTERACTIVE = `${CARD} transition-colors hover:border-slate-300`;
 
 /** Amber status badge on a light surface. Amber TEXT on white must be amber-800. */
 export const BADGE_AMBER =
@@ -82,7 +82,7 @@ export const BADGE_SLATE =
 
 /** Trailing-arrow link, but sized for a full card footer rather than a caption. */
 export const LINK_ARROW_LG =
-  'inline-flex items-center gap-2 font-sans text-xs font-semibold text-primary no-underline transition-all hover:gap-3 hover:text-primary-dark';
+  'inline-flex items-center gap-2.5 font-sans text-xs font-semibold text-primary no-underline transition-all hover:gap-3.5 hover:text-primary-dark';
 
 /** Pill on a deep-teal band (market badge, applied-filter chip, eyebrow). */
 export const PILL_DARK =

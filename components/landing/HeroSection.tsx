@@ -92,7 +92,7 @@ export default async function HeroSection() {
           />
           {/* The overlay is what guarantees the white headline clears AA
               contrast regardless of what the photograph does underneath. */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/75 to-primary/95 backdrop-blur-[1.5px]" />
+          <div className="absolute inset-0 bg-primary/85 backdrop-blur-[1.5px]" />
         </div>
 
         {/* Content — vertically centred in the one-screen section. The rhythm
