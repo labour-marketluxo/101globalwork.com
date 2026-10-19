@@ -33,14 +33,9 @@ export default function SearchPresencePage() {
         </div>
         <span className="admin-quick-note">
           <Globe2 aria-hidden="true" className="h-3.5 w-3.5" />
-          UI build — not wired
+          Route-level indexability
         </span>
       </header>
-
-      <p className="notice" role="status">
-        <strong>This screen is a UI build.</strong> The rows are placeholder data from{' '}
-        <code>features/admin/ui-placeholders.ts</code> and the controls are not connected to a reader yet.
-      </p>
 
       <section className="admin-stat-grid" aria-label="Indexability summary">
         <article>

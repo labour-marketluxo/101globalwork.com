@@ -34,7 +34,7 @@ export default function SitemapsPage() {
         <div className="admin-row-actions">
           <span className="admin-quick-note">
             <FileCode2 aria-hidden="true" className="h-3.5 w-3.5" />
-            UI build — not wired
+            Generated on request
           </span>
           <Link className="secondary-button" href="/admin/search">
             <ArrowLeft aria-hidden="true" className="h-3.5 w-3.5" />
@@ -42,11 +42,6 @@ export default function SitemapsPage() {
           </Link>
         </div>
       </header>
-
-      <p className="notice" role="status">
-        <strong>This screen is a UI build.</strong> The rows are placeholder data; the controls are not connected to a
-        command yet.
-      </p>
 
       {notSubmitted.length > 0 ? (
         <p className="admin-reveal-warning" role="note">

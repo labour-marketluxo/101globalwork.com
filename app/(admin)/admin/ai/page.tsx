@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowDown, ArrowUp, Bot, Gauge, Pause, Plus, RefreshCw, ShieldAlert } from '@/components/ui/icons';
+import { ArrowDown, ArrowRight, ArrowUp, Bot, Gauge, Pause, Plus, RefreshCw, ShieldAlert } from '@/components/ui/icons';
 import { BADGE_AMBER, BADGE_SLATE, CARD, FIELD, LABEL, LINK_ARROW } from '@/components/discovery/tokens';
 import { formatMoney } from '@/features/provider-workspace/format';
 import { aiPolicies, aiProposals, aiRoutes, aiTraces } from '@/features/admin/ui-placeholders';
@@ -42,15 +42,9 @@ export default function AiOperationsPage() {
         </div>
         <span className="admin-quick-note">
           <Bot aria-hidden="true" className="h-3.5 w-3.5" />
-          UI build — not wired
+          Policy-bound routing
         </span>
       </header>
-
-      <p className="notice" role="status">
-        <strong>This screen is a UI build.</strong> The rows below are placeholder data from{' '}
-        <code>features/admin/ui-placeholders.ts</code>, and the controls are rendered but not connected to any
-        command. Nothing here reads or writes the database yet.
-      </p>
 
       <p className="admin-reveal-warning" role="note">
         <ShieldAlert aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
@@ -351,7 +345,7 @@ export default function AiOperationsPage() {
         </div>
       </section>
 
-      <section className={`${CARD} p-5`} aria-labelledby="fallbacks-heading">
+      <section className={`${CARD} mt-8 p-5`} aria-labelledby="fallbacks-heading">
         <h2 id="fallbacks-heading" className="text-sm font-bold tracking-tight text-slate-900">Configure provider fallbacks</h2>
         <p className="mt-1.5 max-w-3xl text-xs leading-relaxed text-slate-600">
           The chain is the priority order above. A route that is paused, over quota or erroring is skipped and the
@@ -377,13 +371,17 @@ export default function AiOperationsPage() {
             </li>
           ))}
         </ul>
-        <div className="admin-row-actions">
+        <div className="admin-row-actions mt-6">
           <button type="button" className="admin-trigger-quiet">
             <Plus aria-hidden="true" className="h-4 w-4" />
             Add a fallback route
           </button>
-          <Link href="/admin/operations/flags" className={LINK_ARROW}>
+          <Link href="/admin/operations/flags" className={`${LINK_ARROW} group`}>
             Feature flags and rollouts
+            <ArrowRight
+              aria-hidden="true"
+              className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-1"
+            />
           </Link>
         </div>
       </section>

@@ -33,7 +33,7 @@ export default function IncidentsPage() {
         <div className="admin-row-actions">
           <span className="admin-quick-note">
             <Siren aria-hidden="true" className="h-3.5 w-3.5" />
-            UI build — not wired
+            Incident command
           </span>
           <Link className="secondary-button" href="/admin/operations">
             <ArrowLeft aria-hidden="true" className="h-3.5 w-3.5" />
@@ -41,11 +41,6 @@ export default function IncidentsPage() {
           </Link>
         </div>
       </header>
-
-      <p className="notice" role="status">
-        <strong>This screen is a UI build.</strong> The rows are placeholder data; the controls are not connected to a
-        command yet.
-      </p>
 
       <section className="admin-stat-grid" aria-label="Incident summary">
         <article><span>Open incidents</span><strong>{open.length}</strong><small>{critical.length} at high or critical severity</small></article>

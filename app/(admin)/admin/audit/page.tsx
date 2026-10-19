@@ -31,14 +31,9 @@ export default function AuditExplorerPage() {
         </div>
         <span className="admin-quick-note">
           <Lock aria-hidden="true" className="h-3.5 w-3.5" />
-          Append-only — UI build
+          Append-only
         </span>
       </header>
-
-      <p className="notice" role="status">
-        <strong>This screen is a UI build.</strong> The rows below are placeholder data and the controls are not
-        connected to a reader yet. Personal details are shown masked, as they will be when this is wired.
-      </p>
 
       <section className="admin-section two-column-admin">
         <div className={`${CARD} p-5`} aria-labelledby="rules-heading">

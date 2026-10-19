@@ -103,10 +103,16 @@ export const SEVERITY_COPY: Record<IncidentSeverity, { label: string; tone: 'amb
 
 export const INCIDENT_AREAS: Record<string, string> = {
   trust: 'Trust',
+  money: 'Money',
   financials: 'Financials',
+  payments: 'Payments',
   projects: 'Projects',
   operations: 'Operations',
   accounts: 'Accounts',
+  search: 'Search',
+  data: 'Data',
+  delivery: 'Delivery',
+  third_party: 'Third party',
 };
 
 /** The window choices the overview offers, in hours. */

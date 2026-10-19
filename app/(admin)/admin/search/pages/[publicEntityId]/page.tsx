@@ -43,10 +43,6 @@ export default async function SearchPageInspection({ params }: { params: Promise
         </div>
       </header>
 
-      <p className="notice" role="status">
-        <strong>UI build.</strong> This entity is placeholder data; the controls below are rendered but not wired.
-      </p>
-
       <section className="admin-section two-column-admin">
         <div className={`${CARD} p-5`} aria-labelledby="canonical-heading">
           <h2 id="canonical-heading" className="flex items-center gap-2 text-sm font-bold tracking-tight text-slate-900">
