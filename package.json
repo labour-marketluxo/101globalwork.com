@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@iconify-icons/lucide": "^2.0.16",
+    "@iconify-icons/ph": "^2.0.0",
     "@iconify/react": "^6.0.2",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.56.1",

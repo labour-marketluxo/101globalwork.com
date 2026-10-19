@@ -217,8 +217,8 @@ export async function getMyPendingInvitation(): Promise<PendingInvitation | null
 /**
  * Turn capability keys into a plain-language summary of what the role can do.
  *
- * THE MAPPING IS DERIVED FROM THE ADMIN NAVIGATION, not invented. AdminNav already groups its links by
- * these exact prefixes — `platform.admin` is "Users & access", `platform.trust` is "Trust & safety",
+ * THE MAPPING IS DERIVED FROM THE ADMIN NAVIGATION, not invented. The admin sidebar groups its links
+ * by these exact prefixes — `platform.admin` is "Users & access", `platform.trust` is "Trust & safety",
  * `platform.money` is "Money" — so this reads the same vocabulary the platform's own interface uses
  * for the same powers. Where a prefix is not one the navigation names, the summary says so instead of
  * guessing at a label: an unknown capability is exactly the case where a reassuring description would
