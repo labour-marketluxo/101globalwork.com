@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { isUiPreview } from '@/lib/ui-preview';
 
 /**
  * Who is looking at the administrator workspace, and what their capabilities cover.
@@ -30,10 +31,40 @@ export type AdminContext = {
 
 type Raw = Record<string, unknown>;
 
+/**
+ * Local preview access.
+ *
+ * `isUiPreview` requires both a development build and the explicit .env.local opt-in, so this can
+ * never grant owner access to a production deployment. It exists so every admin screen can be
+ * inspected locally even when the project has no seeded administrator row.
+ */
+const PREVIEW_CAPABILITIES = [
+  'platform.admin',
+  'platform.support',
+  'platform.trust',
+  'platform.projects',
+  'platform.money',
+  'platform.seo',
+  'platform.taxonomy',
+  'platform.markets',
+  'platform.operations',
+] as const;
+
+function previewAdminContext(): AdminContext {
+  return {
+    accountId: 'ui-preview-owner',
+    isOwner: true,
+    roles: [{ key: 'platform_owner', name: 'Platform Owner' }],
+    capabilities: [...PREVIEW_CAPABILITIES],
+    can: () => true,
+    has: () => true,
+  };
+}
+
 export const getAdminContext = cache(async (): Promise<AdminContext | null> => {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.rpc('admin_context_command');
-  if (!data || typeof data !== 'object') return null;
+  if (!data || typeof data !== 'object') return isUiPreview ? previewAdminContext() : null;
 
   const raw = data as Raw;
   const capabilities = Array.isArray(raw.capabilities)

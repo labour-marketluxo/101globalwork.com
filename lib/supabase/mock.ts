@@ -750,6 +750,67 @@ const MOCK_RPC_RESULTS: Record<string, unknown> = {
       'platform.operations',
     ],
   },
+  /**
+   * Two outstanding checks so the admin overview and the sidebar incident badge have a real preview
+   * state. Production reads the same shape from `admin_incident_feed_command`; this fixture exists
+   * only in the development-gated mock client.
+   */
+  admin_incident_feed_command: {
+    allowed: true,
+    role: 'platform_admin',
+    generated_at: new Date().toISOString(),
+    window_hours: 24,
+    since: daysAgo(1),
+    counts: {
+      critical: 1,
+      high: 1,
+      medium: 0,
+      low: 0,
+      unacknowledged: 2,
+      recurred: 0,
+      outstanding: 2,
+    },
+    items: [
+      {
+        key: 'trust_credentials_overdue',
+        area: 'trust',
+        severity: 'high',
+        title: 'A provider credential needs review',
+        detail: 'Licence evidence has been waiting for a decision since yesterday.',
+        count: 1,
+        oldest_at: hoursFromNow(-18),
+        window_basis: 'submitted_at',
+        market_scoped: false,
+        deep_link: '/admin/trust/credentials',
+        action_label: 'Review credentials',
+        acknowledged: false,
+        acknowledged_at: null,
+        acknowledged_count: null,
+        acknowledged_by: null,
+        acknowledgement_note: null,
+        recurred: false,
+      },
+      {
+        key: 'payment_unfunded',
+        area: 'money',
+        severity: 'critical',
+        title: 'An accepted job is waiting on funding',
+        detail: 'The provider is assigned and cannot start until the payment obligation is funded.',
+        count: 1,
+        oldest_at: hoursFromNow(-6),
+        window_basis: 'accepted_at',
+        market_scoped: false,
+        deep_link: '/admin/money',
+        action_label: 'Inspect financials',
+        acknowledged: false,
+        acknowledged_at: null,
+        acknowledged_count: null,
+        acknowledged_by: null,
+        acknowledgement_note: null,
+        recurred: false,
+      },
+    ],
+  },
 
   /* ------------------------------------------------------------------ provider workspace
    *
