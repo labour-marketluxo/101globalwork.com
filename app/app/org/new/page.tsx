@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { CARD, FIELD, LABEL, PAGE_SHELL } from '@/components/discovery/tokens';
+import { CARD, FIELD, LABEL } from '@/components/discovery/tokens';
 import { PendingButton } from '@/components/provider/ProviderControls';
 import { WorkspaceNotice } from '@/components/provider/WorkspaceNotices';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -42,24 +42,7 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
   const failure = organisationFailureCopy(query.failed);
 
   return (
-    <div className={PAGE_SHELL}>
-      <header>
-        <p className="font-sans text-[11px] font-bold tracking-wider text-primary uppercase">New organisation</p>
-        <h1 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-          Set up a business entity
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          Four steps, in any order. Nothing is created until you press Create, and Save Draft keeps what you have typed
-          so you can come back to it.
-        </p>
-        <ol className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-500">
-          <li><a href="#step-1" className="underline underline-offset-2">1. Identity</a></li>
-          <li><a href="#step-2" className="underline underline-offset-2">2. Locations and currency</a></li>
-          <li><a href="#step-3" className="underline underline-offset-2">3. Policies and contacts</a></li>
-          <li><a href="#step-4" className="underline underline-offset-2">4. Plan</a></li>
-        </ol>
-      </header>
-
+    <>
       {failure ? (
         <div className="mt-5">
           <WorkspaceNotice tone="amber" role="alert" title="That organisation was not created.">
@@ -78,7 +61,7 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
       <form action={createOrganisationAction} className={`${CARD} mt-5 grid gap-8 p-5 sm:p-6`}>
         <input type="hidden" name="next" value="/app/org/new" />
 
-        <fieldset id="step-1" className="grid gap-4">
+        <fieldset id="step-1" className="grid scroll-mt-6 gap-4">
           <legend className="text-sm font-bold tracking-tight text-slate-900">1. Identity</legend>
           <p className="text-xs leading-relaxed text-slate-500">
             The display name is what your team and your providers see; the legal name is what goes on documents. A
@@ -117,7 +100,7 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
           </div>
         </fieldset>
 
-        <fieldset id="step-2" className="grid gap-4 border-t border-solid border-slate-200 pt-6">
+        <fieldset id="step-2" className="grid scroll-mt-6 gap-4 border-t border-solid border-slate-200 pt-6">
           <legend className="text-sm font-bold tracking-tight text-slate-900">2. Locations and currency</legend>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
@@ -143,7 +126,7 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
           </div>
         </fieldset>
 
-        <fieldset id="step-3" className="grid gap-4 border-t border-solid border-slate-200 pt-6">
+        <fieldset id="step-3" className="grid scroll-mt-6 gap-4 border-t border-solid border-slate-200 pt-6">
           <legend className="text-sm font-bold tracking-tight text-slate-900">3. Policies and contacts</legend>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
@@ -173,7 +156,7 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
           </div>
         </fieldset>
 
-        <fieldset id="step-4" className="grid gap-4 border-t border-solid border-slate-200 pt-6">
+        <fieldset id="step-4" className="grid scroll-mt-6 gap-4 border-t border-solid border-slate-200 pt-6">
           <legend className="text-sm font-bold tracking-tight text-slate-900">4. Plan</legend>
           <div>
             <label htmlFor="subscription_plan" className={LABEL}>Subscription plan</label>
@@ -207,6 +190,6 @@ export default async function NewOrganisationPage({ searchParams }: { searchPara
           </p>
         </div>
       </form>
-    </div>
+    </>
   );
 }
