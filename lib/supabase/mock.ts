@@ -38,6 +38,7 @@ export const MOCK_USER_ID = 'mock-user-123';
 export const MOCK_ACCOUNT_ID = 'mock-account-123';
 export const MOCK_PROVIDER_ID = 'mock-provider-123';
 export const MOCK_MARKET_ID = 'mock-market-ng';
+export const MOCK_ORGANISATION_ID = 'mock-org-northline';
 
 const EPOCH = new Date(0).toISOString();
 
@@ -110,6 +111,32 @@ const MOCK_TABLE_ROWS: Record<string, Record<string, unknown>[]> = {
       display_name: 'Mock User',
       avatar_url: null,
       created_at: EPOCH,
+    },
+  ],
+  organisations: [
+    {
+      id: MOCK_ORGANISATION_ID,
+      display_name: 'Northline Facilities',
+      legal_name: 'Northline Facilities Ltd',
+      status: 'active',
+      created_at: daysAgo(180),
+    },
+  ],
+  organisation_members: [
+    {
+      organisation_id: MOCK_ORGANISATION_ID,
+      account_id: MOCK_ACCOUNT_ID,
+      role: 'admin',
+      status: 'active',
+      removed_at: null,
+      joined_at: daysAgo(171),
+      organisations: {
+        id: MOCK_ORGANISATION_ID,
+        display_name: 'Northline Facilities',
+      },
+      profiles: {
+        display_name: 'Ada Okafor',
+      },
     },
   ],
   /**
@@ -731,6 +758,1180 @@ const perProject =
   (args?: Record<string, unknown>): unknown =>
     byAssignment[String(args?.p_assignment_id)] ?? byAssignment[MOCK_ASSIGNMENT_ID];
 
+/* ---------------------------------------------------------------- admin preview data
+ *
+ * The admin directories normally read through command RPCs. Preview mode has no database, so these
+ * fixtures provide the exact snake_case shape those commands return. They make the account, supply
+ * and project screens inspectable without weakening the production reads.
+ */
+type MockAdminRow = Record<string, unknown>;
+
+const mockText = (value: unknown): string => (typeof value === 'string' ? value : '');
+const mockObj = (value: unknown): MockAdminRow =>
+  value && typeof value === 'object' && !Array.isArray(value) ? (value as MockAdminRow) : {};
+const mockRows = (value: unknown): MockAdminRow[] =>
+  Array.isArray(value) ? value.filter((entry): entry is MockAdminRow => Boolean(entry) && typeof entry === 'object') : [];
+const mockStrings = (value: unknown): string[] =>
+  Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string') : [];
+
+const MOCK_ADMIN_ACCOUNTS: MockAdminRow[] = [
+  {
+    account_id: MOCK_ACCOUNT_ID,
+    display_name: 'Ada Okafor',
+    contact_masked: 'a***a@northline.example',
+    contact_kind: 'email',
+    contact_confirmed: true,
+    last_sign_in_at: hoursFromNow(-2),
+    account_status: 'active',
+    created_at: daysAgo(182),
+    provider_count: 1,
+    request_count: 6,
+    admin_roles: [],
+    organisations: [
+      {
+        organisation_id: 'mock-org-northline',
+        name: 'Northline Facilities',
+        role: 'admin',
+        status: 'active',
+        joined_at: daysAgo(171),
+      },
+    ],
+    verification_summary: { pending: 1, verified: 2, other: 0 },
+  },
+  {
+    account_id: 'mock-account-tunde',
+    display_name: 'Tunde Balogun',
+    contact_masked: 't***n@101globalwork.example',
+    contact_kind: 'email',
+    contact_confirmed: true,
+    last_sign_in_at: hoursFromNow(-1),
+    account_status: 'active',
+    created_at: daysAgo(420),
+    provider_count: 0,
+    request_count: 12,
+    admin_roles: [{ key: 'platform_admin', name: 'Platform Administrator', status: 'active' }],
+    organisations: [],
+    verification_summary: { pending: 0, verified: 0, other: 0 },
+  },
+  {
+    account_id: 'mock-account-grace',
+    display_name: 'Grace Adeyemi',
+    contact_masked: 'g***i@example.com',
+    contact_kind: 'email',
+    contact_confirmed: false,
+    last_sign_in_at: daysAgo(9),
+    account_status: 'suspended',
+    created_at: daysAgo(96),
+    provider_count: 0,
+    request_count: 3,
+    admin_roles: [],
+    organisations: [
+      {
+        organisation_id: 'mock-org-mercer',
+        name: 'Mercer & Vale',
+        role: 'member',
+        status: 'active',
+        joined_at: daysAgo(90),
+      },
+    ],
+    verification_summary: { pending: 0, verified: 1, other: 1 },
+  },
+  {
+    account_id: 'mock-account-amina',
+    display_name: 'Amina Oyelaran',
+    contact_masked: '+234 80 *** 4821',
+    contact_kind: 'phone',
+    contact_confirmed: true,
+    last_sign_in_at: hoursFromNow(-7),
+    account_status: 'active',
+    created_at: daysAgo(240),
+    provider_count: 1,
+    request_count: 4,
+    admin_roles: [],
+    organisations: [
+      {
+        organisation_id: 'mock-org-gwarinpa-electric',
+        name: 'Gwarinpa Electrical Works',
+        role: 'owner',
+        status: 'active',
+        joined_at: daysAgo(230),
+      },
+    ],
+    verification_summary: { pending: 1, verified: 3, other: 0 },
+  },
+  {
+    account_id: 'mock-account-chinedu',
+    display_name: 'Chinedu Eze',
+    contact_masked: null,
+    contact_kind: 'none',
+    contact_confirmed: false,
+    last_sign_in_at: daysAgo(38),
+    account_status: 'closed',
+    created_at: daysAgo(310),
+    provider_count: 0,
+    request_count: 1,
+    admin_roles: [],
+    organisations: [],
+    verification_summary: { pending: 0, verified: 0, other: 0 },
+  },
+];
+
+const MOCK_ADMIN_PROVIDERS: MockAdminRow[] = [
+  {
+    provider_id: MOCK_PROVIDER_ID,
+    display_name: 'Mock Provider Co',
+    provider_status: 'active',
+    public_slug: 'mock-provider-co',
+    is_public: true,
+    market_id: MOCK_MARKET_ID,
+    market_name: 'Nigeria',
+    created_at: daysAgo(220),
+    setup_percent: 100,
+    readiness_score: 92,
+    readiness_state: 'ready',
+    credential_count: 4,
+    credential_expiring: 1,
+    credential_expired: 0,
+    credential_pending: 1,
+    pending_verifications: 1,
+    last_verification_at: daysAgo(12),
+    restriction_id: null,
+    restriction_kind: null,
+    restriction_reason_code: null,
+    restriction_applied_at: null,
+    restriction_expires_at: null,
+    restriction_note: null,
+    categories: [
+      { name: 'Plumbing', is_primary: true },
+      { name: 'Electrical Systems', is_primary: false },
+    ],
+  },
+  {
+    provider_id: 'mock-provider-cold-room',
+    display_name: 'Cold Room Services Ltd',
+    provider_status: 'active',
+    public_slug: 'cold-room-services',
+    is_public: true,
+    market_id: MOCK_MARKET_ID,
+    market_name: 'Nigeria',
+    created_at: daysAgo(190),
+    setup_percent: 100,
+    readiness_score: 86,
+    readiness_state: 'ready',
+    credential_count: 3,
+    credential_expiring: 0,
+    credential_expired: 0,
+    credential_pending: 1,
+    pending_verifications: 2,
+    last_verification_at: daysAgo(4),
+    restriction_id: null,
+    restriction_kind: null,
+    restriction_reason_code: null,
+    restriction_applied_at: null,
+    restriction_expires_at: null,
+    restriction_note: null,
+    categories: [{ name: 'Air Conditioning & HVAC', is_primary: true }],
+  },
+  {
+    provider_id: 'mock-provider-gwarinpa',
+    display_name: 'Gwarinpa Electrical Works',
+    provider_status: 'draft',
+    public_slug: null,
+    is_public: false,
+    market_id: MOCK_MARKET_ID,
+    market_name: 'Nigeria',
+    created_at: daysAgo(64),
+    setup_percent: 72,
+    readiness_score: 64,
+    readiness_state: 'needs_attention',
+    credential_count: 2,
+    credential_expiring: 1,
+    credential_expired: 0,
+    credential_pending: 1,
+    pending_verifications: 1,
+    last_verification_at: null,
+    restriction_id: null,
+    restriction_kind: null,
+    restriction_reason_code: null,
+    restriction_applied_at: null,
+    restriction_expires_at: null,
+    restriction_note: null,
+    categories: [{ name: 'Electrical Systems', is_primary: true }],
+  },
+  {
+    provider_id: 'mock-provider-sterling',
+    display_name: 'Sterling Solar & Power',
+    provider_status: 'active',
+    public_slug: 'sterling-solar-power',
+    is_public: true,
+    market_id: MOCK_MARKET_ID,
+    market_name: 'Nigeria',
+    created_at: daysAgo(330),
+    setup_percent: 100,
+    readiness_score: 71,
+    readiness_state: 'restricted',
+    credential_count: 5,
+    credential_expiring: 0,
+    credential_expired: 1,
+    credential_pending: 0,
+    pending_verifications: 0,
+    last_verification_at: daysAgo(20),
+    restriction_id: 'mock-restriction-sterling',
+    restriction_kind: 'suspended',
+    restriction_reason_code: 'expired_credential',
+    restriction_applied_at: daysAgo(3),
+    restriction_expires_at: daysAgo(-11),
+    restriction_note: 'Public liability certificate expired and the replacement is still under review.',
+    categories: [{ name: 'Solar & Power', is_primary: true }],
+  },
+  {
+    provider_id: 'mock-provider-urbanfit',
+    display_name: 'UrbanFit Interiors',
+    provider_status: 'paused',
+    public_slug: null,
+    is_public: false,
+    market_id: MOCK_MARKET_ID,
+    market_name: 'Nigeria',
+    created_at: daysAgo(48),
+    setup_percent: 88,
+    readiness_score: 78,
+    readiness_state: 'setup',
+    credential_count: 2,
+    credential_expiring: 1,
+    credential_expired: 0,
+    credential_pending: 0,
+    pending_verifications: 0,
+    last_verification_at: daysAgo(8),
+    restriction_id: null,
+    restriction_kind: null,
+    restriction_reason_code: null,
+    restriction_applied_at: null,
+    restriction_expires_at: null,
+    restriction_note: null,
+    categories: [{ name: 'Interior Finishing', is_primary: true }],
+  },
+];
+
+const MOCK_ADMIN_PROJECTS: MockAdminRow[] = [
+  {
+    request_id: MOCK_REQUEST_ID,
+    title: 'Replace the kitchen mixer tap and reseal the sink',
+    state: 'in_progress',
+    phase: 'contracted',
+    severity_rank: 2,
+    created_at: daysAgo(6),
+    updated_at: hoursFromNow(-4),
+    completed_at: null,
+    exceptions: ['blocked_task'],
+    market_name: 'Nigeria',
+    market_code: 'NG',
+    customer: {
+      account_id: MOCK_ACCOUNT_ID,
+      name: 'Ada Okafor',
+      contact_masked: 'a***a@northline.example',
+      organisation_id: 'mock-org-northline',
+      account_status: 'active',
+    },
+    provider: {
+      provider_id: MOCK_PROVIDER_ID,
+      name: 'Mock Provider Co',
+      assignment_id: MOCK_ASSIGNMENT_ID,
+      assignment_status: 'in_progress',
+    },
+    issue: null,
+    blocked_tasks: 1,
+    money: {
+      obligation_id: 'mock-obligation-1',
+      obligation_status: 'funded',
+      amount_minor: 4_500_000,
+      currency_code: 'NGN',
+      payout_status: 'pending',
+    },
+  },
+  {
+    request_id: MOCK_SECOND_REQUEST_ID,
+    title: 'Service the split air conditioner in the main bedroom',
+    state: 'accepted',
+    phase: 'contracted',
+    severity_rank: 3,
+    created_at: daysAgo(2),
+    updated_at: daysAgo(1),
+    completed_at: null,
+    exceptions: ['work_without_funding'],
+    market_name: 'Nigeria',
+    market_code: 'NG',
+    customer: {
+      account_id: MOCK_ACCOUNT_ID,
+      name: 'Ada Okafor',
+      contact_masked: 'a***a@northline.example',
+      organisation_id: 'mock-org-northline',
+      account_status: 'active',
+    },
+    provider: {
+      provider_id: 'mock-provider-cold-room',
+      name: 'Cold Room Services Ltd',
+      assignment_id: MOCK_SECOND_ASSIGNMENT_ID,
+      assignment_status: 'accepted',
+    },
+    issue: null,
+    blocked_tasks: 0,
+    money: {
+      obligation_id: 'mock-obligation-2',
+      obligation_status: 'pending',
+      amount_minor: 2_800_000,
+      currency_code: 'NGN',
+      payout_status: null,
+    },
+  },
+  {
+    request_id: MOCK_THIRD_REQUEST_ID,
+    title: 'Repair corridor lighting across three floors',
+    state: 'disputed',
+    phase: 'exception',
+    severity_rank: 1,
+    created_at: daysAgo(10),
+    updated_at: hoursFromNow(-8),
+    completed_at: null,
+    exceptions: ['disputed', 'trust_case_hold', 'open_issue'],
+    market_name: 'Nigeria',
+    market_code: 'NG',
+    customer: {
+      account_id: 'mock-account-tunde',
+      name: 'Tunde Balogun',
+      contact_masked: 't***n@101globalwork.example',
+      account_status: 'active',
+    },
+    provider: {
+      provider_id: 'mock-provider-gwarinpa',
+      name: 'Gwarinpa Electrical Works',
+      assignment_id: 'mock-assignment-3',
+      assignment_status: 'in_progress',
+    },
+    issue: {
+      kind: 'safety',
+      status: 'open',
+      legal_hold: false,
+      summary: 'Customer reports exposed wiring after the first floor was handed back.',
+      trust_case_id: 'mock-trust-case-1',
+      trust_case_state: 'investigating',
+      trust_case_severity: 'high',
+      trust_case_hold: true,
+    },
+    blocked_tasks: 2,
+    money: {
+      obligation_id: 'mock-obligation-3',
+      obligation_status: 'funded',
+      amount_minor: 7_200_000,
+      currency_code: 'NGN',
+      payout_status: 'held',
+    },
+  },
+  {
+    request_id: 'mock-request-4',
+    title: 'Annual solar inverter maintenance',
+    state: 'completed',
+    phase: 'closed',
+    severity_rank: 4,
+    created_at: daysAgo(30),
+    updated_at: daysAgo(4),
+    completed_at: daysAgo(4),
+    exceptions: ['completed_without_release'],
+    market_name: 'Nigeria',
+    market_code: 'NG',
+    customer: {
+      account_id: 'mock-account-amina',
+      name: 'Amina Oyelaran',
+      contact_masked: '+234 80 *** 4821',
+      account_status: 'active',
+    },
+    provider: {
+      provider_id: 'mock-provider-sterling',
+      name: 'Sterling Solar & Power',
+      assignment_id: 'mock-assignment-4',
+      assignment_status: 'completed',
+    },
+    issue: null,
+    blocked_tasks: 0,
+    money: {
+      obligation_id: 'mock-obligation-4',
+      obligation_status: 'funded',
+      amount_minor: 5_600_000,
+      currency_code: 'NGN',
+      payout_status: 'blocked',
+    },
+  },
+  {
+    request_id: 'mock-request-5',
+    title: 'Fit out reception and meeting rooms',
+    state: 'quoted',
+    phase: 'pre_work',
+    severity_rank: 5,
+    created_at: daysAgo(15),
+    updated_at: daysAgo(14),
+    completed_at: null,
+    exceptions: ['stale'],
+    market_name: 'Nigeria',
+    market_code: 'NG',
+    customer: {
+      account_id: 'mock-account-chinedu',
+      name: 'Chinedu Eze',
+      contact_masked: null,
+      account_status: 'closed',
+    },
+    provider: null,
+    issue: null,
+    blocked_tasks: 0,
+    money: {
+      obligation_id: null,
+      obligation_status: null,
+      amount_minor: null,
+      currency_code: null,
+      payout_status: null,
+    },
+  },
+];
+
+const adminAccountDirectory = (args?: Record<string, unknown>) => {
+  const search = mockText(args?.p_search).toLowerCase();
+  const standing = mockText(args?.p_standing);
+  const accounts = MOCK_ADMIN_ACCOUNTS.filter(account => {
+    const organisations = mockRows(account.organisations).map(org => mockText(org.name)).join(' ');
+    const haystack = `${mockText(account.display_name)} ${mockText(account.contact_masked)} ${mockText(account.account_id)} ${organisations}`.toLowerCase();
+    return (!search || haystack.includes(search)) && (!standing || mockText(account.account_status) === standing);
+  });
+  return { allowed: true, accounts };
+};
+
+const adminProviderDirectory = (args?: Record<string, unknown>) => {
+  const search = mockText(args?.p_search).toLowerCase();
+  const queue = mockText(args?.p_queue) || 'all';
+  const marketId = mockText(args?.p_market_id);
+  const providers = MOCK_ADMIN_PROVIDERS.filter(provider => {
+    const categories = mockRows(provider.categories).map(category => mockText(category.name)).join(' ');
+    const haystack = `${mockText(provider.display_name)} ${mockText(provider.public_slug)} ${categories}`.toLowerCase();
+    const queueMatches =
+      queue === 'all' ||
+      (queue === 'awaiting_verification' && Number(provider.pending_verifications ?? 0) > 0) ||
+      (queue === 'restricted' && Boolean(provider.restriction_id)) ||
+      (queue === 'expiring_credentials' && Number(provider.credential_expiring ?? 0) > 0) ||
+      (queue === 'not_live' && provider.is_public !== true);
+    const marketMatches = !marketId || mockText(provider.market_id) === marketId;
+    return (!search || haystack.includes(search)) && queueMatches && marketMatches;
+  });
+  return { allowed: true, providers };
+};
+
+const adminProjectOperations = (args?: Record<string, unknown>) => {
+  const search = mockText(args?.p_search).toLowerCase();
+  const state = mockText(args?.p_state);
+  const exception = mockText(args?.p_exception);
+  const projects = MOCK_ADMIN_PROJECTS.filter(project => {
+    const customer = mockObj(project.customer);
+    const provider = mockObj(project.provider);
+    const haystack = `${mockText(project.title)} ${mockText(project.request_id)} ${mockText(customer.name)} ${mockText(provider.name)}`.toLowerCase();
+    const exceptions = mockStrings(project.exceptions);
+    return (
+      (!search || haystack.includes(search)) &&
+      (!state || mockText(project.state) === state) &&
+      (!exception || exception === 'any' || exceptions.includes(exception))
+    );
+  });
+  return {
+    allowed: true,
+    counts: {
+      total: MOCK_ADMIN_PROJECTS.length,
+      blocked: MOCK_ADMIN_PROJECTS.filter(project => Number(project.blocked_tasks ?? 0) > 0).length,
+      disputed: MOCK_ADMIN_PROJECTS.filter(project => mockText(project.state) === 'disputed').length,
+      stale: MOCK_ADMIN_PROJECTS.filter(project => mockStrings(project.exceptions).includes('stale')).length,
+      financially_inconsistent: MOCK_ADMIN_PROJECTS.filter(project =>
+        mockStrings(project.exceptions).some(value =>
+          ['work_without_funding', 'completed_without_release', 'cancelled_with_funds_held', 'paid_before_completion'].includes(value),
+        ),
+      ).length,
+    },
+    projects,
+  };
+};
+
+const adminAccountDetail = (args?: Record<string, unknown>) => {
+  const accountId = mockText(args?.p_account_id);
+  const account = MOCK_ADMIN_ACCOUNTS.find(entry => mockText(entry.account_id) === accountId);
+  if (!account) return { allowed: true, found: false };
+  return {
+    allowed: true,
+    found: true,
+    account: {
+      account_id: account.account_id,
+      display_name: account.display_name,
+      contact_masked: account.contact_masked,
+      contact_kind: account.contact_kind,
+      has_email: account.contact_kind === 'email',
+      has_phone: account.contact_kind === 'phone',
+      contact_confirmed: account.contact_confirmed,
+      confirmations: account.contact_masked
+        ? [{ kind: account.contact_kind, value_masked: account.contact_masked, confirmed_at: account.contact_confirmed ? daysAgo(20) : null }]
+        : [],
+      last_sign_in_at: account.last_sign_in_at,
+      account_status: account.account_status,
+      created_at: account.created_at,
+      is_platform_owner: account.account_id === 'mock-account-tunde',
+      is_self: false,
+    },
+    admin_roles: mockRows(account.admin_roles).map(role => ({
+      ...role,
+      granted_at: daysAgo(120),
+      revoked_at: null,
+    })),
+    organisations: account.organisations,
+    providers:
+      account.account_id === MOCK_ACCOUNT_ID
+        ? [
+            {
+              id: MOCK_PROVIDER_ID,
+              display_name: 'Mock Provider Co',
+              status: 'active',
+              is_public: true,
+              readiness_score: 92,
+              readiness: 'ready',
+              setup_percent: 100,
+              next_action: 'Review the expiring gas certificate.',
+              active_restriction: null,
+            },
+          ]
+        : [],
+    sessions: [
+      {
+        session_ref: 'sess_4f2a91c',
+        created_at: daysAgo(1),
+        updated_at: hoursFromNow(-2),
+        refreshed_at: hoursFromNow(-2),
+        aal: 'aal1',
+        ip_masked: '102.89.***.42',
+        user_agent: 'Chrome 140 · macOS',
+      },
+    ],
+    verifications:
+      account.account_id === MOCK_ACCOUNT_ID
+        ? [
+            {
+              id: 'mock-verification-1',
+              provider_id: MOCK_PROVIDER_ID,
+              provider_name: 'Mock Provider Co',
+              kind: 'identity',
+              status: 'verified',
+              jurisdiction_code: 'NG',
+              created_at: daysAgo(60),
+              reviewed_at: daysAgo(58),
+              review_note: 'Identity document matched the account holder.',
+            },
+            {
+              id: 'mock-verification-2',
+              provider_id: MOCK_PROVIDER_ID,
+              provider_name: 'Mock Provider Co',
+              kind: 'public_liability',
+              status: 'pending',
+              jurisdiction_code: 'NG',
+              created_at: daysAgo(2),
+              reviewed_at: null,
+              review_note: null,
+            },
+          ]
+        : [],
+    requests: mockRows(MOCK_ADMIN_PROJECTS)
+      .filter(project => mockText(mockObj(project.customer).account_id) === accountId)
+      .map(project => ({
+        id: project.request_id,
+        need_text: project.title,
+        state: project.state,
+        created_at: project.created_at,
+      })),
+    organisations_count: mockRows(account.organisations).length,
+    open_case_count: account.account_id === MOCK_ACCOUNT_ID ? 1 : 0,
+  };
+};
+
+const adminProjectDiagnostics = (args?: Record<string, unknown>) => {
+  const requestId = mockText(args?.p_request_id);
+  const project = MOCK_ADMIN_PROJECTS.find(entry => mockText(entry.request_id) === requestId) ?? MOCK_ADMIN_PROJECTS[0];
+  const customer = mockObj(project.customer);
+  const provider = mockObj(project.provider);
+  const issue = mockObj(project.issue);
+  const money = mockObj(project.money);
+  return {
+    allowed: true,
+    found: true,
+    project: {
+      request_id: project.request_id,
+      title: project.title,
+      state: project.state,
+      urgency: 'normal',
+      created_at: project.created_at,
+      updated_at: project.updated_at,
+      submitted_at: project.created_at,
+      completed_at: project.completed_at,
+      cancelled_at: null,
+      market_name: project.market_name,
+      market_code: project.market_code,
+      service_name: 'Facilities maintenance',
+      location_name: 'Gwarinpa, Abuja',
+      organisation_id: customer.organisation_id ?? null,
+      organisation_name: 'Northline Facilities',
+    },
+    customer,
+    provider: provider.provider_id
+      ? {
+          ...provider,
+          status: 'active',
+          assigned_at: daysAgo(5),
+          accepted_quote_id: 'mock-quote-1',
+        }
+      : null,
+    schedule: {
+      scheduled_start: hoursFromNow(3),
+      scheduled_end: hoursFromNow(5),
+      timezone: 'Africa/Lagos',
+      note: 'Access through the service entrance.',
+    },
+    accepted_scope: {
+      version: 2,
+      scope: { summary: project.title, includes: ['labour', 'materials', 'cleanup'] },
+      accepted_at: daysAgo(5),
+    },
+    accepted_quote: {
+      id: 'mock-quote-1',
+      status: 'accepted',
+      total_minor: money.amount_minor,
+      currency_code: money.currency_code,
+      summary: 'Parts and labour, with a two-week workmanship warranty.',
+      valid_until: daysAgo(-20),
+    },
+    stages: [
+      {
+        stage_id: 'mock-admin-stage-1',
+        ordinal: 1,
+        title: 'Make safe and prepare',
+        tasks: [
+          { id: 'mock-admin-task-1', ordinal: 1, title: 'Isolate the affected service', status: 'completed', assignee: 'Mock Provider Co' },
+          { id: 'mock-admin-task-2', ordinal: 2, title: 'Protect the surrounding area', status: 'completed', assignee: 'Mock Provider Co' },
+        ],
+      },
+      {
+        stage_id: 'mock-admin-stage-2',
+        ordinal: 2,
+        title: 'Carry out the repair',
+        tasks: [
+          { id: 'mock-admin-task-3', ordinal: 1, title: 'Fit replacement parts', status: 'in_progress', assignee: 'Mock Provider Co' },
+          { id: 'mock-admin-task-4', ordinal: 2, title: 'Test and clean the area', status: project.blocked_tasks ? 'blocked' : 'not_started', assignee: 'Mock Provider Co' },
+        ],
+      },
+    ],
+    issues: issue.status
+      ? [
+          {
+            id: 'mock-admin-issue-1',
+            kind: issue.kind ?? 'operational',
+            status: issue.status,
+            summary: issue.summary ?? 'Operational issue under review.',
+            legal_hold: issue.legal_hold === true,
+            response_due_at: hoursFromNow(20),
+            resolution: null,
+            created_at: daysAgo(2),
+            resolved_at: null,
+          },
+        ]
+      : [],
+    changes: [
+      {
+        id: 'mock-admin-change-1',
+        title: 'Replace the waste trap while the sink is open',
+        status: 'proposed',
+        change_kind: 'scope',
+        baseline_total_minor: money.amount_minor,
+        proposed_total_minor: Number(money.amount_minor ?? 0) + 350_000,
+        currency_code: money.currency_code,
+        created_at: hoursFromNow(-18),
+      },
+    ],
+    evidence_count: 4,
+    document_count: 2,
+    timeline: [
+      { action: 'REQUEST_ACCEPTED', occurred_at: daysAgo(5), actor: customer.name, actor_type: 'customer', resource_type: 'request', resource_id: project.request_id, reason_code: null },
+      { action: 'ASSIGNMENT_STARTED', occurred_at: hoursFromNow(-26), actor: provider.name ?? 'Provider', actor_type: 'provider', resource_type: 'assignment', resource_id: provider.assignment_id ?? null, reason_code: null },
+      { action: 'TASK_BLOCKED', occurred_at: hoursFromNow(-4), actor: provider.name ?? 'Provider', actor_type: 'provider', resource_type: 'task', resource_id: 'mock-admin-task-4', reason_code: 'awaiting_material' },
+    ],
+    money: money.obligation_id
+      ? {
+          obligation_id: money.obligation_id,
+          status: money.obligation_status,
+          amount_minor: money.amount_minor,
+          currency_code: money.currency_code,
+          created_at: daysAgo(5),
+          updated_at: hoursFromNow(-6),
+          quote_id: 'mock-quote-1',
+          payouts: [
+            {
+              id: 'mock-admin-payout-1',
+              status: money.payout_status ?? 'pending',
+              amount_minor: Math.round(Number(money.amount_minor ?? 0) * 0.9),
+              currency_code: money.currency_code,
+              provider_reference: 'MOCK-PAYOUT-1001',
+            },
+          ],
+          refunds: [],
+          ledger: {
+            entry_count: 6,
+            by_account_kind: { customer: 4_500_000, provider: -4_050_000, platform: -450_000 },
+            last_entry_at: hoursFromNow(-6),
+          },
+        }
+      : null,
+    jobs: [
+      {
+        id: 'mock-admin-job-1',
+        aggregate_type: 'assignment',
+        aggregate_id: provider.assignment_id ?? 'mock-assignment-1',
+        event_type: 'assignment.started',
+        occurred_at: hoursFromNow(-26),
+        published_at: hoursFromNow(-26),
+        attempt_count: 1,
+        last_error: null,
+      },
+    ],
+    overrides: [],
+    legal_transitions: {
+      in_progress: ['submitted_for_approval', 'disputed', 'cancelled'],
+      disputed: ['in_progress', 'cancelled', 'completed'],
+    },
+  };
+};
+
+const mockOrganisationOverview = (args?: Record<string, unknown>) => {
+  const organisationId = mockText(args?.p_organisation_id) || MOCK_ORGANISATION_ID;
+  const projects = MOCK_ADMIN_PROJECTS.slice(0, 4).map((project, index) => {
+    const customer = mockObj(project.customer);
+    const provider = mockObj(project.provider);
+    const money = mockObj(project.money);
+    return {
+      request_id: project.request_id,
+      title: project.title,
+      state: project.state,
+      urgency: index === 2 ? 'urgent' : 'normal',
+      created_at: project.created_at,
+      completed_at: project.completed_at,
+      location_name: index % 2 === 0 ? 'Head office' : 'Gwarinpa site',
+      service_name: 'Facilities maintenance',
+      owner_account_id: customer.account_id,
+      owner_name: customer.name,
+      assignment_id: provider.assignment_id,
+      assignment_status: provider.assignment_status,
+      scheduled_end: hoursFromNow(24),
+      obligation_status: money.obligation_status,
+      amount_minor: money.amount_minor,
+      currency_code: money.currency_code,
+      budget_committed_minor: money.amount_minor,
+      provider_id: provider.provider_id,
+      provider_name: provider.name,
+      blocked: Number(project.blocked_tasks ?? 0) > 0,
+      open_case: mockText(project.state) === 'disputed',
+      needs_org_approval: index === 1,
+      sla: index === 2 ? 'blocked' : index === 3 ? 'complete' : 'on_track',
+      next_action: index === 2 ? 'provider_schedule' : 'none',
+    };
+  });
+  return {
+    allowed: true,
+    role: 'admin',
+    organisation: {
+      id: organisationId,
+      display_name: 'Northline Facilities',
+      legal_name: 'Northline Facilities Ltd',
+      organisation_type: 'business_customer',
+      currency_code: 'NGN',
+      timezone: 'Africa/Lagos',
+      subscription_plan: 'portfolio',
+      status: 'active',
+      primary_contact_name: 'Ada Okafor',
+      primary_contact_email: 'a***a@northline.example',
+      primary_contact_phone: '+234 80 *** 4821',
+      market_name: 'Nigeria',
+      policies: { approvals_above_minor: 500_000, require_two_approvers: false },
+    },
+    locations: [
+      { id: 'mock-org-location-hq', location_id: 'mock-location-abuja', name: 'Head office', kind: 'office', label: 'HQ', is_primary: true },
+      { id: 'mock-org-location-site', location_id: 'mock-location-gwarinpa', name: 'Gwarinpa site', kind: 'site', label: 'Gwarinpa', is_primary: false },
+    ],
+    members: [
+      { account_id: MOCK_ACCOUNT_ID, name: 'Ada Okafor', role: 'admin', joined_at: daysAgo(171) },
+      { account_id: 'mock-account-amina', name: 'Amina Oyelaran', role: 'finance_approver', joined_at: daysAgo(90) },
+      { account_id: 'mock-account-tunde', name: 'Tunde Balogun', role: 'member', joined_at: daysAgo(60) },
+    ],
+    budgets: [
+      {
+        id: 'mock-org-budget-hq',
+        location_id: 'mock-org-location-hq',
+        location_name: 'Head office',
+        period_start: '2026-10-01',
+        period_end: '2026-10-31',
+        currency_code: 'NGN',
+        committed_minor: 12_000_000,
+        actual_minor: 8_450_000,
+      },
+      {
+        id: 'mock-org-budget-site',
+        location_id: 'mock-org-location-site',
+        location_name: 'Gwarinpa site',
+        period_start: '2026-10-01',
+        period_end: '2026-10-31',
+        currency_code: 'NGN',
+        committed_minor: 7_500_000,
+        actual_minor: 4_200_000,
+      },
+    ],
+    projects,
+    approvals: [
+      {
+        request_id: MOCK_SECOND_REQUEST_ID,
+        title: 'Service the split air conditioner in the main bedroom',
+        kind: 'quote',
+        amount_minor: 2_800_000,
+        currency_code: 'NGN',
+        state: 'quoted',
+        provider_name: 'Cold Room Services Ltd',
+      },
+      {
+        request_id: MOCK_THIRD_REQUEST_ID,
+        title: 'Repair corridor lighting across three floors',
+        kind: 'completion',
+        amount_minor: 7_200_000,
+        currency_code: 'NGN',
+        state: 'submitted_for_approval',
+        provider_name: 'Gwarinpa Electrical Works',
+      },
+    ],
+    exceptions: [
+      { kind: 'blocked_task', severity: 'medium', label: 'A repair task is blocked', detail: 'Waiting on a replacement isolation valve.', location_name: 'Gwarinpa site' },
+      { kind: 'approval_overdue', severity: 'high', label: 'An approval has waited four days', detail: 'Completion evidence is ready for review.', location_name: 'Head office' },
+    ],
+    providers: [
+      { provider_id: MOCK_PROVIDER_ID, name: 'Mock Provider Co', jobs: 4, completed: 3, on_time: 2, late: 1 },
+      { provider_id: 'mock-provider-cold-room', name: 'Cold Room Services Ltd', jobs: 2, completed: 1, on_time: 1, late: 0 },
+    ],
+    totals: {
+      projects: 5,
+      active: 3,
+      completed: 1,
+      pre_work: 1,
+      approvals: 2,
+      exceptions: 2,
+      committed_funded_minor: 19_500_000,
+    },
+  };
+};
+
+const mockOrganisationApprovals = () => ({
+  allowed: true,
+  role: 'admin',
+  my_role: 'admin',
+  threshold_minor: 500_000,
+  items: [
+    {
+      request_id: MOCK_SECOND_REQUEST_ID,
+      title: 'Service the split air conditioner in the main bedroom',
+      state: 'quoted',
+      kind: 'quote',
+      amount_minor: 2_800_000,
+      currency_code: 'NGN',
+      location_name: 'Gwarinpa site',
+      requester_name: 'Ada Okafor',
+      owner_name: 'Ada Okafor',
+      provider_name: 'Cold Room Services Ltd',
+      evidence_count: 0,
+      age_days: 2,
+      threshold_minor: 500_000,
+      requires_senior_role: false,
+    },
+    {
+      request_id: MOCK_THIRD_REQUEST_ID,
+      title: 'Repair corridor lighting across three floors',
+      state: 'submitted_for_approval',
+      kind: 'completion',
+      amount_minor: 7_200_000,
+      currency_code: 'NGN',
+      location_name: 'Head office',
+      requester_name: 'Tunde Balogun',
+      owner_name: 'Tunde Balogun',
+      provider_name: 'Gwarinpa Electrical Works',
+      evidence_count: 4,
+      age_days: 4,
+      threshold_minor: 500_000,
+      requires_senior_role: true,
+    },
+  ],
+  history: [
+    {
+      id: 'mock-approval-history-1',
+      request_id: 'mock-request-4',
+      title: 'Annual solar inverter maintenance',
+      kind: 'completion',
+      decision: 'approved',
+      amount_minor: 5_600_000,
+      currency_code: 'NGN',
+      threshold_minor: 500_000,
+      note: 'Approved after evidence review.',
+      delegate_name: null,
+      decided_by_name: 'Amina Oyelaran',
+      decided_at: daysAgo(5),
+    },
+  ],
+});
+
+const mockOrganisationBudgets = () => ({
+  allowed: true,
+  role: 'admin',
+  centres: [
+    {
+      id: 'mock-cost-centre-hq',
+      name: 'Head office operations',
+      code: 'HQ-OPS',
+      currency_code: 'NGN',
+      allocated_minor: 12_000_000,
+      location_name: 'Head office',
+      committed_minor: 8_450_000,
+      paid_minor: 5_200_000,
+      variance_minor: 3_550_000,
+      variance_percent: 29.6,
+      project_count: 3,
+      active_project_count: 1,
+    },
+    {
+      id: 'mock-cost-centre-site',
+      name: 'Gwarinpa maintenance',
+      code: 'GW-MAINT',
+      currency_code: 'NGN',
+      allocated_minor: 7_500_000,
+      location_name: 'Gwarinpa site',
+      committed_minor: 4_200_000,
+      paid_minor: 2_100_000,
+      variance_minor: 3_300_000,
+      variance_percent: 44,
+      project_count: 2,
+      active_project_count: 2,
+    },
+  ],
+  periods: [
+    {
+      id: 'mock-budget-period-hq',
+      location_name: 'Head office',
+      period_start: '2026-10-01',
+      period_end: '2026-10-31',
+      currency_code: 'NGN',
+      committed_minor: 8_450_000,
+      actual_minor: 5_200_000,
+      remaining_minor: 3_550_000,
+    },
+    {
+      id: 'mock-budget-period-site',
+      location_name: 'Gwarinpa site',
+      period_start: '2026-10-01',
+      period_end: '2026-10-31',
+      currency_code: 'NGN',
+      committed_minor: 4_200_000,
+      actual_minor: 2_100_000,
+      remaining_minor: 3_300_000,
+    },
+  ],
+  transactions: [
+    {
+      request_id: MOCK_REQUEST_ID,
+      reference: 'OBL-2026-1042',
+      title: 'Replace the kitchen mixer tap and reseal the sink',
+      cost_centre: 'HQ-OPS',
+      state: 'in_progress',
+      obligation_status: 'funded',
+      amount_minor: 4_500_000,
+      currency_code: 'NGN',
+      payout_status: 'pending',
+      paid_minor: 0,
+      at: daysAgo(5),
+    },
+    {
+      request_id: MOCK_SECOND_REQUEST_ID,
+      reference: 'OBL-2026-1048',
+      title: 'Service the split air conditioner in the main bedroom',
+      cost_centre: 'GW-MAINT',
+      state: 'quoted',
+      obligation_status: 'pending',
+      amount_minor: 2_800_000,
+      currency_code: 'NGN',
+      payout_status: null,
+      paid_minor: 0,
+      at: daysAgo(2),
+    },
+  ],
+});
+
+const mockOrganisationReports = () => ({
+  allowed: true,
+  role: 'admin',
+  generated_at: hoursFromNow(-1),
+  data_as_of: hoursFromNow(-2),
+  aggregation_threshold: 3,
+  suppressed_groups: 0,
+  completion: { projects: 5, completed: 1, ended_badly: 1, avg_days: 6 },
+  sla: { on_time: 2, late: 1, currently_overdue: 1, no_date: 1 },
+  spend_by_site: [
+    { label: 'Head office', projects: 3, funded_minor: 12_000_000, paid_minor: 8_000_000 },
+    { label: 'Gwarinpa site', projects: 2, funded_minor: 7_500_000, paid_minor: 4_200_000 },
+  ],
+  spend_by_service: [
+    { label: 'Plumbing', projects: 2, funded_minor: 4_500_000, paid_minor: 2_100_000 },
+    { label: 'Electrical Systems', projects: 1, funded_minor: 7_200_000, paid_minor: 5_200_000 },
+    { label: 'Air Conditioning & HVAC', projects: 1, funded_minor: 2_800_000, paid_minor: 0 },
+  ],
+  provider_reliability: [
+    { provider_id: MOCK_PROVIDER_ID, name: 'Mock Provider Co', jobs: 4, completed: 3, on_time: 2, late: 1, disputed: 0 },
+    { provider_id: 'mock-provider-cold-room', name: 'Cold Room Services Ltd', jobs: 2, completed: 1, on_time: 1, late: 0, disputed: 0 },
+    { provider_id: 'mock-provider-gwarinpa', name: 'Gwarinpa Electrical Works', jobs: 1, completed: 0, on_time: 0, late: 0, disputed: 1 },
+  ],
+});
+
+const mockOrganisationDirectory = () => ({
+  allowed: true,
+  role: 'admin',
+  members: [
+    {
+      account_id: MOCK_ACCOUNT_ID,
+      name: 'Ada Okafor',
+      role: 'admin',
+      status: 'active',
+      scope_location_ids: ['mock-org-location-hq', 'mock-org-location-site'],
+      scope_names: ['Head office', 'Gwarinpa site'],
+      scope_note: null,
+      joined_at: daysAgo(171),
+      suspended_at: null,
+      last_activity_at: hoursFromNow(-2),
+    },
+    {
+      account_id: 'mock-account-amina',
+      name: 'Amina Oyelaran',
+      role: 'finance_approver',
+      status: 'active',
+      scope_location_ids: ['mock-org-location-hq'],
+      scope_names: ['Head office'],
+      scope_note: 'Approves spend above the organisation threshold.',
+      joined_at: daysAgo(90),
+      suspended_at: null,
+      last_activity_at: daysAgo(1),
+    },
+    {
+      account_id: 'mock-account-tunde',
+      name: 'Tunde Balogun',
+      role: 'member',
+      status: 'active',
+      scope_location_ids: ['mock-org-location-site'],
+      scope_names: ['Gwarinpa site'],
+      scope_note: null,
+      joined_at: daysAgo(60),
+      suspended_at: null,
+      last_activity_at: daysAgo(3),
+    },
+  ],
+  invitations: [
+    {
+      id: 'mock-org-invite-1',
+      email: 'procurement@northline.example',
+      role: 'member',
+      status: 'pending',
+      scope_location_ids: ['mock-org-location-site'],
+      expires_at: daysAgo(-5),
+      created_at: daysAgo(2),
+      invited_by_name: 'Ada Okafor',
+    },
+  ],
+  locations: [
+    {
+      id: 'mock-org-location-hq',
+      location_id: 'mock-location-abuja',
+      name: 'Head office',
+      area_name: 'Abuja',
+      kind: 'office',
+      is_primary: true,
+      archived: false,
+      address_line1: '18 Adetokunbo Ademola Crescent',
+      address_line2: 'Wuse II',
+      locality: 'Abuja',
+      region: 'FCT',
+      postal_code: '900211',
+      country_code: 'NG',
+      timezone: 'Africa/Lagos',
+      site_manager_name: 'Ada Okafor',
+      site_manager_phone: '+234 80 *** 4821',
+      access_notes: 'Reception holds visitor badges.',
+      safety_notes: 'Contractors sign in at the security desk.',
+      active_projects: 2,
+      total_projects: 3,
+    },
+    {
+      id: 'mock-org-location-site',
+      location_id: 'mock-location-gwarinpa',
+      name: 'Gwarinpa site',
+      area_name: 'Gwarinpa',
+      kind: 'site',
+      is_primary: false,
+      archived: false,
+      address_line1: '7th Avenue',
+      address_line2: null,
+      locality: 'Gwarinpa',
+      region: 'FCT',
+      postal_code: '900108',
+      country_code: 'NG',
+      timezone: 'Africa/Lagos',
+      site_manager_name: 'Tunde Balogun',
+      site_manager_phone: '+234 81 *** 9032',
+      access_notes: 'Service entrance is behind the main building.',
+      safety_notes: 'Isolate power before work in the east wing.',
+      active_projects: 2,
+      total_projects: 2,
+    },
+  ],
+  providers: [
+    {
+      id: 'mock-org-provider-1',
+      provider_id: MOCK_PROVIDER_ID,
+      name: 'Mock Provider Co',
+      status: 'preferred',
+      contract_reference: 'NL-FM-2026-01',
+      note: 'Primary plumbing and general maintenance partner.',
+      added_at: daysAgo(120),
+      identity_verified: true,
+      verified_credentials: 2,
+      provider_status: 'active',
+      readiness_score: 92,
+      services: ['Plumbing', 'Electrical Systems'],
+      areas: ['Abuja', 'Gwarinpa'],
+      jobs_for_us: 4,
+      verification_at_add: { identity: true, credentials: 2 },
+    },
+    {
+      id: 'mock-org-provider-2',
+      provider_id: 'mock-provider-cold-room',
+      name: 'Cold Room Services Ltd',
+      status: 'contract',
+      contract_reference: 'NL-HVAC-2026-02',
+      note: 'Cooling and HVAC maintenance.',
+      added_at: daysAgo(75),
+      identity_verified: true,
+      verified_credentials: 1,
+      provider_status: 'active',
+      readiness_score: 86,
+      services: ['Air Conditioning & HVAC'],
+      areas: ['Abuja'],
+      jobs_for_us: 2,
+      verification_at_add: { identity: true, credentials: 1 },
+    },
+  ],
+});
+
 const MOCK_RPC_RESULTS: Record<string, unknown> = {
   /** `true` so /account/activate-admin-access renders its screen instead of redirecting to `/`. */
   platform_admin_activation_required_command: true,
@@ -811,6 +2012,16 @@ const MOCK_RPC_RESULTS: Record<string, unknown> = {
       },
     ],
   },
+  admin_account_directory_command: adminAccountDirectory,
+  admin_account_detail_command: adminAccountDetail,
+  admin_provider_directory_command: adminProviderDirectory,
+  admin_project_operations_command: adminProjectOperations,
+  admin_project_diagnostics_command: adminProjectDiagnostics,
+  get_organisation_command: mockOrganisationOverview,
+  get_organisation_approvals_command: mockOrganisationApprovals,
+  get_organisation_budgets_command: mockOrganisationBudgets,
+  get_organisation_reports_command: mockOrganisationReports,
+  get_organisation_directory_command: mockOrganisationDirectory,
 
   /* ------------------------------------------------------------------ provider workspace
    *
