@@ -56,7 +56,8 @@ begin
 
   perform set_config('request.jwt.claim.sub', v_trust_auth::text, true);
   perform set_config('request.jwt.claim.aal', 'aal2', true);
-  perform public.review_provider_verification_command(v_verification_id, 'verified'::public.verification_status, 'E2E trust approval');
+  perform set_config('request.jwt.claim.aal', 'aal2', true);
+  perform public.decide_provider_verification_command(v_verification_id, 'verified', 'document_matches_claim', 'E2E trust approval', 'identity-and-business-v1');
   insert into e2e_result values('trust_review', exists(select 1 from public.provider_verifications pv where pv.id=v_verification_id and pv.status='verified'), 'identity verified');
 
   perform set_config('request.jwt.claim.sub', v_provider_auth::text, true);

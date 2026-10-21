@@ -21,6 +21,9 @@ jobs:
       - run: npm install
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
+      # Structural check, and the first one to run: it needs no dependencies and catches a class of failure that
+      # lint, typecheck and the webpack build all pass over — see scripts/check-route-conflicts.mjs.
+      - run: npm run check:routes
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build

@@ -1,0 +1,86 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import {
+  HubHero,
+  IndexabilityNotice,
+  LocationGrid,
+  ProviderGrid,
+  ServiceChips,
+} from '@/components/discovery/HubSections';
+import { getCityHub } from '@/features/discovery/data/mock-locations';
+
+/**
+ * City service hub — e.g. /ng/abuja
+ *
+ * Middle of the public location hierarchy. Lists the localities beneath it and
+ * completes the trail Home → Country → City.
+ *
+ * Server component: no 'use client'. Rendered inside the (marketing) group, so
+ * LandingLayout already wraps it.
+ */
+
+
+type Params = Promise<{ market: string; region: string }>;
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { market, region } = await params;
+  const found = getCityHub(market, region);
+  if (!found) return {};
+
+  return {
+    title: `${found.city.name}, ${found.country.name} — services and providers`,
+    description: found.city.intro,
+    alternates: { canonical: `/${found.country.slug}/${found.city.slug}` },
+    robots: { index: false, follow: true },
+  };
+}
+
+export default async function CityHubPage({ params }: { params: Params }) {
+  const { market, region } = await params;
+  const found = getCityHub(market, region);
+  if (!found) notFound();
+
+  const { country: countryHub, city: cityHub } = found;
+  const countryPath = `/${countryHub.slug}`;
+  const basePath = `${countryPath}/${cityHub.slug}`;
+
+  return (
+    <>
+      <HubHero
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: countryHub.name, href: countryPath },
+          { label: cityHub.name },
+        ]}
+        badge={`CITY · ${cityHub.name}`}
+        title={`Services in ${cityHub.name}, ${countryHub.name}`}
+        lede={cityHub.intro}
+        marketSlug={countryHub.slug}
+      />
+
+      <div className="mx-auto w-full max-w-6xl px-4 pt-12 pb-24 sm:px-6 lg:px-8">
+        <LocationGrid
+          heading={`Neighbourhoods in ${cityHub.name}`}
+          description="Choose a neighbourhood to see which services are available and how well supplied it is."
+          items={cityHub.localities.map((item) => ({ slug: item.slug, name: item.name }))}
+          basePath={basePath}
+        />
+
+        <ServiceChips
+          heading="Popular services"
+          description="Tell us what needs doing and we will match you with eligible providers."
+          services={cityHub.popularServices}
+          marketSlug={countryHub.slug}
+        />
+
+        <ProviderGrid
+          heading={`Providers near ${cityHub.name}`}
+          description="A preview of providers building reputation on 101GlobalWork."
+          providers={cityHub.featuredProviders}
+        />
+
+        <IndexabilityNotice />
+      </div>
+    </>
+  );
+}

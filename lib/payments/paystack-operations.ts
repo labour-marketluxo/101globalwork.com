@@ -57,12 +57,43 @@ export async function createPaystackRefund(input: { transactionReference: string
   });
 }
 
-export async function createPaystackTransferRecipient(input: { name: string; accountNumber: string; bankCode: string; currencyCode: string }) {
+/**
+ * `type` is the Paystack recipient family: `nuban` for Nigerian bank accounts, `mobile_money` for a wallet. It
+ * defaults to `nuban` so the existing caller keeps working, and the payout page passes whichever the provider
+ * chose — sending a wallet number as a bank account is a verification failure that reads like a wrong number.
+ */
+export async function createPaystackTransferRecipient(input: {
+  name: string;
+  accountNumber: string;
+  bankCode: string;
+  currencyCode: string;
+  type?: 'nuban' | 'mobile_money';
+}) {
   assertPaystackExecutionAllowed();
   return paystack<{ recipient_code: string; active: boolean }>(`/transferrecipient`, {
     method: 'POST',
-    body: JSON.stringify({ type: 'nuban', name: input.name, account_number: input.accountNumber, bank_code: input.bankCode, currency: input.currencyCode }),
+    body: JSON.stringify({
+      type: input.type ?? 'nuban',
+      name: input.name,
+      account_number: input.accountNumber,
+      bank_code: input.bankCode,
+      currency: input.currencyCode,
+    }),
   });
+}
+
+/**
+ * Whether a stored recipient can still receive transfers.
+ *
+ * The account number is not re-sent and not re-stored: this asks Paystack about the code we already hold, which
+ * is what "retry verification" means once the destination exists.
+ */
+export async function fetchPaystackTransferRecipient(recipientCode: string) {
+  assertPaystackExecutionAllowed();
+  return paystack<{ recipient_code: string; active: boolean; details?: Record<string, unknown> }>(
+    `/transferrecipient/${encodeURIComponent(recipientCode)}`,
+    { method: 'GET' },
+  );
 }
 
 export async function initiatePaystackTransfer(input: { amountMinor: number; currencyCode: string; recipientCode: string; reference: string; reason?: string }) {
